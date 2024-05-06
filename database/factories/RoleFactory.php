@@ -18,6 +18,7 @@ class RoleFactory extends Factory
     {
         return [
             //
+            'id' => fake()->uuid(),
             'name' => fake()->word(),
         ];
     }

@@ -14,11 +14,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $adm_r = Role::factory()->create([
+            'name' => 'Administrador',
+        ]);
+
         $adm = User::factory()
             ->count(1)
-            ->for(Role::factory()->state([
-                'name' => 'Administrador',
-            ]))
+            ->for($adm_r)
             ->create([
                 'name' => 'Informatica',
                 'email' => 'informatica@fruveco.com',
