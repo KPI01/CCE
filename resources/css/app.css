@@ -3,21 +3,13 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'Open Sans';
+  font-family: 'Inter';
   src: 
-    url('/fonts/OpenSans-VariableFont.ttf')
-    format('truetype');
-  font-weight: 300, 400, 600,700, 800;
-}
-
-@font-face {
-  font-family: 'Open Sans Italic';
-  src: 
-    url('/fonts/OpenSans-Italic-VariableFont.ttf')
+    url('/fonts/Inter-VariableFont.ttf')
     format('truetype');
   font-weight: 300, 400, 600,700, 800;
 }
 
 * {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
