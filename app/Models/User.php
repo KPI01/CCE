@@ -12,7 +12,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, HasUuids,Notifiable;
+    use HasFactory, HasUuids, Notifiable;
 
     /**
      * Atributos asignables de forma masiva.
@@ -54,9 +54,6 @@ class User extends Authenticatable
      */
     public function role(): BelongsTo
     {
-        return $this->belongsTo(Role::class)
-          ->withDefault([
-              'name' => 'Usuario',
-          ]);
+        return $this->belongsTo(Role::class);
     }
 }

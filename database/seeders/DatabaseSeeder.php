@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
                 'email_verified_at' => now(),
                 'password' => '123456'
             ]);
+            
         $user = User::factory()
             ->count(1)
             ->for(Role::factory()->state([
