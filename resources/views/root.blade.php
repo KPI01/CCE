@@ -14,7 +14,7 @@
     @inertiaHead
 </head>
 
-<body class="w-screen h-screen">
+<body class="w-fit">
     @inertia
 </body>
 
