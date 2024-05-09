@@ -7,7 +7,9 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/Components/ui/alert-dialog"
-import { Button } from "../ui/button"
+import { Button } from "@/Components/ui/button"
+
+import { Link } from '@inertiajs/react'
 
 interface Props {
     canOpen: boolean
@@ -34,7 +36,11 @@ export default function ConfirmEmailDialog({
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <Button asChild onClick={() => callback?.(false)}>
-                            <AlertDialogAction>Volver</AlertDialogAction>
+                            <AlertDialogAction asChild>
+                                <Link href={route('login')}>
+                                Volver
+                                </Link>
+                            </AlertDialogAction>
                         </Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>

@@ -28,10 +28,10 @@ export default function InputToggleVisibility({
                     <FormLabel>{props.label}</FormLabel>
                     <FormControl>
                         <div className="flex w-full items-center space-x-2">
-                            <Input
+                            <Input autoComplete="on"
                                 type={visibility ? 'text' : 'password'}
                                 {...field} />
-                            <Button type="button" variant={'outline'} onClick={() => setVisibility(!visibility)}>
+                            <Button id={`show-${props.name}`} type="button" variant={'outline'} onClick={() => setVisibility(!visibility)}>
                                 {visibility
                                     ? <EyeOpenIcon />
                                     : <EyeClosedIcon />
@@ -45,7 +45,7 @@ export default function InputToggleVisibility({
                             <Link href={route('reset_clave')}>¿Clave olvidada?</Link>
                         </Button>
                     }
-                    <FormMessage />
+                    <FormMessage className="max-w-sm" />
                 </FormItem>
             )} />
     )

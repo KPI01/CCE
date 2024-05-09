@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\User;
@@ -9,7 +10,6 @@ use App\Models\User;
 class UserController extends Controller
 {
     //
-    protected $model = User::class;
 
     /**
      * Mostrar formulario de registro de usuario
@@ -42,10 +42,19 @@ class UserController extends Controller
      */
     public function store(Request $req)
     {
-        $inst = new $this->model;
         $vals = $req->input();
+        $user_role = Role::where('name', 'Usuario')->first();
 
-        return $vals;
+        unset($vals['confirmPassword']);
+        $vals['role_id'] = $user_role->id;
+
+        User::create($vals);
+
+        return Inertia::render('Auth/Register', [
+            'form_sent' => true,
+            'register_done' => true,
+            'vals' => $vals
+        ]);
     }
 
     /**

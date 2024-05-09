@@ -5,7 +5,7 @@ import { Link } from '@inertiajs/react'
 
 export default function NavBar({ uri, txt }: { uri: string | undefined, txt?: string }) {
 
-    console.log('<NavBar> Props:', `text: ${txt}`, `uri: ${uri}`)
+    console.log('Props:', `text: ${txt}`, `uri: ${uri}`)
 
     return (
         <nav className="px-7 py-4 flex flex-col">

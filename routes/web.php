@@ -44,13 +44,13 @@ Route::prefix('cce')
                             ->name('registro');
                         Route::post('/registro', 'store')
                             ->name('nuevo_usuario');
-                        Route::get('/reset-clave', 'reset_form')
+                        Route::get('/reset', 'reset_form')
                             ->name('reset_clave');
                         Route::get('/validar-email', function () {
-                          return Inertia::render('_EmailValidation');  
+                            return route('registro');
                         })
                             ->name('verification.notice');
-                        Route::post('/reset-clave', 'reset_form')
+                        Route::post('/reset', 'reset_form')
                             ->name('guardar_clave');
                     });
             })

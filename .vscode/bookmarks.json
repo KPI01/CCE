@@ -9,27 +9,27 @@
 					"label": ""
 				},
 				{
-					"line": 56,
+					"line": 65,
 					"column": 14,
 					"label": ""
 				},
 				{
-					"line": 66,
+					"line": 75,
 					"column": 16,
 					"label": ""
 				},
 				{
-					"line": 76,
+					"line": 85,
 					"column": 15,
 					"label": ""
 				},
 				{
-					"line": 86,
+					"line": 95,
 					"column": 8,
 					"label": ""
 				},
 				{
-					"line": 99,
+					"line": 108,
 					"column": 12,
 					"label": ""
 				}
@@ -40,16 +40,6 @@
 			"bookmarks": [
 				{
 					"line": 47,
-					"column": 20,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "resources/js/Pages/Auth/Register.tsx",
-			"bookmarks": [
-				{
-					"line": 64,
 					"column": 20,
 					"label": ""
 				}

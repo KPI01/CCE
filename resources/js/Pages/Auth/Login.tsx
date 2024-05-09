@@ -1,6 +1,6 @@
 import NoAuthLayout from "@/Layouts/NotAuthLayout";
 
-import { Head } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from 'zod'
 import {
@@ -46,7 +46,7 @@ export default function Login() {
     })
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log('<Login>', `onSubmit(values): ${values}`)
+        console.log('onSubmit(values):', values)
 
         // POST con router de Inertia
     }
@@ -54,36 +54,38 @@ export default function Login() {
     return (
         <NoAuthLayout>
             <Head title="Inicio de Sesión" />
-            <Card className="w-3/4 lg:w-full mx-auto">
-                <CardHeader>
-                    <CardTitle className="lg:text-4xl">Inicio de Sesión</CardTitle>
-                    <CardDescription className="lg:text-xl">Para poder utilizar la aplicación, primero debes identificarte.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                            <FormField
-                                control={form.control}
-                                name="email"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Correo</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="ejemplo@dominio.com" {...field} />
-                                        </FormControl>
-                                        
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <InputToggleVisibility label="Clave" control={form.control} name="password" />
-                            <Button type="submit">Iniciar sesión!</Button>
-                        </form>
-                    </Form>
-                </CardContent>
-                <CardFooter>
-                </CardFooter>
-            </Card>
+            <main>
+                <Card className="w-3/4 lg:w-full mx-auto">
+                    <CardHeader>
+                        <CardTitle className="lg:text-4xl">Inicio de Sesión</CardTitle>
+                        <CardDescription className="lg:text-xl">Para poder utilizar la aplicación, primero debes identificarte.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Form {...form}>
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                                <FormField
+                                    control={form.control}
+                                    name="email"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Correo</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="ejemplo@dominio.com" {...field} />
+                                            </FormControl>
+
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <InputToggleVisibility label="Clave" control={form.control} name="password" />
+                                <Button type="submit">Iniciar sesión!</Button>
+                            </form>
+                        </Form>
+                    </CardContent>
+                    <CardFooter>
+                    </CardFooter>
+                </Card>
+            </main>
         </NoAuthLayout>
     )
 }
