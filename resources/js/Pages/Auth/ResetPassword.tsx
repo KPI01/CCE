@@ -1,90 +1,101 @@
-import { useEffect, FormEventHandler } from 'react';
-import GuestLayout from '@/Layouts/GuestLayout';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import { Head, useForm } from '@inertiajs/react';
+import NoAuthLayout from "@/Layouts/NotAuthLayout";
+import { Input } from "@/Components/ui/input";
+import { Button } from "@/Components/ui/button";
+import { Head } from "@inertiajs/react";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle
+} from "@/Components/ui/card";
+import {
+    Form,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+    FormControl
+} from "@/Components/ui/form"
 
-export default function ResetPassword({ token, email }: { token: string, email: string }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        token: token,
-        email: email,
-        password: '',
-        password_confirmation: '',
-    });
 
-    useEffect(() => {
-        return () => {
-            reset('password', 'password_confirmation');
-        };
-    }, []);
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from 'zod'
+import { zodResolver } from "@hookform/resolvers/zod";
+import ConfirmEmailDialog from "@/Components/Forms/ConfirmEmailDialog";
 
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
+const formSchemaEmail = z.object({
+    email: z.string({
+        required_error: 'Este campo es obligatorio',
+    }).email({ message: 'Debes ingresar un correo' }),
+})
 
-        post(route('password.store'));
-    };
+export default function ResetPassword() {
+
+    let [showDialog, setShowDialog] = useState(false)
+
+    const formEmail = useForm<z.infer<typeof formSchemaEmail>>({
+        resolver: zodResolver(formSchemaEmail),
+        defaultValues: {
+            email: '',
+        }
+    })
+
+    let formState = formEmail.formState.isValid
+
+    console.log('<ResetPassword>', 'var: formState', formState)
+
+    function handleShowDialog(val: boolean) {
+        if (formState === true) {
+            setShowDialog(val)
+        }
+    }
+
+    function sendCode(values: z.infer<typeof formSchemaEmail>) {
+        console.log('<ResetPassword>', 'sendCode(values): ', values)
+
+        // POST con router de Inertia para enviar correo
+    }
+
+    // function onSubmit(values: z.infer<typeof formSchema>) 
+    // {
+    //     console.log(values)        
+    // }
 
     return (
-        <GuestLayout>
-            <Head title="Reset Password" />
-
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
-                    />
-
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        isFocused={true}
-                        onChange={(e) => setData('password', e.target.value)}
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
-
-                    <TextInput
-                        type="password"
-                        name="password_confirmation"
-                        value={data.password_confirmation}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) => setData('password_confirmation', e.target.value)}
-                    />
-
-                    <InputError message={errors.password_confirmation} className="mt-2" />
-                </div>
-
-                <div className="flex items-center justify-end mt-4">
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Reset Password
-                    </PrimaryButton>
-                </div>
-            </form>
-        </GuestLayout>
-    );
+        <NoAuthLayout>
+            <Head title="Reseteo de clave" />
+            <Card>
+                <CardHeader>
+                    <CardTitle className="lg:text-4xl">Reseteo de clave</CardTitle>
+                    <CardDescription className="lg:text-xl">Para poder reestablecer tu clave, primero ingresa tu email.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Form {...formEmail}>
+                        <form onSubmit={formEmail.handleSubmit(sendCode)} className="space-y-8">
+                            <FormField
+                                control={formEmail.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Correo</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="ejemplo@dominio.com" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <Button onClick={() => handleShowDialog(true)} type="submit" disabled={formEmail.formState.isSubmitting}>Validar</Button>
+                        </form>
+                    </Form>
+                </CardContent>
+                <CardFooter>
+                    <ConfirmEmailDialog canOpen={formState} open={showDialog} callback={handleShowDialog} />
+                </CardFooter>
+            </Card>
+        </NoAuthLayout>
+    )
 }

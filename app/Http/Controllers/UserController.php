@@ -4,16 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\User;
 
 class UserController extends Controller
 {
     //
+    protected $model = User::class;
+
     /**
      * Mostrar formulario de registro de usuario
      */
     public function register_form()
     {
-        return Inertia::render('Auth/_Register');
+        return Inertia::render('Auth/Register');
     }
 
     /**
@@ -21,7 +24,15 @@ class UserController extends Controller
      */
     public function login_form()
     {
-        return Inertia::render('Auth/_Login');
+        return Inertia::render('Auth/Login');
+    }
+
+    /**
+     * Mostrar formulario de reseteo de clave
+     */
+    public function reset_form()
+    {
+        return Inertia::render('Auth/ResetPassword');
     }
 
     /**
@@ -31,7 +42,10 @@ class UserController extends Controller
      */
     public function store(Request $req)
     {
+        $inst = new $this->model;
+        $vals = $req->input();
 
+        return $vals;
     }
 
     /**
@@ -61,6 +75,29 @@ class UserController extends Controller
      * @param Request $req
      */
     public function logout(Request $req)
+    {
+
+    }
+
+    /**
+     * Enviar código de validación al correo
+     * 
+     * @param Request $req
+     */
+    public function send_code(Request $req)
+    {
+        $email = $req->input('email');
+        $user = User::where('email', $email)->first();
+        
+
+    }
+
+    /**
+     * Reestablecer clave de usuario
+     * 
+     * @param Request $req
+     */
+    public function reset_pass(Request $req) 
     {
 
     }

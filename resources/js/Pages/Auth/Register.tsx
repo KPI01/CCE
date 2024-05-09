@@ -1,117 +1,143 @@
-import { useEffect, FormEventHandler } from 'react';
-import GuestLayout from '@/Layouts/GuestLayout';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import { Head, Link, useForm } from '@inertiajs/react';
+import NoAuthLayout from "@/Layouts/NotAuthLayout";
+
+import {useState} from 'react'
+import { z } from 'zod'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Head } from "@inertiajs/react";
+import {
+    Card,
+    CardHeader,
+    CardContent,
+    CardTitle,
+    CardDescription,
+    CardFooter
+} from "@/Components/ui/card";
+import { useForm } from "react-hook-form";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/Components/ui/form"
+import { Input } from "@/Components/ui/input"
+import { Button } from "@/Components/ui/button"
+import InputToggleVisibility from "@/Components/Forms/InputToggleVisibility";
+import ConfirmEmailDialog from "@/Components/Forms/ConfirmEmailDialog";
+
+
+const formSchema = z.object({
+    name: z.string({
+        required_error: 'Debes ingresar un nombre',
+        invalid_type_error: 'Debes insertar un nombre',
+    }).regex(/[a-zA-Z]/, {
+        message: 'El nombre no debe tener números ni símbolos',
+    }).min(3, 'El nombre debe tener al menos 3 caracteres'),
+    email: z.string({
+        required_error: 'Debes ingresar un correo',
+        invalid_type_error: 'Debes insertar un correo',
+    }).email('Debes insertar un correo'),
+    password: z.string({
+        required_error: 'Este campo es requerido',
+        invalid_type_error: 'Debes insertar una clave',
+    }).regex(/[a-zA-Z]{3,}[0-9]{3,}[!"@#$%&/\(\)\[\]\{\}^*+\-=?¿?`´ºª\\'¡ç]{2,}/, 'La clave debe tener al menos 3 letras (mayúsculas o minúsculas), 3 números y 2 caracteres especiales').min(8, 'La clave debe tener al menos 8 caracteres'),
+    confirmPassword: z.string({
+        required_error: 'Este campo es requerido',
+        invalid_type_error: 'Debes insertar una clave',
+    })
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Las claves no coinciden",
+    path: ["confirmPassword"],
+})
 
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
-    });
 
-    useEffect(() => {
-        return () => {
-            reset('password', 'password_confirmation');
-        };
-    }, []);
+    let [showDialog, setShowDialog] = useState(false)
 
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+        }
+    })
 
-        post(route('register'));
-    };
+    let formSubmit = form.formState.isSubmitSuccessful
+
+    function handleShowDialog(val: boolean) {
+        if (formSubmit === true) {
+            setShowDialog(val)
+        }
+    }
+
+    function onSubmit(values: z.infer<typeof formSchema>) {
+        console.log('<Register>','onSubmit(values): ',values)
+
+        console.log('<Register>', `onSubmit(password === confirmPassword)values.password === values.confirmPassword}`)
+
+        // POST con router de Inertia + confirmación de clave
+        // Luego de enviar el usuario a la BD implementar la confirmación del correo
+
+        // Request va aqui
+
+        formSubmit = form.formState.isSubmitSuccessful
+
+        handleShowDialog(true)
+    }
 
     return (
-        <GuestLayout>
-            <Head title="Register" />
+        <NoAuthLayout>
+            <Head title="Registro" />
+            <Card>
+                <CardHeader>
+                    <CardTitle className="lg:text-4xl">Registro</CardTitle>
+                    <CardDescription className="lg:text-xl">Para poder registrar al usuario ingresa los datos adecuadamente.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8" >
+                            <FormField
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Nombre</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Pero Perez" {...field} />
+                                        </FormControl>
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="name" value="Name" />
+                                        <FormMessage />
+                                    </FormItem>
+                                )} />
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Correo</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="email"
+                                                placeholder="ejemplo@dominio.com" {...field} />
+                                        </FormControl>
 
-                    <TextInput
-                        id="name"
-                        name="name"
-                        value={data.name}
-                        className="mt-1 block w-full"
-                        autoComplete="name"
-                        isFocused={true}
-                        onChange={(e) => setData('name', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.name} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
-
-                    <TextInput
-                        id="password_confirmation"
-                        type="password"
-                        name="password_confirmation"
-                        value={data.password_confirmation}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) => setData('password_confirmation', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.password_confirmation} className="mt-2" />
-                </div>
-
-                <div className="flex items-center justify-end mt-4">
-                    <Link
-                        href={route('login')}
-                        className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                        Already registered?
-                    </Link>
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Register
-                    </PrimaryButton>
-                </div>
-            </form>
-        </GuestLayout>
-    );
+                                        <FormMessage />
+                                    </FormItem>
+                                )} />
+                            <InputToggleVisibility label="Clave" name="password" control={form.control} />
+                            <InputToggleVisibility label="Repite la clave" control={form.control} name="confitmPassword" />
+                            <Button type="submit">Regístrate!</Button>
+                        </form>
+                    </Form>
+                </CardContent>
+                <CardFooter>
+                    <ConfirmEmailDialog canOpen={formSubmit} open={showDialog} callback={handleShowDialog} />
+                </CardFooter>
+            </Card>
+        </NoAuthLayout>
+    )
 }

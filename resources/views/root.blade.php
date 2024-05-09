@@ -8,6 +8,8 @@
 
     <title inertia>{{ config('app.name', 'CCE') }}</title>
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     @routes
     @viteReactRefresh
     @vite(['resources/js/app.tsx', "resources/js/Pages/{$page['component']}.tsx"])

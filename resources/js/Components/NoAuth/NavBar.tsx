@@ -3,14 +3,9 @@ import { Separator } from '@/Components/ui/separator'
 
 import { Link } from '@inertiajs/react'
 
-export default function NavBar({site}: {site: any}) {
-    const txt = site === 'registro' ? 'Iniciar sesión' 
-        : site === 'login' ? 'Registrarse' : ''
+export default function NavBar({ uri, txt }: { uri: string | undefined, txt?: string }) {
 
-    const url = site === 'login' ? 'registro'
-        : site === 'registro' ? 'login' : ''
-
-    console.log(url)
+    console.log('<NavBar> Props:', `text: ${txt}`, `uri: ${uri}`)
 
     return (
         <nav className="px-7 py-4 flex flex-col">
@@ -19,9 +14,12 @@ export default function NavBar({site}: {site: any}) {
                     <span className="text-primary">C</span>uaderno de <span className="text-primary">C</span>
                     ampo <span className="text-primary">E</span>lectrónico
                 </h1>
-                <Button variant={'outline'} asChild>
-                    <Link href={route(url)}>{txt}!</Link>
-                </Button>
+                {
+                    uri !== undefined &&
+                    <Button variant={'outline'} asChild>
+                        <Link href={route(uri)}>{txt}!</Link>
+                    </Button>
+                }
 
             </div>
             <Separator className='bg-primary/25' />
