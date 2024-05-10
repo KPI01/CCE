@@ -45,7 +45,7 @@ export default function ResetPassword() {
 
     let formState = formEmail.formState.isValid
 
-    console.log('<ResetPassword>', 'var: formState', formState)
+    console.log('var: formState', formState)
 
     function handleShowDialog(val: boolean) {
         if (formState === true) {
@@ -54,14 +54,14 @@ export default function ResetPassword() {
     }
 
     function sendCode(values: z.infer<typeof formSchemaEmail>) {
-        console.log('<ResetPassword>', 'sendCode(values): ', values)
+        console.log('sendCode(values): ', values)
 
         // POST con router de Inertia para enviar correo
     }
 
-    // function onSubmit(values: z.infer<typeof formSchema>) 
+    // function onSubmit(values: z.infer<typeof formSchema>)
     // {
-    //     console.log(values)        
+    //     console.log(values)
     // }
 
     return (
@@ -69,8 +69,8 @@ export default function ResetPassword() {
             <Head title="Reseteo de clave" />
             <Card>
                 <CardHeader>
-                    <CardTitle className="lg:text-4xl">Reseteo de clave</CardTitle>
-                    <CardDescription className="lg:text-xl">Para poder reestablecer tu clave, primero ingresa tu email.</CardDescription>
+                    <CardTitle className="lg:text-4xl">Restablecer clave</CardTitle>
+                    <CardDescription className="lg:text-xl">Para poder restablecer tu clave, primero ingresa tu correo.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Form {...formEmail}>

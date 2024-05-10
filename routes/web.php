@@ -46,6 +46,8 @@ Route::prefix('cce')
                             ->name('nuevo_usuario');
                         Route::get('/reset', 'reset_form')
                             ->name('reset_clave');
+                        Route::get('/reset/', 'reset_form')
+                            ->name('reset_clave');
                         Route::get('/validar-email', function () {
                             return route('registro');
                         })

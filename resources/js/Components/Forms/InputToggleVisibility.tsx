@@ -11,9 +11,7 @@ import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
 import { EyeOpenIcon, EyeClosedIcon } from "@radix-ui/react-icons"
 
-export default function InputToggleVisibility({
-    ...props
-}) {
+export default function InputToggleVisibility({...props}) {
 
     const currentRoute = route().current()
 

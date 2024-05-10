@@ -16,15 +16,15 @@ class UserController extends Controller
      */
     public function register_form()
     {
-        return Inertia::render('Auth/Register');
+        return Inertia::render('NoAuth/Register');
     }
 
     /**
-     * Mostrar formulario de inicio de sesión 
+     * Mostrar formulario de inicio de sesión
      */
     public function login_form()
     {
-        return Inertia::render('Auth/Login');
+        return Inertia::render('NoAuth/Login');
     }
 
     /**
@@ -32,12 +32,12 @@ class UserController extends Controller
      */
     public function reset_form()
     {
-        return Inertia::render('Auth/ResetPassword');
+        return Inertia::render('NoAuth/ResetPassword');
     }
 
     /**
      * Guardar un nuevo usuario
-     * 
+     *
      * @param Request $req
      */
     public function store(Request $req)
@@ -50,7 +50,7 @@ class UserController extends Controller
 
         User::create($vals);
 
-        return Inertia::render('Auth/Register', [
+        return Inertia::render('NoAuth/Register', [
             'form_sent' => true,
             'register_done' => true,
             'vals' => $vals
@@ -59,7 +59,7 @@ class UserController extends Controller
 
     /**
      * Actualizar datos de usuario
-     * 
+     *
      * @param Request $req
      * @param string $id
      */
@@ -70,7 +70,7 @@ class UserController extends Controller
 
     /**
      * Validar sesión de usuario
-     * 
+     *
      * @param Request $req
      */
     public function login(Request $req)
@@ -80,7 +80,7 @@ class UserController extends Controller
 
     /**
      * Cerrar sesión de usuario
-     * 
+     *
      * @param Request $req
      */
     public function logout(Request $req)
@@ -90,23 +90,23 @@ class UserController extends Controller
 
     /**
      * Enviar código de validación al correo
-     * 
+     *
      * @param Request $req
      */
     public function send_code(Request $req)
     {
         $email = $req->input('email');
         $user = User::where('email', $email)->first();
-        
+
 
     }
 
     /**
      * Reestablecer clave de usuario
-     * 
+     *
      * @param Request $req
      */
-    public function reset_pass(Request $req) 
+    public function reset_pass(Request $req)
     {
 
     }

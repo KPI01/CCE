@@ -34,16 +34,6 @@
 					"label": ""
 				}
 			]
-		},
-		{
-			"path": "resources/js/Pages/Auth/Login.tsx",
-			"bookmarks": [
-				{
-					"line": 47,
-					"column": 20,
-					"label": ""
-				}
-			]
 		}
 	]
 }

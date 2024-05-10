@@ -28,7 +28,6 @@ import InputToggleVisibility from "@/Components/Forms/InputToggleVisibility";
 const formSchema = z.object({
     email: z.string({
         required_error: 'Este campo es requerido',
-        invalid_type_error: 'Debes ingresar un correo válido',
     }).email(
         'Debes ser un correo válido'
     ).min(5, 'El correo debe ser más largo'),
@@ -40,8 +39,6 @@ export default function Login() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            email: '',
-            password: '',
         }
     })
 
@@ -54,7 +51,6 @@ export default function Login() {
     return (
         <NoAuthLayout>
             <Head title="Inicio de Sesión" />
-            <main>
                 <Card className="w-3/4 lg:w-full mx-auto">
                     <CardHeader>
                         <CardTitle className="lg:text-4xl">Inicio de Sesión</CardTitle>
@@ -85,7 +81,6 @@ export default function Login() {
                     <CardFooter>
                     </CardFooter>
                 </Card>
-            </main>
         </NoAuthLayout>
     )
 }

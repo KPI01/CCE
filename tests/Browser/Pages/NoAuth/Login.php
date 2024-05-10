@@ -1,17 +1,18 @@
 <?php
 
-namespace Tests\Browser\Pages;
+namespace Tests\Browser\Pages\NoAuth;
 
 use Laravel\Dusk\Browser;
+use Laravel\Dusk\Page;
 
-class HomePage extends Page
+class Login extends Page
 {
     /**
      * Get the URL for the page.
      */
     public function url(): string
     {
-        return '/';
+        return '/cee/auth/login';
     }
 
     /**
@@ -19,7 +20,7 @@ class HomePage extends Page
      */
     public function assert(Browser $browser): void
     {
-        //
+        $browser->assertPathIs($this->url());
     }
 
     /**
@@ -30,7 +31,9 @@ class HomePage extends Page
     public function elements(): array
     {
         return [
-            '@element' => '#selector',
+            '@nav' => '#app > nav',
+            '@nav-title'=> '#app nav h1',
+            '@nav-link'=> '#app nav h1',
         ];
     }
 }

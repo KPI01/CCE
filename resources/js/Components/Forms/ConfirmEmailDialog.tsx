@@ -21,8 +21,8 @@ export default function ConfirmEmailDialog({
     canOpen, open, callback
 }: Props) {
 
-    console.log('<ConfirmEmailDialog>', 'var: canOpen', canOpen)
-    console.log('<ConfirmEmailDialog>', 'var: open', open)
+    console.log('var: canOpen', canOpen)
+    console.log('var: open', open)
 
     if (canOpen) {
         return (

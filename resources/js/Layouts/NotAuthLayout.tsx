@@ -16,7 +16,7 @@ export default function NoAuthLayout({ children }: PropsWithChildren) {
             text: 'Regístrate',
             uri: 'registro',
         },
-        'registro':{ 
+        'registro': {
             text: 'Iniciar sesión',
             uri: 'login',
         },
@@ -26,14 +26,14 @@ export default function NoAuthLayout({ children }: PropsWithChildren) {
         },
     }
 
-    console.log('<NotAuthLayout> Vars:', `uri: ${uri}`)
+    console.log('vars:', `uri: ${uri}`)
 
     return (
         <>
-            <NavBar uri={routes[uri]?.uri} txt={routes[uri]?.text}/>
-            <div className="h-3/4 grid place-content-center">
+            <NavBar uri={routes[uri]?.uri} txt={routes[uri]?.text} />
+            <main className="h-5/6 grid place-content-center">
                 {children}
-            </div>
+            </main>
         </>
     )
 }
