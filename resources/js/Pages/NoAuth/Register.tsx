@@ -47,7 +47,7 @@ const formSchema = z
             })
             .regex(
                 / ^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-/+]).*$ /,
-                "La clave debe que tener al menos 1 mayúscula, 1 minúscula, 1 número y 1 símbolo."
+                "La clave debe tener al menos 1 mayúscula, 1 minúscula, 1 número y 1 símbolo."
             )
             .min(8, "La clave debe tener al menos 8 caracteres."),
         confirmPassword: z.string({
@@ -55,7 +55,7 @@ const formSchema = z
         }),
     })
     .refine((data) => data.password === data.confirmPassword, {
-        message: "Las claves no coinciden.",
+        message: "Las claves deben coincidir.",
         path: ["confirmPassword"],
     });
 

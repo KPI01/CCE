@@ -27,11 +27,16 @@ import InputToggleVisibility from "@/Components/Forms/InputToggleVisibility";
 
 const formSchema = z.object({
     email: z.string({
-        required_error: 'Este campo es requerido',
+        required_error: 'Debes ingresar un correo.',
     }).email(
-        'Debes ser un correo válido'
+        'Debes ingresar un correo válido.'
     ).min(5, 'El correo debe ser más largo'),
-    password: z.string(),
+    password: z.string({
+        required_error: 'Debes ingresar tu clave.',
+    }).regex(
+        / ^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-/+]).*$ /,
+        "La clave debe tener al menos 1 mayúscula, 1 minúscula, 1 número y 1 símbolo."
+    ),
 })
 
 export default function Login() {

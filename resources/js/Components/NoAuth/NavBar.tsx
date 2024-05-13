@@ -8,7 +8,7 @@ export default function NavBar({ uri, txt }: { uri: string | undefined, txt?: st
     console.log('Props:', `text: ${txt}`, `uri: ${uri}`)
 
     return (
-        <nav role='navigation' className="h-1/6 px-7 py-4 flex flex-col">
+        <nav id='navbar' role='navigation' className="h-1/6 px-7 py-4 flex flex-col">
             <div className="flex justify-between py-5">
                 <h1 className="text-xl font-extrabold tracking-tight lg:text-4xl">
                     <span className="text-primary">C</span>uaderno de <span className="text-primary">C</span>

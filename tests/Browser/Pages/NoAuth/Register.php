@@ -5,14 +5,14 @@ namespace Tests\Browser\Pages\NoAuth;
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\Page;
 
-class Login extends Page
+class Register extends Page
 {
     /**
-     * URL de la página.
+     * Obtener la URL de la página.
      */
     public function url(): string
     {
-        return '/cce/auth/login';
+        return '/cce/auth/registro';
     }
 
     /**
@@ -32,11 +32,13 @@ class Login extends Page
     {
         return [
             '@form' => '#app main form',
+            '@name' => '#app main form input[name="name"]',
             '@email' => '#app main form input[name="email"]',
             '@pass' => '#app main form input[name="password"]',
+            '@pass-toggle' => '#app main form button[id="show-password"]',
+            '@confirm-pass' => '#app main form input[name="confirmPassword"]',
+            '@confirm-toggle' => '#app main form button[id="show-confirmPassword"]',
             '@submit' => '#app main form button[type="submit"]',
-            '@toggle-visibility' => '#app main form button[id="show-password"]',
-            '@reset-link' => '#app main form a',
         ];
     }
 }

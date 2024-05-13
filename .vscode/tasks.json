@@ -163,6 +163,26 @@
 				"group": "testing",
 			},
 		},
+		{
+			"type": "shell",
+			"command": "php artisan test",
+			"problemMatcher": [],
+			"label": "artisan: test",
+			"detail": "laravel",
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "silent",
+				"focus": true,
+				"panel": "dedicated",
+				"showReuseMessage": false,
+				"clear": false,
+				"group": "testing",
+			},
+		},
 	],
 	"inputs": [
 		{

@@ -26,13 +26,13 @@ use Inertia\Inertia;
 //  });
 
 // Rutas de la app
-Route::prefix('cce')
+Route::prefix('/cce')
     ->group(function () {
         Route::get('/', function () {
             return Inertia::render('Bienvenida');
         });
 
-        Route::prefix('auth')
+        Route::prefix('/auth')
             ->group(function () {
                 Route::controller(UserController::class)
                     ->group(function () {

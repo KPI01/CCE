@@ -8,15 +8,15 @@ use Laravel\Dusk\Component as BaseComponent;
 class NavBar extends BaseComponent
 {
     /**
-     * Get the root selector for the component.
+     * Obtener el elemento base.
      */
     public function selector(): string
     {
-        return 'nav';
+        return '#app > nav';
     }
 
     /**
-     * Assert that the browser page contains the component.
+     * Aserción que la página contiene el componente.
      */
     public function assert(Browser $browser): void
     {
@@ -24,16 +24,15 @@ class NavBar extends BaseComponent
     }
 
     /**
-     * Get the element shortcuts for the component.
+     * Shortcuts para los elementos del componente.
      *
      * @return array<string, string>
      */
     public function elements(): array
     {
         return [
-            '@nav' => $this->selector(),
-            '@nav-title' => $this->selector() . ' h1',
-            '@nav-link' => $this->selector() . ' a',
+            '@title' => 'h1',
+            '@button' => 'a',
         ];
     }
 }
