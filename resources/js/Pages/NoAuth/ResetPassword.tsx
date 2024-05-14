@@ -28,41 +28,24 @@ import ConfirmEmailDialog from "@/Components/Forms/ConfirmEmailDialog";
 
 const formSchemaEmail = z.object({
     email: z.string({
-        required_error: 'Este campo es obligatorio',
-    }).email({ message: 'Debes ingresar un correo' }),
+        required_error: 'Debes ingresar un correo.',
+    }).email({ message: 'El correo debe ser válido.' }),
 })
 
 export default function ResetPassword() {
 
-    let [showDialog, setShowDialog] = useState(false)
 
     const formEmail = useForm<z.infer<typeof formSchemaEmail>>({
-        resolver: zodResolver(formSchemaEmail),
-        defaultValues: {
-            email: '',
-        }
+        resolver: zodResolver(formSchemaEmail)
     })
 
     let formState = formEmail.formState.isValid
 
     console.log('var: formState', formState)
 
-    function handleShowDialog(val: boolean) {
-        if (formState === true) {
-            setShowDialog(val)
-        }
+    function onSubmit(values: z.infer<typeof formSchemaEmail>) {
+        console.log(values)
     }
-
-    function sendCode(values: z.infer<typeof formSchemaEmail>) {
-        console.log('sendCode(values): ', values)
-
-        // POST con router de Inertia para enviar correo
-    }
-
-    // function onSubmit(values: z.infer<typeof formSchema>)
-    // {
-    //     console.log(values)
-    // }
 
     return (
         <NoAuthLayout>
@@ -74,7 +57,7 @@ export default function ResetPassword() {
                 </CardHeader>
                 <CardContent>
                     <Form {...formEmail}>
-                        <form onSubmit={formEmail.handleSubmit(sendCode)} className="space-y-8">
+                        <form onSubmit={formEmail.handleSubmit(onSubmit)} className="space-y-8">
                             <FormField
                                 control={formEmail.control}
                                 name="email"
@@ -88,12 +71,11 @@ export default function ResetPassword() {
                                     </FormItem>
                                 )}
                             />
-                            <Button onClick={() => handleShowDialog(true)} type="submit" disabled={formEmail.formState.isSubmitting}>Validar</Button>
+                            <Button id="btn-email" type="submit" disabled={formEmail.formState.isSubmitting}>Validar</Button>
                         </form>
                     </Form>
                 </CardContent>
                 <CardFooter>
-                    <ConfirmEmailDialog canOpen={formState} open={showDialog} callback={handleShowDialog} />
                 </CardFooter>
             </Card>
         </NoAuthLayout>

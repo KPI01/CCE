@@ -35,6 +35,24 @@ class LoginTest extends DuskTestCase
     }
 
     /**
+     * Test de ir a la página de registro.
+     */
+    public function testIrRegistro(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(new Login)
+                ->within(new NavBar, function (Browser $browser) {
+                    $browser->assertVisible('@button')
+                        ->assertSeeLink('Regístrate');
+
+                    $browser->clickLink('Regístrate');
+                });
+
+            $browser->screenshot('login/ir_registro');
+        });
+    }
+
+    /**
      * Test de envío de campos vacíos.
      */
     public function testEnviarCamposVacios(): void
@@ -44,7 +62,7 @@ class LoginTest extends DuskTestCase
 
             $browser->press('@submit');
 
-            $browser->assertSee('Debes ingresar un correo.')
+            $browser->assertSee('Debes ingresar tu correo.')
                 ->assertSee('Debes ingresar tu clave.');
 
             $browser->screenshot('login/campos_vacíos');
@@ -63,8 +81,8 @@ class LoginTest extends DuskTestCase
                 ->type('@pass', '123456')
                 ->press('@submit');
 
-            $browser->assertSee('Debes ingresar un correo válido.')
-                ->assertSee('La clave debe tener al menos 1 mayúscula, 1 minúscula, 1 número y 1 símbolo.');
+            $browser->assertSee('Debes ingresar tu correo.')
+                ->assertSee('La clave debe tener al menos 8 caracteres.');
 
             $browser->screenshot('login/campos_incorrectos');
         });
@@ -86,6 +104,25 @@ class LoginTest extends DuskTestCase
             $browser->assertAttribute('@pass', 'type', 'text');
 
             $browser->screenshot('login/visibilidad_clave');
+        });
+    }
+
+    /**
+     * Test de envío de datos de usuario Informatica
+     */
+    public function testUsuarioInformatica(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(new Login);
+
+            $browser->type('@email','informatica@fruveco.com')
+                ->type('@pass', 'Fruveco@2024')
+                ->press('@submit');
+
+            $browser->assertDontSee('Debes ingresar tu correo.')
+                ->assertDontSee('Debes ingresar tu clave.');
+
+            $browser->screenshot('login/usuario_informatica');
         });
     }
 }

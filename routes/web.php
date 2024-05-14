@@ -1,62 +1,63 @@
 <?php
 
-// use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AppController;
 use App\Http\Controllers\UserController;
 // use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-// Route::get('/', function () {
-//     return Inertia::render('Welcome', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//     ]);
-// });
-
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//      Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//      Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-//  });
+Route::get('/', function () {
+    return redirect(route('bienvenida'));
+});
 
 // Rutas de la app
 Route::prefix('/cce')
     ->group(function () {
         Route::get('/', function () {
-            return Inertia::render('Bienvenida');
-        });
+            // return Inertia::render('Bienvenida');
+            return redirect(route('form.login'));
+        })
+        ->name('bienvenida');
 
         Route::prefix('/auth')
             ->group(function () {
                 Route::controller(UserController::class)
                     ->group(function () {
                         Route::get('/login', 'login_form')
-                            ->name('login');
+                            ->name('form.login');
                         Route::post('/login', 'login')
-                            ->name('validar_login');
+                            ->name('login.usuario');
                         Route::get('/registro', 'register_form')
-                            ->name('registro');
+                            ->name('form.registro');
                         Route::post('/registro', 'store')
-                            ->name('nuevo_usuario');
+                            ->name('store.usuario');
                         Route::get('/reset', 'reset_form')
-                            ->name('reset_clave');
-                        Route::get('/reset/', 'reset_form')
-                            ->name('reset_clave');
-                        Route::get('/validar-email', function () {
-                            return route('registro');
-                        })
-                            ->name('verification.notice');
+                            ->name('form.reset-pass');
+
+                        Route::prefix('/correo')
+                            ->group(function () {
+                                Route::get('/validar', 'confirm_email_form')
+                                    ->name('verification.notice');
+                                Route::get('/validar/{id}/{hash}', 'confirm_email')
+                                    ->middleware('signed')
+                                    ->name('verification.verify');
+                                Route::post('/correo/notificación', 'send_email')
+                                    ->middleware('throttle:6,1')
+                                    ->name('verification.send');
+                            });
+
                         Route::post('/reset', 'reset_form')
                             ->name('guardar_clave');
                     });
             })
             ->middleware('auth');
-    });
 
-// require __DIR__ . '/auth.php';
+            Route::prefix('/app')
+                ->group(function () {
+                    Route::controller(AppController::class)
+                        ->group(function () {
+                            Route::get('/dashboard', 'dashboard')
+                                ->name('dashboard.usuario');
+                        });
+                });
+    });

@@ -6,6 +6,8 @@ use App\Models\Role;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\User;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -36,6 +38,14 @@ class UserController extends Controller
     }
 
     /**
+     * Mostrar diálogo de confirmación de correo
+     */
+    public function confirm_email_form()
+    {
+        return Inertia::render('NoAuth/ConfirmEmail');
+    }
+
+    /**
      * Guardar un nuevo usuario
      *
      * @param Request $req
@@ -45,16 +55,35 @@ class UserController extends Controller
         $vals = $req->input();
         $user_role = Role::where('name', 'Usuario')->first();
 
-        unset($vals['confirmPassword']);
         $vals['role_id'] = $user_role->id;
 
         User::create($vals);
 
-        return Inertia::render('NoAuth/Register', [
-            'form_sent' => true,
-            'register_done' => true,
-            'vals' => $vals
-        ]);
+        return redirect(route('verification.notice'));
+    }
+
+    /**
+     * Validación de correo del usuario
+     *
+     * @param EmailVerificationRequest $req
+     */
+    public function confirm_email(EmailVerificationRequest $req)
+    {
+        $req->fulfill();
+
+        return redirect(route('form.login'));
+    }
+
+    /**
+     * Enviar correo de validación automáticamente
+     *
+     * @param Request $req
+     */
+    public function send_email(Request $req)
+    {
+        $req->user()->sendEmailVerificationNotification();
+
+        return back()->with('mensaje', 'Correo de verificación enviado');
     }
 
     /**
@@ -75,6 +104,24 @@ class UserController extends Controller
      */
     public function login(Request $req)
     {
+        $credentials = $req->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        $user = User::where('email', $req->input('email'))->first();
+
+        if (!Auth::check()) {
+
+            if (Auth::attempt($credentials)) {
+                $req->session()->regenerate();
+                return redirect(route('dashboard.usuario'));
+            } else {
+                return back()->withErrors([
+                    'email' => 'Correo y clave inválida'
+                ])->onlyInput('email');
+            }
+        }
 
     }
 

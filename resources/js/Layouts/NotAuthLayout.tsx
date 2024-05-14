@@ -12,17 +12,17 @@ interface Routes {
 export default function NoAuthLayout({ children }: PropsWithChildren) {
     const uri: string | '' = route().current()?.toString() || '';
     const routes: Routes = {
-        'login': {
+        'form.login': {
             text: 'Regístrate',
-            uri: 'registro',
+            uri: 'form.registro',
         },
-        'registro': {
+        'form.registro': {
             text: 'Iniciar sesión',
-            uri: 'login',
+            uri: 'form.login',
         },
-        'reset_clave': {
+        'form.reset-clave': {
             text: 'Volver',
-            uri: 'login',
+            uri: 'form.login',
         },
     }
 
@@ -31,7 +31,7 @@ export default function NoAuthLayout({ children }: PropsWithChildren) {
     return (
         <>
             <NavBar uri={routes[uri]?.uri} txt={routes[uri]?.text} />
-            <main className="h-5/6 grid place-content-center">
+            <main className="basis-full grid place-content-center">
                 {children}
             </main>
         </>

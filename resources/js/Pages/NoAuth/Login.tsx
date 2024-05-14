@@ -9,7 +9,6 @@ import {
     CardHeader,
     CardTitle,
     CardDescription,
-    CardFooter
 
 } from "@/Components/ui/card"
 import { useForm } from "react-hook-form";
@@ -26,17 +25,13 @@ import { Button } from "@/Components/ui/button"
 import InputToggleVisibility from "@/Components/Forms/InputToggleVisibility";
 
 const formSchema = z.object({
-    email: z.string({
-        required_error: 'Debes ingresar un correo.',
-    }).email(
-        'Debes ingresar un correo válido.'
-    ).min(5, 'El correo debe ser más largo'),
+    email: z.string().email(
+        'Debes ingresar tu correo.'
+    ),
     password: z.string({
         required_error: 'Debes ingresar tu clave.',
-    }).regex(
-        / ^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-/+]).*$ /,
-        "La clave debe tener al menos 1 mayúscula, 1 minúscula, 1 número y 1 símbolo."
-    ),
+    })
+    .min(8, 'La clave debe tener al menos 8 caracteres.'),
 })
 
 export default function Login() {
@@ -44,13 +39,16 @@ export default function Login() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
+            email: '',
+            password: '',
         }
     })
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log('onSubmit(values):', values)
+        // console.log('onSubmit(values):', values)
 
         // POST con router de Inertia
+        router.post(route('login.usuario'), values)
     }
 
     return (
@@ -69,9 +67,13 @@ export default function Login() {
                                     name="email"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Correo</FormLabel>
+                                            <FormLabel htmlFor="email">Correo</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="ejemplo@dominio.com" {...field} />
+                                                <Input
+                                                id="email"
+                                                placeholder="ejemplo@dominio.com"
+                                                autoComplete="on"
+                                                {...field} />
                                             </FormControl>
 
                                             <FormMessage />
@@ -83,8 +85,6 @@ export default function Login() {
                             </form>
                         </Form>
                     </CardContent>
-                    <CardFooter>
-                    </CardFooter>
                 </Card>
         </NoAuthLayout>
     )

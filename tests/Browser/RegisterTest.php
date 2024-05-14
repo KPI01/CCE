@@ -46,8 +46,7 @@ class RegisterTest extends DuskTestCase
             $browser->press('@submit')
                 ->assertSee('Debes ingresar un nombre.')
                 ->assertSee('Debes ingresar un correo.')
-                ->assertSee('Debes ingresar una clave.')
-                ->assertSee('Debes confirmar la clave.');
+                ->assertSee('La clave debe tener al menos 1 mayúscula, 1 minúscula, 1 número, 1 símbolo y al menos 8 caracteres.');
 
             $browser->screenshot('register/campos_vacios');
         });
@@ -68,8 +67,8 @@ class RegisterTest extends DuskTestCase
                 ->press('@submit');
 
             $browser->assertSee('El nombre solo puede contener letras.')
-                ->assertSee('El correo debe ser válido.')
-                ->assertSee('La clave debe tener al menos 1 mayúscula, 1 minúscula, 1 número y 1 símbolo.')
+                ->assertSee('Debes ingresar un correo')
+                ->assertSee('La clave debe tener al menos 1 mayúscula, 1 minúscula, 1 número, 1 símbolo y al menos 8 caracteres.')
                 ->assertSee('Las claves deben coincidir.');
 
             $browser->screenshot('register/campos_invalidos');
@@ -84,6 +83,9 @@ class RegisterTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit(new Register);
 
+            $browser->type('@name', 'Jorge')
+                ->type('@email', 'jorge@correo.com');
+
             $browser->assertAttribute('@pass', 'type', 'password')
                 ->assertAttribute('@confirm-pass', 'type', 'password');
 
@@ -96,6 +98,30 @@ class RegisterTest extends DuskTestCase
                 ->assertAttribute('@confirm-pass', 'type', 'text');
 
             $browser->screenshot('register/visibilidad_claves');
+        });
+    }
+
+    /**
+     * Test con campos correctos
+     */
+    public function testCamposCorrectos(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(new Register);
+
+            $browser->type('@name', 'Jorge')
+                ->type('@email', 'jorge@correo.com')
+                ->type('@pass', 'FKH!9NB%Bj')
+                ->click('@pass-toggle')
+                ->type('@confirm-pass', 'FKH!9NB%Bj')
+                ->press('@submit');
+
+            $browser->assertDontSee('El nombre solo puede contener letras.')
+                ->assertDontSee('El correo debe ser válido.')
+                ->assertDontSee('La clave debe tener al menos 1 mayúscula, 1 minúscula, 1 número, 1 símbolo y al menos 8 caracteres.')
+                ->assertDontSee('Las claves deben coincidir.');
+
+            $browser->screenshot('register/envio_formulario');
         });
     }
 }

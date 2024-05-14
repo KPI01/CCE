@@ -40,7 +40,7 @@
 				"panel": "shared",
 				"showReuseMessage": false,
 				"clear": true,
-				"group": "dev-server",
+				"group": "dev-server"
 			}
 		},
 		{
@@ -60,7 +60,7 @@
 				"panel": "dedicated",
 				"showReuseMessage": false,
 				"clear": true,
-				"group": "database",
+				"group": "database"
 			}
 		},
 		{
@@ -80,7 +80,7 @@
 				"panel": "dedicated",
 				"showReuseMessage": false,
 				"clear": true,
-				"group": "database",
+				"group": "database"
 			}
 		},
 		{
@@ -100,8 +100,8 @@
 				"panel": "dedicated",
 				"showReuseMessage": false,
 				"clear": true,
-				"group": "database",
-			},
+				"group": "database"
+			}
 		},
 		{
 			"type": "shell",
@@ -120,8 +120,8 @@
 				"panel": "dedicated",
 				"showReuseMessage": false,
 				"clear": true,
-				"group": "database",
-			},
+				"group": "database"
+			}
 		},
 		{
 			"type": "shell",
@@ -140,8 +140,8 @@
 				"panel": "dedicated",
 				"showReuseMessage": false,
 				"clear": true,
-				"group": "make",
-			},
+				"group": "make"
+			}
 		},
 		{
 			"type": "shell",
@@ -160,8 +160,28 @@
 				"panel": "dedicated",
 				"showReuseMessage": false,
 				"clear": false,
-				"group": "testing",
+				"group": "testing"
+			}
+		},
+		{
+			"type": "shell",
+			"command": "php artisan dusk --without-tty --filter ${input:filter}",
+			"problemMatcher": [],
+			"label": "artisan: browser test w/ filtro",
+			"detail": "laravel",
+			"group": {
+				"kind": "test",
+				"isDefault": true
 			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": true,
+				"panel": "dedicated",
+				"showReuseMessage": false,
+				"clear": false,
+				"group": "testing"
+			}
 		},
 		{
 			"type": "shell",
@@ -180,9 +200,9 @@
 				"panel": "dedicated",
 				"showReuseMessage": false,
 				"clear": false,
-				"group": "testing",
-			},
-		},
+				"group": "testing"
+			}
+		}
 	],
 	"inputs": [
 		{
@@ -195,6 +215,11 @@
 			"type": "promptString",
 			"id": "view",
 			"description": "Nombre para la vista",
+		},
+		{
+			"type": "promptString",
+			"id": "filter",
+			"description": "Nombre del test",
 		},
 	]
 }

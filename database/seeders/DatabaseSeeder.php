@@ -24,17 +24,16 @@ class DatabaseSeeder extends Seeder
             ->create([
                 'name' => 'Informatica',
                 'email' => 'informatica@fruveco.com',
-                'email_verified_at' => now(),
-                'password' => '123456'
+                'password' => 'Fruveco@2024'
             ]);
-            
-        $user = User::factory()
-            ->count(1)
-            ->for(Role::factory()->state([
-                'name' => 'Usuario',
-            ]))
-            ->create([
-                'password' => '123456'
-            ]);
+
+        // $user = User::factory()
+        //     ->count(1)
+        //     ->for(Role::factory()->state([
+        //         'name' => 'Usuario',
+        //     ]))
+        //     ->create([
+        //         'password' => '123456'
+        //     ]);
     }
 }
