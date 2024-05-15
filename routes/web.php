@@ -53,7 +53,7 @@ Route::prefix('/cce')
                                     ->middleware(['auth' ,'signed'])
                                     ->name('verification.verify');
                                 Route::post('/correo/notificación', 'send_email')
-                                    ->middleware('throttle:6,1')
+                                    ->middleware(['auth', 'throttle:6,1'])
                                     ->name('verification.send');
                             });
 

@@ -14,27 +14,32 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $adm_r = Role::factory()->create([
-            'name' => 'Administrador',
-        ]);
 
-        $adm = User::factory()
+        User::factory()
             ->count(1)
-            ->for($adm_r)
+            ->for(Role::factory()->state([
+                'name' => 'Administrador',
+            ]))
             ->create([
                 'name' => 'Informatica',
                 'email' => 'informatica@fruveco.com',
                 'password' => 'Fruveco@2024',
-                'email_verified_at' => null
+                'email_verified_at' => now(),
+                'remember_token' => null,
             ]);
 
-        // $user = User::factory()
-        //     ->count(1)
-        //     ->for(Role::factory()->state([
-        //         'name' => 'Usuario',
-        //     ]))
-        //     ->create([
-        //         'password' => '123456'
-        //     ]);
+        User::factory()
+            ->count(1)
+            ->for(Role::factory()->state([
+                'name' => 'Usuario',
+            ]))
+            ->create([
+                'name' => fake()->name(),
+                'email' => fake()->unique()->safeEmail(),
+                'password' => '0dEwSl-!$*',
+                'email_verified_at' => null,
+                'remember_token' => null,
+            ]);
+
     }
 }

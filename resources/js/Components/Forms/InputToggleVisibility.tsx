@@ -41,9 +41,9 @@ export default function InputToggleVisibility({...props}) {
                     </FormControl>
                     <FormMessage className="max-w-sm" />
                     {
-                        currentRoute === 'form.login' &&
+                        currentRoute === 'login' &&
                         <Button asChild variant={'link'}>
-                            <Link href={route('form.reset-pass')}>¿Clave olvidada?</Link>
+                            <Link href={route('reset-pass')}>¿Clave olvidada?</Link>
                         </Button>
                     }
                 </FormItem>

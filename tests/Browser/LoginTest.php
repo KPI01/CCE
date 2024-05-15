@@ -2,6 +2,7 @@
 
 namespace Tests\Browser;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Components\NoAuth\NavBar;
@@ -10,6 +11,11 @@ use Tests\DuskTestCase;
 
 class LoginTest extends DuskTestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+    }
+
     /**
      * Test de acceso y visibilidad de la página.
      */
@@ -111,15 +117,43 @@ class LoginTest extends DuskTestCase
     }
 
     /**
-     * Test de envío de datos de usuario admin
+     * Test de envío de datos de usuario con correo validado
      */
-    public function testUsuarioAdmin(): void
+    public function testUsuarioValidado(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new Login);
 
+
             $browser->type('@email', 'informatica@fruveco.com')
                 ->type('@pass', 'Fruveco@2024')
+                ->press('@submit');
+
+            $browser->assertDontSee('Debes ingresar tu correo.')
+                ->assertDontSee('Debes ingresar tu clave.');
+
+            $browser->pause(3000)
+                ->assertPathIs('/cce/app/dashboard');
+
+            $browser->screenshot('login/usuario_informatica');
+        });
+    }
+
+    /**
+     * Test de envío de datos con correo sin validar
+     */
+    public function testUsuarioSinValidar(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(new Login);
+
+            // El email se estará extrayendo de la BD que está creando el factory
+            $email = 'caban.iker@example.net';
+
+            $browser->loginAs(User::firstWhere('email', $email));
+
+            $browser->type('@email', $email)
+                ->type('@pass', '0dEwSl-!$*')
                 ->press('@submit');
 
             $browser->assertDontSee('Debes ingresar tu correo.')
@@ -133,10 +167,16 @@ class LoginTest extends DuskTestCase
     }
 
     /**
-     * Test de envío de datos con usuario normal
+     * Test de reenvío de código
      */
-    public function testUsuarioNormal(): void
-     {
+    public function testReenvio(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(new Login);
 
-     }
+            $email = 'caban.iker@example.net';
+
+
+        });
+    }
 }

@@ -16,6 +16,7 @@ export default function ConfirmEmail() {
         console.log('Reenviar código')
 
         // POST con router de Inertia
+        router.post(route('verification.send'))
     }
 
     function handleContinue() {
@@ -28,19 +29,19 @@ export default function ConfirmEmail() {
         <NoAuthLayout>
             <Head title="Confirmación de correo" />
 
-            <Card>
+            <Card className="max-w-md">
                 <CardHeader>
                     <CardTitle>Confirma tu  correo</CardTitle>
-                    <CardDescription>Para poder iniciar sesión, primero debes ingresar al link que ha sido enviado a tu correo.</CardDescription>
-                    <CardContent className="p-0 space-y-4 space-x-6">
-                        <Button onClick={handleContinue} >
-                            Continuar
-                        </Button>
-                        <Button onClick={resendCode} variant={'outline'}>
-                            Reenviar correo
-                        </Button>
-                    </CardContent>
                 </CardHeader>
+                <CardContent className="space-y-4">
+                    <CardDescription>Para poder iniciar sesión, primero debes ingresar al link que ha sido enviado a tu correo. Una vez des click en el botón de verificar, puedes cerrar esta pestaña o volver del email y dar en "Continuar"</CardDescription>
+                    <Button id="continue-btn" className="me-5" onClick={handleContinue} >
+                        Continuar
+                    </Button>
+                    <Button id="resend-btn" onClick={resendCode} variant={'outline'}>
+                        Reenviar correo
+                    </Button>
+                </CardContent>
             </Card>
         </NoAuthLayout>
     )
