@@ -17,7 +17,7 @@ export default function NavBar({ uri, txt }: { uri: string | undefined, txt?: st
                 {
                     uri !== undefined &&
                     <Button variant={'outline'} asChild>
-                        <Link href={route(uri)}>{txt}!</Link>
+                        <Link href={route(uri)}>{txt}</Link>
                     </Button>
                 }
 

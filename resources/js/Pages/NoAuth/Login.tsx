@@ -30,8 +30,15 @@ const formSchema = z.object({
     ),
     password: z.string({
         required_error: 'Debes ingresar tu clave.',
-    })
-    .min(8, 'La clave debe tener al menos 8 caracteres.'),
+    }),
+})
+.refine((data) => data.password.length > 0, {
+    message: 'Debes ingresar tu clave.',
+    path: ['password'],
+})
+.refine((data) => data.password.length >= 8, {
+    message: 'La clave debe tener al menos 8 caracteres.',
+    path: ['password'],
 })
 
 export default function Login() {

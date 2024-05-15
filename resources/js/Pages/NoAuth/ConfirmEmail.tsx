@@ -8,20 +8,36 @@ import {
     CardContent,
 } from "@/Components/ui/card";
 
-import { Head, Link } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
 
 export default function ConfirmEmail() {
+
+    function resendCode() {
+        console.log('Reenviar código')
+
+        // POST con router de Inertia
+    }
+
+    function handleContinue() {
+        console.log('Cierre de sesión')
+
+        router.get(route('dashboard.usuario'))
+    }
+
     return (
         <NoAuthLayout>
-            <Head title="Confirmar correo" />
+            <Head title="Confirmación de correo" />
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Confirmación de correo</CardTitle>
+                    <CardTitle>Confirma tu  correo</CardTitle>
                     <CardDescription>Para poder iniciar sesión, primero debes ingresar al link que ha sido enviado a tu correo.</CardDescription>
-                    <CardContent className="p-0 my-5">
-                        <Button asChild>
-                            <Link href={route('login')}>Volver</Link>
+                    <CardContent className="p-0 space-y-4 space-x-6">
+                        <Button onClick={handleContinue} >
+                            Continuar
+                        </Button>
+                        <Button onClick={resendCode} variant={'outline'}>
+                            Reenviar correo
                         </Button>
                     </CardContent>
                 </CardHeader>

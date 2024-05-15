@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class UserController extends Controller
 {
@@ -53,11 +55,16 @@ class UserController extends Controller
     public function store(Request $req)
     {
         $vals = $req->input();
-        $user_role = Role::where('name', 'Usuario')->first();
+        $user_role = Role::firstOrCreate([
+            'name' => 'Usuario',
+        ]);
 
         $vals['role_id'] = $user_role->id;
 
-        User::create($vals);
+        $user = User::create($vals);
+        event(new Registered($user));
+
+        Auth::login($user);
 
         return redirect(route('verification.notice'));
     }
@@ -71,7 +78,7 @@ class UserController extends Controller
     {
         $req->fulfill();
 
-        return redirect(route('form.login'));
+        return redirect(route('dashboard.usuario'));
     }
 
     /**
@@ -83,7 +90,7 @@ class UserController extends Controller
     {
         $req->user()->sendEmailVerificationNotification();
 
-        return back()->with('mensaje', 'Correo de verificación enviado');
+        return back()->with('msj', 'Correo de verificación enviado');
     }
 
     /**
@@ -109,19 +116,18 @@ class UserController extends Controller
             'password' => ['required'],
         ]);
 
-        $user = User::where('email', $req->input('email'))->first();
-
-        if (!Auth::check()) {
-
-            if (Auth::attempt($credentials)) {
-                $req->session()->regenerate();
-                return redirect(route('dashboard.usuario'));
-            } else {
-                return back()->withErrors([
-                    'email' => 'Correo y clave inválida'
-                ])->onlyInput('email');
-            }
+        if (Auth::check()) {
+            return redirect()->intended(route('dashboard.usuario'));
         }
+
+        if (Auth::attempt($credentials)) {
+            $req->session()->regenerate();
+            return redirect()->intended(route('dashboard.usuario'));
+        }
+
+        return back()->withErrors([
+            'email' => 'Las credenciales son inválidas.',
+        ])->onlyInput('email');
 
     }
 
@@ -133,23 +139,19 @@ class UserController extends Controller
     public function logout(Request $req)
     {
 
+        if (Auth::check()) {
+            $req->session()->invalidate();
+
+            return redirect(route('login'));
+        } else {
+            return redirect()->intended(route('login'))->withErrors([
+                'email' => 'No hay una sesión activa.',
+            ]);
+        }
     }
 
     /**
-     * Enviar código de validación al correo
-     *
-     * @param Request $req
-     */
-    public function send_code(Request $req)
-    {
-        $email = $req->input('email');
-        $user = User::where('email', $email)->first();
-
-
-    }
-
-    /**
-     * Reestablecer clave de usuario
+     * Restablecer clave de usuario
      *
      * @param Request $req
      */

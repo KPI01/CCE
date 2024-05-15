@@ -12,17 +12,17 @@ interface Routes {
 export default function NoAuthLayout({ children }: PropsWithChildren) {
     const uri: string | '' = route().current()?.toString() || '';
     const routes: Routes = {
-        'form.login': {
+        'login': {
             text: 'Regístrate',
-            uri: 'form.registro',
+            uri: 'registro',
         },
-        'form.registro': {
+        'registro': {
             text: 'Iniciar sesión',
-            uri: 'form.login',
+            uri: 'login',
         },
-        'form.reset-clave': {
-            text: 'Volver',
-            uri: 'form.login',
+        'verification.notice': {
+            text: 'Cerrar sesión',
+            uri: 'logout',
         },
     }
 

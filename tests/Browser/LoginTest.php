@@ -45,7 +45,10 @@ class LoginTest extends DuskTestCase
                     $browser->assertVisible('@button')
                         ->assertSeeLink('Regístrate');
 
-                    $browser->clickLink('Regístrate');
+                    $browser->visit(
+                        $browser->attribute('@button', 'href')
+                    )
+                        ->assertPathIs('/cce/auth/registro');
                 });
 
             $browser->screenshot('login/ir_registro');
@@ -108,21 +111,32 @@ class LoginTest extends DuskTestCase
     }
 
     /**
-     * Test de envío de datos de usuario Informatica
+     * Test de envío de datos de usuario admin
      */
-    public function testUsuarioInformatica(): void
+    public function testUsuarioAdmin(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new Login);
 
-            $browser->type('@email','informatica@fruveco.com')
+            $browser->type('@email', 'informatica@fruveco.com')
                 ->type('@pass', 'Fruveco@2024')
                 ->press('@submit');
 
             $browser->assertDontSee('Debes ingresar tu correo.')
                 ->assertDontSee('Debes ingresar tu clave.');
 
+            $browser->pause(3000)
+                ->assertPathIs('/cce/auth/correo/validar');
+
             $browser->screenshot('login/usuario_informatica');
         });
     }
+
+    /**
+     * Test de envío de datos con usuario normal
+     */
+    public function testUsuarioNormal(): void
+     {
+
+     }
 }

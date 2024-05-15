@@ -4,33 +4,13 @@
 			"path": "app/Http/Controllers/UserController.php",
 			"bookmarks": [
 				{
-					"line": 52,
-					"column": 18,
-					"label": ""
-				},
-				{
-					"line": 94,
+					"line": 101,
 					"column": 14,
 					"label": ""
 				},
 				{
-					"line": 104,
-					"column": 16,
-					"label": ""
-				},
-				{
-					"line": 132,
-					"column": 15,
-					"label": ""
-				},
-				{
-					"line": 142,
-					"column": 8,
-					"label": ""
-				},
-				{
-					"line": 155,
-					"column": 12,
+					"line": 157,
+					"column": 6,
 					"label": ""
 				}
 			]
