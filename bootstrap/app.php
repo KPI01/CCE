@@ -16,6 +16,12 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
 
+        $middleware->trustHosts(at: [
+            '127.0.0.1',
+            '::1',
+            'localhost',
+        ]);
+
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {

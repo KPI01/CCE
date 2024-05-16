@@ -12,7 +12,7 @@ class ResetPassword extends Page
      */
     public function url(): string
     {
-        return '/cce/auth/reset';
+        return '/cce/auth/clave/olvido';
     }
 
     /**
@@ -31,9 +31,11 @@ class ResetPassword extends Page
     public function elements(): array
     {
         return [
+            '@card-title'=> 'h3',
+            '@card-description' => 'h3 + p',
             '@form' => '#app main form',
             '@email' => '#app main form input[name="email"]',
-            '@submit-email' => '#app main form button[type="submit"]#btn-email',
+            '@submit-email' => '#app main form button[type="submit"]#submit-email',
         ];
     }
 }

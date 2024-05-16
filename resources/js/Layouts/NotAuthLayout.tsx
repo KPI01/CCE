@@ -24,9 +24,13 @@ export default function NoAuthLayout({ children }: PropsWithChildren) {
             text: 'Cerrar sesión',
             uri: 'logout',
         },
+        'password.request': {
+            text: 'Volver al inicio de sesión',
+            uri: 'login',
+        },
     }
 
-    console.log('vars:', `uri: ${uri}`)
+    // console.log('vars:', `uri: ${uri}`)
 
     return (
         <>

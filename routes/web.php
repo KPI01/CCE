@@ -5,18 +5,18 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return redirect(route('bienvenida'));
-});
+// Route::get('/', function () {
+//     return redirect(route('bienvenida'));
+// });
 
 // Rutas de la app
 Route::prefix('/cce')
     ->group(function () {
-        Route::get('/', function () {
-            // return Inertia::render('Bienvenida');
-            return redirect(route('login'));
-        })
-        ->name('bienvenida');
+        // Route::get('/', function () {
+        //     // return Inertia::render('Bienvenida');
+        //     return redirect(route('login'));
+        // })
+        // ->name('bienvenida');
 
         Route::prefix('/auth')
             ->group(function () {
@@ -26,16 +26,17 @@ Route::prefix('/cce')
 
                 Route::controller(UserController::class)
                     ->group(function () {
-                        Route::get('/login', 'login_form')
-                            ->name('login');
-                        Route::post('/login', 'login')
-                            ->name('login.usuario');
-                        Route::get('/registro', 'register_form')
-                            ->name('registro');
-                        Route::post('/registro', 'store')
-                            ->name('store.usuario');
-                        Route::get('/reset', 'reset_form')
-                            ->name('reset-pass');
+                        Route::middleware('guest')
+                            ->group(function () {
+                                Route::get('/login', 'login_form')
+                                    ->name('login');
+                                Route::post('/login', 'login')
+                                    ->name('login.usuario');
+                                Route::get('/registro', 'register_form')
+                                    ->name('registro');
+                                Route::post('/registro', 'store')
+                                    ->name('store.usuario');
+                            });
 
                         Route::prefix('/correo')
                             ->middleware('auth')
@@ -55,6 +56,19 @@ Route::prefix('/cce')
                                 Route::post('/correo/notificación', 'send_email')
                                     ->middleware(['auth', 'throttle:6,1'])
                                     ->name('verification.send');
+                            });
+
+                        Route::prefix('/clave')
+                        ->middleware('guest')
+                            ->group(function () {
+                                Route::get('/olvido', 'reset_pass_request_form')
+                                    ->name('password.request');
+                                Route::post('/olvido', 'reset_pass_request')
+                                    ->name('password.email');
+                                Route::get('/reseteo/{token}', 'reset_pass_form')
+                                    ->name('password.reset');
+                                Route::post('/reseteo', 'reset_pass')
+                                    ->name('password.update');
                             });
 
                         Route::post('/logout', 'logout')

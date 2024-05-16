@@ -74,16 +74,15 @@ export default function Register(props: Props) {
     });
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        console.info("onSubmit(values): ", values);
-
-        console.info(
-            "onSubmit(password === confirmPassword): ",
+        console.log("onSubmit() values: ", values)
+        console.log(
+            "onSubmit() confirmación clave: ",
             values.password === values.confirmPassword
         );
 
         // POST con router de Inertia
         // Luego de enviar el usuario a la BD implementar la confirmación del correo
-        delete values.confirmPassword
+        if (values.password == values.confirmPassword) delete values.confirmPassword
 
         router.post(route('store.usuario'), values)
 

@@ -43,7 +43,7 @@ export default function InputToggleVisibility({...props}) {
                     {
                         currentRoute === 'login' &&
                         <Button asChild variant={'link'}>
-                            <Link href={route('reset-pass')}>¿Clave olvidada?</Link>
+                            <Link href={route('password.request')}>¿Clave olvidada?</Link>
                         </Button>
                     }
                 </FormItem>
