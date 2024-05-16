@@ -7,21 +7,6 @@
 					"line": 104,
 					"column": 14,
 					"label": ""
-				},
-				{
-					"line": 160,
-					"column": 6,
-					"label": ""
-				}
-			]
-		},
-		{
-			"path": "resources/js/Pages/NoAuth/Register.tsx",
-			"bookmarks": [
-				{
-					"line": 75,
-					"column": 14,
-					"label": ""
 				}
 			]
 		}
