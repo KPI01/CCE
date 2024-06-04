@@ -9,6 +9,9 @@
 			"problemMatcher": [],
 			"label": "npm: dev",
 			"detail": "vite",
+            "runOptions": {
+                "runOn": "folderOpen"
+            },
 			"group": {
 				"kind": "test",
 				"isDefault": true
@@ -29,6 +32,9 @@
 			"problemMatcher": [],
 			"label": "artisan: serve",
 			"detail": "laravel",
+            "runOptions": {
+                "runOn": "folderOpen"
+            },
 			"group": {
 				"kind": "test",
 				"isDefault": true

@@ -9,6 +9,46 @@
 					"label": ""
 				}
 			]
+		},
+		{
+			"path": "app/Http/Controllers/EntidadController.php",
+			"bookmarks": [
+				{
+					"line": 13,
+					"column": 20,
+					"label": ""
+				},
+				{
+					"line": 21,
+					"column": 14,
+					"label": ""
+				},
+				{
+					"line": 29,
+					"column": 19,
+					"label": ""
+				},
+				{
+					"line": 37,
+					"column": 25,
+					"label": ""
+				},
+				{
+					"line": 45,
+					"column": 16,
+					"label": ""
+				},
+				{
+					"line": 53,
+					"column": 19,
+					"label": ""
+				},
+				{
+					"line": 61,
+					"column": 31,
+					"label": ""
+				}
+			]
 		}
 	]
 }
