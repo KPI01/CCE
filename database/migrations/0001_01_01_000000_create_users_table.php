@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id');
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->string('name', 100);
+            $table->string('email', 254)->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password', 150);
             $table->rememberToken();
             $table->timestamps();
         });
@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
+
+            $table->foreign('email')->references('email')->on('users')->onDelete('cascade');
         });
 
         Schema::create('sessions', function (Blueprint $table) {

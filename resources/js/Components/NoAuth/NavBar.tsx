@@ -10,10 +10,10 @@ export default function NavBar({ uri, txt }: { uri: string | undefined, txt?: st
     return (
         <nav id='navbar' role='navigation' className="basis-auto px-7 py-4 flex flex-col">
             <div className="flex justify-between py-5">
-                <h1 className="text-xl font-extrabold tracking-tight lg:text-4xl">
+                <h2 className="text-xl font-extrabold tracking-tight lg:text-4xl">
                     <span className="text-primary">C</span>uaderno de <span className="text-primary">C</span>
                     ampo <span className="text-primary">E</span>lectrónico
-                </h1>
+                </h2>
                 {
                     uri !== undefined &&
                     <Button variant={'outline'} asChild>

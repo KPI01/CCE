@@ -119,13 +119,16 @@ class UserController extends Controller
             'password' => ['required'],
         ]);
 
+        $user = User::where('email', $credentials['email'])->first();
+
         if (Auth::check()) {
             return redirect()->intended(route('dashboard.usuario'));
         }
 
         if (Auth::attempt($credentials)) {
-            $req->session()->regenerate();
-            return redirect()->intended(route('dashboard.usuario'));
+            Auth::login($user, true);
+
+            return redirect()->intended(route('home'));
         }
 
         return back()->withErrors([
@@ -136,15 +139,11 @@ class UserController extends Controller
 
     /**
      * Cerrar sesión de usuario
-     *
-     * @param Request $req
      */
-    public function logout(Request $req)
+    public function logout()
     {
-
         if (Auth::check()) {
-            $req->session()->invalidate();
-
+            Auth::logout();
             return redirect(route('login'));
         } else {
             return redirect()->intended(route('login'))->withErrors([

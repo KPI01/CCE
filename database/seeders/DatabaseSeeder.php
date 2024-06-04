@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         User::factory()
             ->count(1)
             ->for(Role::factory()->state([
-                'name' => 'Administrador',
+                'name' => 'Admin',
             ]))
             ->create([
                 'name' => 'Informatica',
