@@ -1,24 +1,22 @@
 <?php
 
 use App\Http\Controllers\AppController;
+use App\Http\Controllers\EmpresaController;
+use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return redirect(route('bienvenida'));
-// });
+Route::get('/', [AppController::class, 'redirect_home'])->name('root');
 
 // Rutas de la app
 Route::prefix('/cce')
     ->group(function () {
-        // Route::get('/', function () {
-        //     // return Inertia::render('Bienvenida');
-        //     return redirect(route('login'));
-        // })
-        // ->name('bienvenida');
+        Route::controller(AppController::class)->group(function () {
+            Route::get('/', 'redirect_home');
+        });
 
-        Route::prefix('/auth')
+        Route::prefix('auth')
             ->group(function () {
                 Route::get('/', function () {
                     return redirect(route('login'));
@@ -38,7 +36,7 @@ Route::prefix('/cce')
                                     ->name('store.usuario');
                             });
 
-                        Route::prefix('/correo')
+                        Route::prefix('correo')
                             ->middleware('auth')
                             ->group(function () {
                                 Route::get('/', function () {
@@ -58,7 +56,7 @@ Route::prefix('/cce')
                                     ->name('verification.send');
                             });
 
-                        Route::prefix('/clave')
+                        Route::prefix('clave')
                         ->middleware('guest')
                             ->group(function () {
                                 Route::get('/olvido', 'reset_pass_request_form')
@@ -77,13 +75,49 @@ Route::prefix('/cce')
             });
 
 
-            Route::prefix('/app')
+            Route::prefix('app')
                 ->middleware(['auth', 'verified'])
                 ->group(function () {
                     Route::controller(AppController::class)
                         ->group(function () {
-                            Route::get('/dashboard', 'dashboard')
-                                ->name('dashboard.usuario');
+                            Route::get('/', 'redirect_home');
+                            Route::get('home', 'index')
+                                ->name('home');
+                        });
+
+                    Route::prefix('admin')
+                        ->middleware('auth')
+                        ->group(function () {
+                            Route::controller(AppController::class)
+                                ->group(function () {
+                                    Route::get('/', 'redirect_home');
+                                });
+                        });
+
+                    Route::prefix('recurso')
+                        ->group(function () {
+                            Route::resource(
+                                'personas', PersonaController::class
+                            )->names([
+                                'index' => 'recurso.persona.index',
+                                'create'=> 'recurso.persona.create',
+                                'store'=> 'recurso.persona.store',
+                                'show' => 'recurso.persona.show',
+                                'edit' => 'recurso.persona.edit',
+                                'update'=> 'recurso.persona.update',
+                                'destroy' => 'recurso.persona.destroy'
+                            ]);
+                            Route::resource(
+                                'empresas', EmpresaController::class
+                            )->names([
+                                'index' => 'recurso.empresa.index',
+                                'create'=> 'recurso.empresa.create',
+                                'store'=> 'recurso.empresa.store',
+                                'show' => 'recurso.empresa.show',
+                                'edit' => 'recurso.empresa.edit',
+                                'update'=> 'recurso.empresa.update',
+                                'destroy' => 'recurso.empresa.destroy'
+                            ]);
                         });
                 });
     });
