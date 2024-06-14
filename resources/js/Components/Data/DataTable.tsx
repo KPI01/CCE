@@ -51,6 +51,8 @@ import {
 import { Button } from "@/Components/ui/button"
 import { Input } from "@/Components/ui/input"
 import { Separator } from "@/Components/ui/separator"
+import { ScrollArea } from "../ui/scroll-area"
+import { Link } from "@inertiajs/react"
 
 type Meta = {
     header: string
@@ -62,11 +64,13 @@ type Meta = {
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
+    rc: string
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
+    rc
 }: DataTableProps<TData, TValue>) {
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
@@ -74,10 +78,17 @@ export function DataTable<TData, TValue>({
     })
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+    const [rowSelection, setRowSelection] = useState({})
+    console.log(rowSelection)
 
     const table = useReactTable({
         data,
         columns,
+        defaultColumn: {
+            size: 100,
+            minSize: 50,
+            maxSize: 200
+        },
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         onPaginationChange: setPagination,
@@ -85,6 +96,7 @@ export function DataTable<TData, TValue>({
         getSortedRowModel: getSortedRowModel(),
         onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
+        onRowSelectionChange: setRowSelection,
         initialState: {
             pagination: pagination,
             sorting: sorting,
@@ -93,11 +105,10 @@ export function DataTable<TData, TValue>({
         state: {
             pagination,
             sorting,
-            columnFilters
+            columnFilters,
+            rowSelection
         },
     })
-
-    console.log(table.getState().columnFilters)
 
     return (
         <div className="select-none">
@@ -133,7 +144,7 @@ export function DataTable<TData, TValue>({
                                                             <AccordionTrigger>{info.header}</AccordionTrigger>
                                                             <AccordionContent>
                                                                 <Select open onValueChange={value => {
-                                                                    console.log(columnFilters)
+                                                                    // console.log(columnFilters)
                                                                     const meta = column.columnDef.meta as Meta
                                                                     let val = value === '*' ? undefined : value
                                                                     let copyFilters = columnFilters
@@ -147,7 +158,7 @@ export function DataTable<TData, TValue>({
                                                                         copyFilters.push({ id: meta.key, value: val })
                                                                     }
 
-                                                                    console.log('Copia', copyFilters)
+                                                                    // console.log('Copia', copyFilters)
                                                                     setColumnFilters(copyFilters)
                                                                 }}>
                                                                     <SelectTrigger>
@@ -156,7 +167,7 @@ export function DataTable<TData, TValue>({
                                                                     <SelectContent>
                                                                         {info.options?.map((option) => {
                                                                             const curr = table.getColumn(info.key)?.getFilterValue() ? table.getColumn(info.key)?.getFilterValue() : '*'
-                                                                            console.log('curr', curr)
+                                                                            // console.log('curr', curr)
                                                                             let text = option !== '*' ? option : 'Todos'
                                                                             return (
                                                                                 <SelectItem key={option} value={option} {...(option === curr ? { 'data-state': 'checked' } : {})}>
@@ -196,7 +207,7 @@ export function DataTable<TData, TValue>({
                         </SheetHeader>
                     </SheetContent>
                 </Sheet>
-                <Separator className="h-10" orientation="vertical"/>
+                <Separator className="h-10" orientation="vertical" />
                 <Button
                     variant="outline"
                     size="sm"
@@ -216,7 +227,7 @@ export function DataTable<TData, TValue>({
                     Siguiente
                 </Button>
             </div>
-            <div className="rounded-md border">
+            <div className="rounded-md border overflow-auto">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => {

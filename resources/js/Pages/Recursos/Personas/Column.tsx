@@ -1,25 +1,41 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { MoreHorizontal } from "lucide-react"
 
 import { Button } from "@/Components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/Components/ui/dropdown-menu"
+
 import {
  CaretSortIcon,
- FileTextIcon,
- Pencil2Icon
+
 } from "@radix-ui/react-icons"
 
 import { Persona } from "@/types"
-import Actions from "@/Components/Data/Actions"
+import { Checkbox } from "@/Components/ui/checkbox"
 
 export const columns: ColumnDef<Persona>[] = [
+    {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            className="size-5"
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+            aria-label="Select all"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+      },
     {
         accessorKey: "nombres",
         header: ({ column }) => {
@@ -105,9 +121,16 @@ export const columns: ColumnDef<Persona>[] = [
         }
     },
     {
-        accessorKey: "ropo.tipo",
+        accessorFn: (row) => {
+            if (row.ropo?.tipo) {
+                return row.ropo.tipo
+            }
+            return null
+        },
+        id: "ropo_tipo",
         header: "Tipo de Carnet ROPO",
         enableColumnFilter: true,
+        size: 200,
         meta: {
             header: "Tipo de Carnet ROPO",
             key: "ropo_tipo",
@@ -116,7 +139,13 @@ export const columns: ColumnDef<Persona>[] = [
         }
     },
     {
-        accessorKey: "ropo.caducidad",
+        accessorFn: (row) => {
+            if (row.ropo?.caducidad) {
+                return row.ropo.caducidad
+            }
+            return null
+        },
+        id: "ropo_caducidad",
         header: ({ column }) => {
             return (
               <Button
@@ -140,7 +169,13 @@ export const columns: ColumnDef<Persona>[] = [
         }
     },
     {
-        accessorKey: "ropo.nro",
+        accessorFn: (row) => {
+            if (row.ropo?.nro) {
+                return row.ropo.nro
+            }
+            return null
+        },
+        id: "ropo_nro",
         header: "N° de Carnet ROPO",
         enableColumnFilter: true,
         meta: {
@@ -149,7 +184,13 @@ export const columns: ColumnDef<Persona>[] = [
         }
     },
     {
-        accessorKey: "ropo.tipo_aplicador",
+        accessorFn: (row) => {
+            if (row.ropo?.tipo_aplicador) {
+                return row.ropo.tipo_aplicador
+            }
+            return null
+        },
+        id: "ropo_tipo_aplicador",
         header: ({ column }) => {
             return (
               <Button
@@ -167,16 +208,4 @@ export const columns: ColumnDef<Persona>[] = [
             key: "ropo_tipo_aplicador"
         }
     },
-    {
-        id: "actions",
-        header: "Acciones",
-        cell: ({ row }) => {
-            const item = row.original
-
-            return (
-                <Actions routeName='recurso.persona.show' item={item.id} />
-            )
-        },
-        enableColumnFilter: false
-    }
 ]

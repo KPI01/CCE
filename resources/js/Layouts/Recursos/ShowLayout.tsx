@@ -2,10 +2,9 @@ import { ReactNode } from "react"
 import { Head, Link } from "@inertiajs/react"
 import { ArrowLeftIcon } from "@radix-ui/react-icons"
 
-import UserLayout from "@/Layouts/UserLayout"
-import AdminLayout from "@/Layouts/AdminLayout"
 import { Separator } from "@/Components/ui/separator"
 import { Button } from "@/Components/ui/button"
+import MainLayout from "@/Layouts/MainLayout"
 
 interface Props {
     children: ReactNode
@@ -17,12 +16,11 @@ interface Props {
 }
 
 export default function ShowLayout(props: Props) {
-    let Layout = props.isAdmin ? AdminLayout : UserLayout
     let updated = new Date(props.updated_at)
     console.log(updated)
 
     return (
-        <Layout>
+        <MainLayout>
             <Head title={props.pageTitle} />
             <div className="flex flex-col my-5 mx-32">
                 <div className="flex items-center gap-4">
@@ -39,6 +37,6 @@ export default function ShowLayout(props: Props) {
                 </div>
                 {props.children}
             </div>
-        </Layout>
+        </MainLayout>
     )
 }

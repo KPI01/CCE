@@ -15,7 +15,8 @@ import {
     GearIcon,
     Pencil1Icon,
     QuestionMarkCircledIcon,
-    HamburgerMenuIcon
+    HamburgerMenuIcon,
+    HomeIcon
 } from "@radix-ui/react-icons"
 import {
     NavigationMenu,
@@ -31,24 +32,28 @@ import { cn } from "@/lib/utils"
 
 import { forwardRef } from 'react'
 import { Link } from "@inertiajs/react"
-import { Label } from "@/Components/ui/label"
+
+const MENUCONTENT_CLASS = "p-4 h-fit grid gap-3 p-6 md:w-[35rem] lg:w-[45rem] lg:grid-cols-[.75fr_1fr]"
 
 interface Resources {
-    title: string,
-    rsrc: string,
-    href: string
+    title: string
+    rsrc: string
+    href?: string
+    descrip?: string
 }
 
 const config: Resources[] = [
     {
         title: 'Usuarios',
         rsrc: 'user',
-        href: '#'
+        href: '#',
+        descrip: 'Administrar los usuarios existentes en la app. Diferente de personas'
     },
     {
         title: 'Roles',
         rsrc: 'roles',
-        href: '#'
+        href: '#',
+        descrip: 'Administrar los roles de la app para garantizar/remover permisos.'
     }
 
 ]
@@ -57,12 +62,14 @@ const recursos: Resources[] = [
     {
         title: 'Personas',
         rsrc: 'persona',
-        href: route('recurso.persona.index')
+        href: route('personas.index'),
+        descrip: 'Que se encuentren relacionadas con parcelas, empresas, tratamientos, etc...'
     },
     {
         title: 'Empresas',
         rsrc: 'empresa',
-        href: route('recurso.empresa.index')
+        href: route('empresas.index'),
+        descrip: 'Que realiza tratamientos, se encarga de parcelas, posee máquinas, etc...'
     },
     {
         title: 'Productos',
@@ -72,44 +79,10 @@ const recursos: Resources[] = [
     {
         title: 'Cultivos',
         rsrc: 'cultivo',
-        href: '#'
+        href: '#',
+        descrip: 'Diferentes cultivos que pueden asignarse a las parcelas.'
     },
 ]
-
-function NoDropDownItem({ title, ref = '#', currentRoute }: { title: string, ref?: string, currentRoute?: string }) {
-    return (
-        <NavigationMenuItem className="transition hover:text-primary hover:bg-accent px-3  py-2 rounded-md">
-            <Link href={ref}>
-                <NavigationMenuLink active={currentRoute?.includes(ref)}>
-                    {title}
-                </NavigationMenuLink>
-            </Link>
-        </NavigationMenuItem>
-    )
-}
-
-const ListItem = forwardRef<
-    React.ElementRef<"a">,
-    React.ComponentPropsWithoutRef<"a">
->(({ className, title, children, ...props }, ref) => {
-    return (
-        <li>
-            <NavigationMenuLink asChild>
-                <a
-                    ref={ref}
-                    className={cn(
-                        "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-                        className
-                    )}
-                    {...props}
-                >
-                    <div className="text-sm font-medium leading-none">{title}</div>
-                </a>
-            </NavigationMenuLink>
-        </li>
-    )
-})
-ListItem.displayName = "ListItem"
 
 interface Props {
     username: string,
@@ -121,49 +94,82 @@ export default function NavBar({ username, email, isAdmin }: Props) {
     const currentRoute = route().current()?.toString()
     console.log(currentRoute)
     return (
-        <nav role='navigation' className="basis-auto px-7 py-4 flex flex-col gap-3">
-            <div className="flex justify-between items-center">
-                <Link href={route('home')}>
+        <nav id='navbar' role='navigation' className="basis-auto px-7 py-4 flex flex-col gap-3">
+            <div className="flex items-center justify-center gap-3">
+                {!currentRoute?.includes('home') &&
+                    <>
+                        <Link href={route('home')}>
+                            <HomeIcon />
+                        </Link>
+                        <Separator orientation="vertical" className="h-[3ch]" />
+                    </>
+                }
+                <div className="flex justify-between items-center basis-full">
+
                     <h2 className="font-semibold text-sm md:text-lg lg:text-xl">Bienvenido, <span className="font-bold">{username}</span></h2>
-                </Link>
-                <NavigationMenu orientation="vertical" className="bg-primary text-accent px-4 py-2 rounded-md font-medium">
-                    <NavigationMenuList className="space-x-8">
-                        <NoDropDownItem title="Visitas" />
-                        <NoDropDownItem title="Campañas" />
-                        <NoDropDownItem title="Tratamientos" />
-                        <NavigationMenuItem>
-                            <NavigationMenuTrigger>Recursos</NavigationMenuTrigger>
-                        </NavigationMenuItem>
-                    </NavigationMenuList>
-                </NavigationMenu>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild className="hidden lg:flex">
-                        <Button variant={"outline"}>
-                            <GearIcon className="mr-2 h-4 w-4" />
-                            Configuración
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="hidden lg:block px-2 me-5">
-                        <DropdownMenuLabel>{username}</DropdownMenuLabel>
-                        <DropdownMenuLabel className="text-xs font-light pt-0">{email}</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="gap-1">
-                            <Pencil1Icon />
-                            Editar Perfil
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="gap-1">
-                            <QuestionMarkCircledIcon />
-                            Soporte
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="gap-2 font-semibold">
-                            <Link href={route('logout')} method="post" as="button" className="flex gap-3 items-center">
-                                <ExitIcon />
-                                Cerrar sesión
-                            </Link>
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                    <NavigationMenu id="navbar-nav" orientation="vertical" className="bg-primary text-accent px-4 py-2 rounded-md font-medium hidden xl :flex">
+                        <NavigationMenuList id="navbar-nav-list" className="space-x-8">
+                            <NoDropDownItem title="Visitas" />
+                            <NoDropDownItem title="Campañas" />
+                            <NoDropDownItem title="Tratamientos" />
+                            <NavigationMenuItem id="navbar-rsrc" className="ms-12">
+                                <NavigationMenuTrigger className="font-medium text-md">
+                                    Recursos
+                                </NavigationMenuTrigger>
+                                <NavigationMenuContent id="rsrc-content">
+                                    <ul id="rsrc-list" className={MENUCONTENT_CLASS}>
+                                        {recursos.map((item) => (
+                                            <ListItem key={item.rsrc} title={item.title} href={item.href} id={`rsrc-${item.rsrc}`}>
+                                                {item.descrip}
+                                            </ListItem>
+                                        ))}
+                                    </ul>
+                                </NavigationMenuContent>
+                            </NavigationMenuItem>
+                            {isAdmin && (
+                                <NavigationMenuItem>
+                                    <NavigationMenuTrigger className="font-medium text-md">Mantenimiento</NavigationMenuTrigger>
+                                    <NavigationMenuContent className={MENUCONTENT_CLASS} asChild>
+                                        <ul>
+                                            {config.map((item) => (
+                                                <ListItem key={item.rsrc} title={item.title}>
+                                                    {item.descrip}
+                                                </ListItem>
+                                            ))}
+                                        </ul>
+                                    </NavigationMenuContent>
+                                </NavigationMenuItem>
+                            )}
+                        </NavigationMenuList>
+                    </NavigationMenu>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger id="navbar-conf" asChild className="hidden lg:flex">
+                            <Button variant={"outline"}>
+                                <GearIcon className="mr-2 h-4 w-4" />
+                                Configuración
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="hidden lg:block px-2 me-5">
+                            <DropdownMenuLabel className="text-sm font-semibold">{email}</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem className="gap-1">
+                                <Pencil1Icon />
+                                Editar Perfil
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="gap-1">
+                                <QuestionMarkCircledIcon />
+                                Soporte
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem className="gap-2 font-semibold">
+                                <Link href={route('logout')} method="post" as="button" className="flex gap-3 items-center">
+                                    <ExitIcon />
+                                    Cerrar sesión
+                                </Link>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild className="flex lg:hidden">
                         <Button variant={"outline"}>
@@ -223,5 +229,48 @@ export default function NavBar({ username, email, isAdmin }: Props) {
             </div>
             <Separator />
         </nav>
+    )
+}
+
+
+
+const ListItem = forwardRef<
+    React.ElementRef<"a">,
+    React.ComponentPropsWithoutRef<"a">
+>(({ className, title, children, ...props }, ref) => {
+    return (
+        <li>
+            <NavigationMenuLink
+                className={cn(
+                    "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                    className
+                )}
+                asChild
+            >
+                <a
+                    ref={ref}
+
+                    {...props}
+                >
+                    <div className="text-sm font-medium leading-none">{title}</div>
+                    <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                        {children}
+                    </p>
+                </a>
+            </NavigationMenuLink>
+        </li>
+    )
+})
+ListItem.displayName = "ListItem"
+
+function NoDropDownItem({ title, ref = '#', currentRoute }: { title: string, ref?: string, currentRoute?: string }) {
+    return (
+        <NavigationMenuItem className="transition hover:text-primary hover:bg-accent px-3 py-2 rounded-md cursor-pointer">
+            <NavigationMenuLink active={currentRoute?.includes(ref)} asChild>
+                <Link href={ref}>
+                    {title}
+                </Link>
+            </NavigationMenuLink>
+        </NavigationMenuItem>
     )
 }

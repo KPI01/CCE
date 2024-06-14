@@ -11,6 +11,15 @@ class Persona extends Model
 {
     use HasFactory, HasUuids;
 
+    protected $fillable = [
+        'id',
+        'nombres',
+        'apellidos',
+        'tipo_id_nac',
+        'id_nac',
+        'email',
+    ];
+
     public function empresas(): BelongsToMany {
         return $this->belongsToMany(Empresa::class)
             ->withTimestamps()

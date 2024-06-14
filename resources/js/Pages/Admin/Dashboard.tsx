@@ -1,13 +1,13 @@
-import AdminLayout from '@/Layouts/AdminLayout'
+import MainLayout from '@/Layouts/MainLayout'
 
 import { Head } from '@inertiajs/react'
 
 export default function Dashboard()
 {
     return (
-        <AdminLayout>
+        <MainLayout>
             <Head title='Home' />
             <h2>Bienvenido a tu Dashboard</h2>
-        </AdminLayout>
+        </MainLayout>
     )
 }

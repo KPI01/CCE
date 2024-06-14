@@ -49,7 +49,7 @@ Route::prefix('/cce')
                                 Route::get('/validar', 'confirm_email_form')
                                     ->name('verification.notice');
                                 Route::get('/validar/{id}/{hash}', 'confirm_email')
-                                    ->middleware(['auth' ,'signed'])
+                                    ->middleware(['auth', 'signed'])
                                     ->name('verification.verify');
                                 Route::post('/correo/notificación', 'send_email')
                                     ->middleware(['auth', 'throttle:6,1'])
@@ -57,7 +57,7 @@ Route::prefix('/cce')
                             });
 
                         Route::prefix('clave')
-                        ->middleware('guest')
+                            ->middleware('guest')
                             ->group(function () {
                                 Route::get('/olvido', 'reset_pass_request_form')
                                     ->name('password.request');
@@ -75,49 +75,31 @@ Route::prefix('/cce')
             });
 
 
-            Route::prefix('app')
-                ->middleware(['auth', 'verified'])
-                ->group(function () {
-                    Route::controller(AppController::class)
-                        ->group(function () {
-                            Route::get('/', 'redirect_home');
-                            Route::get('home', 'index')
-                                ->name('home');
-                        });
+        Route::prefix('app')
+            ->middleware(['auth', 'verified'])
+            ->group(function () {
+                Route::controller(AppController::class)
+                    ->group(function () {
+                        Route::get('/', 'redirect_home');
+                        Route::get('home', 'index')
+                            ->name('home');
+                    });
 
-                    Route::prefix('admin')
-                        ->middleware('auth')
-                        ->group(function () {
-                            Route::controller(AppController::class)
-                                ->group(function () {
-                                    Route::get('/', 'redirect_home');
-                                });
-                        });
+                Route::prefix('admin')
+                    ->middleware('auth')
+                    ->group(function () {
+                        Route::controller(AppController::class)
+                            ->group(function () {
+                                Route::get('/', 'redirect_home');
+                            });
+                    });
 
-                    Route::prefix('recurso')
-                        ->group(function () {
-                            Route::resource(
-                                'personas', PersonaController::class
-                            )->names([
-                                'index' => 'recurso.persona.index',
-                                'create'=> 'recurso.persona.create',
-                                'store'=> 'recurso.persona.store',
-                                'show' => 'recurso.persona.show',
-                                'edit' => 'recurso.persona.edit',
-                                'update'=> 'recurso.persona.update',
-                                'destroy' => 'recurso.persona.destroy'
-                            ]);
-                            Route::resource(
-                                'empresas', EmpresaController::class
-                            )->names([
-                                'index' => 'recurso.empresa.index',
-                                'create'=> 'recurso.empresa.create',
-                                'store'=> 'recurso.empresa.store',
-                                'show' => 'recurso.empresa.show',
-                                'edit' => 'recurso.empresa.edit',
-                                'update'=> 'recurso.empresa.update',
-                                'destroy' => 'recurso.empresa.destroy'
-                            ]);
-                        });
-                });
+                Route::prefix('recurso')
+                    ->group(function () {
+                        Route::resources([
+                            'personas' => PersonaController::class,
+                            'empresas' => EmpresaController::class
+                        ]);
+                    });
+            });
     });

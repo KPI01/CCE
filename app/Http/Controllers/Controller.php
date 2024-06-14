@@ -9,7 +9,7 @@ abstract class Controller
 {
     //
 
-    // Variable para almacenar datos recuperados de la BD
+    // Variable para almacenar datos recuperados de la BD o request
     public $data;
     // Variable para guardar las relaciones del modelo
     public $relations;
@@ -17,6 +17,10 @@ abstract class Controller
     public $adm_role;
     // Variable para el usuario
     public $user;
+    // Variable para instancia de modelo
+    public $instance;
+    // Variable para devolver mensajes al usuario
+    public $message;
 
     // Constructor
     public function __construct()

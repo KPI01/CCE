@@ -35,11 +35,19 @@ class HandleInertiaRequests extends Middleware
 
         $user['role'] = $role;
 
+        $session = $request->session()->all();
+        foreach ($session as $key => $value) {
+            if (str_starts_with($key, '_') || str_contains($key, 'login_web')) {
+                unset($session[$key]);
+            }
+        }
+
         return array_merge(parent::share($request), [
             'appName' => config('app.name'),
             'auth' => [
                 'user' => $user,
-            ]
+            ],
+            'session' => $session,
         ]);
     }
 }

@@ -6,8 +6,10 @@ use App\Models\Persona;
 use App\Http\Requests\StorePersonaRequest;
 use App\Http\Requests\UpdatePersonaRequest;
 use App\Models\Role;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class PersonaController extends Controller
@@ -57,6 +59,7 @@ class PersonaController extends Controller
     public function create()
     {
         //
+        return Inertia::render("Recursos/Personas/Create");
     }
 
     /**
@@ -65,6 +68,46 @@ class PersonaController extends Controller
     public function store(StorePersonaRequest $request)
     {
         //
+        $data = $request->all();
+        $ropo = [];
+
+        foreach ($data as $key => $value) {
+            if (str_contains($key, 'ropo')) {
+                foreach ($value as $k => $v) {
+                    $ropo[$k] = $v;
+                }
+                unset($data[$key]);
+            }
+        }
+
+        $ropo = count($ropo) > 0 ? $ropo : null;
+
+        if ($data['email']) {
+            return Redirect::intended(route('personas.index'))
+                ->withErrors([
+                    'email' => 'La persona ya existe.'
+                ]);
+        }
+
+        $this->instance->save();
+        $this->instance = Persona::create($data);
+
+        if ($ropo) {
+            DB::table('ropo')->insert([
+                'persona' => $this->instance->id,
+                'nro' => $ropo['nro'],
+                'tipo' => $ropo['tipo'],
+                'caducidad' => date('Y-m-d H:i:s', $ropo['caducidad']),
+                'tipo_aplicador' => $ropo['tipo_aplicador'],
+            ]);
+        }
+
+        $this->message = "Persona [$this->instance] creada con éxito";
+
+        return Redirect::intended(route('personas.index'))->with([
+            'from' => 'store.persona',
+            'message' => $this->message
+        ]);
     }
 
     /**

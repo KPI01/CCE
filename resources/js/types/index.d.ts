@@ -22,12 +22,12 @@ export interface Persona extends Modelo {
     tel: string
     perfil: string
     observaciones: string
-    ropo: {
+    ropo?: {
         id: string
         tipo: string
-        caducidad: string
-        nro: string
-        tipo_aplicador: string
+        caducidad?: string
+        nro?: string
+        tipo_aplicador?: string
     }
     empresas?: Empresa[]
 }
