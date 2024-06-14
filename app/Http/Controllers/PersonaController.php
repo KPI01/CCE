@@ -6,7 +6,6 @@ use App\Models\Persona;
 use App\Http\Requests\StorePersonaRequest;
 use App\Http\Requests\UpdatePersonaRequest;
 use App\Models\Role;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -82,23 +81,25 @@ class PersonaController extends Controller
 
         $ropo = count($ropo) > 0 ? $ropo : null;
 
-        if ($data['email']) {
+        if (Persona::where('email', $data['email'])->exists()) {
             return Redirect::intended(route('personas.index'))
                 ->withErrors([
                     'email' => 'La persona ya existe.'
                 ]);
+        } else if (Persona::where('id_nac', $data['id_nac'])->exists()) {
+            return Redirect::intended(route('personas.index'))
+                ->withErrors([
+                    'id_nac' => 'La persona ya existe.'
+                ]);
         }
 
-        $this->instance->save();
         $this->instance = Persona::create($data);
+        $this->instance->save();
 
         if ($ropo) {
             DB::table('ropo')->insert([
                 'persona' => $this->instance->id,
-                'nro' => $ropo['nro'],
-                'tipo' => $ropo['tipo'],
-                'caducidad' => date('Y-m-d H:i:s', $ropo['caducidad']),
-                'tipo_aplicador' => $ropo['tipo_aplicador'],
+                ...$ropo
             ]);
         }
 

@@ -10,10 +10,11 @@ interface Props {
 }
 
 export default function MainLayout({ children, className }: Props) {
-    const { auth }: any = usePage().props
+    const { auth, session }: any = usePage().props
     const isAdmin: boolean = auth.user.role.name === 'Admin'
     // console.log(auth)
     // console.log(isAdmin)
+    console.log(session)
 
     return (
         <StrictMode>

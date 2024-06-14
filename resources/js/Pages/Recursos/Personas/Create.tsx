@@ -40,12 +40,12 @@ import { router } from "@inertiajs/react";
 import { Switch } from "@/Components/ui/switch";
 import { Label } from "@/Components/ui/label";
 import { useState } from "react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 const RSRC = 'persona'
 const REQUIRED_MSG = 'Este campo es requerido.'
 const CONTAINER_CLASS = "grid grid-cols-[repeat(2,minmax(250px,1fr))] gap-x-12 gap-y-4"
-const TODAY = new Date()
-const TODAY_FORMATTED = `${TODAY.getFullYear()}-${(TODAY.getMonth() + 1).toString().padStart(2, '0')}-${TODAY.getDate().toString().padStart(2, '0')}`
 const TIPOS_ID_NAC = ['DNI', 'NIE'] as const
 const PERFILES = ['Aplicador', 'Técnico', 'Supervisor', 'Productor'] as const
 const TIPOS_ROPO = ['Aplicador', 'Técnico'] as const
@@ -66,12 +66,12 @@ const formSchema = z.object({
     id_nac: z.string({
         required_error: REQUIRED_MSG,
     })
-    .max(12, 'El DNI/NIE debe ser de 12 caracteres.'),
+        .max(12, 'El DNI/NIE debe ser de 12 caracteres.'),
     email: z.string({
         required_error: REQUIRED_MSG,
     })
         .email('El correo debe ser válido.'),
-    tel: z.string().max(20).optional(),
+    tel: z.string().regex(/^[0-9]{3}-[0-9]{2}-[0-9]{2}-[0-9]{2}$/, 'El número debe estar en el formato indicado').optional(),
     perfil: z.enum(PERFILES).optional(),
     observaciones: z.string()
         .max(300, 'Las observaciones deben tener menos de 300 caracteres.')
@@ -142,11 +142,12 @@ export default function Create() {
                                 <FormControl>
                                     <Input
                                         id="nombres"
+                                        name="nombres"
                                         placeholder="..."
-                                        {...field}
+                                        onChange={field.onChange}
                                     />
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage id={`${field.name}-message`} />
                             </FormItem>
                         )} />
                     <FormField
@@ -158,11 +159,12 @@ export default function Create() {
                                 <FormControl>
                                     <Input
                                         id="apellidos"
+                                        name="apellidos"
                                         placeholder="..."
-                                        {...field}
+                                        onChange={field.onChange}
                                     />
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage id={`${field.name}-message`} />
                             </FormItem>
                         )} />
                     <div className="grid gap-x-6 grid-cols-[10ch_1fr] ">
@@ -186,7 +188,7 @@ export default function Create() {
                                             ))}
                                         </SelectContent>
                                     </Select>
-                                    <FormMessage />
+                                    <FormMessage id={`${field.name}-message`} />
                                 </FormItem>
                             )} />
                         <FormField
@@ -197,11 +199,12 @@ export default function Create() {
                                     <FormControl>
                                         <Input
                                             id="id_nac"
+                                            name="id_nac"
                                             placeholder="..."
-                                            {...field}
+                                            onChange={field.onChange}
                                         />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage id={`${field.name}-message`} />
                                 </FormItem>
                             )} />
                     </div>
@@ -214,12 +217,13 @@ export default function Create() {
                                 <FormControl>
                                     <Input
                                         id="email"
+                                        name="email"
                                         autoComplete="email"
                                         placeholder="..."
-                                        {...field}
+                                        onChange={field.onChange}
                                     />
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage id={`${field.name}-message`} />
                             </FormItem>
                         )} />
                     <FormField
@@ -231,15 +235,15 @@ export default function Create() {
                                 <FormControl>
                                     <Input
                                         id="tel"
+                                        name="tel"
                                         autoComplete="tel"
                                         type="tel"
-                                        pattern="[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}"
                                         placeholder="..."
-                                        {...field}
+                                        onChange={field.onChange}
                                     />
                                 </FormControl>
                                 <FormDescription>Formato: 123-456-78-90</FormDescription>
-                                <FormMessage />
+                                <FormMessage id={`${field.name}-message`} />
                             </FormItem>
                         )} />
                     <FormField
@@ -266,7 +270,7 @@ export default function Create() {
                                         </SelectContent>
                                     </Select>
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage id={`${field.name}-message`} />
                             </FormItem>
                         )} />
                     <FormField
@@ -277,14 +281,15 @@ export default function Create() {
                                 <FormLabel htmlFor="observaciones">Observaciones</FormLabel>
                                 <FormControl>
                                     <Textarea
-                                    className="resize-y"
-                                        rows={1}
                                         id="observaciones"
+                                        name="observaciones"
+                                        className="resize-y"
+                                        rows={1}
                                         placeholder="..."
-                                        {...field}
+                                        onChange={field.onChange}
                                     />
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage id={`${field.name}-message`} />
                             </FormItem>
                         )} />
                     <div className="flex items-center space-x-2">
@@ -314,7 +319,7 @@ export default function Create() {
                                             </SelectContent>
                                         </Select>
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage id={`${field.name}-message`} />
                                 </FormItem>
                             )} />
                         <FormField
@@ -326,11 +331,11 @@ export default function Create() {
                                     <FormControl>
                                         <Input
                                             id="ropo-nro"
+                                            name="ropo.nro"
                                             placeholder="..."
-                                            {...field}
                                         />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage id={`${field.name}-message`} />
                                 </FormItem>
                             )}
                         />
@@ -339,49 +344,47 @@ export default function Create() {
                             name="ropo.caducidad"
                             render={({ field }) => (
                                 <FormItem className="flex flex-col">
-                                    <FormLabel htmlFor="#" asChild>
-                                        <span>Fecha de caducidad</span>
-                                    </FormLabel>
+                                    <FormLabel>Caducidad del carnet</FormLabel>
                                     <Popover>
-                                        <FormControl>
-                                            <div className="flex items-center gap-2">
-                                                <Input
-                                                    type="date"
-                                                    id="ropo-caducidad_input"
-                                                    className="
-                                                    "
-                                                    placeholder="DD/MM/AAAA"
-                                                    pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}"
-                                                    onChange={field.onChange}
-                                                />
-                                                <PopoverTrigger id="ropo-caducidad_trigger" asChild>
-                                                    <Button variant={"outline"} size="sm">
-                                                        <CalendarIcon className="opacity-75" />
-                                                    </Button>
-                                                </PopoverTrigger>
-                                            </div>
-                                        </FormControl>
-                                        <PopoverContent className="w-auto p-0">
+                                        <PopoverTrigger id="ropo-caducidad_trigger" asChild>
+                                            <FormControl>
+                                                <Button
+                                                    variant={"outline"}
+                                                    className={cn(
+                                                        "w-[240px] pl-3 text-left font-normal",
+                                                        !field.value && "text-muted-foreground"
+                                                    )}
+                                                >
+                                                    {field.value ? (
+                                                        format(field.value, "dd/MM/yyyy")
+                                                    ) : (
+                                                        <span>dd/mm/aaaa</span>
+                                                    )}
+                                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                </Button>
+                                            </FormControl>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto p-0" align="start">
                                             <Calendar
-                                                id="ropo-caducidad_calendar"
+                                            id="ropo-caducidad_calendar"
                                                 mode="single"
                                                 locale={es}
-                                                showOutsideDays={false}
-                                                captionLayout={"dropdown"}
                                                 selected={field.value}
                                                 onSelect={field.onChange}
-                                                disabled={(date: Date) => date < new Date() || date < new Date("1900-01-01")}
+                                                disabled={(date) =>
+                                                    date < new Date()
+                                                }
                                                 initialFocus
-
                                             />
                                         </PopoverContent>
                                     </Popover>
                                     <FormDescription>
-                                        Formato: DD/MM/AAAA.
+                                        Your date of birth is used to calculate your age.
                                     </FormDescription>
-                                    <FormMessage />
+                                    <FormMessage id={`${field.name}-message`} />
                                 </FormItem>
-                            )} />
+                            )}
+                        />
                         <FormField
                             control={form.control}
                             name="ropo.tipo_aplicador"
@@ -409,7 +412,7 @@ export default function Create() {
                                             </SelectContent>
                                         </Select>
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage id={`${field.name}-message`} />
                                 </FormItem>
                             )} />
                     </div>
