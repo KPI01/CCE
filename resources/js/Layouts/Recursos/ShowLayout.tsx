@@ -1,42 +1,27 @@
-import { ReactNode } from "react"
-import { Head, Link } from "@inertiajs/react"
-import { ArrowLeftIcon } from "@radix-ui/react-icons"
+import { Head } from "@inertiajs/react"
 
-import { Separator } from "@/Components/ui/separator"
-import { Button } from "@/Components/ui/button"
 import MainLayout from "@/Layouts/MainLayout"
+import { LayoutProps } from "@/types"
+import FormHeader from "./FormHeader"
 
-interface Props {
-    children: ReactNode
-    isAdmin: boolean
-    pageTitle: string
-    title: string
+interface Props extends LayoutProps {
     updated_at: string
-    recurso: string
 }
 
-export default function ShowLayout(props: Props) {
-    let updated = new Date(props.updated_at)
+export default function ShowLayout({
+    children,
+    pageTitle,
+    updated_at,
+    recurso = 'personas'
+}: Props) {
+    let updated = new Date(updated_at)
     console.log(updated)
 
     return (
         <MainLayout>
-            <Head title={props.pageTitle} />
-            <div className="flex flex-col my-5 mx-32">
-                <div className="flex items-center gap-4">
-                    <Button variant={'ghost'} className="px-2 py-1" asChild>
-                        <Link href={route(`recurso.${props.recurso}.index`)}>
-                            <ArrowLeftIcon width={32} height={32} />
-                        </Link>
-                    </Button>
-                    <Separator orientation="vertical" className="h-10" />
-                    <div className="flex flex-col gap-4">
-                    <h1 className="font-bold text-5xl">{props.title}</h1>
-                    <span className="text-sm text-primary/25">Última actualización: {updated.toLocaleString()} {}</span>
-                    </div>
-                </div>
-                {props.children}
-            </div>
+            <Head title={pageTitle} />
+                <FormHeader title={pageTitle} updated={updated} recurso={recurso}/>
+                {children}
         </MainLayout>
     )
 }

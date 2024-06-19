@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import {
     ColumnDef,
@@ -8,11 +8,12 @@ import {
     getCoreRowModel,
     useReactTable,
     getPaginationRowModel,
-    PaginationState,
     getSortedRowModel,
     SortingState,
     ColumnFiltersState,
-    getFilteredRowModel
+    getFilteredRowModel,
+    VisibilityState,
+    InitialTableState
 } from "@tanstack/react-table"
 import {
     Table,
@@ -22,220 +23,86 @@ import {
     TableHeader,
     TableRow
 } from "@/Components/ui/table"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/Components/ui/select"
-import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-
-} from "@/Components/ui/sheet"
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/Components/ui/accordion"
-import {
-    MagnifyingGlassIcon,
-    Cross1Icon
-} from "@radix-ui/react-icons"
-import { Button } from "@/Components/ui/button"
-import { Input } from "@/Components/ui/input"
 import { Separator } from "@/Components/ui/separator"
-import { ScrollArea } from "../ui/scroll-area"
-import { Link } from "@inertiajs/react"
-
-type Meta = {
-    header: string
-    key: string
-    tipo: string
-    options?: any[]
-}
+import { DataTablePagination } from "./Pagination"
+import ColumnFilters from "@/Components/Data/ColumnFilters"
+import { DataTableViewOptions } from "@/Components/Data/ColumnToggle"
+import { Toaster } from "@/Components/ui/toaster"
+import { useToast } from "@/Components/ui/use-toast"
+import { usePage } from "@inertiajs/react"
+import { Flash } from "@/types"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
-    rc: string
+    initialVisibility?: TData
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
-    rc
+    initialVisibility
 }: DataTableProps<TData, TValue>) {
-    const [pagination, setPagination] = useState<PaginationState>({
-        pageIndex: 0,
-        pageSize: 8,
-    })
+    const { toast } = useToast()
+    const pageProps = usePage().props
+    const flash = pageProps.flash as Flash
+
+    useEffect(() => {
+        if (flash.message?.toast) {
+            toast({
+                variant: flash.message.toast?.variant,
+                title: flash.message.toast?.title !== undefined ? flash.message.toast?.title : '',
+                description: flash.message.toast?.description,
+            })
+        }
+    }, [flash])
+
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [rowSelection, setRowSelection] = useState({})
-    console.log(rowSelection)
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(initialVisibility ? initialVisibility : {})
 
     const table = useReactTable({
         data,
         columns,
-        defaultColumn: {
-            size: 100,
-            minSize: 50,
-            maxSize: 200
-        },
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
-        onPaginationChange: setPagination,
         onSortingChange: setSorting,
         getSortedRowModel: getSortedRowModel(),
         onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
         onRowSelectionChange: setRowSelection,
+        onColumnVisibilityChange: setColumnVisibility,
         initialState: {
-            pagination: pagination,
             sorting: sorting,
             columnFilters: columnFilters,
         },
         state: {
-            pagination,
             sorting,
             columnFilters,
-            rowSelection
+            rowSelection,
+            columnVisibility
         },
     })
+
+    console.log(table.getState())
 
     return (
         <div className="select-none">
             <div className="flex items-center justify-end gap-3 mb-3">
-                <Sheet>
-                    <SheetTrigger asChild>
-                        <Button variant={table.getState().columnFilters.length > 0 ? "default" : "ghost"} className="gap-2">
-                            <MagnifyingGlassIcon />
-                            Filtros
-                            {table.getState().columnFilters.length > 0 ? <span className="text-sm font-medium">({table.getState().columnFilters.length})</span> : null}
-                        </Button>
-                    </SheetTrigger>
-                    <SheetContent className="w-96 overflow-auto">
-                        <SheetHeader>
-                            <SheetTitle className="font-bold text-xl">
-                                Filtros
-                            </SheetTitle>
-                            <SheetDescription>
-                                Selecciona los filtros que desees.
-                            </SheetDescription>
-                            <div className="flex flex-col items-start gap-10">
-                                <div>
-                                    <Button variant={"destructive"} size={'sm'} onClick={() => table.resetColumnFilters()}>Limpiar filtros</Button>
-                                </div>
-                                <div className="flex flex-col gap-8 w-full">
-                                    {table.getAllColumns().map((column) => {
-                                        if (column.getCanFilter()) {
-                                            let info = column.columnDef.meta as Meta
-                                            if (info.tipo == 'select') {
-                                                return (
-                                                    <Accordion key={column.id} type="single" collapsible className="w-full">
-                                                        <AccordionItem value={column.id}>
-                                                            <AccordionTrigger>{info.header}</AccordionTrigger>
-                                                            <AccordionContent>
-                                                                <Select open onValueChange={value => {
-                                                                    // console.log(columnFilters)
-                                                                    const meta = column.columnDef.meta as Meta
-                                                                    let val = value === '*' ? undefined : value
-                                                                    let copyFilters = columnFilters
-                                                                    if (copyFilters.find((filter) => filter.id === meta.key)) {
-                                                                        copyFilters.map((filter) => {
-                                                                            if (filter.id === meta.key) {
-                                                                                filter.value = val
-                                                                            }
-                                                                        })
-                                                                    } else {
-                                                                        copyFilters.push({ id: meta.key, value: val })
-                                                                    }
-
-                                                                    // console.log('Copia', copyFilters)
-                                                                    setColumnFilters(copyFilters)
-                                                                }}>
-                                                                    <SelectTrigger>
-                                                                        <SelectValue placeholder={table.getColumn(info.key)?.getFilterValue() as string ?? "Todos"} />
-                                                                    </SelectTrigger>
-                                                                    <SelectContent>
-                                                                        {info.options?.map((option) => {
-                                                                            const curr = table.getColumn(info.key)?.getFilterValue() ? table.getColumn(info.key)?.getFilterValue() : '*'
-                                                                            // console.log('curr', curr)
-                                                                            let text = option !== '*' ? option : 'Todos'
-                                                                            return (
-                                                                                <SelectItem key={option} value={option} {...(option === curr ? { 'data-state': 'checked' } : {})}>
-                                                                                    {text}
-                                                                                </SelectItem>)
-                                                                        })}
-                                                                    </SelectContent>
-                                                                </Select>
-                                                            </AccordionContent>
-                                                        </AccordionItem>
-                                                    </Accordion>
-                                                )
-                                            }
-                                            return (
-                                                <Accordion key={column.id} type="single" collapsible className="w-full scroll-auto">
-                                                    <AccordionItem value={column.id}>
-                                                        <AccordionTrigger>{info.header}</AccordionTrigger>
-                                                        <AccordionContent>
-                                                            <Input
-                                                                placeholder={`${info.header.toLowerCase()}...`}
-                                                                value={(table.getColumn(info.key)?.getFilterValue() as string) ?? ""}
-                                                                onChange={(e) =>
-                                                                    table.getColumn(info.key)?.setFilterValue(e.target.value)
-                                                                }
-                                                                className="max-w-sm"
-                                                            />
-                                                        </AccordionContent>
-                                                    </AccordionItem>
-                                                </Accordion>
-
-                                            )
-                                        }
-                                    })
-                                    }
-                                </div>
-                            </div>
-                        </SheetHeader>
-                    </SheetContent>
-                </Sheet>
+                <ColumnFilters table={table} filterState={columnFilters} setFilterState={setColumnFilters} />
                 <Separator className="h-10" orientation="vertical" />
-                <Button
-                    variant="outline"
-                    size="sm"
-                    className="select-none"
-                    onClick={() => table.previousPage()}
-                    disabled={!table.getCanPreviousPage()}
-                >
-                    Anterior
-                </Button>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    className="select-none"
-                    onClick={() => table.nextPage()}
-                    disabled={!table.getCanNextPage()}
-                >
-                    Siguiente
-                </Button>
+                <DataTableViewOptions table={table} />
             </div>
-            <div className="rounded-md border overflow-auto">
-                <Table>
+            <div className="rounded-md border overflow-auto w-full mx-auto">
+                <Table className="w-full">
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => {
                             return (
                                 <TableRow key={headerGroup.id}>
                                     {headerGroup.headers.map((header) => {
                                         return (
-                                            <TableHead key={header.id}>
+                                            <TableHead key={header.id} className={(header.column.columnDef.id !== "select" ? 'p-3' : 'p-4')} style={{ width: `${header.getSize()}px` }}>
                                                 {header.isPlaceholder
                                                     ? null
                                                     : flexRender(
@@ -273,43 +140,10 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-            <div className="flex items-center justify-end gap-4 py-4 me-3 select-none">
-                <div className="flex items-center gap-2">
-                    Mostrar
-                    <Select onValueChange={(value) => setPagination({
-                        ...pagination,
-                        pageSize: Number(value)
-                    })}>
-                        <SelectTrigger className="w-[10ch]">
-                            <SelectValue placeholder={pagination.pageSize} />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {[5, 8, 10, 15].map((pageSize) => (
-                                <SelectItem key={pageSize} value={pageSize.toString()}>
-                                    {pageSize}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    registros
-                </div>
-                <Separator orientation="vertical" className="h-10" />
-                <div className="flex items-center gap-2">
-                    Página
-                    <Input
-                        type="text"
-                        value={table.getState().pagination.pageIndex + 1}
-                        onChange={(e) => {
-                            let conv = e.target.value ? Number(e.target.value) - 1 : 0
-                            let val = conv > table.getPageCount() ? table.getPageCount() - 1 : conv
-
-                            table.setPageIndex(Number(val))
-                        }}
-                        className="w-[7ch] text-center"
-                    />
-                    de {table.getPageCount()}
-                </div>
+            <div className="flex w-full p-4 justify-end">
+                <DataTablePagination table={table} />
             </div>
-        </div>
+            <Toaster />
+        </div >
     )
 }

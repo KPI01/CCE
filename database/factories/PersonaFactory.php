@@ -34,7 +34,7 @@ class PersonaFactory extends Factory
             'id_nac' => $id_nac,
             'email' => fake()->unique()->safeEmail(),
             'tel' => fake()->phoneNumber(),
-            'perfil' => fake()->word(),
+            'perfil' => fake()->randomElement( ['Aplicador', 'Técnico', 'Supervisor', 'Productor']),
             'observaciones' => fake()->boolean() ? fake()->realText(
                 fake()->numberBetween(20,100)
             ) : null,

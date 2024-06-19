@@ -5,19 +5,38 @@ import DataLayout from "@/Layouts/DataLayout"
 import { columns } from "./Column"
 
 import { Persona } from "@/types"
-import { usePage } from "@inertiajs/react"
+import { InitialTableState } from "@tanstack/react-table"
 
 interface Props {
     data: Persona[],
-    isAdmin: boolean
 }
 
-export default function Page(props: Props) {
-    const pageProps = usePage().props
-    console.log(pageProps)
+const RECURSO = 'personas'
+
+export default function Page({
+    data
+}: Props) {
+    const initVisibility = {
+            nombres: true,
+            apellidos: true,
+            id_nac: true,
+            email: true,
+            tel: true,
+            perfil: true,
+            ropo_tipo: false,
+            ropo_caducidad: false,
+            ropo_nro: false,
+            ropo_tipo_aplicador: false,
+    }
 
     return (
-        <DataLayout title="Personas" isAdmin={props.isAdmin} data={props.data} columns={columns} recurso="personas" />
+        <DataLayout
+            title="Personas"
+            data={data}
+            columns={columns}
+            recurso={RECURSO}
+            initialVisibility={initVisibility}
+        />
     )
 
 

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('id_nac', 12)->unique();
             $table->string('email', 254)->unique();
             $table->string('tel', 20)->nullable();
-            $table->string('perfil', 10)->nullable();
+            $table->string('perfil', 20)->nullable();
             $table->text('observaciones')->nullable();
         });
 
@@ -28,7 +28,7 @@ return new class extends Migration
             $table->foreignUuid('persona')->references('id')->on('personas')->cascadeOnDelete();
             $table->string('tipo', 15);
             $table->date('caducidad')->nullable();
-            $table->string('nro', 14)->nullable();
+            $table->string('nro', 25)->nullable();
             $table->string('tipo_aplicador', 30)->nullable();
         });
     }

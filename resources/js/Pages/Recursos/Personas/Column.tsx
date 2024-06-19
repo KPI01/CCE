@@ -2,54 +2,19 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 
-import { Button } from "@/Components/ui/button"
-
-import {
- CaretSortIcon,
-
-} from "@radix-ui/react-icons"
-
 import { Persona } from "@/types"
-import { Checkbox } from "@/Components/ui/checkbox"
+import { DataTableColumnHeader } from "@/Components/Data/ColumnHeader"
+import Actions from "@/Components/Data/Persona/Actions"
 
 export const columns: ColumnDef<Persona>[] = [
     {
-        id: "select",
-        header: ({ table }) => (
-          <Checkbox
-            className="size-5"
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && "indeterminate")
-            }
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-            aria-label="Select all"
-          />
-        ),
-        cell: ({ row }) => (
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
-          />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-      },
-    {
         accessorKey: "nombres",
-        header: ({ column }) => {
-            return (
-              <Button
-                variant="ghost"
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-              >
-                Nombres
-                <CaretSortIcon className="ml-2 h-4 w-4" />
-              </Button>
-            )
-          },
+        header: ({ column }) => (<DataTableColumnHeader column={column} title="Nombres" />),
         enableColumnFilter: true,
+        enableSorting: true,
+        enableHiding: false,
+
+        size: 150,
         meta: {
             header: "Nombres",
             key: "nombres"
@@ -57,18 +22,11 @@ export const columns: ColumnDef<Persona>[] = [
     },
     {
         accessorKey: "apellidos",
-        header: ({ column }) => {
-            return (
-              <Button
-                variant="ghost"
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-              >
-                Apellidos
-                <CaretSortIcon className="ml-2 h-4 w-4" />
-              </Button>
-            )
-          },
+        header: ({ column }) => (<DataTableColumnHeader column={column} title="Apellidos" />),
         enableColumnFilter: true,
+        enableSorting: true,
+        enableHiding: false,
+        size: 150,
         meta: {
             header: "Apellidos",
             key: "apellidos"
@@ -76,8 +34,10 @@ export const columns: ColumnDef<Persona>[] = [
     },
     {
         accessorKey: "id_nac",
-        header: "DNI/NIE",
+        header: ({ column }) => (<DataTableColumnHeader column={column} title="DNI/NIE" />),
         enableColumnFilter: true,
+        enableSorting: false,
+        enableHiding: false,
         meta: {
             header: "DNI/NIE",
             key: "id_nac"
@@ -85,8 +45,11 @@ export const columns: ColumnDef<Persona>[] = [
     },
     {
         accessorKey: "email",
-        header: "Email",
+        header: ({ column }) => (<DataTableColumnHeader column={column} title="Email" />),
         enableColumnFilter: true,
+        enableSorting: false,
+        enableHiding: true,
+        minSize: 300,
         meta: {
             header: "Email",
             key: "email"
@@ -94,8 +57,11 @@ export const columns: ColumnDef<Persona>[] = [
     },
     {
         accessorKey: "tel",
-        header: "Teléfono",
+        header: ({ column }) => (<DataTableColumnHeader column={column} title="Tel." />),
         enableColumnFilter: false,
+        enableSorting: false,
+        enableHiding: true,
+        minSize: 250,
         meta: {
             header: "Teléfono",
             key: "tel"
@@ -103,19 +69,11 @@ export const columns: ColumnDef<Persona>[] = [
     },
     {
         accessorKey: "perfil",
-        header: ({ column }) => {
-            return (
-              <Button
-                variant="ghost"
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-              >
-                Perfil
-                <CaretSortIcon className="ml-2 h-4 w-4" />
-              </Button>
-            )
-          },
-          enableColumnFilter: true,
-          meta: {
+        header: ({ column }) => (<DataTableColumnHeader column={column} title="Perfil" />),
+        enableColumnFilter: true,
+        enableSorting: true,
+        enableHiding: true,
+        meta: {
             header: "Perfil",
             key: "perfil"
         }
@@ -128,9 +86,10 @@ export const columns: ColumnDef<Persona>[] = [
             return null
         },
         id: "ropo_tipo",
-        header: "Tipo de Carnet ROPO",
+        header: ({ column }) => (<DataTableColumnHeader column={column} title="Tipo Carnet ROPO" />),
         enableColumnFilter: true,
-        size: 200,
+        enableHiding: true,
+        size: 250,
         meta: {
             header: "Tipo de Carnet ROPO",
             key: "ropo_tipo",
@@ -146,23 +105,15 @@ export const columns: ColumnDef<Persona>[] = [
             return null
         },
         id: "ropo_caducidad",
-        header: ({ column }) => {
-            return (
-              <Button
-                variant="ghost"
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-              >
-                Caducidad Carnet ROPO
-                <CaretSortIcon className="ml-2 h-4 w-4" />
-              </Button>
-            )
-          },
+        header: ({ column }) => (<DataTableColumnHeader column={column} title="Caducidad" />),
         cell: (info) => {
             if (info.getValue()) {
                 return new Date(info.getValue() as string).toLocaleDateString()
             }
         },
         enableColumnFilter: true,
+        enableSorting: true,
+        enableHiding: true,
         meta: {
             header: "Caducidad Carnet ROPO",
             key: "ropo_caducidad"
@@ -176,8 +127,9 @@ export const columns: ColumnDef<Persona>[] = [
             return null
         },
         id: "ropo_nro",
-        header: "N° de Carnet ROPO",
+        header: ({ column }) => (<DataTableColumnHeader column={column} title="Nº Carnet" />),
         enableColumnFilter: true,
+        enableSorting: false,
         meta: {
             header: "N° de Carnet ROPO",
             key: "ropo_nro"
@@ -191,21 +143,24 @@ export const columns: ColumnDef<Persona>[] = [
             return null
         },
         id: "ropo_tipo_aplicador",
-        header: ({ column }) => {
-            return (
-              <Button
-                variant="ghost"
-                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-              >
-                Tipo Aplicador ROPO
-                <CaretSortIcon className="ml-2 h-4 w-4" />
-              </Button>
-            )
-          },
+        header: ({ column }) => (<DataTableColumnHeader column={column} title="Tipo Aplicador" />),
         enableColumnFilter: true,
+        enableSorting: true,
         meta: {
             header: "Tipo Aplicador ROPO",
             key: "ropo_tipo_aplicador"
         }
     },
+    {
+        id: "actions",
+        header: ({ column }) => (<DataTableColumnHeader column={column} title="Acciones" />),
+        cell: ({ row }) => {
+          const persona = row.original
+
+          return (
+            <Actions item={persona} />
+          )
+        },
+        enableHiding: false,
+    }
 ]

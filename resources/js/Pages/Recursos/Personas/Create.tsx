@@ -25,11 +25,6 @@ import {
 import { SelectItem } from "@/Components/ui/select";
 import { Textarea } from "@/Components/ui/textarea";
 import {
-    CalendarIcon,
-    CheckCircledIcon,
-    TrashIcon
-} from "@radix-ui/react-icons";
-import {
     Popover,
     PopoverTrigger,
     PopoverContent
@@ -42,8 +37,9 @@ import { Label } from "@/Components/ui/label";
 import { useState } from "react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { Save, Trash2, CalendarDays } from "lucide-react";
 
-const RSRC = 'persona'
+const RSRC = 'personas'
 const REQUIRED_MSG = 'Este campo es requerido.'
 const CONTAINER_CLASS = "grid grid-cols-[repeat(2,minmax(250px,1fr))] gap-x-12 gap-y-4"
 const TIPOS_ID_NAC = ['DNI', 'NIE'] as const
@@ -71,17 +67,49 @@ const formSchema = z.object({
         required_error: REQUIRED_MSG,
     })
         .email('El correo debe ser válido.'),
-    tel: z.string().regex(/^[0-9]{3}-[0-9]{2}-[0-9]{2}-[0-9]{2}$/, 'El número debe estar en el formato indicado').optional(),
-    perfil: z.enum(PERFILES).optional(),
+    tel: z.string()
+        .regex(/^[0-9]{3}-[0-9]{2}-[0-9]{2}-[0-9]{2}$/, 'El número debe estar en el formato indicado.')
+        .optional(),
+    perfil: z.enum(PERFILES)
+        .optional(),
     observaciones: z.string()
         .max(300, 'Las observaciones deben tener menos de 300 caracteres.')
         .optional(),
     ropo: z.object({
         tipo: z.enum(TIPOS_ROPO).optional(),
         caducidad: z.date().optional(),
-        nro: z.string().max(20).optional(),
+        nro: z.string().optional(),
         tipo_aplicador: z.enum(TIPOS_APLICADOR).optional(),
-    }).optional(),
+    })
+        .optional()
+        .superRefine((data, ctx) => {
+            if (data?.tipo && !data?.nro) {
+                console.log('')
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Debes ingresar el Nº del carnet.',
+                    path: ['nro'],
+                })
+            } else if (!data?.tipo && data?.nro) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Debes seleccionar el tipo de carnet.',
+                    path: ['tipo'],
+                })
+            } else if (data?.tipo && data?.nro) {
+                const regex = /^[0-9]{5,}[A-Z]{2}[/]?[0-9]*$|^[0-9]{1,3}[/][0-9]{1,3}$/gm;
+
+                if (!regex.test(data.nro)) {
+                    ctx.addIssue({
+                        code: z.ZodIssueCode.custom,
+                        message: 'El Nº del carnet debe estar en el formato adecuado.',
+                        path: ['nro'],
+                    })
+                }
+            } else if (!data?.tipo && !data?.nro) {
+                return true
+            }
+        })
 })
     .superRefine((data, ctx) => {
         let tipo_id = data.tipo_id_nac
@@ -101,8 +129,6 @@ const formSchema = z.object({
                 path: ['id_nac'],
             })
         }
-
-
     })
 
 export default function Create() {
@@ -114,6 +140,7 @@ export default function Create() {
             tipo_id_nac: 'DNI',
         }
     })
+    console.log(form.formState)
 
     function handleRopoShow(curr: boolean) {
         let val = !curr
@@ -138,11 +165,11 @@ export default function Create() {
                         name="nombres"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="nombres">Nombre(s) *</FormLabel>
+                                <FormLabel htmlFor={field.name}>Nombre(s) *</FormLabel>
                                 <FormControl>
                                     <Input
                                         id="nombres"
-                                        name="nombres"
+                                        name={field.name}
                                         placeholder="..."
                                         onChange={field.onChange}
                                     />
@@ -155,11 +182,11 @@ export default function Create() {
                         name="apellidos"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="apellidos">Apellido(s) *</FormLabel>
+                                <FormLabel htmlFor={field.name}>Apellido(s) *</FormLabel>
                                 <FormControl>
                                     <Input
                                         id="apellidos"
-                                        name="apellidos"
+                                        name={field.name}
                                         placeholder="..."
                                         onChange={field.onChange}
                                     />
@@ -174,7 +201,7 @@ export default function Create() {
                             name="tipo_id_nac"
                             render={({ field }) => (
                                 <FormItem>
-                                    <Select onValueChange={field.onChange} defaultValue={field.value} name="tipo_id_nac">
+                                    <Select onValueChange={field.onChange} defaultValue={field.value} name={field.name}>
                                         <FormControl>
                                             <SelectTrigger className="w-full">
                                                 <SelectValue placeholder='Selecciona el tipo de identificación' />
@@ -199,7 +226,7 @@ export default function Create() {
                                     <FormControl>
                                         <Input
                                             id="id_nac"
-                                            name="id_nac"
+                                            name={field.name}
                                             placeholder="..."
                                             onChange={field.onChange}
                                         />
@@ -213,11 +240,11 @@ export default function Create() {
                         name="email"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="email">Correo *</FormLabel>
+                                <FormLabel htmlFor={field.name}>Correo *</FormLabel>
                                 <FormControl>
                                     <Input
                                         id="email"
-                                        name="email"
+                                        name={field.name}
                                         autoComplete="email"
                                         placeholder="..."
                                         onChange={field.onChange}
@@ -231,18 +258,18 @@ export default function Create() {
                         name="tel"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="tel">Teléfono</FormLabel>
+                                <FormLabel htmlFor={field.name}>Teléfono</FormLabel>
                                 <FormControl>
                                     <Input
                                         id="tel"
-                                        name="tel"
+                                        name={field.name}
                                         autoComplete="tel"
                                         type="tel"
                                         placeholder="..."
                                         onChange={field.onChange}
                                     />
                                 </FormControl>
-                                <FormDescription>Formato: 123-456-78-90</FormDescription>
+                                <FormDescription>Formato: 123-45-67-89</FormDescription>
                                 <FormMessage id={`${field.name}-message`} />
                             </FormItem>
                         )} />
@@ -251,9 +278,9 @@ export default function Create() {
                         name="perfil"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel htmlFor="perfil">Perfil</FormLabel>
+                                <FormLabel htmlFor={field.name}>Perfil</FormLabel>
                                 <FormControl>
-                                    <Select name="perfil" onValueChange={field.onChange} defaultValue={field.value}>
+                                    <Select name={field.name} onValueChange={field.onChange} defaultValue={field.value}>
                                         <FormControl>
                                             <SelectTrigger
                                                 id="perfil"
@@ -278,11 +305,11 @@ export default function Create() {
                         name="observaciones"
                         render={({ field }) => (
                             <FormItem className="col-span-2">
-                                <FormLabel htmlFor="observaciones">Observaciones</FormLabel>
+                                <FormLabel htmlFor={field.name}>Observaciones</FormLabel>
                                 <FormControl>
                                     <Textarea
                                         id="observaciones"
-                                        name="observaciones"
+                                        name={field.name}
                                         className="resize-y"
                                         rows={1}
                                         placeholder="..."
@@ -302,10 +329,10 @@ export default function Create() {
                             name="ropo.tipo"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel htmlFor="ropo-tipo">Tipo Carnet</FormLabel>
+                                    <FormLabel htmlFor={field.name.replace('.', '-')}>Tipo Carnet</FormLabel>
                                     <FormControl>
-                                        <Select name="ropo.tipo" onValueChange={field.onChange} defaultValue={field.value}>
-                                            <FormControl id="ropo-tipo">
+                                        <Select name={field.name} onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl id={field.name.replace('.', '-')}>
                                                 <SelectTrigger className="w-full">
                                                     <SelectValue placeholder='Selecciona el tipo de carnet' />
                                                 </SelectTrigger>
@@ -319,7 +346,7 @@ export default function Create() {
                                             </SelectContent>
                                         </Select>
                                     </FormControl>
-                                    <FormMessage id={`${field.name}-message`} />
+                                    <FormMessage id={`${field.name.replace('.', '_')}-message`} />
                                 </FormItem>
                             )} />
                         <FormField
@@ -327,15 +354,17 @@ export default function Create() {
                             name="ropo.nro"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel htmlFor="ropo-nro">Nº</FormLabel>
-                                    <FormControl>
+                                    <FormLabel htmlFor={field.name.replace('.', '-')}>Nº</FormLabel>
+                                    <FormControl id={field.name}>
                                         <Input
                                             id="ropo-nro"
-                                            name="ropo.nro"
+                                            name={field.name}
                                             placeholder="..."
+                                            onChange={field.onChange}
+                                            value={field.value || ''}
                                         />
                                     </FormControl>
-                                    <FormMessage id={`${field.name}-message`} />
+                                    <FormMessage id={`${field.name.replace('.', '_')}-message`} />
                                 </FormItem>
                             )}
                         />
@@ -344,9 +373,13 @@ export default function Create() {
                             name="ropo.caducidad"
                             render={({ field }) => (
                                 <FormItem className="flex flex-col">
-                                    <FormLabel>Caducidad del carnet</FormLabel>
+                                    <FormLabel asChild>
+                                        <span>
+                                            Caducidad del carnet
+                                        </span>
+                                    </FormLabel>
                                     <Popover>
-                                        <PopoverTrigger id="ropo-caducidad_trigger" asChild>
+                                        <PopoverTrigger id={`${field.name.replace('.', '_')}-trigger`} asChild>
                                             <FormControl>
                                                 <Button
                                                     variant={"outline"}
@@ -354,19 +387,34 @@ export default function Create() {
                                                         "w-[240px] pl-3 text-left font-normal",
                                                         !field.value && "text-muted-foreground"
                                                     )}
+                                                    value={
+                                                        field.value ?
+                                                            format(field.value, "dd/MM/yyyy")
+                                                            : "dd/mm/aaaa"
+                                                    }
                                                 >
-                                                    {field.value ? (
-                                                        format(field.value, "dd/MM/yyyy")
-                                                    ) : (
-                                                        <span>dd/mm/aaaa</span>
-                                                    )}
-                                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                    <span id={`${field.name.replace('.', '_')}-value`}>
+                                                        {field.value ? (
+                                                            format(field.value, "dd/MM/yyyy")
+                                                        ) : (
+                                                            "dd/mm/aaaa"
+                                                        )}
+                                                    </span>
+                                                    <Input
+                                                        id={`${field.name.replace('.', '_')}-input`}
+                                                        type="hidden"
+                                                        name={field.name}
+                                                        value={
+                                                            field.value ? format(field.value, "yyyy-MM-dd") : ""
+                                                        }
+                                                        onChange={field.onChange} />
+                                                    <CalendarDays className="ml-auto h-4 w-4 opacity-50" />
                                                 </Button>
                                             </FormControl>
                                         </PopoverTrigger>
                                         <PopoverContent className="w-auto p-0" align="start">
                                             <Calendar
-                                            id="ropo-caducidad_calendar"
+                                                id={`${field.name.replace('.', '_')}-calendar`}
                                                 mode="single"
                                                 locale={es}
                                                 selected={field.value}
@@ -379,9 +427,9 @@ export default function Create() {
                                         </PopoverContent>
                                     </Popover>
                                     <FormDescription>
-                                        Your date of birth is used to calculate your age.
+                                        Utiliza el calendario para ingresar la fecha.
                                     </FormDescription>
-                                    <FormMessage id={`${field.name}-message`} />
+                                    <FormMessage id={`${field.name.replace('.', '_')}-message`} />
                                 </FormItem>
                             )}
                         />
@@ -418,11 +466,11 @@ export default function Create() {
                     </div>
                     <div className="col-span-2 flex justify-between items-center">
                         <Button variant={'destructive'} className="col-span-2" type="reset">
-                            <TrashIcon className="mr-2" />
+                            <Trash2 className="mr-2 h-4" />
                             Vaciar
                         </Button>
                         <Button type="submit">
-                            <CheckCircledIcon className="mr-2" />
+                            <Save className="h-4 mr-2" />
                             Crear
                         </Button>
                     </div>

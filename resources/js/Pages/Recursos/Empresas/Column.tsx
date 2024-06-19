@@ -7,7 +7,7 @@ import {
  CaretSortIcon,
 } from "@radix-ui/react-icons"
 import { Empresa } from "@/types"
-import Actions from "@/Components/Data/Actions"
+import Actions from "@/Components/Data/Persona/Actions"
 
 export const columns: ColumnDef<Empresa>[] = [
     {

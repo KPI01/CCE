@@ -49,21 +49,6 @@
 					"label": ""
 				}
 			]
-		},
-		{
-			"path": "tests/Browser/Create/PersonaTest.php",
-			"bookmarks": [
-				{
-					"line": 238,
-					"column": 0,
-					"label": ""
-				},
-				{
-					"line": 261,
-					"column": 0,
-					"label": ""
-				}
-			]
 		}
 	]
 }

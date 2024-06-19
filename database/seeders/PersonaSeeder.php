@@ -16,20 +16,32 @@ class PersonaSeeder extends Seeder
     {
         //
         $data = Persona::factory()
-            ->count(10)
+            ->count(25)
             ->create();
 
         foreach ($data as $value) {
             $doRopo = fake()->boolean(60);
 
             if ($doRopo) {
+                $ropoNro = "";
+
+                do {
+                    if (fake()->boolean(50)) {
+                        $ropoNro = fake()->regexify('/^[0-9]{9}[S]{1}[SUA]{1}[\/]{1}[0-9]{1,2}$/');
+                    } else {
+                        $ropoNro = fake()->regexify('/^[0-9]{2,3}[\/][0-9]{1,2}$/');
+                    }
+                } while (strlen($ropoNro) > 25);
+
                 $tipo = fake()->randomElement(['Aplicador', 'Técnico']);
+
+
                 DB::table('ropo')->insert([
                     'persona' => $value->id,
                     'tipo' => $tipo,
-                    'caducidad' => fake()->date(),
-                    'tipo_aplicador' => $tipo === 'Aplicador' ? fake()->word() : null,
-                    'nro' => fake()->randomElement([fake()->unique()->bothify('##########??/#'), fake()->unique()->bothify('##########??'), fake()->unique()->numerify('##/##')]),
+                    'caducidad' => fake()->dateTimeBetween('now', '+5 years')->format('Y-m-d'),
+                    'tipo_aplicador' => $tipo ? fake()->randomElement(['Básico', 'Cualificado', 'Fumigación', 'Piloto', 'Aplicación', 'Fitosanitarios']) : null,
+                    'nro' => $ropoNro,
                 ]);
             }
         }

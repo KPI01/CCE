@@ -24,7 +24,7 @@ class PersonaController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Mostrar listado de los recursos registrados.
      */
     public function index()
     {
@@ -44,16 +44,21 @@ class PersonaController extends Controller
 
                 $this->data[$key]->ropo = $info;
             }
+
+            $this->data[$key]->urls = [
+                'edit' => route('personas.edit', $value->id),
+                'destroy' => route('personas.destroy', $value->id),
+                'show' => route('personas.show', $value->id),
+            ];
         }
 
         return Inertia::render("Recursos/Personas/Table", [
             'data' => $this->data,
-            'isAdmin' => $this->user->role_id == $this->adm_role
         ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Mostrar formulario para registrar un nuevo recurso.
      */
     public function create()
     {
@@ -62,7 +67,7 @@ class PersonaController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Almacenar nuevo recurso.
      */
     public function store(StorePersonaRequest $request)
     {
@@ -82,14 +87,17 @@ class PersonaController extends Controller
         $ropo = count($ropo) > 0 ? $ropo : null;
 
         if (Persona::where('email', $data['email'])->exists()) {
-            return Redirect::intended(route('personas.index'))
+            $email = $data['email'];
+            return Redirect::back()
                 ->withErrors([
-                    'email' => 'La persona ya existe.'
+                    'email' => "[$email] ya existe está registrado."
                 ]);
         } else if (Persona::where('id_nac', $data['id_nac'])->exists()) {
-            return Redirect::intended(route('personas.index'))
+            $id_nac = $data['id_nac'];
+            $tipo_id_nac = $data['tipo_id_nac'];
+            return Redirect::back()
                 ->withErrors([
-                    'id_nac' => 'La persona ya existe.'
+                    'id_nac' => "[$tipo_id_nac: $id_nac] ya está registrado."
                 ]);
         }
 
@@ -97,22 +105,36 @@ class PersonaController extends Controller
         $this->instance->save();
 
         if ($ropo) {
+            $ropo_nro = $ropo['nro'];
+
+            if (DB::table('ropo')->where('nro', $ropo_nro)->exists()) {
+                return Redirect::back()
+                    ->withErrors([
+                        'ropo.nro' => "[Nro Ropo:$ropo_nro] ya existe está registrado."
+                    ]);
+            }
+
             DB::table('ropo')->insert([
                 'persona' => $this->instance->id,
                 ...$ropo
             ]);
         }
 
-        $this->message = "Persona [$this->instance] creada con éxito";
+        $tipo_id_nac = $this->instance->tipo_id_nac;
+        $id_nac = $this->instance->id_nac;
+
+        $this->message = "Persona con $tipo_id_nac $id_nac creada con éxito";
 
         return Redirect::intended(route('personas.index'))->with([
             'from' => 'store.persona',
-            'message' => $this->message
+            'message' => ['content' => $this->message]
         ]);
     }
 
     /**
-     * Display the specified resource.
+     * Mostrar un recurso en especifico.
+     *
+     * @param string $id
      */
     public function show(string $id)
     {
@@ -124,20 +146,26 @@ class PersonaController extends Controller
 
         return Inertia::render("Recursos/Personas/Show", [
             'data' => $this->data,
-            'isAdmin' => $this->user->role_id == $this->adm_role
         ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Mostrar el formulario para editar el recurso.
+     *
+     * @param string $id
      */
-    public function edit(Persona $persona)
+    public function edit(string $id)
     {
         //
+        $this->data = Persona::findOrFail($id);
+
+        return Inertia::render("Recursos/Personas/Edit", [
+            'data' => $this->data,
+        ]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualizar los datos del recurso.
      */
     public function update(UpdatePersonaRequest $request, Persona $persona)
     {
@@ -145,10 +173,31 @@ class PersonaController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Eliminar uno recurso en especifico o muchos.
+     *
+     * @param string $id
      */
-    public function destroy(Persona $persona)
+    public function destroy(string $id)
     {
         //
+
+        $this->data = Persona::findOrFail($id);
+        $this->data->delete();
+
+        return Redirect::intended(route('personas.index'))
+            ->with([
+                'from' => 'destroy.persona',
+                'message' => [
+                    'action' => [
+                        'type' => 'destroy',
+                        'data' => $this->data
+                    ],
+                    'toast' => [
+                        'variant' => 'default',
+                        'title' => 'Sistema: Persona',
+                        'description' => $this->data->nombres.' '.$this->data->apellidos.' ('.$this->data->id_nac.') se ha eliminado de los registros.'
+                    ]
+                ]
+            ]);
     }
 }

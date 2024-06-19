@@ -11,14 +11,6 @@ import {
     DropdownMenuPortal
 } from "@/Components/ui/dropdown-menu"
 import {
-    ExitIcon,
-    GearIcon,
-    Pencil1Icon,
-    QuestionMarkCircledIcon,
-    HamburgerMenuIcon,
-    HomeIcon
-} from "@radix-ui/react-icons"
-import {
     NavigationMenu,
     NavigationMenuContent,
     NavigationMenuItem,
@@ -32,6 +24,15 @@ import { cn } from "@/lib/utils"
 
 import { forwardRef } from 'react'
 import { Link } from "@inertiajs/react"
+import {
+    CircleHelp,
+    Cog,
+    LogOut,
+    LucideHome,
+    Menu,
+    Pen
+} from "lucide-react"
+import { NavbarProps } from "@/types"
 
 const MENUCONTENT_CLASS = "p-4 h-fit grid gap-3 p-6 md:w-[35rem] lg:w-[45rem] lg:grid-cols-[.75fr_1fr]"
 
@@ -84,23 +85,23 @@ const recursos: Resources[] = [
     },
 ]
 
-interface Props {
-    username: string,
-    email: string
-    isAdmin: boolean
-}
-
-export default function NavBar({ username, email, isAdmin }: Props) {
+export default function NavBar({
+    username,
+    email,
+    isAdmin
+}: NavbarProps) {
     const currentRoute = route().current()?.toString()
     console.log(currentRoute)
     return (
-        <nav id='navbar' role='navigation' className="basis-auto px-7 py-4 flex flex-col gap-3">
+        <nav id='navbar' role='navigation' className="basis-auto px-7 py-4 pb-0 flex flex-col gap-3">
             <div className="flex items-center justify-center gap-3">
                 {!currentRoute?.includes('home') &&
                     <>
+                    <Button variant={'ghost'} size={'sm'} asChild>
                         <Link href={route('home')}>
-                            <HomeIcon />
+                            <LucideHome className="h-4" />
                         </Link>
+                    </Button>
                         <Separator orientation="vertical" className="h-[3ch]" />
                     </>
                 }
@@ -145,7 +146,7 @@ export default function NavBar({ username, email, isAdmin }: Props) {
                     <DropdownMenu>
                         <DropdownMenuTrigger id="navbar-conf" asChild className="hidden lg:flex">
                             <Button variant={"outline"}>
-                                <GearIcon className="mr-2 h-4 w-4" />
+                                <Cog className="mr-2 h-4 w-4" />
                                 Configuración
                             </Button>
                         </DropdownMenuTrigger>
@@ -153,17 +154,17 @@ export default function NavBar({ username, email, isAdmin }: Props) {
                             <DropdownMenuLabel className="text-sm font-semibold">{email}</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="gap-1">
-                                <Pencil1Icon />
+                                <Pen className="h-4 w-4" />
                                 Editar Perfil
                             </DropdownMenuItem>
                             <DropdownMenuItem className="gap-1">
-                                <QuestionMarkCircledIcon />
+                                <CircleHelp className="h-4 w-4" />
                                 Soporte
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="gap-2 font-semibold">
                                 <Link href={route('logout')} method="post" as="button" className="flex gap-3 items-center">
-                                    <ExitIcon />
+                                    <LogOut className="h-4 w-4" />
                                     Cerrar sesión
                                 </Link>
                             </DropdownMenuItem>
@@ -173,14 +174,14 @@ export default function NavBar({ username, email, isAdmin }: Props) {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild className="flex lg:hidden">
                         <Button variant={"outline"}>
-                            <HamburgerMenuIcon />
+                            <Menu className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="block: lg:hidden px-2 me-5">
                         <DropdownMenuLabel>Secciones</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem asChild>
-                            <Link href=''>
+                            <Link href='' as="button">
                                 Visitas
                             </Link>
                         </DropdownMenuItem>
@@ -212,16 +213,16 @@ export default function NavBar({ username, email, isAdmin }: Props) {
                         <DropdownMenuLabel className="text-xs font-light pt-0">{email}</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem className="gap-1">
-                            <Pencil1Icon />
+                            <Pen />
                             Editar Perfil
                         </DropdownMenuItem>
                         <DropdownMenuItem className="gap-1">
-                            <QuestionMarkCircledIcon />
+                            <CircleHelp />
                             Soporte
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem className="gap-2 font-semibold">
-                            <ExitIcon />
+                            <LogOut className="h-4 w-4" />
                             Cerrar sesión
                         </DropdownMenuItem>
                     </DropdownMenuContent>

@@ -1,18 +1,25 @@
-import { AccordionContent } from "@/Components/ui/accordion"
-import { Card, CardContent, CardDescription, CardHeader } from "@/Components/ui/card"
+import {
+    Card,
+    CardDescription,
+    CardHeader
+} from "@/Components/ui/card"
 import { Input } from "@/Components/ui/input"
 import { Label } from "@/Components/ui/label"
 import { Separator } from "@/Components/ui/separator"
 import { Textarea } from "@/Components/ui/textarea"
 import ShowLayout from "@/Layouts/Recursos/ShowLayout"
-import { Persona } from "@/types"
+import { LayoutProps, Persona } from "@/types"
 import { Link } from "@inertiajs/react"
-import { Accordion, AccordionItem, AccordionTrigger } from "@radix-ui/react-accordion"
-import { BackpackIcon } from "@radix-ui/react-icons"
+import {
+    Accordion,
+    AccordionItem,
+    AccordionTrigger,
+    AccordionContent
+} from "@/Components/ui/accordion"
+import { Building } from "lucide-react"
 
-interface Props {
+interface Props extends LayoutProps  {
     data: Persona
-    isAdmin: boolean
 }
 
 function Title({ title }: { title: string }) {
@@ -50,9 +57,16 @@ function ItemProperty({ title, value, textarea = false }: { title: string, value
 }
 
 export default function Show(props: Props) {
-    console.log(props.data)
+    let relations = {
+        empresas: props.data.empresas ?? undefined
+    }
     return (
-        <ShowLayout pageTitle="Persona" title={`${props.data.nombres} ${props.data.apellidos}`} isAdmin={props.isAdmin} updated_at={props.data.updated_at} recurso="persona">
+        <ShowLayout
+            pageTitle="Persona"
+            mainTitle={`${props.data.nombres} ${props.data.apellidos}`}
+            updated_at={props.data.updated_at}
+            recurso="personas"
+        >
             <div className="flex flex-col items-start gap-8 pt-10 px-48">
                 <div>
                     <Title title="Datos básicos" />
@@ -68,7 +82,7 @@ export default function Show(props: Props) {
                 </div>
                 <div className="w-full">
                     <Accordion type="single" collapsible className="w-full">
-                        {props.data.empresas &&
+                        {relations.empresas !== undefined && relations.empresas.length > 0 &&
                             (
                                 <>
                                     <AccordionItem value='empresas'>
@@ -78,12 +92,12 @@ export default function Show(props: Props) {
                                         <AccordionContent className="flex">
                                             {props.data.empresas?.map(i => {
                                                 return (
-                                                    <Link key={i.id} href={route('recurso.empresa.show', i.id)} className="w-fit">
+                                                    <Link key={i.id} href={route('empresas.show', i.id)} className="w-fit">
                                                         <Card className="w-fit hover:bg-secondary transition ">
                                                             <CardHeader className="p-4 font-medium">
                                                                 <div className="flex items-center gap-1">
-                                                                <BackpackIcon />
-                                                                {i.nombre}
+                                                                    <Building className="h-4 mr-2" />
+                                                                    {i.nombre}
                                                                 </div>
                                                                 <CardDescription>
                                                                     <span className="font-light ms-2">
