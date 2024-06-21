@@ -38,109 +38,31 @@ import { useState } from "react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Save, Trash2, CalendarDays } from "lucide-react";
+import {
+    formSchema,
+    PERFILES,
+    TIPOS_APLICADOR,
+    TIPOS_ID_NAC,
+    TIPOS_ROPO
+} from "./formSchema";
+import {FormItemSelectConstructor} from "@/Components/Forms/FormItemSelectConstructor";
+import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 
-const RSRC = 'personas'
-const REQUIRED_MSG = 'Este campo es requerido.'
-const CONTAINER_CLASS = "grid grid-cols-[repeat(2,minmax(250px,1fr))] gap-x-12 gap-y-4"
-const TIPOS_ID_NAC = ['DNI', 'NIE'] as const
-const PERFILES = ['Aplicador', 'Técnico', 'Supervisor', 'Productor'] as const
-const TIPOS_ROPO = ['Aplicador', 'Técnico'] as const
-const TIPOS_APLICADOR = ['', 'Básico', 'Cualificado', 'Fumigación', 'Piloto', 'Aplicación Fitosanitarios'] as const
+const RECURSO = 'personas'
+const CONTAINER_CLASS = "container grid grid-cols-2 gap-x-32 gap-y-8"
 
-const formSchema = z.object({
-    nombres: z.string({
-        required_error: REQUIRED_MSG,
-    })
-        .min(3, 'El nombre debe tener al menos 3 caracteres.')
-        .max(50, 'El nombre debe tener menos de 50 caracteres.'),
-    apellidos: z.string({
-        required_error: REQUIRED_MSG,
-    })
-        .min(3, 'Los apellidos deben tener al menos 3 caracteres.')
-        .max(50, 'Los apellidos deben tener menos de 50 caracteres.'),
-    tipo_id_nac: z.enum(TIPOS_ID_NAC),
-    id_nac: z.string({
-        required_error: REQUIRED_MSG,
-    })
-        .max(12, 'El DNI/NIE debe ser de 12 caracteres.'),
-    email: z.string({
-        required_error: REQUIRED_MSG,
-    })
-        .email('El correo debe ser válido.'),
-    tel: z.string()
-        .regex(/^[0-9]{3}-[0-9]{2}-[0-9]{2}-[0-9]{2}$/, 'El número debe estar en el formato indicado.')
-        .optional(),
-    perfil: z.enum(PERFILES)
-        .optional(),
-    observaciones: z.string()
-        .max(300, 'Las observaciones deben tener menos de 300 caracteres.')
-        .optional(),
-    ropo: z.object({
-        tipo: z.enum(TIPOS_ROPO).optional(),
-        caducidad: z.date().optional(),
-        nro: z.string().optional(),
-        tipo_aplicador: z.enum(TIPOS_APLICADOR).optional(),
-    })
-        .optional()
-        .superRefine((data, ctx) => {
-            if (data?.tipo && !data?.nro) {
-                console.log('')
-                ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    message: 'Debes ingresar el Nº del carnet.',
-                    path: ['nro'],
-                })
-            } else if (!data?.tipo && data?.nro) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    message: 'Debes seleccionar el tipo de carnet.',
-                    path: ['tipo'],
-                })
-            } else if (data?.tipo && data?.nro) {
-                const regex = /^[0-9]{5,}[A-Z]{2}[/]?[0-9]*$|^[0-9]{1,3}[/][0-9]{1,3}$/gm;
-
-                if (!regex.test(data.nro)) {
-                    ctx.addIssue({
-                        code: z.ZodIssueCode.custom,
-                        message: 'El Nº del carnet debe estar en el formato adecuado.',
-                        path: ['nro'],
-                    })
-                }
-            } else if (!data?.tipo && !data?.nro) {
-                return true
-            }
-        })
-})
-    .superRefine((data, ctx) => {
-        let tipo_id = data.tipo_id_nac
-        let id = data.id_nac
-        let regex
-
-        if (tipo_id === 'DNI') {
-            regex = /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKE]{1}$/
-        } else if (tipo_id === 'NIE') {
-            regex = /^[XYZ]{1}[0-9]{7}[XYZ]{1}$/
-        }
-
-        if (!regex?.test(id)) {
-            ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                message: 'La identificación debe tener el formato adecuado.',
-                path: ['id_nac'],
-            })
-        }
-    })
+const schema = formSchema
 
 export default function Create() {
     const [fillRopo, setFillRopo] = useState<boolean>(false)
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<z.infer<typeof schema>>({
+        resolver: zodResolver(schema),
         defaultValues: {
             tipo_id_nac: 'DNI',
         }
     })
-    console.log(form.formState)
+    // console.log(form.formState)
 
     function handleRopoShow(curr: boolean) {
         let val = !curr
@@ -150,52 +72,48 @@ export default function Create() {
         setFillRopo(val)
     }
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    function onSubmit(values: z.infer<typeof schema>) {
         console.log(values)
 
-        router.post(route('personas.store'), values)
+        router.post(route(`${RECURSO}.store`), values)
     }
 
     return (
-        <CreateLayout rsrc={RSRC}>
+        <CreateLayout
+            pageTitle={`Creando: ${RECURSO}`}
+            mainTitle='Modo creación'
+            recurso={RECURSO}
+        >
             <Form {...form}>
                 <form id="create-persona-form" className={CONTAINER_CLASS} onSubmit={form.handleSubmit(onSubmit)}>
                     <FormField
                         control={form.control}
                         name="nombres"
                         render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor={field.name}>Nombre(s) *</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        id="nombres"
-                                        name={field.name}
-                                        placeholder="..."
-                                        onChange={field.onChange}
-                                    />
-                                </FormControl>
-                                <FormMessage id={`${field.name}-message`} />
-                            </FormItem>
+                            <FormItemConstructor
+                                id={field.name}
+                                label="Nombre(s) *"
+                                name={field.name}
+                                placeholder="..."
+                                onChange={field.onChange}
+                                value={field.value}
+                                />
                         )} />
                     <FormField
                         control={form.control}
                         name="apellidos"
                         render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor={field.name}>Apellido(s) *</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        id="apellidos"
-                                        name={field.name}
-                                        placeholder="..."
-                                        onChange={field.onChange}
-                                    />
-                                </FormControl>
-                                <FormMessage id={`${field.name}-message`} />
-                            </FormItem>
+                            <FormItemConstructor
+                            id={field.name}
+                            label="Apellido(s) *"
+                            name={field.name}
+                            placeholder="..."
+                            onChange={field.onChange}
+                            value={field.value}
+                            />
                         )} />
-                    <div className="grid gap-x-6 grid-cols-[10ch_1fr] ">
-                        <FormLabel className={'col-span-2' + (form.getFieldState('id_nac').invalid ? ' text-destructive' : '')} htmlFor="id_nac">Identificación *</FormLabel>
+                    <div className="grid gap-x-12 grid-cols-[10ch_1fr] ">
+                        <FormLabel className={'col-span-2 mb-3' + (form.getFieldState('id_nac').invalid ? ' text-destructive' : '')} htmlFor="id_nac">Identificación *</FormLabel>
                         <FormField
                             control={form.control}
                             name="tipo_id_nac"
@@ -222,7 +140,7 @@ export default function Create() {
                             control={form.control}
                             name="id_nac"
                             render={({ field }) => (
-                                <FormItem className="basis-full">
+                                <FormItem>
                                     <FormControl>
                                         <Input
                                             id="id_nac"
@@ -239,85 +157,55 @@ export default function Create() {
                         control={form.control}
                         name="email"
                         render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor={field.name}>Correo *</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        id="email"
-                                        name={field.name}
-                                        autoComplete="email"
-                                        placeholder="..."
-                                        onChange={field.onChange}
-                                    />
-                                </FormControl>
-                                <FormMessage id={`${field.name}-message`} />
-                            </FormItem>
+                            <FormItemConstructor
+                                id={field.name}
+                                label="Email"
+                                name={field.name}
+                                placeholder="..."
+                                onChange={field.onChange}
+                                value={field.value}
+                                />
                         )} />
                     <FormField
                         control={form.control}
                         name="tel"
                         render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor={field.name}>Teléfono</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        id="tel"
-                                        name={field.name}
-                                        autoComplete="tel"
-                                        type="tel"
-                                        placeholder="..."
-                                        onChange={field.onChange}
-                                    />
-                                </FormControl>
-                                <FormDescription>Formato: 123-45-67-89</FormDescription>
-                                <FormMessage id={`${field.name}-message`} />
-                            </FormItem>
+                            <FormItemConstructor
+                                id={field.name}
+                                label="Teléfono"
+                                name={field.name}
+                                placeholder="..."
+                                onChange={field.onChange}
+                                value={field.value}
+                                />
                         )} />
                     <FormField
                         control={form.control}
                         name="perfil"
                         render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor={field.name}>Perfil</FormLabel>
-                                <FormControl>
-                                    <Select name={field.name} onValueChange={field.onChange} defaultValue={field.value}>
-                                        <FormControl>
-                                            <SelectTrigger
-                                                id="perfil"
-                                                className="w-full">
-                                                <SelectValue placeholder='Selecciona el perfil' />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            {PERFILES.map((perfil) => (
-                                                <SelectItem key={perfil} value={perfil}>
-                                                    {perfil}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </FormControl>
-                                <FormMessage id={`${field.name}-message`} />
-                            </FormItem>
+                            <FormItemSelectConstructor
+                                id={field.name}
+                                name={field.name}
+                                label="Perfil"
+                                value={field.value as string}
+                                placeholder="Seleccionar perfil..."
+                                onChange={field.onChange}
+                                options={PERFILES}
+                            />
                         )} />
                     <FormField
                         control={form.control}
                         name="observaciones"
                         render={({ field }) => (
-                            <FormItem className="col-span-2">
-                                <FormLabel htmlFor={field.name}>Observaciones</FormLabel>
-                                <FormControl>
-                                    <Textarea
-                                        id="observaciones"
-                                        name={field.name}
-                                        className="resize-y"
-                                        rows={1}
-                                        placeholder="..."
-                                        onChange={field.onChange}
-                                    />
-                                </FormControl>
-                                <FormMessage id={`${field.name}-message`} />
-                            </FormItem>
+                            <FormItemConstructor
+                                id={field.name}
+                                label="Observaciones"
+                                textarea
+                                name={field.name}
+                                placeholder="..."
+                                onChange={field.onChange}
+                                value={field.value}
+                                />
                         )} />
                     <div className="flex items-center space-x-2">
                         <Switch name="ropo" id="ropo" onClick={() => handleRopoShow(fillRopo)} />
@@ -328,44 +216,28 @@ export default function Create() {
                             control={form.control}
                             name="ropo.tipo"
                             render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor={field.name.replace('.', '-')}>Tipo Carnet</FormLabel>
-                                    <FormControl>
-                                        <Select name={field.name} onValueChange={field.onChange} defaultValue={field.value}>
-                                            <FormControl id={field.name.replace('.', '-')}>
-                                                <SelectTrigger className="w-full">
-                                                    <SelectValue placeholder='Selecciona el tipo de carnet' />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {TIPOS_ROPO.map((ropo) => (
-                                                    <SelectItem key={ropo} value={ropo}>
-                                                        {ropo}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage id={`${field.name.replace('.', '_')}-message`} />
-                                </FormItem>
+                                <FormItemSelectConstructor
+                                    id={field.name}
+                                    name={field.name}
+                                    label="Tipo de ROPO"
+                                    value={field.value as string}
+                                    placeholder="Seleccionar tipo..."
+                                    onChange={field.onChange}
+                                    options={TIPOS_ROPO}
+                                    />
                             )} />
                         <FormField
                             control={form.control}
                             name="ropo.nro"
                             render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor={field.name.replace('.', '-')}>Nº</FormLabel>
-                                    <FormControl id={field.name}>
-                                        <Input
-                                            id="ropo-nro"
-                                            name={field.name}
-                                            placeholder="..."
-                                            onChange={field.onChange}
-                                            value={field.value || ''}
-                                        />
-                                    </FormControl>
-                                    <FormMessage id={`${field.name.replace('.', '_')}-message`} />
-                                </FormItem>
+                                <FormItemConstructor
+                                    id={field.name}
+                                    label="Nº Carnet"
+                                    name={field.name}
+                                    placeholder="..."
+                                    onChange={field.onChange}
+                                    value={field.value}
+                                    />
                             )}
                         />
                         <FormField
@@ -437,31 +309,15 @@ export default function Create() {
                             control={form.control}
                             name="ropo.tipo_aplicador"
                             render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="ropo-tipo_aplicador">Perfil</FormLabel>
-                                    <FormControl >
-                                        <Select name="ropo.tipo_aplicador" onValueChange={field.onChange} defaultValue={field.value}>
-                                            <FormControl>
-                                                <SelectTrigger id="ropo-tipo_aplicador" className="w-full">
-                                                    <SelectValue placeholder='Selecciona el perfil de aplicador' />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {TIPOS_APLICADOR.map((val) => {
-                                                    if (val !== '') {
-                                                        return (
-                                                            <SelectItem key={TIPOS_APLICADOR.indexOf(val)} value={val}>
-                                                                {val}
-                                                            </SelectItem>
-
-                                                        )
-                                                    }
-                                                })}
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage id={`${field.name}-message`} />
-                                </FormItem>
+                                <FormItemSelectConstructor
+                                    id={field.name}
+                                    label="Tipo de aplicador"
+                                    options={TIPOS_APLICADOR}
+                                    value={field.value as string}
+                                    onChange={field.onChange}
+                                    name={field.name}
+                                    placeholder="Selecciona el tipo de aplicador"
+                                />
                             )} />
                     </div>
                     <div className="col-span-2 flex justify-between items-center">

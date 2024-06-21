@@ -141,6 +141,8 @@ class PersonaController extends Controller
         //
         $this->data = Persona::findOrFail($id);
 
+        $this->data->ropo = DB::table('ropo')->where('persona', $this->data->id)->first() ?: null;
+
         $this->relations['empresas'] = $this->data->empresas()->get();
         $this->data->empresas = $this->relations['empresas'];
 
@@ -194,7 +196,7 @@ class PersonaController extends Controller
                     ],
                     'toast' => [
                         'variant' => 'default',
-                        'title' => 'Sistema: Persona',
+                        'title' => 'Recurso: Persona',
                         'description' => $this->data->nombres.' '.$this->data->apellidos.' ('.$this->data->id_nac.') se ha eliminado de los registros.'
                     ]
                 ]

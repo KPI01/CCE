@@ -2,8 +2,8 @@ type UUID = `${string}-${string}-${string}-${string}-${string}`
 
 type Modelo = {
     id: UUID
-    created_at: string
-    updated_at: string
+    created_at: Date
+    updated_at: Date
 }
 
 export interface User extends Modelo {
@@ -23,18 +23,17 @@ interface ModeloRecurso extends Modelo {
 export interface Persona extends ModeloRecurso {
     nombres: string
     apellidos: string
-    tipo_id_nac: string
+    tipo_id_nac: 'DNI' | 'NIE'
     id_nac: string
     email: string
     tel: string
-    perfil: string
+    perfil: '' | 'Aplicador' | 'Técnico' | 'Supervisor' | 'Productor'
     observaciones: string
     ropo?: {
-        id: string
-        tipo: string
-        caducidad?: string
+        tipo: '' | 'Aplicador' | 'Técnico'
+        caducidad?: Date
         nro?: string
-        tipo_aplicador?: string
+        tipo_aplicador?: '' | 'Básico' | 'Cualificado' | 'Fumigación' | 'Piloto' | 'Aplicación Fitosanitarios'
     }
 
     empresas?: Empresa[]

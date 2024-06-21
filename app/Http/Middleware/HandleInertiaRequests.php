@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -29,25 +30,36 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $user = $request->user() ? $request->user()->only('id', 'name', 'email', 'email_verified_at') : null;
+        if (Auth::check()) {
 
-        $role = $request->user() ? $request->user()->role : null;
+            $user = $request->user() ? $request->user()->only('id', 'name', 'email', 'email_verified_at') : null;
 
-        $user['role'] = $role;
+            $user['verified'] = $user['email_verified_at'] ? true : false;
+            unset($user['email_verified_at']);
 
-        $session = $request->session()->all();
-        foreach ($session as $key => $value) {
-            if (str_starts_with($key, '_') || str_contains($key, 'login_web')) {
-                unset($session[$key]);
-            }
+            $role = $request->user() ? $request->user()->role : null;
+
+            $user['role'] = $role->only('id', 'name');
+
+            $errors = $request->session()->get('errors');
+
+            $props = [
+                'appName' => config('app.name'),
+                'auth' => [
+                    'user' => $user,
+                ],
+                'flash' => [
+                    'message' => $request->session()->get('message'),
+                ]
+            ];
+
+            $errors ?? $props['errors'] = $errors;
+
+            return array_merge(parent::share($request), $props);
         }
 
         return array_merge(parent::share($request), [
             'appName' => config('app.name'),
-            'auth' => [
-                'user' => $user,
-            ],
-            'session' => $session,
         ]);
     }
 }

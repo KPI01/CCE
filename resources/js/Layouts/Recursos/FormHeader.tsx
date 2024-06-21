@@ -17,7 +17,7 @@ export default function FormHeader({
     return (
         <div className="flex items-center gap-4">
             <Button variant={'outline'} size={'sm'} className="px-2 py-1" asChild>
-                <Link href={route(`${recurso}.index`)}>
+                <Link href={route(`${recurso}.index`)} as="button">
                     <ChevronLeft className="h-4" />
                 </Link>
             </Button>

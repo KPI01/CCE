@@ -9,7 +9,7 @@ use Tests\Browser\Components\Navbar;
 use Tests\Browser\Pages\Recursos\Persona\Create;
 use Tests\DuskTestCase;
 
-class PersonaTest extends DuskTestCase
+class CreatePersonaTest extends DuskTestCase
 {
     public $user;
 
@@ -19,7 +19,8 @@ class PersonaTest extends DuskTestCase
         // Login como informatica
         $this->user = User::where('email', 'informatica@fruveco.com')->first();
         $this->browse(function (Browser $browser) {
-            $browser->loginAs($this->user);
+            $browser->loginAs($this->user)
+                ->assertAuthenticatedAs($this->user);
         });
     }
 
@@ -86,6 +87,7 @@ class PersonaTest extends DuskTestCase
                 ->assertVisible('@ropo-form')
                 ->assertVisible('@ropo.tipo')
                 ->assertVisible('@ropo.caducidad-trigger')
+                ->assertVisible('@ropo.caducidad-value')
                 ->click('@ropo.caducidad-trigger')
                 ->assertVisible('@ropo.caducidad-calendar')
                 ->assertVisible('@ropo.nro')
@@ -193,10 +195,10 @@ class PersonaTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit(new Create)
                 ->click('@submit')
-                ->assertSeeIn('@nombres-err', 'Este campo es requerido.')
-                ->assertSeeIn('@apellidos-err', 'Este campo es requerido.')
-                ->assertSeeIn('@id_nac-err', 'Este campo es requerido.')
-                ->assertSeeIn('@email-err', 'Este campo es requerido.')
+                ->assertSeeIn('@nombres-message', 'Este campo es requerido.')
+                ->assertSeeIn('@apellidos-message', 'Este campo es requerido.')
+                ->assertSeeIn('@id_nac-message', 'Este campo es requerido.')
+                ->assertSeeIn('@email-message', 'Este campo es requerido.')
                 ->screenshot('persona/create/envio_vacio');
         });
     }
@@ -213,10 +215,10 @@ class PersonaTest extends DuskTestCase
                 ->type('@id_nac', '2Q864422J0AK3')
                 ->type('@email', 'Eirmod.com')
                 ->press('@submit')
-                ->assertSeeIn('@nombres-err', 'El nombre debe tener al menos 3 caracteres.')
-                ->assertSeeIn('@apellidos-err', 'Los apellidos deben tener al menos 3 caracteres.')
-                ->assertSeeIn('@id_nac-err', 'El DNI/NIE debe ser de 12 caracteres.')
-                ->assertSeeIn('@email-err', 'El correo debe ser válido.')
+                ->assertSeeIn('@nombres-message', 'El nombre debe tener al menos 3 caracteres.')
+                ->assertSeeIn('@apellidos-message', 'Los apellidos deben tener al menos 3 caracteres.')
+                ->assertSeeIn('@id_nac-message', 'El DNI/NIE debe ser de 12 caracteres.')
+                ->assertSeeIn('@email-message', 'El correo debe ser válido.')
                 ->screenshot('persona/create/requeridos_invalidos_1');
 
             $browser->visit(new Create)
@@ -225,10 +227,10 @@ class PersonaTest extends DuskTestCase
                 ->type('@id_nac', '7D1BJ11O3VRH76YH')
                 ->type('@email', 'Sadipscing.com')
                 ->press('@submit')
-                ->assertSeeIn('@nombres-err', 'El nombre debe tener menos de 50 caracteres.')
-                ->assertSeeIn('@apellidos-err', 'Los apellidos deben tener menos de 50 caracteres.')
-                ->assertSeeIn('@id_nac-err', 'El DNI/NIE debe ser de 12 caracteres.')
-                ->assertSeeIn('@email-err', 'El correo debe ser válido.')
+                ->assertSeeIn('@nombres-message', 'El nombre debe tener menos de 50 caracteres.')
+                ->assertSeeIn('@apellidos-message', 'Los apellidos deben tener menos de 50 caracteres.')
+                ->assertSeeIn('@id_nac-message', 'El DNI/NIE debe ser de 12 caracteres.')
+                ->assertSeeIn('@email-message', 'El correo debe ser válido.')
                 ->screenshot('persona/create/requeridos_invalidos_2');
         });
     }
@@ -241,16 +243,16 @@ class PersonaTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit(new Create)
                 ->type('@nombres', 'Veniam')
-                ->assertDontSee('@nombres-err')
                 ->type('@apellidos', 'Tempor')
-                ->assertDontSee('@apellidos-err')
                 ->type('@id_nac', '04315370H')
-                ->assertDontSee('@id_nac-err')
                 ->type('@email', 'Accusam@correo.com')
-                ->assertDontSee('@email-err')
                 ->type('@tel', '123456789')
-                ->assertSeeIn('@tel-err', 'El número debe estar en el formato indicado.')
-                ->press('@submit');
+                ->press('@submit')
+                ->assertDontSee('@nombres-message')
+                ->assertDontSee('@apellidos-message')
+                ->assertDontSee('@id_nac-message')
+                ->assertDontSee('@email-message')
+                ->assertSeeIn('@tel-message', 'El número debe estar en el formato indicado.');
 
                 $browser->screenshot('persona/create/envio_requeridos_validos_basico_invalido');
         });
@@ -260,7 +262,44 @@ class PersonaTest extends DuskTestCase
      * Test envio de campos basicos validos pero con ropo invalido
      */
     public function test_envio_basico_valido_ropo_invalido(): void
-    {}
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(new Create)
+                ->type('@nombres', 'Ipsum')
+                ->type('@apellidos', 'Nulla')
+                ->type('@id_nac', '90401911C')
+                ->type('@email', 'Hendrerit@correo.com')
+                ->type('@tel', '123-45-67-89')
+                ->click('@ropo-checkbox-btn')
+                ->assertVisible('@ropo-form')
+                ->assertSelectMissingOption('@ropo.tipo', 'Volutpat')
+                ->assertSelectHasOption('@ropo.tipo', 'Aplicador')
+                ->assertSelectHasOption('@ropo.tipo', 'Técnico')
+                ->select('@ropo.tipo', 'Aplicador')
+                ->type('@ropo.nro', '16789KJH&%@$')
+                ->click('@ropo.caducidad-trigger')
+                ->assertVisible('@ropo.caducidad-calendar')
+                // ->click('@ropo.caducidad-calendar table tbody tr:last-child td:last-child')
+                // ->assertInputValue('@ropo.caducidad-input', '2024-06-30')
+                ->value('@ropo.caducidad-input', '30-06-2024')
+                ->assertSelectMissingOption('@ropo.tipo_aplicador', 'Ullamcorper')
+                ->assertSelectHasOption('@ropo.tipo_aplicador', 'Básico')
+                ->assertSelectHasOption('@ropo.tipo_aplicador', 'Cualificado')
+                ->assertSelectHasOption('@ropo.tipo_aplicador', 'Fumigación')
+                ->assertSelectHasOption('@ropo.tipo_aplicador', 'Piloto')
+                ->assertSelectHasOption('@ropo.tipo_aplicador', 'Aplicación Fitosanitarios')
+                ->select('@ropo.tipo_aplicador', 'Piloto')
+                ->press('@submit')
+                ->assertDontSee('@nombres-message')
+                ->assertDontSee('@apellidos-message')
+                ->assertDontSee('@id_nac-message')
+                ->assertDontSee('@email-message')
+                ->assertDontSee('@tel-message')
+                ->assertSeeIn('@ropo.nro-message', 'El Nº del carnet debe estar en el formato adecuado.');
+
+            $browser->screenshot('persona/create/envio_basico_valido_ropo_invalido');
+        });
+    }
 
     /**
      * Test de envío de formulario correcto solo con campos requeridos
@@ -295,14 +334,14 @@ class PersonaTest extends DuskTestCase
     /**
      * Test de envío de formulario básico completo correcto
      */
-    public function test_envio_requeridos_valido(): void
+    public function test_envio_basicos_validos(): void
     {
         $this->browse(function (Browser $browser) {
             $nombres = 'Magna';
             $apellidos = 'Tempor';
             $id_nac = '42841629N';
             $email = 'Iriure@correo.com';
-            $tel = '123-456-78-90';
+            $tel = '123-45-67-89';
             $obsrv = 'Gubergren rebum et stet at dolor luptatum stet dolor no clita accusam';
 
             $instanceByEmail = Persona::where('email', $email);
@@ -336,11 +375,11 @@ class PersonaTest extends DuskTestCase
             $apellidos = 'Tempor';
             $id_nac = '42841629N';
             $email = 'Iriure@correo.com';
-            $tel = '123-456-78-90';
+            $tel = '123-45-67-89';
             $obsrv = 'Gubergren rebum et stet at dolor luptatum stet dolor no clita accusam';
             $ropo_tipo = 'Aplicador';
-            $ropo_nro = '123456789';
-            $ropo_caducidad = '31122024';
+            $ropo_nro = '143038069SU/2';
+            $ropo_caducidad = '2024-12-31';
             $ropo_aplicador = 'Piloto';
 
             $instanceByEmail = Persona::where('email', $email);
@@ -359,6 +398,7 @@ class PersonaTest extends DuskTestCase
                 ->click('@ropo-checkbox-btn')
                 ->select('@ropo.tipo', $ropo_tipo)
                 ->type('@ropo.nro', $ropo_nro)
+                ->value('@ropo.caducidad-input', $ropo_caducidad)
                 ->select('@ropo.tipo_aplicador', $ropo_aplicador)
                 ->press('@submit')
                 ->pause(1000);
