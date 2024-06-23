@@ -52,11 +52,13 @@ export default function Edit({
     const [values, setValues] = useState<z.infer<typeof schema>>({ ...form.getValues() })
     console.debug('state:', values)
 
-    function handleTipoIdNacChange(val: 'DNI' | 'NIE') {
-        console.debug('handleTipoIdNacChange:', val)
+    function handleStateChange(key: keyof z.infer<typeof schema>, newValue: Pick<typeof values, keyof typeof values>) {
+        console.debug('handleStateChange | key:', key)
+        console.debug(`handleStateChange | newValue[${key}]:`, newValue)
 
-        if (TIPOS_ID_NAC.includes(val)) {
-            setValues({ ...values, tipo_id_nac: val })
+        switch (key) {
+            default:
+                setValues({ ...values, [key]: newValue })
         }
     }
 
@@ -81,7 +83,7 @@ export default function Edit({
                                 label="Nombres"
                                 name={field.name}
                                 value={values.nombres}
-                                onChange={(e) => setValues({ ...values, nombres: e.target.value })}
+                                onChange={(e) => handleStateChange('nombres', e.target.value)}
                             />
                         )}
                     />
@@ -95,7 +97,7 @@ export default function Edit({
                                 label="Apellidos"
                                 name={field.name}
                                 value={values.apellidos}
-                                onChange={(e) => setValues({ ...values, apellidos: e.target.value })}
+                                onChange={(e) => handleStateChange('apellidos', e.target.value)}
                             />
                         )}
                     />
@@ -107,7 +109,7 @@ export default function Edit({
                             name="tipo_id_nac"
                             render={({ field }) => (
                                 <FormItem>
-                                    <Select onValueChange={(e: 'DNI' | 'NIE') => handleTipoIdNacChange(e)} defaultValue={values.tipo_id_nac} name={field.name}>
+                                    <Select onValueChange={(e: 'DNI' | 'NIE') => handleStateChange('tipo_id_nac', e)} defaultValue={values.tipo_id_nac} name={field.name}>
                                         <FormControl>
                                             <SelectTrigger className="w-full">
                                                 <SelectValue placeholder='Selecciona el tipo de identificación' />
@@ -134,8 +136,8 @@ export default function Edit({
                                             id="id_nac"
                                             name={field.name}
                                             placeholder="..."
-                                            value={field.value}
-                                            onChange={field.onChange}
+                                            value={values.id_nac}
+                                            onChange={(e) => setValues({ ...values, id_nac: e.target.value })}
                                         />
                                     </FormControl>
                                     <FormMessage id={`${field.name}-message`} />
@@ -151,13 +153,15 @@ export default function Edit({
                                 id={field.name}
                                 label="Perfil"
                                 name={field.name}
-                                value={field.value as string}
-                                onChange={field.onChange}
+                                value={values.perfil}
+                                onChange={(e) => setValues({ ...values, perfil: e })}
                                 options={PERFILES}
                                 placeholder="Selecciona un perfil"
                             />
                         )}
                     />
+
+
                 </form>
             </Form>
         </EditLayout>

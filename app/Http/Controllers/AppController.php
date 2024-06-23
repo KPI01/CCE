@@ -28,7 +28,7 @@ class AppController extends Controller
     {
 
         if ($this->user->role_id == $this->adm_role) {
-            return Inertia::render('Admin/Dashboard');
+            return Inertia::render('Dashboard');
         }
         return Inertia::render('User/Dashboard');
     }

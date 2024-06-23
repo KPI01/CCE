@@ -5,9 +5,9 @@
     "tasks": [
 		{
 			"type": "shell",
-			"command": "npm run dev",
+			"command": "pnpm run dev",
 			"problemMatcher": [],
-			"label": "npm: dev",
+			"label": "pnpm: dev",
 			"detail": "vite",
             "runOptions": {
                 "runOn": "folderOpen"
