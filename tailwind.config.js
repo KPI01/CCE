@@ -73,8 +73,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require("tailwindcss-animate"),
-    require("postcss-import")
-  ],
-}
+  plugins: [require("tailwindcss-animate"), require("postcss-import")],
+};

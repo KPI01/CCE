@@ -1,7 +1,3 @@
-# Lock files
-/*-lock.*
-/*.lock
-
 # Node
 /node_modules
 /npm-debug.log
@@ -16,6 +12,7 @@
 /vendor
 
 # Another
+*.cache
 .phpunit.result.cache
 /yarn-error.log
 .editorconfig
