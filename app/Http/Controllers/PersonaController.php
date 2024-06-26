@@ -6,6 +6,7 @@ use App\Models\Persona;
 use App\Http\Requests\StorePersonaRequest;
 use App\Http\Requests\UpdatePersonaRequest;
 use App\Models\Role;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -134,20 +135,29 @@ class PersonaController extends Controller
     /**
      * Mostrar un recurso en especifico.
      *
+     * @param Request $req
      * @param string $id
      */
-    public function show(string $id)
+    public function show(Request $req, string $id)
     {
         //
+        $req->session()->setPreviousUrl($req->url());
         $this->data = Persona::findOrFail($id);
 
         $this->data->ropo = DB::table('ropo')->where('persona', $this->data->id)->first() ?: null;
+
+        $this->data->urls = [
+            'edit' => route('personas.edit', $this->data->id),
+            'destroy' => route('personas.destroy', $this->data->id),
+            'show' => route('personas.show', $this->data->id),
+        ];
 
         $this->relations['empresas'] = $this->data->empresas()->get();
         $this->data->empresas = $this->relations['empresas'];
 
         return Inertia::render("Recursos/Personas/Show", [
             'data' => $this->data,
+            
         ]);
     }
 

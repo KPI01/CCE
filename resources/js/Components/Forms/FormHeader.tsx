@@ -2,8 +2,8 @@ import { Badge, badgeVariants } from "@/Components/ui/badge";
 import { Button } from "@/Components/ui/button";
 import { Separator } from "@/Components/ui/separator";
 import { cn } from "@/lib/utils";
-import { Actions, PageProps, UUID } from "@/types";
-import { Link, usePage } from "@inertiajs/react";
+import { Actions, UUID } from "@/types";
+import { Link } from "@inertiajs/react";
 import { ChevronLeft, Pen, Trash } from "lucide-react";
 
 interface Props {

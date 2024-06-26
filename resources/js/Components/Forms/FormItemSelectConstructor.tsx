@@ -14,8 +14,8 @@ interface Props extends ConstructorProps {
   options: string[];
   itemClass?: string;
   itemStyle?: React.CSSProperties;
-  selectTriggerClass?: string;
-  selectTriggerStyle?: React.CSSProperties;
+  TriggerClass?: string;
+  TriggerStyle?: React.CSSProperties;
 }
 
 export function FormItemSelectConstructor({
@@ -30,8 +30,8 @@ export function FormItemSelectConstructor({
   withLabel = true,
   itemClass,
   itemStyle,
-  selectTriggerClass,
-  selectTriggerStyle,
+  TriggerClass = "",
+  TriggerStyle,
 }: Props) {
   // console.debug('params:',{
   //     id,
@@ -44,7 +44,7 @@ export function FormItemSelectConstructor({
   //     disabled
   // })
 
-  const formItemClass = cn("grid items-center", itemClass);
+  const formItemClass = cn("grid gap-x-2 items-center", itemClass);
   const formItemStyle = { gridTemplateColumns: "15ch 1fr", ...itemStyle };
 
   return (
@@ -63,9 +63,9 @@ export function FormItemSelectConstructor({
         >
           <FormControl>
             <SelectTrigger
-              className={selectTriggerClass}
-              style={selectTriggerStyle}
-              id={id.includes(".") ? id.replace(".", "-") : id}
+              className={TriggerClass}
+              style={TriggerStyle}
+              id={id.replace(".", "-")}
             >
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>

@@ -30,14 +30,18 @@ export default function FormItemConstructor({
   // console.debug({name, withLabel})
 
   const Label = (
-    <FormLabel htmlFor={id} className="leading-4">
+    <FormLabel htmlFor={id} className="leading-0">
       {label}
     </FormLabel>
   );
 
-  const formItemClass = cn("grid items-center", itemClass);
+  const formItemClass = cn("grid gap-x-2 items-center", itemClass);
   const formItemStyle = { gridTemplateColumns: "15ch 1fr", ...itemStyle };
-  const controlInputStyle = { gridTemplateColumns: "15ch 1fr", ...inputStyle };
+  const controlInputStyle = {
+    gridTemplateColumns: "15ch 1fr",
+    marginTop: 0,
+    ...inputStyle,
+  };
   const controlInputClass = cn("grid items-center", inputClass);
 
   return (
@@ -47,7 +51,7 @@ export default function FormItemConstructor({
         <InputField
           id={id}
           name={name}
-          value={value}
+          value={value || ""}
           onChange={onChange}
           disabled={disabled}
           placeholder={placeholder}
@@ -55,7 +59,7 @@ export default function FormItemConstructor({
           style={controlInputStyle}
         />
       </FormControl>
-      <FormMessage id={`${name}-message`} />
+      <FormMessage id={`${id}-message`} />
     </FormItem>
   );
 }

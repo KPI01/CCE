@@ -2,15 +2,20 @@
 
 namespace Tests;
 
+use App\Models\User;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Illuminate\Support\Collection;
 use Laravel\Dusk\TestCase as BaseTestCase;
 use PHPUnit\Framework\Attributes\BeforeClass;
+use Laravel\Dusk\Browser;
+
 
 abstract class DuskTestCase extends BaseTestCase
 {
+    public $user;
+
     /**
      * Prepare for Dusk test execution.
      */
@@ -42,5 +47,17 @@ abstract class DuskTestCase extends BaseTestCase
                 ChromeOptions::CAPABILITY, $options
             )
         );
+    }
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        // Login como informatica
+        $this->user = User::where('email', 'informatica@fruveco.com')->first();
+        $this->browse(function (Browser $browser) {
+            $browser->loginAs($this->user)
+                ->assertAuthenticatedAs($this->user);
+        });
     }
 }

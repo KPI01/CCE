@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -41,16 +42,21 @@ class HandleInertiaRequests extends Middleware
 
             $user['role'] = $role->only('id', 'name');
 
+            $previous = $request->session()->get('_previous');
             $errors = $request->session()->get('errors');
 
             $props = [
                 'appName' => config('app.name'),
+                'previous' => [
+                    'url' => $previous ? $previous['url'] : null,
+                ],
                 'auth' => [
                     'user' => $user,
                 ],
                 'flash' => [
                     'message' => $request->session()->get('message'),
-                ]
+                ],
+                'debug' => $request->session()->all(),
             ];
 
             $errors ?? $props['errors'] = $errors;
