@@ -1,14 +1,14 @@
 {
-  "files": [
-    {
-      "path": "app/Http/Controllers/UserController.php",
-      "bookmarks": [
-        {
-          "line": 104,
-          "column": 14,
-          "label": ""
-        }
-      ]
-    }
-  ]
+	"files": [
+		{
+			"path": "app/Http/Controllers/UserController.php",
+			"bookmarks": [
+				{
+					"line": 104,
+					"column": 14,
+					"label": ""
+				}
+			]
+		}
+	]
 }
