@@ -5,13 +5,11 @@ import DataLayout from "@/Layouts/DataLayout";
 import { columns } from "./Column";
 
 import { Persona } from "@/types";
-import { InitialTableState } from "@tanstack/react-table";
+import { RECURSO } from "./formSchema";
 
 interface Props {
   data: Persona[];
 }
-
-const RECURSO = "personas";
 
 export default function Page({ data }: Props) {
   const initVisibility = {

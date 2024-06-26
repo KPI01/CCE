@@ -42,7 +42,8 @@ import {
 } from "./formSchema";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
-import RecursosLayout from "@/Layouts/RecursosLayout";
+import FormLayout from "@/Layouts/Recursos/FormLayout";
+import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 
 const RECURSO = "personas";
 const CONTAINER_CLASS = "container grid grid-cols-2 gap-x-32 gap-y-8";
@@ -75,7 +76,7 @@ export default function Create() {
   }
 
   return (
-    <RecursosLayout
+    <FormLayout
       pageTitle="Persona"
       mainTitle={`Creando ${RECURSO.slice(0, -1)}...`}
       recurso="personas"
@@ -115,13 +116,13 @@ export default function Create() {
               />
             )}
           />
-          <div className="grid gap-x-12 grid-cols-[10ch_1fr] ">
+          <div
+            className="grid items-center"
+            style={{ gridTemplateColumns: "15ch auto 1fr" }}
+          >
             <FormLabel
               className={
-                "col-span-2 mb-3" +
-                (form.getFieldState("id_nac").invalid
-                  ? " text-destructive"
-                  : "")
+                form.getFieldState("id_nac").invalid ? " text-destructive" : ""
               }
               htmlFor="id_nac"
             >
@@ -131,44 +132,32 @@ export default function Create() {
               control={form.control}
               name="tipo_id_nac"
               render={({ field }) => (
-                <FormItem>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    name={field.name}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Selecciona el tipo de identificación" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {TIPOS_ID_NAC.map((tipo_id_nac) => (
-                        <SelectItem key={tipo_id_nac} value={tipo_id_nac}>
-                          {tipo_id_nac}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage id={`${field.name}-message`} />
-                </FormItem>
+                <FormItemSelectConstructor
+                  id={field.name.replace(".", "-")}
+                  name={field.name}
+                  label="Tipo de identificación"
+                  withLabel={false}
+                  value={field.value}
+                  onChange={field.onChange}
+                  options={TIPOS_ID_NAC}
+                  TriggerClass="w-full ml-2"
+                />
               )}
             />
             <FormField
               control={form.control}
               name="id_nac"
               render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      id="id_nac"
-                      name={field.name}
-                      placeholder="..."
-                      onChange={field.onChange}
-                    />
-                  </FormControl>
-                  <FormMessage id={`${field.name}-message`} />
-                </FormItem>
+                <FormItemConstructor
+                  withLabel={false}
+                  id={field.name}
+                  label="Identificación"
+                  name={field.name}
+                  onChange={field.onChange}
+                  value={field.value}
+                  itemClass="ml-3"
+                  inputClass="col-span-2"
+                />
               )}
             />
           </div>
@@ -230,7 +219,7 @@ export default function Create() {
               />
             )}
           />
-          <div className="flex items-center space-x-2">
+          <div className="col-span-full flex items-center space-x-2">
             <Switch
               name="ropo"
               id="ropo"
@@ -240,14 +229,14 @@ export default function Create() {
           </div>
           <div
             id="ropo-form"
-            className={`col-span-2 grid grid-cols-[repeat(2,25vw)] place-content-start gap-x-12 gap-y-4 ${fillRopo ? "" : "hidden"}`}
+            className={`col-span-2 grid grid-cols-2 place-content-start gap-x-12 gap-y-4 ${fillRopo ? "" : "hidden"}`}
           >
             <FormField
               control={form.control}
               name="ropo.tipo"
               render={({ field }) => (
                 <FormItemSelectConstructor
-                  id={field.name}
+                  id={field.name.replace(".", "_")}
                   name={field.name}
                   label="Tipo de ROPO"
                   value={field.value as string}
@@ -262,7 +251,7 @@ export default function Create() {
               name="ropo.nro"
               render={({ field }) => (
                 <FormItemConstructor
-                  id={field.name}
+                  id={field.name.replace(".", "_")}
                   label="Nº Carnet"
                   name={field.name}
                   placeholder="..."
@@ -275,65 +264,13 @@ export default function Create() {
               control={form.control}
               name="ropo.caducidad"
               render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel asChild>
-                    <span>Caducidad del carnet</span>
-                  </FormLabel>
-                  <Popover>
-                    <PopoverTrigger
-                      id={`${field.name.replace(".", "_")}-trigger`}
-                      asChild
-                    >
-                      <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-[240px] pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground",
-                          )}
-                          value={
-                            field.value
-                              ? format(field.value, "dd/MM/yyyy")
-                              : "dd/mm/aaaa"
-                          }
-                        >
-                          <span id={`${field.name.replace(".", "_")}-value`}>
-                            {field.value
-                              ? format(field.value, "dd/MM/yyyy")
-                              : "dd/mm/aaaa"}
-                          </span>
-                          <Input
-                            id={`${field.name.replace(".", "_")}-input`}
-                            type="hidden"
-                            name={field.name}
-                            value={
-                              field.value
-                                ? format(field.value, "yyyy-MM-dd")
-                                : ""
-                            }
-                            onChange={field.onChange}
-                          />
-                          <CalendarDays className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        id={`${field.name.replace(".", "_")}-calendar`}
-                        mode="single"
-                        locale={es}
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) => date < new Date()}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <FormDescription>
-                    Utiliza el calendario para ingresar la fecha.
-                  </FormDescription>
-                  <FormMessage id={`${field.name.replace(".", "_")}-message`} />
-                </FormItem>
+                <FormDatePickerConstructor
+                  id={field.name.replace(".", "_")}
+                  name={field.name}
+                  label="Caducidad"
+                  onChange={field.onChange}
+                  value={field.value}
+                />
               )}
             />
             <FormField
@@ -364,6 +301,6 @@ export default function Create() {
           </div>
         </form>
       </Form>
-    </RecursosLayout>
+    </FormLayout>
   );
 }

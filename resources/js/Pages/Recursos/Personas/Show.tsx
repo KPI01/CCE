@@ -15,7 +15,7 @@ import { Form, FormField, FormLabel } from "@/Components/ui/form";
 import { format } from "date-fns";
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
-import RecursosLayout from "@/Layouts/RecursosLayout";
+import FormLayout from "@/Layouts/Recursos/FormLayout";
 import FormTitle from "@/Components/Forms/FormTitle";
 
 const schema = formSchema;
@@ -64,13 +64,13 @@ export default function Show({ data }: Props) {
   // }
 
   return (
-    <RecursosLayout
+    <FormLayout
       pageTitle="Persona"
       mainTitle={`${data.nombres} ${data.apellidos}`}
       created_at={data.created_at.toLocaleString()}
       updated_at={data.updated_at.toLocaleString()}
       recurso="personas"
-      action="show"
+      action={"show"}
       id={data.id}
       urls={urls}
     >
@@ -94,7 +94,7 @@ export default function Show({ data }: Props) {
               name="tipo_id_nac"
               render={({ field }) => (
                 <FormItemSelectConstructor
-                  id={field.name.replace(".", "-")}
+                  id={field.name}
                   name={field.name}
                   label="Tipo de identificación"
                   withLabel={false}
@@ -102,7 +102,7 @@ export default function Show({ data }: Props) {
                   placeholder="..."
                   onChange={field.onChange}
                   options={TIPOS_ID_NAC}
-                  className="w-fit"
+                  TriggerClass="w-full ml-2"
                   disabled
                 />
               )}
@@ -158,7 +158,7 @@ export default function Show({ data }: Props) {
             name="perfil"
             render={({ field }) => (
               <FormItemSelectConstructor
-                id={field.name.replace(".", "-")}
+                id={field.name}
                 name={field.name}
                 label="Perfil"
                 value={field.value as string}
@@ -188,7 +188,7 @@ export default function Show({ data }: Props) {
           <FormTitle title="Datos ROPO" />
           <div
             id="ropo-form"
-            className="col-span-2 grid grid-cols-[repeat(2,25vw)] place-content-start gap-x-12 gap-y-4"
+            className="col-span-2 grid grid-cols-2 gap-x-12 gap-y-4"
           >
             <FormField
               control={form.control}
@@ -206,6 +206,7 @@ export default function Show({ data }: Props) {
                 />
               )}
             />
+
             <FormField
               control={form.control}
               name="ropo.nro"
@@ -221,6 +222,7 @@ export default function Show({ data }: Props) {
                 />
               )}
             />
+
             <FormField
               control={form.control}
               name="ropo.caducidad"
@@ -236,6 +238,7 @@ export default function Show({ data }: Props) {
                 />
               )}
             />
+
             <FormField
               control={form.control}
               name="ropo.tipo_aplicador"
@@ -255,6 +258,6 @@ export default function Show({ data }: Props) {
           </div>
         </form>
       </Form>
-    </RecursosLayout>
+    </FormLayout>
   );
 }
