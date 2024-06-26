@@ -1,320 +1,260 @@
-import { Input } from "@/Components/ui/input"
-import { Label } from "@/Components/ui/label"
-import { Textarea } from "@/Components/ui/textarea"
-import ShowLayout from "@/Layouts/Recursos/ShowLayout"
-import { LayoutProps } from "@/types"
-import { formSchema, PERFILES, TIPOS_APLICADOR, TIPOS_ROPO, TIPOS_ID_NAC } from "./formSchema"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/Components/ui/form"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select"
+import { LayoutProps, Persona } from "@/types";
+import {
+  formSchema,
+  PERFILES,
+  TIPOS_APLICADOR,
+  TIPOS_ROPO,
+  TIPOS_ID_NAC,
+  CONTAINER_CLASS,
+} from "./formSchema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Form, FormField, FormLabel } from "@/Components/ui/form";
 
-import { format } from "date-fns"
-import FormItemConstructor from "@/Components/Forms/FormItemConstructor"
+import { format } from "date-fns";
+import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
+import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
+import RecursosLayout from "@/Layouts/RecursosLayout";
+import FormTitle from "@/Components/Forms/FormTitle";
 
+const schema = formSchema;
 
-const CONTAINER_CLASS = "container grid grid-cols-[repeat(2,minmax(250px,1fr))] gap-x-12 gap-y-4 py-4"
-
-
-const schema = formSchema
+type URLs = {
+  edit: string;
+  destroy: string;
+};
 
 interface Props extends LayoutProps {
-    data: any
+  data: Persona;
 }
 
-export default function Show({
-    data
-}: Props) {
-    // const values = schema.parse(data)
-    console.log(data)
-    const form = useForm<z.infer<typeof schema>>({
-        resolver: zodResolver(schema),
-        defaultValues: data
-    })
+export default function Show({ data }: Props) {
+  // console.debug(data);
 
-    // let relations = {
-    //     empresas: data.empresas ?? undefined
-    // }
+  data.created_at = new Date(data.created_at);
+  data.updated_at = new Date(data.updated_at);
 
-    return (
-        <ShowLayout
-            pageTitle="Persona"
-            mainTitle={`${data.nombres} ${data.apellidos}`}
-            updated_at={data.updated_at}
-            recurso="personas"
-        >
-            <Form {...form}>
-                <form id="create-persona-form" className={CONTAINER_CLASS}>
-                    <FormField
-                        control={form.control}
-                        name="nombres"
-                        render={({ field }) => (
-                           <FormItemConstructor
-                            id={field.name}
-                            label="Nombres"
-                            name={field.name}
-                            onChange={field.onChange}
-                            value={field.value}
-                           />
-                        )} />
-                    <FormField
-                        control={form.control}
-                        name="apellidos"
-                        render={({ field }) => (
-                           <FormItemConstructor
-                            id={field.name}
-                            label="Apellidos"
-                            name={field.name}
-                            onChange={field.onChange}
-                            value={field.value}
-                           />
-                        )} />
-                    <div className="grid gap-x-6 grid-cols-[10ch_1fr] ">
-                        <FormLabel className={'col-span-2' + (form.getFieldState('id_nac').invalid ? ' text-destructive' : '')} htmlFor="id_nac">Identificación</FormLabel>
-                        <FormField
-                            control={form.control}
-                            name="tipo_id_nac"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <Select defaultValue={field.value} name={field.name} disabled>
-                                        <FormControl>
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue placeholder='Selecciona el tipo de identificación' />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            {TIPOS_ID_NAC.map((tipo_id_nac) => (
-                                                <SelectItem key={tipo_id_nac} value={tipo_id_nac}>
-                                                    {tipo_id_nac}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage id={`${field.name}-message`} />
-                                </FormItem>
-                            )} />
-                        <FormField
-                            control={form.control}
-                            name="id_nac"
-                            render={({ field }) => (
-                                <FormItem className="basis-full">
-                                    <FormControl>
-                                        <Input
-                                            id="id_nac"
-                                            disabled
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage id={`${field.name}-message`} />
-                                </FormItem>
-                            )} />
-                    </div>
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor={field.name}>Correo</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        id="email"
-                                        disabled
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage id={`${field.name}-message`} />
-                            </FormItem>
-                        )} />
-                    <FormField
-                        control={form.control}
-                        name="tel"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor={field.name}>Teléfono</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        id="tel"
-                                        disabled
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage id={`${field.name}-message`} />
-                            </FormItem>
-                        )} />
-                    <FormField
-                        control={form.control}
-                        name="perfil"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel htmlFor={field.name}>Perfil</FormLabel>
-                                <FormControl>
-                                    <Select name={field.name} defaultValue={field.value} disabled>
-                                        <FormControl>
-                                            <SelectTrigger
-                                                id="perfil"
-                                                className="w-full">
-                                                <SelectValue placeholder='Selecciona el perfil' />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            {PERFILES.map((perfil) => (
-                                                <SelectItem key={perfil} value={perfil}>
-                                                    {perfil}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </FormControl>
-                                <FormMessage id={`${field.name}-message`} />
-                            </FormItem>
-                        )} />
-                    <FormField
-                        control={form.control}
-                        name="observaciones"
-                        render={({ field }) => (
-                            <FormItem className="col-span-2">
-                                <FormLabel htmlFor={field.name}>Observaciones</FormLabel>
-                                <FormControl>
-                                    <Textarea
-                                        id="observaciones"
-                                        disabled
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage id={`${field.name}-message`} />
-                            </FormItem>
-                        )} />
-                    <div id="ropo-form" className='col-span-2 grid grid-cols-[repeat(2,25vw)] place-content-start gap-x-12 gap-y-4'>
-                        <FormField
-                            control={form.control}
-                            name="ropo.tipo"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor={field.name.replace('.', '-')}>Tipo Carnet</FormLabel>
-                                    <FormControl>
-                                        <Select name={field.name} defaultValue={field.value} disabled>
-                                            <FormControl id={field.name.replace('.', '-')}>
-                                                <SelectTrigger className="w-full">
-                                                    <SelectValue placeholder='Selecciona el tipo de carnet' />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {TIPOS_ROPO.map((ropo) => (
-                                                    <SelectItem key={ropo} value={ropo}>
-                                                        {ropo}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage id={`${field.name.replace('.', '_')}-message`} />
-                                </FormItem>
-                            )} />
-                        <FormField
-                            control={form.control}
-                            name="ropo.nro"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor={field.name.replace('.', '-')}>Nº</FormLabel>
-                                    <FormControl id={field.name}>
-                                        <Input
-                                            id="ropo-nro"
-                                            disabled
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage id={`${field.name.replace('.', '_')}-message`} />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="ropo.caducidad"
-                            render={({ field }) => (
-                                <FormItem className="flex flex-col">
-                                    <FormLabel>
-                                            Caducidad del carnet
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            id="ropo-caducidad"
-                                            disabled
-                                            value={field.value ? format(field.value, 'dd/MM/yyyy') : ''}
-                                        />
-                                    </FormControl>
-                                    <FormMessage id={`${field.name.replace('.', '_')}-message`} />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="ropo.tipo_aplicador"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel htmlFor="ropo-tipo_aplicador">Perfil</FormLabel>
-                                    <FormControl >
-                                        <Select name="ropo.tipo_aplicador" defaultValue={field.value} disabled>
-                                            <FormControl>
-                                                <SelectTrigger id="ropo-tipo_aplicador" className="w-full">
-                                                    <SelectValue placeholder='Selecciona el perfil de aplicador' />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {TIPOS_APLICADOR.map((val) => {
-                                                    if (val !== '') {
-                                                        return (
-                                                            <SelectItem key={TIPOS_APLICADOR.indexOf(val)} value={val}>
-                                                                {val}
-                                                            </SelectItem>
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      nombres: data.nombres,
+      apellidos: data.apellidos,
+      tipo_id_nac: data.tipo_id_nac,
+      id_nac: data.id_nac,
+      email: data.email,
+      tel: data.tel || "",
+      perfil: data.perfil || "",
+      observaciones: data.observaciones || "",
+      ropo: {
+        tipo: data.ropo?.tipo || "",
+        caducidad: data.ropo?.caducidad
+          ? new Date(data.ropo.caducidad)
+          : undefined,
+        nro: data.ropo?.nro || "",
+        tipo_aplicador: data.ropo?.tipo_aplicador || "",
+      },
+    },
+  });
 
-                                                        )
-                                                    }
-                                                })}
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage id={`${field.name}-message`} />
-                                </FormItem>
-                            )} />
-                    </div>
-                </form>
-            </Form>
-        </ShowLayout>
-    )
-}
+  const urls: URLs = { ...data.urls };
 
-function Title({ title }: { title: string }) {
-    return (
-        <h3 className="font-semibold text-2xl mb-4">{title}</h3>
-    )
-}
+  // let relations = {
+  //     empresas: data.empresas ?? undefined
+  // }
 
+  return (
+    <RecursosLayout
+      pageTitle="Persona"
+      mainTitle={`${data.nombres} ${data.apellidos}`}
+      created_at={data.created_at.toLocaleString()}
+      updated_at={data.updated_at.toLocaleString()}
+      recurso="personas"
+      action="show"
+      id={data.id}
+      urls={urls}
+    >
+      <Form {...form}>
+        <form id="show-persona-form" className={CONTAINER_CLASS}>
+          <FormTitle title="Datos básicos" />
+          <div
+            className="grid items-center"
+            style={{ gridTemplateColumns: "15ch auto 1fr" }}
+          >
+            <FormLabel
+              className={
+                form.getFieldState("id_nac").invalid ? " text-destructive" : ""
+              }
+              htmlFor="id_nac"
+            >
+              Identificación
+            </FormLabel>
+            <FormField
+              control={form.control}
+              name="tipo_id_nac"
+              render={({ field }) => (
+                <FormItemSelectConstructor
+                  id={field.name.replace(".", "-")}
+                  name={field.name}
+                  label="Tipo de identificación"
+                  withLabel={false}
+                  value={field.value as string}
+                  placeholder="..."
+                  onChange={field.onChange}
+                  options={TIPOS_ID_NAC}
+                  className="w-fit"
+                  disabled
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="id_nac"
+              render={({ field }) => (
+                <FormItemConstructor
+                  withLabel={false}
+                  id={field.name}
+                  label="Identificación"
+                  name={field.name}
+                  onChange={field.onChange}
+                  value={field.value}
+                  itemClass="ml-3"
+                  inputClass="col-span-2"
+                  disabled
+                />
+              )}
+            />
+          </div>
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItemConstructor
+                id={field.name}
+                label="Email"
+                name={field.name}
+                onChange={field.onChange}
+                value={field.value}
+                disabled
+              />
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="tel"
+            render={({ field }) => (
+              <FormItemConstructor
+                id={field.name}
+                label="Teléfono"
+                name={field.name}
+                onChange={field.onChange}
+                value={field.value}
+                disabled
+              />
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="perfil"
+            render={({ field }) => (
+              <FormItemSelectConstructor
+                id={field.name.replace(".", "-")}
+                name={field.name}
+                label="Perfil"
+                value={field.value as string}
+                placeholder="..."
+                onChange={field.onChange}
+                options={PERFILES}
+                disabled
+              />
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="observaciones"
+            render={({ field }) => (
+              <FormItemConstructor
+                id={field.name}
+                label="Observaciones"
+                name={field.name}
+                onChange={field.onChange}
+                value={field.value}
+                disabled
+                textarea
+              />
+            )}
+          />
 
-function ItemProperty({ title, value, textarea = false }: { title: string, value: string, textarea?: boolean }) {
-    value = value === null ? '' : value
-    return (
-        <div className="grid grid-cols-[8ch_1fr] items-center basis-auto">
-            {textarea
-                ? (
-                    <>
-                        <div className="grid w-full gap-1.5 col-span-2">
-                            <Label className="mb-2" htmlFor={`val-${title}`}>{title}</Label>
-                            <Textarea className="w-full" id={`val-${title}`} value={value} disabled cols={35} rows={2} />
-                        </div>
-                    </>
-                )
-                : (<>
-                    <Label htmlFor={`val-${title}`} className="text-start w-fit">{title}</Label>
-                    <Input
-                        id={`val-${title}`}
-                        className="w-[35ch] mx-7"
-                        type="text"
-                        disabled
-                        value={value}
-                    />
-                </>
-                )}
-        </div>
-    )
+          <FormTitle title="Datos ROPO" />
+          <div
+            id="ropo-form"
+            className="col-span-2 grid grid-cols-[repeat(2,25vw)] place-content-start gap-x-12 gap-y-4"
+          >
+            <FormField
+              control={form.control}
+              name="ropo.tipo"
+              render={({ field }) => (
+                <FormItemSelectConstructor
+                  id={field.name.replace(".", "-")}
+                  name={field.name}
+                  label="Tipo de carnet ROPO"
+                  value={field.value as string}
+                  placeholder="No posee"
+                  onChange={field.onChange}
+                  options={TIPOS_ROPO}
+                  disabled
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="ropo.nro"
+              render={({ field }) => (
+                <FormItemConstructor
+                  id={field.name.replace(".", "-")}
+                  name={field.name}
+                  placeholder="No posee"
+                  value={field.value}
+                  onChange={field.onChange}
+                  label="N° de carnet ROPO"
+                  disabled
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="ropo.caducidad"
+              render={({ field }) => (
+                <FormItemConstructor
+                  id={field.name.replace(".", "-")}
+                  name={field.name}
+                  placeholder="No posee"
+                  value={field.value ? format(field.value, "dd/MM/yyyy") : ""}
+                  onChange={field.onChange}
+                  label="Caducidad"
+                  disabled
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="ropo.tipo_aplicador"
+              render={({ field }) => (
+                <FormItemSelectConstructor
+                  id={field.name.replace(".", "-")}
+                  name={field.name}
+                  placeholder="No posee"
+                  value={field.value || ""}
+                  onChange={field.onChange}
+                  label="Tipo de aplicador"
+                  options={TIPOS_APLICADOR}
+                  disabled
+                />
+              )}
+            />
+          </div>
+        </form>
+      </Form>
+    </RecursosLayout>
+  );
 }

@@ -11,23 +11,16 @@ use Tests\DuskTestCase;
 
 class CreatePersonaTest extends DuskTestCase
 {
-    public $user;
 
     public function setUp(): void
     {
         parent::setUp();
-        // Login como informatica
-        $this->user = User::where('email', 'informatica@fruveco.com')->first();
-        $this->browse(function (Browser $browser) {
-            $browser->loginAs($this->user)
-                ->assertAuthenticatedAs($this->user);
-        });
     }
 
     /**
      * Comprobación que se puede acceder.
      */
-    public function test_acceso(): void
+    public function testAcceso(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new Create);
@@ -39,7 +32,7 @@ class CreatePersonaTest extends DuskTestCase
     /**
      * Comprobación de visualización de elementos
      */
-    public function test_accesibilidad_visual(): void
+    public function testAccesibilidadVisual(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new Create)
@@ -70,7 +63,7 @@ class CreatePersonaTest extends DuskTestCase
     /**
      * Test de visualizar todos los campos
      */
-    public function test_accesibilidad_completa(): void
+    public function testAccesibilidadCompleta(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new Create)
@@ -86,9 +79,10 @@ class CreatePersonaTest extends DuskTestCase
                 ->click('@ropo-checkbox-btn')
                 ->assertVisible('@ropo-form')
                 ->assertVisible('@ropo.tipo')
-                ->assertVisible('@ropo.caducidad-trigger')
+                ->assertVisible('@ropo.caducidad-btn')
+                ->assertEnabled('@ropo.caducidad-btn')
                 ->assertVisible('@ropo.caducidad-value')
-                ->click('@ropo.caducidad-trigger')
+                ->press('@ropo.caducidad-btn')
                 ->assertVisible('@ropo.caducidad-calendar')
                 ->assertVisible('@ropo.nro')
                 ->assertVisible('@ropo.tipo_aplicador')
@@ -100,9 +94,9 @@ class CreatePersonaTest extends DuskTestCase
     }
 
     /**
-     * Test de llenado de campos basicos
+     * Test de llenado de campos básicos
      */
-    public function test_llenado_campos_basicos(): void
+    public function testLlenadoCamposBasicos(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new Create)
@@ -127,7 +121,7 @@ class CreatePersonaTest extends DuskTestCase
     /**
      * Test para mostrar el formulario completo
      */
-    public function test_mostrar_ropo(): void
+    public function testMostrarRopo(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new Create)
@@ -155,7 +149,7 @@ class CreatePersonaTest extends DuskTestCase
     /**
      * Test de llenado de formulario completo
      */
-    public function test_llenado_completo(): void
+    public function testLlenadoCompleto(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new Create)
@@ -190,7 +184,7 @@ class CreatePersonaTest extends DuskTestCase
     /**
      * Test de envío de campos requeridos vacíos
      */
-    public function test_envio_vacio(): void
+    public function testEnvioVacio(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new Create)
@@ -206,7 +200,7 @@ class CreatePersonaTest extends DuskTestCase
     /**
      * Test de envío de campos requeridos inválidos
      */
-    public function test_envio_requeridos_invalidos(): void
+    public function testEnvioRequeridosInvalidos(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new Create)
@@ -238,7 +232,7 @@ class CreatePersonaTest extends DuskTestCase
     /**
      * Test de envio de campos requeridos validos pero restante invalido sin ropo
      */
-    public function test_envio_requeridos_validos_basico_invalido(): void
+    public function testEnvioRequeridosValidosBasicoInvalido(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new Create)
@@ -261,7 +255,7 @@ class CreatePersonaTest extends DuskTestCase
     /**
      * Test envio de campos basicos validos pero con ropo invalido
      */
-    public function test_envio_basico_valido_ropo_invalido(): void
+    public function testEnvioBasicoValidoRopoInvalido(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new Create)
@@ -277,7 +271,7 @@ class CreatePersonaTest extends DuskTestCase
                 ->assertSelectHasOption('@ropo.tipo', 'Técnico')
                 ->select('@ropo.tipo', 'Aplicador')
                 ->type('@ropo.nro', '16789KJH&%@$')
-                ->click('@ropo.caducidad-trigger')
+                ->press('@ropo.caducidad-btn')
                 ->assertVisible('@ropo.caducidad-calendar')
                 // ->click('@ropo.caducidad-calendar table tbody tr:last-child td:last-child')
                 // ->assertInputValue('@ropo.caducidad-input', '2024-06-30')
@@ -304,7 +298,7 @@ class CreatePersonaTest extends DuskTestCase
     /**
      * Test de envío de formulario correcto solo con campos requeridos
      */
-    public function test_envio_requeridos_validos(): void
+    public function testEnvioRequeridosValidos(): void
     {
         $this->browse(function (Browser $browser) {
              $nombres = 'Sadipscing';
@@ -334,7 +328,7 @@ class CreatePersonaTest extends DuskTestCase
     /**
      * Test de envío de formulario básico completo correcto
      */
-    public function test_envio_basicos_validos(): void
+    public function testEnvioBasicosValidos(): void
     {
         $this->browse(function (Browser $browser) {
             $nombres = 'Magna';
@@ -368,7 +362,7 @@ class CreatePersonaTest extends DuskTestCase
     /**
      * Test de envío de formulario completo correcto
      */
-    public function test_envio_completo_valido(): void
+    public function testEnvioCompleto(): void
     {
         $this->browse(function (Browser $browser) {
             $nombres = 'Magna';

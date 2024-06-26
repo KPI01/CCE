@@ -1,55 +1,61 @@
-import { FormControl, FormItem, FormLabel, FormMessage } from "../ui/form"
-import { Input } from "../ui/input"
-import { Textarea } from "../ui/textarea"
+import { cn } from "@/lib/utils";
+import { FormControl, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 
 interface Props extends ConstructorProps {
-    textarea?: boolean
+  textarea?: boolean;
+  inputStyle?: React.CSSProperties;
+  itemStyle?: React.CSSProperties;
+  itemClass?: string;
+  inputClass?: string;
 }
 
 export default function FormItemConstructor({
-    id,
-    label,
-    name,
-    value,
-    onChange,
-    disabled = false,
-    placeholder,
-    textarea = false
+  id,
+  label,
+  name,
+  value,
+  onChange,
+  disabled = false,
+  placeholder = "...",
+  textarea = false,
+  withLabel = true,
+  itemStyle,
+  inputStyle = { columnSpan: "none" },
+  inputClass,
+  itemClass,
 }: Props) {
+  const InputField = textarea ? Textarea : Input;
+  // console.debug({name, withLabel})
 
-    if (textarea) {
-        return (
-            <FormItem className="grid grid-cols-1 col-span-2 items-center">
-                <FormLabel htmlFor={id}>{label}</FormLabel>
-                <FormControl>
-                    <Textarea
-                        id={id}
-                        name={name}
-                        value={value}
-                        onChange={onChange}
-                        disabled={disabled}
-                        placeholder={placeholder}
-                    />
-                </FormControl>
-                <FormMessage id={`${name}-message`} />
-            </FormItem>
-        )
-    }
+  const Label = (
+    <FormLabel htmlFor={id} className="leading-4">
+      {label}
+    </FormLabel>
+  );
 
-    return (
-        <FormItem className="grid grid-cols-[15ch_1fr] items-center">
-            <FormLabel htmlFor={id}>{label}</FormLabel>
-            <FormControl>
-                <Input
-                    id={id}
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    disabled={disabled}
-                    placeholder={placeholder}
-                />
-            </FormControl>
-            <FormMessage id={`${name}-message`} />
-        </FormItem>
-    )
+  const formItemClass = cn("grid items-center", itemClass);
+  const formItemStyle = { gridTemplateColumns: "15ch 1fr", ...itemStyle };
+  const controlInputStyle = { gridTemplateColumns: "15ch 1fr", ...inputStyle };
+  const controlInputClass = cn("grid items-center", inputClass);
+
+  return (
+    <FormItem className={formItemClass} style={formItemStyle}>
+      {withLabel && Label}
+      <FormControl>
+        <InputField
+          id={id}
+          name={name}
+          value={value}
+          onChange={onChange}
+          disabled={disabled}
+          placeholder={placeholder}
+          className={controlInputClass}
+          style={controlInputStyle}
+        />
+      </FormControl>
+      <FormMessage id={`${name}-message`} />
+    </FormItem>
+  );
 }
