@@ -14,18 +14,17 @@ import { CalendarDays } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 import { es } from "date-fns/locale";
 
-interface Props {
+interface Props extends Omit<ConstructorProps, "value"> {
   id: string;
   name: string;
-  value: Date | undefined;
   onChange: (...events: any[]) => void;
-  description?: string;
   label: string;
   withLabel?: boolean;
   itemClass?: string;
   itemStyle?: React.CSSProperties;
   triggerClass?: string;
   triggerStyle?: React.CSSProperties;
+  value: Date | undefined
 }
 
 export default function FormDatePickerConstructor({
@@ -33,19 +32,27 @@ export default function FormDatePickerConstructor({
   name,
   value,
   onChange,
-  description,
   label,
   itemClass,
   itemStyle,
   withLabel = true,
   triggerClass,
   triggerStyle,
+  descrip
 }: Props) {
+  const toId = id.includes(".") ? id.replace(".", "_") : id;
+  const labelId = `label-${toId}`;
+  const inputId = `input-${toId}`;
+  const triggerId = `trigger-${toId}`;
+  const calId = `calendar-${toId}`;
+
   const Label = (
-    <FormLabel htmlFor={`${id}-btn`} className="leading-4">
+    <FormLabel id={labelId} htmlFor={triggerId} className="leading-4">
       {label}
     </FormLabel>
   );
+
+  const Descrip = descrip && <FormDescription className="select-none text-xs col-start-2">{descrip}</FormDescription>
 
   const customItemClass = cn("grid gap-x-2 items-center", itemClass);
   const customStyle = { gridTemplateColumns: "15ch 1fr", ...itemStyle };
@@ -61,14 +68,13 @@ export default function FormDatePickerConstructor({
       {withLabel && Label}
       <Popover>
         <PopoverTrigger
-          id={`${id}-trigger`}
           className={customTriggerClass}
           style={customTriggerStyle}
           asChild
         >
           <FormControl>
             <Button
-              id={`${id}-btn`}
+              id={triggerId}
               variant={"outline"}
               className={cn(
                 "pl-3 text-left font-normal mt-0",
@@ -76,11 +82,11 @@ export default function FormDatePickerConstructor({
               )}
               value={value ? format(value, "dd/MM/yyyy") : "dd/mm/aaaa"}
             >
-              <span id={`${id}-value`}>
+              <span>
                 {value ? format(value, "dd/MM/yyyy") : "dd/mm/aaaa"}
               </span>
               <Input
-                id={`${id}-input`}
+                id={inputId}
                 type="hidden"
                 name={name}
                 value={value ? format(value, "yyyy-MM-dd") : ""}
@@ -92,7 +98,7 @@ export default function FormDatePickerConstructor({
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
-            id={`${id}-calendar`}
+            id={calId}
             mode="single"
             locale={es}
             selected={value}
@@ -101,8 +107,8 @@ export default function FormDatePickerConstructor({
           />
         </PopoverContent>
       </Popover>
-      {description && <FormDescription>{description}</FormDescription>}
-      <FormMessage id={`${id}-message`} />
+      {descrip && Descrip}
+      <FormMessage id={`${id}-message`} className="col-start-1"/>
     </FormItem>
   );
 }

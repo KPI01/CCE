@@ -6,6 +6,7 @@ import {
   CONTAINER_CLASS,
   formSchema,
   PERFILES,
+  TIPOS_APLICADOR,
   TIPOS_ID_NAC,
   TIPOS_ROPO,
 } from "./formSchema";
@@ -17,6 +18,8 @@ import FormLayout from "@/Layouts/Recursos/FormLayout";
 import FormTitle from "@/Components/Forms/FormTitle";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 import { Separator } from "@/Components/ui/separator";
+import FormButton from "@/Components/Forms/FormButton";
+import { Save } from "lucide-react";
 
 const schema = formSchema;
 
@@ -24,10 +27,12 @@ interface Props extends LayoutProps {
   data: Persona;
 }
 export default function Edit({ data }: Props) {
-  // console.debug('data:', data);
+  console.debug('data:', data);
+  // console.debug('data.ropo:', data.ropo);
 
   data.created_at = new Date(data.created_at);
   data.updated_at = new Date(data.updated_at);
+  if (data.ropo?.caducidad) data.ropo.caducidad = new Date(data.ropo.caducidad);
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -53,16 +58,28 @@ export default function Edit({ data }: Props) {
     ...form.getValues(),
   });
   console.debug("formDefaults:", form.getValues());
+  console.debug("formState:", form.formState.errors);
   console.debug("state:", values);
 
-  function handleStateChange(key: keyof typeof values, val: typeof values) {
-    console.debug("handleStateChange | key:", key, "val:", val);
+  function updateForm(key: keyof typeof values, newValues: typeof values) {
+    console.debug("updateForm", "values:", values);
 
-    setValues({ ...values, ...val });
+    form.setValue(key, newValues[key]);
+    console.debug("updateForm", "form.getValues:", form.getValues());
   }
 
-  function onSubmit(values: z.infer<typeof schema>) {
-    console.debug(values);
+  function handleStateChange(key: keyof typeof values, newValues: typeof values) {
+    console.debug("handleStateChange", "key:", key)
+    console.debug("handleStateChange", "newValues:", newValues);
+
+    updateForm(key, newValues);
+
+    setValues({ ...values, ...newValues });
+  }
+
+  function onSubmit(formValues: z.infer<typeof schema>) {
+    console.debug(formValues);
+    
   }
 
   return (
@@ -77,10 +94,11 @@ export default function Edit({ data }: Props) {
     >
       <Form {...form}>
         <form
+          id={`edit-form-${data.id}`}
           onSubmit={form.handleSubmit(onSubmit)}
           className={CONTAINER_CLASS}
         >
-          <FormTitle title="Datos Personales" />
+          <FormTitle id="h3-datos_personales" title="Datos Personales" />
           <FormField
             control={form.control}
             name="nombres"
@@ -90,6 +108,7 @@ export default function Edit({ data }: Props) {
                 label="Nombres"
                 name={field.name}
                 value={values.nombres}
+                autoComplete={"given-name"}
                 onChange={(e) =>
                   handleStateChange("nombres", {
                     ...values,
@@ -109,6 +128,7 @@ export default function Edit({ data }: Props) {
                 label="Apellidos"
                 name={field.name}
                 value={values.apellidos}
+                autoComplete={"family-name"}
                 onChange={(e) =>
                   handleStateChange("apellidos", {
                     ...values,
@@ -124,10 +144,11 @@ export default function Edit({ data }: Props) {
             style={{ gridTemplateColumns: "15ch auto 1fr" }}
           >
             <FormLabel
+            id="label-id_nac"
               className={
                 form.getFieldState("id_nac").invalid ? " text-destructive" : ""
               }
-              htmlFor="id_nac"
+              htmlFor="input-id_nac"
             >
               Identificación
             </FormLabel>
@@ -136,7 +157,7 @@ export default function Edit({ data }: Props) {
               name="tipo_id_nac"
               render={({ field }) => (
                 <FormItemSelectConstructor
-                  id={field.name.replace(".", "-")}
+                  id={field.name}
                   name={field.name}
                   label="Tipo de identificación"
                   withLabel={false}
@@ -174,6 +195,7 @@ export default function Edit({ data }: Props) {
                 label="Email"
                 name={field.name}
                 value={values.email}
+                autoComplete={"email"}
                 onChange={(e) =>
                   handleStateChange("email", {
                     ...values,
@@ -193,12 +215,15 @@ export default function Edit({ data }: Props) {
                 label="Teléfono"
                 name={field.name}
                 value={values.tel}
-                onChange={(e) =>
+                autoComplete={"tel"}
+                onChange={(e) =>{
+                  form.setValue("tel", e.target.value);
                   handleStateChange("tel", {
                     ...values,
                     tel: e.target.value,
-                  })
+                  })}
                 }
+                descrip="Formato: 123-45-67-89"
               />
             )}
           />
@@ -212,7 +237,7 @@ export default function Edit({ data }: Props) {
                 label="Perfil"
                 name={field.name}
                 value={values.perfil as string}
-                onChange={(e) => setValues({ ...values, perfil: e })}
+                onChange={(e) => handleStateChange("perfil", {...values, perfil: e})}
                 options={PERFILES}
               />
             )}
@@ -239,7 +264,7 @@ export default function Edit({ data }: Props) {
           />
 
           <Separator className="col-span-full my-4" />
-          <FormTitle title="Datos ROPO" />
+          <FormTitle id="h3-ropo" title="Datos ROPO" />
 
           <FormField
             control={form.control}
@@ -327,10 +352,17 @@ export default function Edit({ data }: Props) {
                     },
                   })
                 }
-                options={TIPOS_ROPO}
+                options={TIPOS_APLICADOR}
               />
             )}
           />
+
+          <div className="flex justify-end col-span-full mt-4">
+          <FormButton type="submit">
+            <Save className="size-4 mr-2" />
+            Guardar
+          </FormButton>
+          </div>
         </form>
       </Form>
     </FormLayout>

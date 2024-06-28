@@ -2,36 +2,11 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/Components/ui/button";
-import { Input } from "@/Components/ui/input";
 import {
   Form,
-  FormControl,
-  FormDescription,
   FormField,
-  FormItem,
   FormLabel,
-  FormMessage,
 } from "@/Components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectTrigger,
-  SelectValue,
-} from "@/Components/ui/select";
-import { SelectItem } from "@/Components/ui/select";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/Components/ui/popover";
-import { es } from "date-fns/locale";
-import { Calendar } from "@/Components/ui/calendar";
-import { router } from "@inertiajs/react";
-import { Switch } from "@/Components/ui/switch";
-import { Label } from "@/Components/ui/label";
-import { useState } from "react";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
 import { Save, Trash2, CalendarDays } from "lucide-react";
 import {
   formSchema,
@@ -44,6 +19,11 @@ import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectCons
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import FormLayout from "@/Layouts/Recursos/FormLayout";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
+import FormButton from "@/Components/Forms/FormButton";
+import { useState } from "react";
+import { router } from "@inertiajs/react";
+import { Switch } from "@/Components/ui/switch";
+import { Label } from "@radix-ui/react-label";
 
 const RECURSO = "personas";
 const CONTAINER_CLASS = "container grid grid-cols-2 gap-x-32 gap-y-8";
@@ -290,10 +270,10 @@ export default function Create() {
             />
           </div>
           <div className="col-span-2 flex justify-between items-center">
-            <Button variant={"destructive"} className="col-span-2" type="reset">
+            <FormButton variant={"destructive"} className="col-span-2" type="reset">
               <Trash2 className="mr-2 h-4" />
               Vaciar
-            </Button>
+            </FormButton>
             <Button type="submit">
               <Save className="h-4 mr-2" />
               Crear

@@ -1,5 +1,5 @@
 import { Select } from "@radix-ui/react-select";
-import { FormControl, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "../ui/form";
 import {
   SelectContent,
   SelectItem,
@@ -32,7 +32,20 @@ export function FormItemSelectConstructor({
   itemStyle,
   TriggerClass = "",
   TriggerStyle,
+  descrip = undefined,
 }: Props) {
+  id = id.includes(".") ? id.replace(".", "_") : id
+  const triggerId = `trigger-${id}`;
+  const labelId = `label-${id}`;
+
+  const Label = (
+    <FormLabel id={labelId} htmlFor={triggerId}>
+      {label}
+    </FormLabel>
+  );
+
+  const Descrip = descrip && <FormDescription className="select-none text-xs col-start-2">{descrip}</FormDescription>;
+
   // console.debug('params:',{
   //     id,
   //     label,
@@ -49,11 +62,7 @@ export function FormItemSelectConstructor({
 
   return (
     <FormItem className={formItemClass} style={formItemStyle}>
-      {withLabel && (
-        <FormLabel htmlFor={id.includes(".") ? id.replace(".", "-") : id}>
-          {label}
-        </FormLabel>
-      )}
+      {withLabel && Label}
       <FormControl>
         <Select
           name={name}
@@ -65,7 +74,7 @@ export function FormItemSelectConstructor({
             <SelectTrigger
               className={TriggerClass}
               style={TriggerStyle}
-              id={id.replace(".", "-")}
+              id={triggerId}
             >
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
@@ -82,7 +91,8 @@ export function FormItemSelectConstructor({
           </SelectContent>
         </Select>
       </FormControl>
-      <FormMessage id={`${name}-message`} />
+      {descrip && Descrip}
+      <FormMessage id={`${name}-message`} className="col-span-full" />
     </FormItem>
   );
 }

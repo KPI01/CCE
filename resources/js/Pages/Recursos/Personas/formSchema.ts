@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const RECURSO = "personas";
-export const CONTAINER_CLASS = "container grid grid-cols-2 gap-x-12 gap-y-4";
+export const CONTAINER_CLASS = "container grid grid-cols-2 gap-x-12 gap-y-4 px-32";
 
 const FIELD_MSG = "Este campo";
 const REQUIRED_MSG = `${FIELD_MSG} es requerido.`;
@@ -84,7 +84,7 @@ export const formSchema = z
       .string()
       .regex(
         /^[0-9]{3}-[0-9]{2}-[0-9]{2}-[0-9]{2}$/,
-        "El número debe estar en el formato indicado.",
+        "El teléfono debe estar en el formato indicado.",
       )
       .optional(),
     perfil: z
@@ -125,7 +125,10 @@ export const formSchema = z
             },
           })
           .optional(),
-        caducidad: z.date().optional(),
+        caducidad: z.date({
+          required_error: REQUIRED_MSG,
+          invalid_type_error: 'Debes ingresar una fecha válida',
+        }).optional(),
         nro: z.string().optional(),
         tipo_aplicador: z
           .enum(TIPOS_APLICADOR_READONLY, {
@@ -147,7 +150,6 @@ export const formSchema = z
       .optional()
       .superRefine((data, ctx) => {
         if (data?.tipo && !data?.nro) {
-          console.log("");
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: "Debes ingresar el Nº del carnet.",

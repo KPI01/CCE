@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { FormControl, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
@@ -9,6 +9,7 @@ interface Props extends ConstructorProps {
   itemStyle?: React.CSSProperties;
   itemClass?: string;
   inputClass?: string;
+  autoComplete?: 'name' | 'given-name' | 'family-name' | 'email' | 'tel' | 'off' | 'on';
 }
 
 export default function FormItemConstructor({
@@ -25,15 +26,23 @@ export default function FormItemConstructor({
   inputStyle = { columnSpan: "none" },
   inputClass,
   itemClass,
+  autoComplete = "off",
+  descrip = undefined,
 }: Props) {
+  const toId = id.includes(".") ? id.replace(".", "_") : id;
+  const inputId = `input-${toId}`;
+  const labelId = `label-${toId}`;
+
   const InputField = textarea ? Textarea : Input;
   // console.debug({name, withLabel})
 
   const Label = (
-    <FormLabel htmlFor={id} className="leading-0">
+    <FormLabel id={labelId} htmlFor={inputId} className="leading-0">
       {label}
     </FormLabel>
   );
+
+  const Descrip = <FormDescription className="select-none text-xs col-start-2">{descrip}</FormDescription>;
 
   const formItemClass = cn("grid gap-x-2 items-center", itemClass);
   const formItemStyle = { gridTemplateColumns: "15ch 1fr", ...itemStyle };
@@ -42,14 +51,14 @@ export default function FormItemConstructor({
     marginTop: 0,
     ...inputStyle,
   };
-  const controlInputClass = cn("grid items-center", inputClass);
+  const controlInputClass = cn("grid items-center max-h-48", inputClass);
 
   return (
     <FormItem className={formItemClass} style={formItemStyle}>
       {withLabel && Label}
       <FormControl>
         <InputField
-          id={id}
+          id={inputId}
           name={name}
           value={value || ""}
           onChange={onChange}
@@ -57,9 +66,11 @@ export default function FormItemConstructor({
           placeholder={placeholder}
           className={controlInputClass}
           style={controlInputStyle}
+          autoComplete={autoComplete}
         />
       </FormControl>
-      <FormMessage id={`${id}-message`} />
+      {descrip && Descrip}
+      <FormMessage id={`${id}-message`} className="col-start-1 row-start-2" />
     </FormItem>
   );
 }

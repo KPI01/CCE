@@ -9,4 +9,5 @@ interface ConstructorProps {
   placeholder?: string;
   className?: string;
   style?: React.CSSProperties;
+  descrip?: string;
 }
