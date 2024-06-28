@@ -96,7 +96,10 @@ Route::prefix('/cce')
 
                 Route::prefix('recurso')
                     ->group(function () {
-                        Route::resource('personas', PersonaController::class);
+                        Route::resource('personas', PersonaController::class)
+                        ->missing(function () {
+                            return redirect(route('personas.index'));
+                        });
                         Route::resource('empresas', EmpresaController::class);
                     });
 

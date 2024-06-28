@@ -24,8 +24,8 @@ return new class extends Migration
             $table->text('observaciones')->nullable();
         });
 
-        Schema::create('ropo', function (Blueprint $table) {
-            $table->foreignUuid('persona')->references('id')->on('personas')->cascadeOnDelete();
+        Schema::create('persona_ropo', function (Blueprint $table) {
+            $table->foreignUuid('persona_id')->references('id')->on('personas')->cascadeOnDelete();
             $table->string('tipo', 15);
             $table->date('caducidad')->nullable();
             $table->string('nro', 25)->nullable();

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Persona;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
 
@@ -33,10 +34,10 @@ class PersonaFactory extends Factory
             'tipo_id_nac' => $tipo_id_nac,
             'id_nac' => $id_nac,
             'email' => fake()->unique()->safeEmail(),
-            'tel' => fake()->phoneNumber(),
-            'perfil' => fake()->randomElement( ['Aplicador', 'Técnico', 'Supervisor', 'Productor']),
+            'tel' => fake()->regexify('/^[0-9]{3}-[0-9]{2}-[0-9]{2}-[0-9]{2}$/'),
+            'perfil' => fake()->randomElement(['Aplicador', 'Técnico', 'Supervisor', 'Productor']),
             'observaciones' => fake()->boolean() ? fake()->realText(
-                fake()->numberBetween(20,100)
+                fake()->numberBetween(20, 100)
             ) : null,
         ];
     }
