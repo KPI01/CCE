@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DestroyRecursoRequest;
 use App\Models\Persona;
 use App\Http\Requests\StorePersonaRequest;
-use App\Http\Requests\UpdatePersonaRequest;
-use App\Models\Role;
+use App\Http\Requests\StoreRecursoRequest;
+use App\Http\Requests\UpdateRecursoRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
-class PersonaController extends Controller
+class PersonaController extends RecursoController
 {
 
     /**
@@ -20,13 +20,9 @@ class PersonaController extends Controller
      */
     public function __construct()
     {
-        $this->adm_role = Role::where('name', 'Admin')->first()->id;
-        $this->user = Auth::user();
+        parent::__construct();
     }
 
-    /**
-     * Mostrar listado de los recursos registrados.
-     */
     public function index()
     {
         //
@@ -58,19 +54,13 @@ class PersonaController extends Controller
         ]);
     }
 
-    /**
-     * Mostrar formulario para registrar un nuevo recurso.
-     */
     public function create()
     {
         //
         return Inertia::render("Recursos/Personas/Create");
     }
 
-    /**
-     * Almacenar nuevo recurso.
-     */
-    public function store(StorePersonaRequest $request)
+    public function store(StoreRecursoRequest $request)
     {
         //
         $data = $request->all();
@@ -132,20 +122,12 @@ class PersonaController extends Controller
         ]);
     }
 
-    /**
-     * Mostrar un recurso en especifico.
-     *
-     * @param Request $req
-     * @param string $id
-     */
     public function show(Request $req, string $id)
     {
         //
         $req->session()->setPreviousUrl($req->url());
-        $this->data = Persona::findOrFail($id);
-
-        $this->data->ropo = DB::table('ropo')->where('persona', $this->data->id)->first() ?: null;
-
+        $this->data = Persona::findOrFail($id)->first();
+        
         $this->data->urls = [
             'edit' => route('personas.edit', $this->data->id),
             'destroy' => route('personas.destroy', $this->data->id),
@@ -169,17 +151,14 @@ class PersonaController extends Controller
     public function edit(string $id)
     {
         //
-        $this->data = Persona::findOrFail($id);
+        $this->data = Persona::findOrFail($id)->first()->ropo();
 
         return Inertia::render("Recursos/Personas/Edit", [
             'data' => $this->data,
         ]);
     }
 
-    /**
-     * Actualizar los datos del recurso.
-     */
-    public function update(UpdatePersonaRequest $request, Persona $persona)
+    public function update(UpdateRecursoRequest $request, string $id)
     {
         //
     }
@@ -189,7 +168,7 @@ class PersonaController extends Controller
      *
      * @param string $id
      */
-    public function destroy(string $id)
+    public function destroy(DestroyRecursoRequest $req, string $id)
     {
         //
 

@@ -11,8 +11,6 @@ abstract class Controller
 
     // Variable para almacenar datos recuperados de la BD o request
     public $data;
-    // Variable para guardar las relaciones del modelo
-    public $relations;
     // Variable para el rol de administrador
     public $adm_role;
     // Variable para el usuario
@@ -27,6 +25,5 @@ abstract class Controller
     {
         $this->adm_role = Role::where('name', 'Admin')->first()->id;
         $this->user = Auth::user();
-        $this->relations = [];
     }
 }
