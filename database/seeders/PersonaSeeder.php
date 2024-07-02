@@ -14,6 +14,11 @@ class PersonaSeeder extends Seeder
     public function run(): void
     {
         //
-        Persona::factory()->count(25)->create();
+        $num = 25;
+        echo "Creando personas ($num) ..." . PHP_EOL;
+        Persona::factory()->count($num)->create();
+
+        echo "Creando personas con ROPO ($num) ..." . PHP_EOL;
+        Persona::factory()->count($num)->withRopo()->create();
     }
 }

@@ -1,15 +1,17 @@
 type UUID = `${string}-${string}-${string}-${string}-${string}`;
 
-type Modelo = {
-  id: UUID;
-  created_at: Date;
-  updated_at: Date;
-};
 
 type ModeloURLs = {
   edit: string;
   destroy: string;
   show: string;
+};
+
+type Modelo = {
+  id: UUID;
+  created_at: Date;
+  updated_at: Date;
+  urls: ModeloURLs;
 };
 
 export interface User extends Modelo {
@@ -33,7 +35,7 @@ export interface Persona extends ModeloRecurso {
   observaciones: string;
   ropo?: {
     tipo: "" | "Aplicador" | "Técnico";
-    caducidad?: Date;
+    caducidad?: Date | null;
     nro?: string;
     tipo_aplicador?:
       | ""
@@ -44,7 +46,6 @@ export interface Persona extends ModeloRecurso {
       | "Aplicación Fitosanitarios";
   };
 
-  empresas?: Empresa[];
 }
 
 export interface Empresa extends ModeloRecurso {

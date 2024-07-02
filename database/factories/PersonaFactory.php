@@ -41,4 +41,28 @@ class PersonaFactory extends Factory
             ) : null,
         ];
     }
+
+    /**
+     * Crea un registros ROPO para la persona
+     */
+    public function withRopo(): Factory
+    {
+        return $this->afterCreating(function (Persona $persona) {
+            $tipo = fake()->randomElement(['Aplicador', 'Técnico']);
+            $regex = fake()->boolean()
+                ? '^[0-9]{7,12}([S]?[ASTU])(?:[/][0-9]{1,3}?$'
+                : '^[0-9]{1,3}[/][0-9]{1,3}$';
+            $nro = fake()->regexify($regex);
+            $cad = fake()->dateTimeBetween('now', '+5 years')->format('Y-m-d');
+            $tipo_apl = fake()->randomElement(['Básico', 'Cualificado', 'Fumigación', 'Piloto', 'Aplicación Fitosanitarios']);
+
+            DB::table('persona_ropo')->insert([
+                'persona_id' => $persona->id,
+                'tipo' => $tipo,
+                'caducidad' => $cad,
+                'nro' => $nro,
+                'tipo_aplicador' => $tipo_apl,
+            ]);
+        });
+    } 
 }

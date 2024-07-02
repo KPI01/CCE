@@ -9,5 +9,5 @@ interface ConstructorProps {
   placeholder?: string;
   className?: string;
   style?: React.CSSProperties;
-  descrip?: string;
+  descripcion?: string | null | never;
 }

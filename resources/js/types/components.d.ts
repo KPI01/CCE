@@ -27,15 +27,19 @@ interface TableProps {
   initialVisibility: any;
 }
 
+type Urls = {
+  show?: string;
+  index?: string;
+  store?: string;
+  update?: string;
+  edit?: string;
+  destroy?: string;
+};
+
 export interface LayoutProps extends PropsWithChildren {
   pageTitle: string;
   mainTitle: string;
-  recurso: string;
   created_at?: string;
   updated_at?: string;
-  urls?: {
-    edit: string;
-    destroy: string;
-  };
-  action: Actions;
+  urls?: Urls;
 }
