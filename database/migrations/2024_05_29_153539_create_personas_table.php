@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -27,8 +26,8 @@ return new class extends Migration
         Schema::create('persona_ropo', function (Blueprint $table) {
             $table->foreignUuid('persona_id')->references('id')->on('personas')->cascadeOnDelete();
             $table->string('tipo', 15);
+            $table->string('nro', 25);
             $table->date('caducidad')->nullable();
-            $table->string('nro', 25)->nullable();
             $table->string('tipo_aplicador', 30)->nullable();
         });
     }
@@ -40,6 +39,6 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('personas');
-        Schema::dropIfExists('ropo');
+        Schema::dropIfExists('persona_ropo');
     }
 };

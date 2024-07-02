@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DestroyRecursoRequest;
 use App\Models\Empresa;
 use App\Http\Requests\StoreEmpresaRequest;
-use App\Http\Requests\UpdateEmpresaRequest;
+use App\Http\Requests\StoreRecursoRequest;
+use App\Http\Requests\UpdateRecursoRequest;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class EmpresaController extends Controller
+class EmpresaController extends RecursoController
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +37,7 @@ class EmpresaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreEmpresaRequest $request)
+    public function store(StoreRecursoRequest $request)
     {
         //
     }
@@ -42,7 +45,7 @@ class EmpresaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $req, string $id)
     {
         //
         $this->data = Empresa::findOrFail($id);
@@ -58,7 +61,7 @@ class EmpresaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Empresa $empresa)
+    public function edit(string $id)
     {
         //
     }
@@ -66,7 +69,7 @@ class EmpresaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateEmpresaRequest $request, Empresa $empresa)
+    public function update(UpdateRecursoRequest $req, string $id)
     {
         //
     }
@@ -74,7 +77,7 @@ class EmpresaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Empresa $empresa)
+    public function destroy(DestroyRecursoRequest $req, string $id)
     {
         //
     }

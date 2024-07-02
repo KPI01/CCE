@@ -28,42 +28,36 @@ class PersonaController extends RecursoController
         //
         $this->data = Persona::all();
 
-        foreach ($this->data as $key => $value) {
-            $ropo = DB::table('ropo')->where('persona', $value->id)->first();
-
-            if ($ropo) {
-                $info = [
-                    'nro' => $ropo->nro,
-                    'tipo' => $ropo->tipo,
-                    'tipo_aplicador' => $ropo->tipo_aplicador,
-                    'caducidad' => $ropo->caducidad
-                ];
-
-                $this->data[$key]->ropo = $info;
-            }
-
-            $this->data[$key]->urls = [
-                'edit' => route('personas.edit', $value->id),
-                'destroy' => route('personas.destroy', $value->id),
-                'show' => route('personas.show', $value->id),
-            ];
-        }
-
         return Inertia::render("Recursos/Personas/Table", [
-            'data' => $this->data,
+            'data' => $this->data->map(function ($data) {
+                return [
+                    ...$data->toArray(),
+                    'urls' => [
+                        'edit' => route('personas.edit', $data->id),
+                        'destroy' => route('personas.destroy', $data->id),
+                        'show' => route('personas.show', $data->id),
+                    ]
+                ];
+            }),
         ]);
     }
 
     public function create()
     {
         //
-        return Inertia::render("Recursos/Personas/Create");
+        return Inertia::render("Recursos/Personas/Create", [
+            'urls' => [
+                'store' => route('personas.store'),
+                'index' => route('personas.index'),
+            ]
+        ]);
     }
 
     public function store(StoreRecursoRequest $request)
     {
         //
         $data = $request->all();
+        // dd($data);
         $ropo = [];
 
         foreach ($data as $key => $value) {
@@ -98,17 +92,19 @@ class PersonaController extends RecursoController
         if ($ropo) {
             $ropo_nro = $ropo['nro'];
 
-            if (DB::table('ropo')->where('nro', $ropo_nro)->exists()) {
+            if (DB::table('persona_ropo')->where('nro', $ropo_nro)->exists()) {
                 return Redirect::back()
                     ->withErrors([
                         'ropo.nro' => "[Nro Ropo:$ropo_nro] ya existe está registrado."
                     ]);
             }
 
-            DB::table('ropo')->insert([
-                'persona' => $this->instance->id,
-                ...$ropo
-            ]);
+            // DB::table('persona_ropo')->insert([
+            //     'persona_id' => $this->instance->id,
+            //     ...$ropo
+            // ]);
+
+            $this->instance->setRopoAttribute($ropo);
         }
 
         $tipo_id_nac = $this->instance->tipo_id_nac;
@@ -125,42 +121,64 @@ class PersonaController extends RecursoController
     public function show(Request $req, string $id)
     {
         //
-        $req->session()->setPreviousUrl($req->url());
-        $this->data = Persona::findOrFail($id)->first();
-        
-        $this->data->urls = [
-            'edit' => route('personas.edit', $this->data->id),
-            'destroy' => route('personas.destroy', $this->data->id),
-            'show' => route('personas.show', $this->data->id),
-        ];
-
-        $this->relations['empresas'] = $this->data->empresas()->get();
-        $this->data->empresas = $this->relations['empresas'];
+        $this->data = Persona::findOrFail($id);
 
         return Inertia::render("Recursos/Personas/Show", [
-            'data' => $this->data,
-            
+            'data' => [
+                ...$this->data->only(['id', 'nombres', 'apellidos', 'tipo_id_nac', 'id_nac', 'email', 'tel', 'perfil', 'observaciones', 'ropo']),
+                'created_at' => $this->data->created_at->format('Y-m-d H:i:s'),
+                'updated_at' => $this->data->updated_at->format('Y-m-d H:i:s'),
+            ],
+            'urls' => [
+                'index' => route('personas.index'),
+                'edit' => route('personas.edit', $this->data->id),
+                'destroy' => route('personas.destroy', $this->data->id),
+            ]
         ]);
     }
 
-    /**
-     * Mostrar el formulario para editar el recurso.
-     *
-     * @param string $id
-     */
     public function edit(string $id)
     {
         //
-        $this->data = Persona::findOrFail($id)->first()->ropo();
+        $this->data = Persona::findOrFail($id);
 
         return Inertia::render("Recursos/Personas/Edit", [
-            'data' => $this->data,
+            'data' => [
+                ...$this->data->only(['id', 'nombres', 'apellidos', 'tipo_id_nac', 'id_nac', 'email', 'tel', 'perfil', 'observaciones', 'ropo']),
+                'created_at' => $this->data->created_at->format('Y-m-d H:i:s'),
+                'updated_at' => $this->data->updated_at->format('Y-m-d H:i:s'),
+            ],
+            'urls' => [
+                'update' => route('personas.update', $this->data->id),
+                'show' => route('personas.show', $this->data->id),
+            ],
         ]);
     }
 
     public function update(UpdateRecursoRequest $request, string $id)
     {
         //
+        $this->data = Persona::findOrFail($id)->first();
+        $aux = $request->all();
+
+        $this->data->update($aux);
+        $this->data->save();
+
+        return Redirect::intended(route('personas.index'))
+            ->with([
+                'from' => 'update.persona',
+                'message' => [
+                    'action' => [
+                        'type' => 'update',
+                        'data' => $this->data
+                    ],
+                    'toast' => [
+                        'variant' => 'default',
+                        'title' => 'Recurso: Persona',
+                        'description' => $this->data->nombres . ' ' . $this->data->apellidos . ' (' . $this->data->id_nac . ') se ha actualizado de los registros.'
+                    ]
+                ]
+            ]);
     }
 
     /**
@@ -186,7 +204,7 @@ class PersonaController extends RecursoController
                     'toast' => [
                         'variant' => 'default',
                         'title' => 'Recurso: Persona',
-                        'description' => $this->data->nombres.' '.$this->data->apellidos.' ('.$this->data->id_nac.') se ha eliminado de los registros.'
+                        'description' => $this->data->nombres . ' ' . $this->data->apellidos . ' (' . $this->data->id_nac . ') se ha eliminado de los registros.'
                     ]
                 ]
             ]);
