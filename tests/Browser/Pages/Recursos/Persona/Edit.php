@@ -6,7 +6,6 @@ use App\Models\Persona;
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\Page;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class Edit extends Page
 {
@@ -14,7 +13,6 @@ class Edit extends Page
 
     public function __construct(Persona $inst)
     {
-        $inst->ropo();
         $this->inst = $inst;
     }
 
@@ -50,6 +48,10 @@ class Edit extends Page
             '@input-' => 'input#input-',
             '@trigger-' => 'button#trigger-',
             '@label-' => 'label#label-',
+            '@txt-observaciones' => 'textarea[name=observaciones]#input-observaciones',
+            '@submit' => 'button[type="submit"]',
+            '@msg-' => 'p#msg-',
+            '@calendar' => 'div#calendar-ropo_caducidad',
         ];
     }
 }

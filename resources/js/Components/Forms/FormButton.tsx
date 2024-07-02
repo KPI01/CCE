@@ -28,6 +28,7 @@ export default function FormButton({
   
   return (
     <Button 
+    variant={variant}
     type={type}
     id={id} 
     onClick={onClick} 

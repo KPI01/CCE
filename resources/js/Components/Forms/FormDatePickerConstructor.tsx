@@ -24,7 +24,7 @@ interface Props extends Omit<ConstructorProps, "value"> {
   itemStyle?: React.CSSProperties;
   triggerClass?: string;
   triggerStyle?: React.CSSProperties;
-  value: Date | undefined
+  value: Date | null
 }
 
 export default function FormDatePickerConstructor({
@@ -38,7 +38,7 @@ export default function FormDatePickerConstructor({
   withLabel = true,
   triggerClass,
   triggerStyle,
-  descrip
+  descripcion
 }: Props) {
   const toId = id.includes(".") ? id.replace(".", "_") : id;
   const labelId = `label-${toId}`;
@@ -52,7 +52,7 @@ export default function FormDatePickerConstructor({
     </FormLabel>
   );
 
-  const Descrip = descrip && <FormDescription className="select-none text-xs col-start-2">{descrip}</FormDescription>
+  const Descripcion = descripcion && <FormDescription className="select-none text-xs col-start-2">{descripcion}</FormDescription>
 
   const customItemClass = cn("grid gap-x-2 items-center", itemClass);
   const customStyle = { gridTemplateColumns: "15ch 1fr", ...itemStyle };
@@ -101,13 +101,13 @@ export default function FormDatePickerConstructor({
             id={calId}
             mode="single"
             locale={es}
-            selected={value}
+            selected={value === null ? undefined : value}
             onSelect={onChange}
             disabled={(date) => date < new Date()}
           />
         </PopoverContent>
       </Popover>
-      {descrip && Descrip}
+      {descripcion && Descripcion}
       <FormMessage id={`${id}-message`} className="col-start-1"/>
     </FormItem>
   );

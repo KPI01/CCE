@@ -42,6 +42,7 @@ export function DataTable<TData, TValue>({
   data,
   initialVisibility,
 }: DataTableProps<TData, TValue>) {
+
   const { toast } = useToast();
   const pageProps = usePage().props;
   const flash = pageProps.flash as Flash;
@@ -88,8 +89,6 @@ export function DataTable<TData, TValue>({
       columnVisibility,
     },
   });
-
-  // console.debug(table.getState());
 
   return (
     <div id="data_table-container" className="select-none">
@@ -166,7 +165,6 @@ export function DataTable<TData, TValue>({
       <div className="flex w-full p-4 justify-end">
         <Pagination table={table} />
       </div>
-      <Toaster />
     </div>
   );
 }

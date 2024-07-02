@@ -10,22 +10,18 @@ export default function FormLayout({
   mainTitle,
   created_at,
   updated_at,
-  recurso,
   urls,
-  action,
-  id,
-}: LayoutProps & { id?: UUID }) {
+  backUrl
+}: LayoutProps & {backUrl?: string}) {
   return (
     <MainLayout>
       <Head title={pageTitle} />
       <FormHeader
-        id={id}
         title={mainTitle}
         created={created_at}
         updated={updated_at}
-        recurso={recurso}
         urls={urls}
-        action={action}
+        backUrl={backUrl}
         className="mb-6"
       />
       {children}

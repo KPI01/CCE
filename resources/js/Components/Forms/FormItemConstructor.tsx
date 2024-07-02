@@ -9,6 +9,7 @@ interface Props extends ConstructorProps {
   itemStyle?: React.CSSProperties;
   itemClass?: string;
   inputClass?: string;
+  msgClass?: string;
   autoComplete?: 'name' | 'given-name' | 'family-name' | 'email' | 'tel' | 'off' | 'on';
 }
 
@@ -27,7 +28,8 @@ export default function FormItemConstructor({
   inputClass,
   itemClass,
   autoComplete = "off",
-  descrip = undefined,
+  msgClass,
+  descripcion = undefined,
 }: Props) {
   const toId = id.includes(".") ? id.replace(".", "_") : id;
   const inputId = `input-${toId}`;
@@ -42,7 +44,7 @@ export default function FormItemConstructor({
     </FormLabel>
   );
 
-  const Descrip = <FormDescription className="select-none text-xs col-start-2">{descrip}</FormDescription>;
+  const Descripcion = <FormDescription className="select-none text-xs col-start-2">{descripcion}</FormDescription>;
 
   const formItemClass = cn("grid gap-x-2 items-center", itemClass);
   const formItemStyle = { gridTemplateColumns: "15ch 1fr", ...itemStyle };
@@ -52,6 +54,7 @@ export default function FormItemConstructor({
     ...inputStyle,
   };
   const controlInputClass = cn("grid items-center max-h-48", inputClass);
+  const formMsgClass = cn("col-span-full row-start-2", msgClass);
 
   return (
     <FormItem className={formItemClass} style={formItemStyle}>
@@ -69,8 +72,8 @@ export default function FormItemConstructor({
           autoComplete={autoComplete}
         />
       </FormControl>
-      {descrip && Descrip}
-      <FormMessage id={`${id}-message`} className="col-start-1 row-start-2" />
+      {descripcion  && Descripcion}
+      <FormMessage id={`msg-${toId}`} className={formMsgClass} />
     </FormItem>
   );
 }

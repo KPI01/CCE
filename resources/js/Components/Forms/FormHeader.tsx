@@ -2,59 +2,33 @@ import { Badge, badgeVariants } from "@/Components/ui/badge";
 import { Button } from "@/Components/ui/button";
 import { Separator } from "@/Components/ui/separator";
 import { cn } from "@/lib/utils";
-import { Actions, UUID } from "@/types";
+import { Actions, Urls, UUID } from "@/types";
 import { Link } from "@inertiajs/react";
 import { ChevronLeft, Pen, Trash } from "lucide-react";
 
 interface Props {
   id?: UUID;
-  action: Actions;
-  recurso: string;
   title: string;
   created?: string | never;
   updated?: string | never;
-  urls?: {
-    edit: string;
-    destroy: string;
-  };
+  urls?: Urls;
   className?: string;
+  backUrl?: string;
 }
 
 export default function FormHeader({
-  id,
-  recurso,
   title,
   created,
   updated,
   urls,
-  action,
+  backUrl = '#',
   className,
 }: Props) {
   // console.debug('route.params:', route().params)
-
-  const param = recurso.slice(0, -1);
-  // console.debug('param:', param);
-  // console.debug('test:', { [param]: id });
-  let backRouting: string;
-
-  // const { previous } = usePage<PageProps>().props;
-  // console.debug('previous:', previous);
-
-  if (action === "show") {
-    backRouting = route(`${recurso}.index`);
-  } else if (action === "edit") {
-    backRouting = route(`${recurso}.show`, { [param]: id });
-  } else if (!["create", "index"].includes(action)) {
-    backRouting = route(`${recurso}.${action}`, { [param]: id });
-  } else {
-    backRouting = route(`${recurso}.${action}`);
-  }
-  // console.debug('backRouting:', { [param]: backRouting });
-
   return (
     <div className={cn("flex items-center gap-4", className)}>
       <Button variant={"outline"} size={"sm"} className="px-2 py-1" asChild>
-        <Link href={backRouting}>
+        <Link as="button" id="back" href={backUrl}>
           <ChevronLeft className="h-4" />
         </Link>
       </Button>
@@ -66,14 +40,14 @@ export default function FormHeader({
             {urls && (
               <>
                 <Link
-                  href={urls.destroy}
+                  href={urls.destroy || '#'}
                   className={badgeVariants({ variant: "destructive" })}
                   as="button"
                 >
                   <Trash className="size-3" />
                 </Link>
                 <Link
-                  href={urls.edit}
+                  href={urls.edit || '#'}
                   className={badgeVariants({ variant: "default" })}
                   as="button"
                 >

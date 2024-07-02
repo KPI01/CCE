@@ -32,7 +32,7 @@ export function FormItemSelectConstructor({
   itemStyle,
   TriggerClass = "",
   TriggerStyle,
-  descrip = undefined,
+  descripcion = undefined,
 }: Props) {
   id = id.includes(".") ? id.replace(".", "_") : id
   const triggerId = `trigger-${id}`;
@@ -44,7 +44,7 @@ export function FormItemSelectConstructor({
     </FormLabel>
   );
 
-  const Descrip = descrip && <FormDescription className="select-none text-xs col-start-2">{descrip}</FormDescription>;
+  const Descripcion = <FormDescription className="select-none text-xs col-start-2">{descripcion}</FormDescription>;
 
   // console.debug('params:',{
   //     id,
@@ -91,7 +91,7 @@ export function FormItemSelectConstructor({
           </SelectContent>
         </Select>
       </FormControl>
-      {descrip && Descrip}
+      {descripcion && Descripcion}
       <FormMessage id={`${name}-message`} className="col-span-full" />
     </FormItem>
   );

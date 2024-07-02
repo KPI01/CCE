@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { MainLayoutProps } from "@/types";
 
 import NavBar from "@/Components/NavBar";
+import { Toaster } from "@/Components/ui/toaster";
 
 export default function MainLayout({ children, className }: MainLayoutProps) {
   const { auth, errors, flash }: any = usePage().props;
@@ -27,6 +28,7 @@ export default function MainLayout({ children, className }: MainLayoutProps) {
       <main className={cn("container flex flex-col", className)}>
         {children}
       </main>
+      <Toaster />
     </StrictMode>
   );
 }

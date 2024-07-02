@@ -7,7 +7,7 @@ import {
   FormField,
   FormLabel,
 } from "@/Components/ui/form";
-import { Save, Trash2, CalendarDays } from "lucide-react";
+import { Save, Trash2 } from "lucide-react";
 import {
   formSchema,
   PERFILES,
@@ -30,7 +30,14 @@ const CONTAINER_CLASS = "container grid grid-cols-2 gap-x-32 gap-y-8";
 
 const schema = formSchema;
 
-export default function Create() {
+interface Props {
+  urls: {
+    store: string;
+    index: string;
+  };
+}
+
+export default function Create({ urls }: Props) {
   const [fillRopo, setFillRopo] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof schema>>({
@@ -39,28 +46,21 @@ export default function Create() {
       tipo_id_nac: "DNI",
     },
   });
-  // console.log(form.formState)
 
   function handleRopoShow(curr: boolean) {
     let val = !curr;
-    // console.log('¿Mostrando ROPO?:', curr)
-    // console.log('Próximo valor:', val)
-
     setFillRopo(val);
   }
 
   function onSubmit(values: z.infer<typeof schema>) {
-    console.log(values);
-
-    router.post(route(`${RECURSO}.store`), values);
+    router.post(urls.store, values);
   }
 
   return (
     <FormLayout
       pageTitle="Persona"
       mainTitle={`Creando ${RECURSO.slice(0, -1)}...`}
-      recurso="personas"
-      action="create"
+      backUrl={urls.index}
     >
       <Form {...form}>
         <form
@@ -105,8 +105,11 @@ export default function Create() {
                 form.getFieldState("id_nac").invalid ? " text-destructive" : ""
               }
               htmlFor="id_nac"
+              asChild
             >
+              <span>
               Identificación *
+              </span>
             </FormLabel>
             <FormField
               control={form.control}
@@ -137,6 +140,7 @@ export default function Create() {
                   value={field.value}
                   itemClass="ml-3"
                   inputClass="col-span-2"
+                  
                 />
               )}
             />
@@ -161,11 +165,12 @@ export default function Create() {
             render={({ field }) => (
               <FormItemConstructor
                 id={field.name}
-                label="Teléfono"
+                label="Nro. de Teléfono"
                 name={field.name}
                 placeholder="..."
                 onChange={field.onChange}
                 value={field.value}
+                descripcion="Formato: 123-45-67-89"
               />
             )}
           />
@@ -199,13 +204,13 @@ export default function Create() {
               />
             )}
           />
-          <div className="col-span-full flex items-center space-x-2">
+          <div className="col-span-full flex items-center space-x-2 font-medium">
             <Switch
               name="ropo"
-              id="ropo"
+              id="show-ropo"
               onClick={() => handleRopoShow(fillRopo)}
             />
-            <Label htmlFor="ropo">¿Datos ROPO?</Label>
+            <Label htmlFor="show-ropo">¿Datos ROPO?</Label>
           </div>
           <div
             id="ropo-form"
@@ -249,7 +254,7 @@ export default function Create() {
                   name={field.name}
                   label="Caducidad"
                   onChange={field.onChange}
-                  value={field.value}
+                  value={field.value || null}
                 />
               )}
             />

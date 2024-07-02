@@ -1,4 +1,4 @@
-import { LayoutProps, Persona } from "@/types";
+import { LayoutProps, Persona, Urls } from "@/types";
 import {
   formSchema,
   PERFILES,
@@ -20,17 +20,14 @@ import FormTitle from "@/Components/Forms/FormTitle";
 
 const schema = formSchema;
 
-type URLs = {
-  edit: string;
-  destroy: string;
-};
-
 interface Props extends LayoutProps {
   data: Persona;
+  urls: Urls;
 }
 
-export default function Show({ data }: Props) {
-  // console.debug(data);
+export default function Show({ data, urls }: Props) {
+  console.debug(data);
+  console.debug(urls);
 
   data.created_at = new Date(data.created_at);
   data.updated_at = new Date(data.updated_at);
@@ -57,26 +54,18 @@ export default function Show({ data }: Props) {
     },
   });
 
-  const urls: URLs = { ...data.urls };
-
-  // let relations = {
-  //     empresas: data.empresas ?? undefined
-  // }
-
   return (
     <FormLayout
       pageTitle="Persona"
       mainTitle={`${data.nombres} ${data.apellidos}`}
       created_at={data.created_at.toLocaleString()}
       updated_at={data.updated_at.toLocaleString()}
-      recurso="personas"
-      action={"show"}
-      id={data.id}
       urls={urls}
+      backUrl={urls.index}
     >
       <Form {...form}>
         <form id="show-persona-form" className={CONTAINER_CLASS}>
-          <FormTitle title="Datos básicos" />
+          <FormTitle id='basicos' title="Datos básicos" />
           <div
             className="grid items-center"
             style={{ gridTemplateColumns: "15ch auto 1fr" }}
@@ -85,7 +74,7 @@ export default function Show({ data }: Props) {
               className={
                 form.getFieldState("id_nac").invalid ? " text-destructive" : ""
               }
-              htmlFor="id_nac"
+              htmlFor="input-id_nac"
             >
               Identificación
             </FormLabel>
@@ -185,7 +174,7 @@ export default function Show({ data }: Props) {
             )}
           />
 
-          <FormTitle title="Datos ROPO" />
+          <FormTitle id='h3-ropo' title="Datos ROPO" />
           <div
             id="ropo-form"
             className="col-span-2 grid grid-cols-2 gap-x-12 gap-y-4"

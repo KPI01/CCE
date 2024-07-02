@@ -3,9 +3,8 @@
 namespace Tests\Browser\Edit;
 
 use App\Models\Persona;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\DB;
 use Laravel\Dusk\Browser;
+use Tests\Browser\Components\Navbar;
 use Tests\Browser\Pages\Recursos\Persona\Edit;
 use Tests\DuskTestCase;
 
@@ -16,35 +15,16 @@ class EditPersonaTest extends DuskTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->p = Persona::factory(1)->withRopo()->create()->first();
 
-        $f = Persona::factory()->create();
-        $this->p = $f->first();
-
-        $ropoNro = '';
-        do {
-            if (fake()->boolean(50)) {
-                $ropoNro = fake()->regexify('/^[0-9]{9}[S]{1}[SUA]{1}[\/]{1}[0-9]{1,2}$/');
-            } else {
-                $ropoNro = fake()->regexify('/^[0-9]{2,3}[\/][0-9]{1,2}$/');
-            }
-        } while (strlen($ropoNro) > 25);
-
-        $tipo = fake()->randomElement(['Aplicador', 'Técnico']);
-
-        DB::table('ropo')->insert([
-            'persona' => $this->p->id,
-            'nro' => $ropoNro,
-            'caducidad' => fake()->dateTimeBetween('now', '+5 years')->format('Y-m-d'),
-            'tipo' => $tipo,
-            'tipo_aplicador' => $tipo ? fake()->randomElement(['Básico', 'Cualificado', 'Fumigación', 'Piloto', 'Aplicación Fitosanitarios']) : null 
-        ]);
     }
 
     public function testAcceso(): void
     {
         //
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Edit($this->p));
+            $browser->visit(new Edit($this->p))
+                ->responsiveScreenshots('persona/edit/acceso');
         });
     }
 
@@ -70,6 +50,8 @@ class EditPersonaTest extends DuskTestCase
                 ->assertPresent('@input-tel')
                 ->assertPresent('@label-perfil')
                 ->assertPresent('@trigger-perfil')
+                ->assertPresent('@label-observaciones')
+                ->assertPresent('@txt-observaciones')
                 ->assertPresent('@label-ropo_tipo')
                 ->assertPresent('@trigger-ropo_tipo')
                 ->assertPresent('@label-ropo_nro')
@@ -82,7 +64,15 @@ class EditPersonaTest extends DuskTestCase
                 ->assertPresentByName('select', 'tipo_id_nac')
                 ->assertPresentByName('select', 'perfil')
                 ->assertPresentByName('select', 'ropo.tipo')
-                ->assertPresentByName('select', 'ropo.tipo_aplicador');
+                ->assertPresentByName('select', 'ropo.tipo_aplicador')
+                ->within(new Navbar, function (Browser $browser) {
+                    $browser->assertPresent('@titulo')
+                        ->assertPresent('@home-btn')
+                        ->assertPresent('@conf-btn')
+                        ->assertPresent('@nav')
+                        ->assertPresent('@list')
+                        ->assertPresent('@rsrc-btn');
+                });
 
             $browser->assertVisible('@form')
                 ->assertVisible('@separator')
@@ -101,6 +91,8 @@ class EditPersonaTest extends DuskTestCase
                 ->assertVisible('@input-tel')
                 ->assertVisible('@label-perfil')
                 ->assertVisible('@trigger-perfil')
+                ->assertVisible('@label-observaciones')
+                ->assertVisible('@txt-observaciones')
                 ->assertVisible('@label-ropo_tipo')
                 ->assertVisible('@trigger-ropo_tipo')
                 ->assertVisible('@label-ropo_nro')
@@ -112,7 +104,16 @@ class EditPersonaTest extends DuskTestCase
                 ->assertVisibleByName('select', 'tipo_id_nac')
                 ->assertVisibleByName('select', 'perfil')
                 ->assertVisibleByName('select', 'ropo.tipo')
-                ->assertVisibleByName('select', 'ropo.tipo_aplicador');
+                ->assertVisibleByName('select', 'ropo.tipo_aplicador')
+                ->within(new Navbar, function (Browser $browser) {
+                    $userNombre = $this->user->nombres;
+                    $browser->assertSeeIn('@titulo', "Bienvenido, $userNombre")
+                        ->assertVisible('@home-btn')
+                        ->assertVisible('@conf-btn')
+                        ->assertVisible('@nav')
+                        ->assertVisible('@list')
+                        ->assertVisible('@rsrc-btn');
+                });
 
             $browser->assertEnabled('@input-nombres')
                 ->assertEnabled('@input-apellidos')
@@ -123,6 +124,7 @@ class EditPersonaTest extends DuskTestCase
                 ->assertEnabled('@input-tel')
                 ->assertButtonEnabled('@trigger-perfil')
                 ->assertEnabledByName('select', 'perfil')
+                ->assertEnabled('@txt-observaciones')
                 ->assertButtonEnabled('@trigger-ropo_tipo')
                 ->assertEnabledByName('select', 'ropo.tipo')
                 ->assertEnabled('@input-ropo_nro')
@@ -130,7 +132,7 @@ class EditPersonaTest extends DuskTestCase
                 ->assertButtonEnabled('@trigger-ropo_tipo_aplicador')
                 ->assertEnabledByName('select', 'ropo.tipo_aplicador');
 
-            $browser->responsiveScreenshots('Recurso/Persona/Edit/accesibilidad');
+            $browser->responsiveScreenshots('persona/edit/accesibilidad');
         });
 
     }
@@ -138,27 +140,28 @@ class EditPersonaTest extends DuskTestCase
     public function testValorDeCampos(): void
     {
         //
-        $this->p->save();
         $this->browse(function (Browser $browser) {
-            
+
             $browser->visit(new Edit($this->p));
 
             $browser->assertValue('@input-nombres', $this->p->nombres)
                 ->assertValue('@input-apellidos', $this->p->apellidos)
-                ->assertSelectedByName('select', 'tipo_id_nac', $this->p->tipo_id_nac)
+                ->assertSelectedByName('tipo_id_nac', $this->p->tipo_id_nac)
                 ->assertValue('@input-id_nac', $this->p->id_nac)
                 ->assertValue('@input-email', $this->p->email)
                 ->assertValue('@input-tel', $this->p->tel)
-                ->assertSelectedByName('select', 'perfil', $this->p->perfil);
-            
+                ->assertSelectedByName('perfil', $this->p->perfil);
+
             if ($this->p->ropo) {
                 // dd($this->p->ropo);
                 $i = $this->p->ropo;
                 $browser->assertValue('@input-ropo_nro', $i['nro'])
                     ->assertValue('@input-ropo_caducidad', $i['caducidad'])
-                    ->assertSelectedByName('select', 'ropo.tipo', $i['tipo'])
-                    ->assertSelectedByName('select', 'ropo.tipo_aplicador', $i['tipo_aplicador']);
+                    ->assertSelectedByName('ropo.tipo', $i['tipo'])
+                    ->assertSelectedByName('ropo.tipo_aplicador', $i['tipo_aplicador']);
             }
+
+            $browser->responsiveScreenshots('persona/edit/valor_de_campos');
         });
     }
 
@@ -166,20 +169,159 @@ class EditPersonaTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new Edit($this->p));
-             
-            $browser->value('@input-nombres', '')
-                ->value('@input-apellidos', '')
-                ->value('@input-id_nac', '')
-                ->value('@input-email', '')
-                ->value('@input-tel', '')
-                ->value('@input-ropo_nro', '')
-                ->value('@input-ropo_caducidad', '')
-                ->select('@trigger-tipo_id_nac', '')
-                ->select('@trigger-perfil', '')
-                ->select('@trigger-ropo_tipo', '')
-                ->select('@trigger-ropo_caducidad', '')
-                ->select('@trigger-ropo-aplicador', '')
+
+            $browser->type('@input-nombres', ' ')
+                ->type('@input-apellidos', ' ')
+                ->type('@input-id_nac', ' ')
+                ->type('@input-email', ' ')
                 ->press('@submit');
+
+            $browser->assertSeeIn('@msg-nombres', 'El nombre debe tener al menos 3 caracteres.')
+                ->assertSeeIn('@msg-apellidos', 'Los apellidos deben tener al menos 3 caracteres.')
+                ->assertSeeIn('@msg-id_nac', 'La identificación debe tener el formato adecuado.')
+                ->assertSeeIn('@msg-email', 'El correo debe ser válido.');
+
+            $browser->responsiveScreenshots('persona/edit/envio_vacio');
+        });
+    }
+
+    public function testEnvioInvalido(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(new Edit($this->p));
+
+            $browser->type('@input-nombres', 'Et')
+                ->type('@input-apellidos', 'ex')
+                ->assertSelectMissingOptionByName('tipo_id_nac', ['NIF', 'VAT'])
+                ->assertSelectHasOptionByName('tipo_id_nac', ['DNI', 'NIE'])
+                ->type('@input-id_nac', 'dolore')
+                ->type('@input-email', 'minim')
+                ->type('@input-tel', 'takimata')
+                ->press('@submit');
+
+            $browser->assertSeeIn('@msg-nombres', 'El nombre debe tener al menos 3 caracteres.')
+                ->assertSeeIn('@msg-apellidos', 'Los apellidos deben tener al menos 3 caracteres.')
+                ->assertSeeIn('@msg-id_nac', 'La identificación debe tener el formato adecuado.')
+                ->assertSeeIn('@msg-email', 'El correo debe ser válido.')
+                ->assertSeeIn('@msg-tel', 'El número debe estar en el formato indicado.');
+
+
+            $browser->responsiveScreenshots('persona/edit/envio_requeridos_invalido');
+        });
+    }
+
+    public function testEnvioBasicosValidoRopoInvalido(): void
+    {
+        $data = [
+            'nombres' => 'consequat',
+            'apellidos' => 'adipiscing',
+            'tipo_id_nac' => 'DNI',
+            'id_nac' => '52378265C',
+            'email' => 'ghastly@dom.com',
+            'tel' => '123-45-67-89',
+            'perfil' => 'Supervisor',
+            'observaciones' => 'door aptly though sitting that fiend within longer raven sure',
+            'ropo' => [
+                'tipo' => 'Técnico',
+                'nro' => '12346',
+            ]
+        ];
+
+        $this->browse(function (Browser $browser) use ($data) {
+            $browser->visit(new Edit($this->p));
+            $browser->type('@input-nombres', $data['nombres'])
+                ->type('@input-apellidos', $data['apellidos'])
+                ->selectByName('tipo_id_nac', $data['tipo_id_nac'])
+                ->type('@input-id_nac', $data['id_nac'])
+                ->type('@input-email', $data['email'])
+                ->type('@input-tel', $data['tel'])
+                ->selectByName('perfil', $data['perfil'])
+                ->type('@txt-observaciones', $data['observaciones'])
+                ->selectByName('ropo.tipo', $data['ropo']['tipo'])
+                ->type('@input-ropo_nro', $data['ropo']['nro'])
+                ->press('@submit');
+
+            $browser->assertNotPresent('@msg-nombres')
+                ->assertNotPresent('@msg-apellidos')
+                ->assertNotPresent('@msg-id_nac')
+                ->assertNotPresent('@msg-email')
+                ->assertNotPresent('@msg-tel')
+                ->assertPresent('@msg-ropo_nro')
+                ->assertSeeIn('@msg-ropo_nro', 'El Nº del carnet debe estar en el formato adecuado.');
+
+            $browser->responsiveScreenshots('persona/edit/envio_requeridos_invalido');
+        });
+    }
+
+    public function testEnvioCorrecto(): void
+    {
+        $data = [
+            'nombres' => 'Omar',
+            'apellidos' => 'Gutierrez',
+            'tipo_id_nac' => 'NIE',
+            'id_nac' => 'Z1564278X',
+            'email' => 'nmenchaca@example.org',
+            'tel' => '296-72-88-22',
+            'perfil' => 'Supervisor',
+            'observaciones' => 'door aptly though sitting that fiend within longer raven sure',
+            'ropo' => [
+                'tipo' => 'Aplicador',
+                'nro' => '296/4',
+                'caducidad' => '2027-05-29',
+                'tipo_aplicador' => 'Básico'
+            ]
+        ];
+
+        $this->browse(function (Browser $browser) use ($data) {
+
+            $browser->visit(new Edit($this->p));
+
+            $browser->type('@input-nombres', $data['nombres'])
+                ->type('@input-apellidos', $data['apellidos'])
+                ->selectByName('tipo_id_nac', $data['tipo_id_nac'])
+                ->type('@input-id_nac', $data['id_nac'])
+                ->type('@input-email', $data['email'])
+                ->type('@input-tel', $data['tel'])
+                ->selectByName('perfil', $data['perfil'])
+                ->type('@txt-observaciones', $data['observaciones'])
+                ->selectByName('ropo.tipo', $data['ropo']['tipo'])
+                ->type('@input-ropo_nro', $data['ropo']['nro'])
+                ->click('@trigger-ropo_caducidad')
+                ->pause(500)
+                ->click('@calendar table tr:nth-child(3) td:nth-child(3)')
+                ->selectByName('ropo.tipo_aplicador', $data['ropo']['tipo_aplicador'])
+                ->press('@submit')
+                ->pause(1000);
+
+            $browser->assertNotPresent('@msg-nombres')
+                ->assertNotPresent('@msg-apellidos')
+                ->assertNotPresent('@msg-id_nac')
+                ->assertNotPresent('@msg-email')
+                ->assertNotPresent('@msg-tel')
+                ->assertNotPresent('@msg-ropo_nro')
+                ->assertNotPresent('@msg-ropo_caducidad');
+
+            $browser->responsiveScreenshots('persona/edit/envio_correcto')
+                ->assertRouteIs('personas.index');
+        });
+    }
+
+    public function testEnvioSinCambios(): void
+    {
+        $this->p->setRopoAttribute([
+            ...$this->p->getRopoAttribute(),
+            'nro' => '296/4'
+        ]);
+        $this->p->save();
+
+        $this->browse(function (Browser $browser) {
+
+            $browser->visit(new Edit($this->p));
+
+            $browser->press('@submit')->pause(750);
+
+            $browser->assertPresent('ol li#edit-sin_cambios')
+                ->responsiveScreenshots('persona/edit/envio_sin_cambios');
         });
     }
 }

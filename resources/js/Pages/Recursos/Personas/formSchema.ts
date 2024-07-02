@@ -84,7 +84,7 @@ export const formSchema = z
       .string()
       .regex(
         /^[0-9]{3}-[0-9]{2}-[0-9]{2}-[0-9]{2}$/,
-        "El teléfono debe estar en el formato indicado.",
+        "El número debe estar en el formato indicado.",
       )
       .optional(),
     perfil: z
@@ -128,7 +128,7 @@ export const formSchema = z
         caducidad: z.date({
           required_error: REQUIRED_MSG,
           invalid_type_error: 'Debes ingresar una fecha válida',
-        }).optional(),
+        }).optional().nullable(),
         nro: z.string().optional(),
         tipo_aplicador: z
           .enum(TIPOS_APLICADOR_READONLY, {
@@ -163,7 +163,7 @@ export const formSchema = z
           });
         } else if (data?.tipo && data?.nro) {
           const regex =
-            /^[0-9]{5,}[A-Z]{2}[/]?[0-9]*$|^[0-9]{1,3}[/][0-9]{1,3}$/gm;
+            /(^[\d]{7,12}([S]?[ASTU])(?:[/][\d]{1,3})?$)|([\d]{1,3}[/][\d]{1,3})/gm;
 
           if (!regex.test(data.nro)) {
             ctx.addIssue({
