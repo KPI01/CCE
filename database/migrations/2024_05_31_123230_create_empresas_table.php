@@ -23,6 +23,14 @@ return new class extends Migration {
             $table->text('observaciones')->nullable();
         });
 
+        Schema::create('empresa_ropo', function (Blueprint $table) {
+            $table->foreignUuid('empresa_id')->references('id')->on('empresas')->cascadeOnDelete();
+            $table->string('tipo', 15);
+            $table->string('nro', 25);
+            $table->date('caducidad')->nullable();
+            $table->string('tipo_aplicador', 30)->nullable();
+        });
+
         Schema::create('empresa_persona', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->timestamps();
@@ -38,6 +46,7 @@ return new class extends Migration {
     {
         Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('empresas');
+        Schema::dropIfExists('empresa_ropo');
         Schema::dropIfExists('empresa_persona');
     }
 };

@@ -1,17 +1,28 @@
 type UUID = `${string}-${string}-${string}-${string}-${string}`;
 
-
-type ModeloURLs = {
-  edit: string;
-  destroy: string;
-  show: string;
-};
-
-type Modelo = {
+interface Modelo {
   id: UUID;
   created_at: Date;
   updated_at: Date;
-  urls: ModeloURLs;
+}
+
+type Perfiles = "" | "Aplicador" | "Técnico" | "Supervisor" | "Productor";
+
+type TiposCarnetROPO = "" | "Aplicador" | "Técnico";
+
+type TipoAplicador =
+  | ""
+  | "Básico"
+  | "Cualificado"
+  | "Fumigación"
+  | "Piloto"
+  | "Aplicación Fitosanitarios";
+
+type ROPO = {
+  tipo: TiposCarnetROPO;
+  caducidad?: Date | null;
+  nro?: string;
+  tipo_aplicador?: TipoAplicador;
 };
 
 export interface User extends Modelo {
@@ -20,42 +31,26 @@ export interface User extends Modelo {
   email_verified_at: string;
 }
 
-interface ModeloRecurso extends Modelo {
-  urls: ModeloURLs;
-}
-
-export interface Persona extends ModeloRecurso {
+export interface Persona extends Modelo {
   nombres: string;
   apellidos: string;
   tipo_id_nac: "DNI" | "NIE";
   id_nac: string;
   email: string;
   tel: string;
-  perfil: "" | "Aplicador" | "Técnico" | "Supervisor" | "Productor";
+  perfil: Perfiles;
   observaciones: string;
-  ropo?: {
-    tipo: "" | "Aplicador" | "Técnico";
-    caducidad?: Date | null;
-    nro?: string;
-    tipo_aplicador?:
-      | ""
-      | "Básico"
-      | "Cualificado"
-      | "Fumigación"
-      | "Piloto"
-      | "Aplicación Fitosanitarios";
-  };
-
+  ropo?: ROPO;
 }
 
-export interface Empresa extends ModeloRecurso {
+export interface Empresa extends Modelo {
   nombre: string;
   nif: string;
   email: string;
   tel: string;
   codigo: string;
-  perfil: string;
+  perfil: Perfiles;
   direccion: string;
   observaciones: string;
-  personas?: Persona[];
+  ropo?: ROPO;
 }

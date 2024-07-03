@@ -23,24 +23,11 @@ class Recurso extends Model
         return $this->relaciones;
     }
 
-    public function getUrlsAttribute()
-    {
-        if (empty($this->urls)) {
-            $this->urls = [];
-        }
-        return $this->urls;
-    }
-
     public function setRelacionesAttribute(array $relaciones)
     {
         $aux = $this->getArrayableRelations();
 
         $this->relaciones = array_merge($relaciones, $aux);
-    }
-
-    public function setUrlsAttribute(array $urls)
-    {
-        $this->$urls = $urls;
     }
 
     protected function constructRelacionesAttribute()

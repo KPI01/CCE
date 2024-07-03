@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Empresa;
-use App\Models\Persona;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class EmpresaSeeder extends Seeder
@@ -15,6 +13,10 @@ class EmpresaSeeder extends Seeder
     public function run(): void
     {
         //
-        Empresa::factory()->count(10)->create();
+        $num = 25;
+        echo "Creando empresas ($num)..." . PHP_EOL;
+        Empresa::factory(25)->create();
+        echo "Creando empresas con ROPO ($num)..." . PHP_EOL;
+        Empresa::factory(25)->withRopo()->create();
     }
 }

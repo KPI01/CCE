@@ -1,4 +1,5 @@
 import { PropsWithChildren } from "react";
+import { UUID } from "./modelos";
 
 type Actions =
   | "index"
@@ -37,9 +38,12 @@ type Urls = {
 };
 
 export interface LayoutProps extends PropsWithChildren {
+  id?: UUID;
   pageTitle: string;
   mainTitle: string;
   created_at?: string;
   updated_at?: string;
   urls?: Urls;
 }
+
+export type ActionUrls = Required<Pick<Urls, "show" | "edit" | "destroy">>;

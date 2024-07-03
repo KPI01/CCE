@@ -41,5 +41,9 @@ class DatabaseSeeder extends Seeder
                 'remember_token' => null,
             ]);
 
+        $this->call([
+            PersonaSeeder::class,
+            EmpresaSeeder::class,
+        ]);
     }
 }
