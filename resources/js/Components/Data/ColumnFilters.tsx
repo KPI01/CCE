@@ -59,9 +59,11 @@ export default function ColumnFilters<TData>({
           ) : null}
         </Button>
       </SheetTrigger>
-      <SheetContent  id="filtros-content" className="overflow-auto">
+      <SheetContent id="filtros-content" className="overflow-auto">
         <SheetHeader className="grid grid-cols-3">
-          <SheetTitle className="font-bold text-xl col-span-2">Filtros</SheetTitle>
+          <SheetTitle className="font-bold text-xl col-span-2">
+            Filtros
+          </SheetTitle>
           <SheetClose asChild>
             <Button
               variant={"ghost"}
@@ -76,131 +78,129 @@ export default function ColumnFilters<TData>({
           <SheetDescription className="col-span-full">
             Selecciona los filtros que desees.
           </SheetDescription>
-            <div>
-              <Button
-                variant={"destructive"}
-                size={"sm"}
-                onClick={() => table.resetColumnFilters()}
-              >
-                Limpiar filtros
-              </Button>
-            </div>
+          <div>
+            <Button
+              variant={"destructive"}
+              size={"sm"}
+              onClick={() => table.resetColumnFilters()}
+            >
+              Limpiar filtros
+            </Button>
+          </div>
         </SheetHeader>
-          <div className="flex flex-col items-start gap-10">
-            <div className="flex flex-col gap-8 w-full">
-              {table.getAllColumns().map((column) => {
-                if (column.getCanFilter()) {
-                  let info = column.columnDef.meta as Meta;
-                  if (info.tipo == "select") {
-                    return (
-                      <Accordion
-                        key={column.id}
-                        type="single"
-                        collapsible
-                        className="w-full"
-                      >
-                        <AccordionItem value={column.id}>
-                          <AccordionTrigger>{info.header}</AccordionTrigger>
-                          <AccordionContent>
-                            <Select
-                              open
-                              onValueChange={(value) => {
-                                // console.log(columnFilters)
-                                const meta = column.columnDef.meta as Meta;
-                                let val = value === "*" ? undefined : value;
-                                let copyFilters = filterState;
-                                if (
-                                  copyFilters.find(
-                                    (filter) => filter.id === meta.key,
-                                  )
-                                ) {
-                                  copyFilters.map((filter) => {
-                                    if (filter.id === meta.key) {
-                                      filter.value = val;
-                                    }
-                                  });
-                                } else {
-                                  copyFilters.push({
-                                    id: meta.key,
-                                    value: val,
-                                  });
-                                }
-
-                                // console.log('Copia', copyFilters)
-                                setFilterState(copyFilters);
-                              }}
-                            >
-                              <SelectTrigger>
-                                <SelectValue
-                                  placeholder={
-                                    (table
-                                      .getColumn(info.key)
-                                      ?.getFilterValue() as string) ?? "Todos"
-                                  }
-                                />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {info.options?.map((option) => {
-                                  const curr = table
-                                    .getColumn(info.key)
-                                    ?.getFilterValue()
-                                    ? table
-                                        .getColumn(info.key)
-                                        ?.getFilterValue()
-                                    : "*";
-                                  // console.log('curr', curr)
-                                  let text = option !== "*" ? option : "Todos";
-                                  return (
-                                    <SelectItem
-                                      key={option}
-                                      value={option}
-                                      {...(option === curr
-                                        ? { "data-state": "checked" }
-                                        : {})}
-                                    >
-                                      {text}
-                                    </SelectItem>
-                                  );
-                                })}
-                              </SelectContent>
-                            </Select>
-                          </AccordionContent>
-                        </AccordionItem>
-                      </Accordion>
-                    );
-                  }
+        <div className="flex flex-col items-start gap-10">
+          <div className="flex flex-col gap-8 w-full">
+            {table.getAllColumns().map((column) => {
+              if (column.getCanFilter()) {
+                let info = column.columnDef.meta as Meta;
+                if (info.tipo == "select") {
                   return (
                     <Accordion
                       key={column.id}
                       type="single"
                       collapsible
-                      className="w-full scroll-auto"
+                      className="w-full"
                     >
                       <AccordionItem value={column.id}>
                         <AccordionTrigger>{info.header}</AccordionTrigger>
                         <AccordionContent>
-                          <Input
-                            placeholder={`${info.header.toLowerCase()}...`}
-                            value={
-                              (table
-                                .getColumn(info.key)
-                                ?.getFilterValue() as string) ?? ""
-                            }
-                            onChange={(e) =>
-                              table
-                                .getColumn(info.key)
-                                ?.setFilterValue(e.target.value)
-                            }
-                            className="max-w-sm"
-                          />
+                          <Select
+                            open
+                            onValueChange={(value) => {
+                              // console.log(columnFilters)
+                              const meta = column.columnDef.meta as Meta;
+                              let val = value === "*" ? undefined : value;
+                              let copyFilters = filterState;
+                              if (
+                                copyFilters.find(
+                                  (filter) => filter.id === meta.key,
+                                )
+                              ) {
+                                copyFilters.map((filter) => {
+                                  if (filter.id === meta.key) {
+                                    filter.value = val;
+                                  }
+                                });
+                              } else {
+                                copyFilters.push({
+                                  id: meta.key,
+                                  value: val,
+                                });
+                              }
+
+                              // console.log('Copia', copyFilters)
+                              setFilterState(copyFilters);
+                            }}
+                          >
+                            <SelectTrigger>
+                              <SelectValue
+                                placeholder={
+                                  (table
+                                    .getColumn(info.key)
+                                    ?.getFilterValue() as string) ?? "Todos"
+                                }
+                              />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {info.options?.map((option) => {
+                                const curr = table
+                                  .getColumn(info.key)
+                                  ?.getFilterValue()
+                                  ? table.getColumn(info.key)?.getFilterValue()
+                                  : "*";
+                                // console.log('curr', curr)
+                                let text = option !== "*" ? option : "Todos";
+                                return (
+                                  <SelectItem
+                                    key={option}
+                                    value={option}
+                                    {...(option === curr
+                                      ? { "data-state": "checked" }
+                                      : {})}
+                                  >
+                                    {text}
+                                  </SelectItem>
+                                );
+                              })}
+                            </SelectContent>
+                          </Select>
                         </AccordionContent>
                       </AccordionItem>
                     </Accordion>
                   );
                 }
-              })}
-            </div>
+                return (
+                  <Accordion
+                    key={column.id}
+                    type="single"
+                    collapsible
+                    className="w-full scroll-auto"
+                  >
+                    <AccordionItem value={column.id}>
+                      <AccordionTrigger>{info.header}</AccordionTrigger>
+                      <AccordionContent>
+                        <Input
+                          placeholder={`${info.header.toLowerCase()}...`}
+                          value={
+                            (table
+                              .getColumn(info.key)
+                              ?.getFilterValue() as string) ?? ""
+                          }
+                          onChange={(e) =>
+                            table
+                              .getColumn(info.key)
+                              ?.setFilterValue(e.target.value)
+                          }
+                          className="max-w-sm"
+                        />
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                );
+              }
+            })}
           </div>
+        </div>
       </SheetContent>
     </Sheet>
   );

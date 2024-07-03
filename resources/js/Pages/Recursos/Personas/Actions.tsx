@@ -7,7 +7,7 @@ import {
 import { Button } from "@/Components/ui/button";
 import { Link, router } from "@inertiajs/react";
 import { File, MoreHorizontal, Pen, Trash } from "lucide-react";
-import { Persona } from "@/types";
+import { ActionUrls, Persona, Urls } from "@/types";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,19 +21,12 @@ import {
 } from "@/Components/ui/alert-dialog";
 
 interface Props {
-  item: Persona;
+  item: Persona & { urls: ActionUrls };
 }
 
 export default function Actions({ item }: Props) {
   function handleDelete(url: string) {
-    console.log(url);
-
-    router.visit(url, {
-      method: "delete",
-      onSuccess: () => {
-        console.log("Eliminado");
-      },
-    });
+    router.delete(url);
   }
 
   if (item.urls)

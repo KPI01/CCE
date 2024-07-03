@@ -2,11 +2,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/Components/ui/button";
-import {
-  Form,
-  FormField,
-  FormLabel,
-} from "@/Components/ui/form";
+import { Form, FormField, FormLabel } from "@/Components/ui/form";
 import { Save, Trash2 } from "lucide-react";
 import {
   formSchema,
@@ -107,9 +103,7 @@ export default function Create({ urls }: Props) {
               htmlFor="id_nac"
               asChild
             >
-              <span>
-              Identificación *
-              </span>
+              <span>Identificación *</span>
             </FormLabel>
             <FormField
               control={form.control}
@@ -140,7 +134,6 @@ export default function Create({ urls }: Props) {
                   value={field.value}
                   itemClass="ml-3"
                   inputClass="col-span-2"
-                  
                 />
               )}
             />
@@ -275,7 +268,11 @@ export default function Create({ urls }: Props) {
             />
           </div>
           <div className="col-span-2 flex justify-between items-center">
-            <FormButton variant={"destructive"} className="col-span-2" type="reset">
+            <FormButton
+              variant={"destructive"}
+              className="col-span-2"
+              type="reset"
+            >
               <Trash2 className="mr-2 h-4" />
               Vaciar
             </FormButton>

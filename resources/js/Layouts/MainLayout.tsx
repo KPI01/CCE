@@ -1,22 +1,35 @@
-import { StrictMode } from "react";
+import { StrictMode, useEffect } from "react";
 
 import { usePage } from "@inertiajs/react";
 
 import { cn } from "@/lib/utils";
-import { MainLayoutProps } from "@/types";
+import { Flash, MainLayoutProps } from "@/types";
 
 import NavBar from "@/Components/NavBar";
 import { Toaster } from "@/Components/ui/toaster";
+import { toast, useToast } from "@/Components/ui/use-toast";
 
 export default function MainLayout({ children, className }: MainLayoutProps) {
-  const { auth, errors, flash }: any = usePage().props;
+  const { auth, errors }: any = usePage().props;
   const isAdmin: boolean = auth.user.role.name === "Admin";
-  // console.log(auth)
-  // console.log(isAdmin)
-  // if (previous) console.debug(previous);
-  // if (flash) console.debug(flash);
-  // if (errors) console.error(errors);
-  console.debug(usePage().props);
+  // console.debug(usePage().props);
+
+  const { toast } = useToast();
+  const pageProps = usePage().props;
+  const flash = pageProps.flash as Flash;
+
+  useEffect(() => {
+    if (flash.message?.toast) {
+      toast({
+        variant: flash.message.toast?.variant,
+        title:
+          flash.message.toast?.title !== undefined
+            ? flash.message.toast?.title
+            : "",
+        description: flash.message.toast?.description,
+      });
+    }
+  }, [flash]);
 
   return (
     <StrictMode>

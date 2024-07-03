@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import {
   ColumnDef,
@@ -26,10 +26,6 @@ import { Separator } from "@/Components/ui/separator";
 import { Pagination } from "./Pagination";
 import ColumnFilters from "@/Components/Data/ColumnFilters";
 import { ColumnToggle } from "@/Components/Data/ColumnToggle";
-import { Toaster } from "@/Components/ui/toaster";
-import { useToast } from "@/Components/ui/use-toast";
-import { usePage } from "@inertiajs/react";
-import { Flash } from "@/types";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -42,24 +38,6 @@ export function DataTable<TData, TValue>({
   data,
   initialVisibility,
 }: DataTableProps<TData, TValue>) {
-
-  const { toast } = useToast();
-  const pageProps = usePage().props;
-  const flash = pageProps.flash as Flash;
-
-  useEffect(() => {
-    if (flash.message?.toast) {
-      toast({
-        variant: flash.message.toast?.variant,
-        title:
-          flash.message.toast?.title !== undefined
-            ? flash.message.toast?.title
-            : "",
-        description: flash.message.toast?.description,
-      });
-    }
-  }, [flash]);
-
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [rowSelection, setRowSelection] = useState({});

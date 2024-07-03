@@ -29,16 +29,7 @@ class PersonaController extends RecursoController
         $this->data = Persona::all();
 
         return Inertia::render("Recursos/Personas/Table", [
-            'data' => $this->data->map(function ($data) {
-                return [
-                    ...$data->toArray(),
-                    'urls' => [
-                        'edit' => route('personas.edit', $data->id),
-                        'destroy' => route('personas.destroy', $data->id),
-                        'show' => route('personas.show', $data->id),
-                    ]
-                ];
-            }),
+            'data' => $this->indexAll('personas', $this->data),
         ]);
     }
 
@@ -57,7 +48,6 @@ class PersonaController extends RecursoController
     {
         //
         $data = $request->all();
-        // dd($data);
         $ropo = [];
 
         foreach ($data as $key => $value) {
@@ -98,11 +88,6 @@ class PersonaController extends RecursoController
                         'ropo.nro' => "[Nro Ropo:$ropo_nro] ya existe está registrado."
                     ]);
             }
-
-            // DB::table('persona_ropo')->insert([
-            //     'persona_id' => $this->instance->id,
-            //     ...$ropo
-            // ]);
 
             $this->instance->setRopoAttribute($ropo);
         }
@@ -181,15 +166,9 @@ class PersonaController extends RecursoController
             ]);
     }
 
-    /**
-     * Eliminar uno recurso en especifico o muchos.
-     *
-     * @param string $id
-     */
     public function destroy(DestroyRecursoRequest $req, string $id)
     {
         //
-
         $this->data = Persona::findOrFail($id);
         $this->data->delete();
 
@@ -202,7 +181,7 @@ class PersonaController extends RecursoController
                         'data' => $this->data
                     ],
                     'toast' => [
-                        'variant' => 'default',
+                        'variant' => 'destructive',
                         'title' => 'Recurso: Persona',
                         'description' => $this->data->nombres . ' ' . $this->data->apellidos . ' (' . $this->data->id_nac . ') se ha eliminado de los registros.'
                     ]

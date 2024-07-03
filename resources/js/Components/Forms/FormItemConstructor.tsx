@@ -1,5 +1,11 @@
 import { cn } from "@/lib/utils";
-import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "../ui/form";
+import {
+  FormControl,
+  FormDescription,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 
@@ -10,7 +16,14 @@ interface Props extends ConstructorProps {
   itemClass?: string;
   inputClass?: string;
   msgClass?: string;
-  autoComplete?: 'name' | 'given-name' | 'family-name' | 'email' | 'tel' | 'off' | 'on';
+  autoComplete?:
+    | "name"
+    | "given-name"
+    | "family-name"
+    | "email"
+    | "tel"
+    | "off"
+    | "on";
 }
 
 export default function FormItemConstructor({
@@ -44,7 +57,11 @@ export default function FormItemConstructor({
     </FormLabel>
   );
 
-  const Descripcion = <FormDescription className="select-none text-xs col-start-2">{descripcion}</FormDescription>;
+  const Descripcion = (
+    <FormDescription className="select-none text-xs col-start-2">
+      {descripcion}
+    </FormDescription>
+  );
 
   const formItemClass = cn("grid gap-x-2 items-center", itemClass);
   const formItemStyle = { gridTemplateColumns: "15ch 1fr", ...itemStyle };
@@ -72,7 +89,7 @@ export default function FormItemConstructor({
           autoComplete={autoComplete}
         />
       </FormControl>
-      {descripcion  && Descripcion}
+      {descripcion && Descripcion}
       <FormMessage id={`msg-${toId}`} className={formMsgClass} />
     </FormItem>
   );

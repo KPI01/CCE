@@ -92,6 +92,6 @@ class PersonaTest extends ModeloTestCase
     public function test_seeder(): void
     {
         $this->seed(PersonaSeeder::class);
-        $this->assertDatabaseCount($this->table, 25);
+        $this->assertDatabaseCount($this->table, 50);
     }
 }

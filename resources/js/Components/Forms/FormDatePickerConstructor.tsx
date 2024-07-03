@@ -24,7 +24,7 @@ interface Props extends Omit<ConstructorProps, "value"> {
   itemStyle?: React.CSSProperties;
   triggerClass?: string;
   triggerStyle?: React.CSSProperties;
-  value: Date | null
+  value: Date | null;
 }
 
 export default function FormDatePickerConstructor({
@@ -38,7 +38,7 @@ export default function FormDatePickerConstructor({
   withLabel = true,
   triggerClass,
   triggerStyle,
-  descripcion
+  descripcion,
 }: Props) {
   const toId = id.includes(".") ? id.replace(".", "_") : id;
   const labelId = `label-${toId}`;
@@ -52,7 +52,11 @@ export default function FormDatePickerConstructor({
     </FormLabel>
   );
 
-  const Descripcion = descripcion && <FormDescription className="select-none text-xs col-start-2">{descripcion}</FormDescription>
+  const Descripcion = descripcion && (
+    <FormDescription className="select-none text-xs col-start-2">
+      {descripcion}
+    </FormDescription>
+  );
 
   const customItemClass = cn("grid gap-x-2 items-center", itemClass);
   const customStyle = { gridTemplateColumns: "15ch 1fr", ...itemStyle };
@@ -82,9 +86,7 @@ export default function FormDatePickerConstructor({
               )}
               value={value ? format(value, "dd/MM/yyyy") : "dd/mm/aaaa"}
             >
-              <span>
-                {value ? format(value, "dd/MM/yyyy") : "dd/mm/aaaa"}
-              </span>
+              <span>{value ? format(value, "dd/MM/yyyy") : "dd/mm/aaaa"}</span>
               <Input
                 id={inputId}
                 type="hidden"
@@ -108,7 +110,7 @@ export default function FormDatePickerConstructor({
         </PopoverContent>
       </Popover>
       {descripcion && Descripcion}
-      <FormMessage id={`${id}-message`} className="col-start-1"/>
+      <FormMessage id={`${id}-message`} className="col-start-1" />
     </FormItem>
   );
 }

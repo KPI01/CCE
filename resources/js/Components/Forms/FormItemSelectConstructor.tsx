@@ -1,5 +1,11 @@
 import { Select } from "@radix-ui/react-select";
-import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "../ui/form";
+import {
+  FormControl,
+  FormDescription,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
 import {
   SelectContent,
   SelectItem,
@@ -34,7 +40,7 @@ export function FormItemSelectConstructor({
   TriggerStyle,
   descripcion = undefined,
 }: Props) {
-  id = id.includes(".") ? id.replace(".", "_") : id
+  id = id.includes(".") ? id.replace(".", "_") : id;
   const triggerId = `trigger-${id}`;
   const labelId = `label-${id}`;
 
@@ -44,7 +50,11 @@ export function FormItemSelectConstructor({
     </FormLabel>
   );
 
-  const Descripcion = <FormDescription className="select-none text-xs col-start-2">{descripcion}</FormDescription>;
+  const Descripcion = (
+    <FormDescription className="select-none text-xs col-start-2">
+      {descripcion}
+    </FormDescription>
+  );
 
   // console.debug('params:',{
   //     id,

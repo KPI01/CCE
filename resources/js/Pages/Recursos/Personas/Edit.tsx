@@ -29,7 +29,7 @@ interface Props extends LayoutProps {
   urls: {
     update: string;
     show: string;
-  }
+  };
 }
 export default function Edit({ data, urls }: Props) {
   const { toast } = useToast();
@@ -65,13 +65,12 @@ export default function Edit({ data, urls }: Props) {
       router.put(urls.update, validation);
     } else {
       console.warn("Sin cambios!");
-      toast({ 
-        title: "No se han detectado cambios!", 
-        variant: "muted", 
+      toast({
+        title: "No se han detectado cambios!",
+        variant: "muted",
         customId: "edit-sin_cambios",
       });
     }
-
   }
 
   return (
@@ -269,8 +268,7 @@ export default function Edit({ data, urls }: Props) {
                 label="Fecha de caducidad"
                 name={field.name}
                 value={field.value || null}
-                onChange={field.onChange
-                }
+                onChange={field.onChange}
               />
             )}
           />
@@ -291,10 +289,14 @@ export default function Edit({ data, urls }: Props) {
           />
 
           <div className="flex gap-x-6 justify-end col-span-full mt-4">
-            <FormButton type="reset" variant={'destructive'} onClick={() => router.get(urls.show)}>
+            <FormButton
+              type="reset"
+              variant={"destructive"}
+              onClick={() => router.get(urls.show)}
+            >
               <CircleX className="size-4 mr-2" />
               Cancelar
-              </FormButton>
+            </FormButton>
             <FormButton type="submit">
               <Save className="size-4 mr-2" />
               Guardar

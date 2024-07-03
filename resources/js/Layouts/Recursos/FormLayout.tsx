@@ -1,7 +1,7 @@
 import { Head } from "@inertiajs/react";
 
 import MainLayout from "@/Layouts/MainLayout";
-import { LayoutProps, UUID } from "@/types";
+import { LayoutProps } from "@/types";
 import FormHeader from "@/Components/Forms/FormHeader";
 
 export default function FormLayout({
@@ -11,15 +11,17 @@ export default function FormLayout({
   created_at,
   updated_at,
   urls,
-  backUrl
-}: LayoutProps & {backUrl?: string}) {
+  backUrl,
+  id,
+}: LayoutProps & { backUrl?: string }) {
   return (
     <MainLayout>
       <Head title={pageTitle} />
       <FormHeader
+        id={id}
         title={mainTitle}
-        created={created_at}
-        updated={updated_at}
+        created_at={created_at}
+        updated_at={updated_at}
         urls={urls}
         backUrl={backUrl}
         className="mb-6"

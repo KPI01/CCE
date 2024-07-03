@@ -56,6 +56,7 @@ export default function Show({ data, urls }: Props) {
 
   return (
     <FormLayout
+      id={data.id}
       pageTitle="Persona"
       mainTitle={`${data.nombres} ${data.apellidos}`}
       created_at={data.created_at.toLocaleString()}
@@ -64,13 +65,14 @@ export default function Show({ data, urls }: Props) {
       backUrl={urls.index}
     >
       <Form {...form}>
-        <form id="show-persona-form" className={CONTAINER_CLASS}>
-          <FormTitle id='basicos' title="Datos básicos" />
+        <form id={`show-form-${data.id}`} className={CONTAINER_CLASS}>
+          <FormTitle id="h3-basicos" title="Datos básicos" />
           <div
             className="grid items-center"
             style={{ gridTemplateColumns: "15ch auto 1fr" }}
           >
             <FormLabel
+              id="label-id_nac"
               className={
                 form.getFieldState("id_nac").invalid ? " text-destructive" : ""
               }
@@ -87,7 +89,7 @@ export default function Show({ data, urls }: Props) {
                   name={field.name}
                   label="Tipo de identificación"
                   withLabel={false}
-                  value={field.value as string}
+                  value={field.value || ""}
                   placeholder="..."
                   onChange={field.onChange}
                   options={TIPOS_ID_NAC}
@@ -174,7 +176,7 @@ export default function Show({ data, urls }: Props) {
             )}
           />
 
-          <FormTitle id='h3-ropo' title="Datos ROPO" />
+          <FormTitle id="h3-ropo" title="Datos ROPO" />
           <div
             id="ropo-form"
             className="col-span-2 grid grid-cols-2 gap-x-12 gap-y-4"
@@ -184,9 +186,9 @@ export default function Show({ data, urls }: Props) {
               name="ropo.tipo"
               render={({ field }) => (
                 <FormItemSelectConstructor
-                  id={field.name.replace(".", "-")}
+                  id={field.name}
                   name={field.name}
-                  label="Tipo de carnet ROPO"
+                  label="Tipo de carnet"
                   value={field.value as string}
                   placeholder="No posee"
                   onChange={field.onChange}
@@ -201,12 +203,12 @@ export default function Show({ data, urls }: Props) {
               name="ropo.nro"
               render={({ field }) => (
                 <FormItemConstructor
-                  id={field.name.replace(".", "-")}
+                  id={field.name}
                   name={field.name}
                   placeholder="No posee"
                   value={field.value}
                   onChange={field.onChange}
-                  label="N° de carnet ROPO"
+                  label="N° de carnet"
                   disabled
                 />
               )}
@@ -217,7 +219,7 @@ export default function Show({ data, urls }: Props) {
               name="ropo.caducidad"
               render={({ field }) => (
                 <FormItemConstructor
-                  id={field.name.replace(".", "-")}
+                  id={field.name}
                   name={field.name}
                   placeholder="No posee"
                   value={field.value ? format(field.value, "dd/MM/yyyy") : ""}
@@ -233,7 +235,7 @@ export default function Show({ data, urls }: Props) {
               name="ropo.tipo_aplicador"
               render={({ field }) => (
                 <FormItemSelectConstructor
-                  id={field.name.replace(".", "-")}
+                  id={field.name}
                   name={field.name}
                   placeholder="No posee"
                   value={field.value || ""}
