@@ -41,8 +41,6 @@ const TIPOS_APLICADOR_READONLY = [
 export const formSchema = z
   .object({
     id: z.string().optional(),
-    created_at: z.date().optional(),
-    updated_at: z.date().optional(),
     nombres: z
       .string({
         required_error: REQUIRED_MSG,
@@ -125,7 +123,7 @@ export const formSchema = z
               }
             },
           })
-          .optional(),
+          .nullable(),
         caducidad: z
           .date({
             required_error: REQUIRED_MSG,
@@ -133,7 +131,7 @@ export const formSchema = z
           })
           .optional()
           .nullable(),
-        nro: z.string().optional(),
+        nro: z.string().nullable(),
         tipo_aplicador: z
           .enum(TIPOS_APLICADOR_READONLY, {
             errorMap: (issue, _ctx) => {
@@ -149,6 +147,7 @@ export const formSchema = z
               }
             },
           })
+          .nullable()
           .optional(),
       })
       .optional()

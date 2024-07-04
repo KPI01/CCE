@@ -22,8 +22,8 @@ class Edit extends Page
     public function url(): string
     {
         //
-        $url = Request::create(route('personas.edit', $this->inst->id));
-        return '/' . $url->path();
+        $url = Request::create(route("personas.edit", $this->inst->id));
+        return "/" . $url->path();
     }
 
     /**
@@ -42,16 +42,17 @@ class Edit extends Page
     public function elements(): array
     {
         return [
-            '@form' => 'form#edit-form-' . $this->inst->id,
-            '@h3-' => 'h3#h3-',
-            '@separator' => 'div[data-orientation="horizontal"]',
-            '@input-' => 'input#input-',
-            '@trigger-' => 'button#trigger-',
-            '@label-' => 'label#label-',
-            '@txt-observaciones' => 'textarea[name=observaciones]#input-observaciones',
-            '@submit' => 'button[type="submit"]',
-            '@msg-' => 'p#msg-',
-            '@calendar' => 'div#calendar-ropo_caducidad',
+            "@form" => "form#edit-form-" . $this->inst->id,
+            "@h3-" => "h3#h3-",
+            "@separator" => 'div[data-orientation="horizontal"]',
+            "@input-" => "input#input-",
+            "@trigger-" => "button#trigger-",
+            "@label-" => "label#label-",
+            "@txt-observaciones" =>
+                "textarea[name=observaciones]#input-observaciones",
+            "@submit" => 'button[type="submit"]',
+            "@msg-" => "p#msg-",
+            "@calendar" => "div#calendar-ropo_caducidad",
         ];
     }
 }

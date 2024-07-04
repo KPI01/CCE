@@ -13,8 +13,8 @@ class Table extends Page
      */
     public function url(): string
     {
-        $url = Request::create(route('personas.index'));
-        return '/'.$url->path();
+        $url = Request::create(route("personas.index"));
+        return "/" . $url->path();
     }
 
     /**
@@ -33,13 +33,13 @@ class Table extends Page
     public function elements(): array
     {
         return [
-            '@header-' => '#header-',
-            '@filtros-' => '#filtros-',
-            '@visibilidad-' => '#visibilidad-',
-            '@v-toggle-' => '#visibilidad-content #toggle-col-',
-            '@datatable' => '#data-table',
-            '@page-' => '#page-',
-            '@goTo-' => '#goto-',
+            "@header-" => "#header-",
+            "@filtros-" => "#filtros-",
+            "@visibilidad-" => "#visibilidad-",
+            "@v-toggle-" => "#visibilidad-content #toggle-col-",
+            "@datatable" => "#data-table",
+            "@page-" => "#page-",
+            "@goTo-" => "#goto-",
         ];
     }
 }

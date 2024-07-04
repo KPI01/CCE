@@ -14,8 +14,8 @@ class Create extends Page
     public function url(): string
     {
         //
-        $url = Request::create(route('personas.create'));
-        return '/'.$url->path();
+        $url = Request::create(route("personas.create"));
+        return "/" . $url->path();
     }
 
     /**
@@ -34,17 +34,18 @@ class Create extends Page
     public function elements(): array
     {
         return [
-            '@form' => 'form#create-persona-form',
-            '@back' => 'button#back',
-            '@input-' => 'input#input-',
-            '@txtarea-observaciones' => 'textarea[name=observaciones]#input-observaciones',
-            '@msg-' => 'p#msg-',
-            '@calendar' => 'div#calendar-ropo_caducidad',
-            '@trigger-' => 'button#trigger-',
-            '@label-' => 'label#label-',
-            '@submit' => 'button[type="submit"]',
-            '@reset' => 'button[type="reset"]',
-            '@show-ropo' => 'button#show-ropo',
+            "@form" => "form#create-persona-form",
+            "@back" => "button#back",
+            "@input-" => "input#input-",
+            "@txtarea-observaciones" =>
+                "textarea[name=observaciones]#input-observaciones",
+            "@msg-" => "p#msg-",
+            "@calendar" => "div#calendar-ropo_caducidad",
+            "@trigger-" => "button#trigger-",
+            "@label-" => "label#label-",
+            "@submit" => 'button[type="submit"]',
+            "@reset" => 'button[type="reset"]',
+            "@show-ropo" => "button#show-ropo",
         ];
     }
 }

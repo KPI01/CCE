@@ -61,18 +61,18 @@ export default function ColumnFilters<TData>({
       </SheetTrigger>
       <SheetContent id="filtros-content" className="overflow-auto">
         <SheetHeader className="grid grid-cols-3">
-          <SheetTitle className="font-bold text-xl col-span-2">
+          <SheetTitle className="col-span-2 text-xl font-bold">
             Filtros
           </SheetTitle>
           <SheetClose asChild>
             <Button
               variant={"ghost"}
               size={"sm"}
-              className="h-fit w-fit ml-auto mb-auto"
+              className="mb-auto ml-auto h-fit w-fit"
               style={{ marginTop: 0 }}
               onClick={() => table.resetColumnFilters()}
             >
-              <X className="size-5 m-2" />
+              <X className="m-2 size-5" />
             </Button>
           </SheetClose>
           <SheetDescription className="col-span-full">
@@ -89,7 +89,7 @@ export default function ColumnFilters<TData>({
           </div>
         </SheetHeader>
         <div className="flex flex-col items-start gap-10">
-          <div className="flex flex-col gap-8 w-full">
+          <div className="flex w-full flex-col gap-8">
             {table.getAllColumns().map((column) => {
               if (column.getCanFilter()) {
                 let info = column.columnDef.meta as Meta;

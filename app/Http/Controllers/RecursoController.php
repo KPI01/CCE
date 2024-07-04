@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 
 class RecursoController extends Controller
 {
-    
     // Variable para almacenar datos recuperados de la BD o request
     public $data;
     // Variable para guardar las relaciones del modelo
@@ -28,7 +27,7 @@ class RecursoController extends Controller
 
     public function __construct()
     {
-        $this->adm_role = Role::where('name', 'Admin')->first()->id;
+        $this->adm_role = Role::where("name", "Admin")->first()->id;
         $this->user = Auth::user();
     }
 
@@ -37,11 +36,11 @@ class RecursoController extends Controller
         return $data->map(function ($data) use ($recurso) {
             return [
                 ...$data->toArray(),
-                'urls' => [
-                    'edit' => route("$recurso.edit", $data->id),
-                    'destroy' => route("$recurso.destroy", $data->id),
-                    'show' => route("$recurso.show", $data->id),
-                ]
+                "urls" => [
+                    "edit" => route("$recurso.edit", $data->id),
+                    "destroy" => route("$recurso.destroy", $data->id),
+                    "show" => route("$recurso.show", $data->id),
+                ],
             ];
         });
     }

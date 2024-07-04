@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -13,7 +12,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    "name" => env("APP_NAME", "Laravel"),
 
     /*
     |--------------------------------------------------------------------------
@@ -24,7 +23,7 @@ return [
     |
     */
 
-    'abbreviation' => env('APP_NAME_ABBREVIATION', ''),
+    "abbreviation" => env("APP_NAME_ABBREVIATION", ""),
 
     /*
     |--------------------------------------------------------------------------
@@ -37,7 +36,7 @@ return [
     |
     */
 
-    'env' => env('APP_ENV', 'development'),
+    "env" => env("APP_ENV", "development"),
 
     /*
     |--------------------------------------------------------------------------
@@ -50,7 +49,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    "debug" => (bool) env("APP_DEBUG", false),
 
     /*
     |--------------------------------------------------------------------------
@@ -63,7 +62,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://127.0.0.1:8000'),
+    "url" => env("APP_URL", "http://127.0.0.1:8000"),
 
     /*
     |--------------------------------------------------------------------------
@@ -76,7 +75,7 @@ return [
     |
     */
 
-    'timezone' => env('APP_TIMEZONE', 'UTC'),
+    "timezone" => env("APP_TIMEZONE", "UTC"),
 
     /*
     |--------------------------------------------------------------------------
@@ -89,11 +88,11 @@ return [
     |
     */
 
-    'locale' => env('APP_LOCALE', 'es'),
+    "locale" => env("APP_LOCALE", "es"),
 
-    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'es'),
+    "fallback_locale" => env("APP_FALLBACK_LOCALE", "es"),
 
-    'faker_locale' => env('APP_FAKER_LOCALE', 'es_ES'),
+    "faker_locale" => env("APP_FAKER_LOCALE", "es_ES"),
 
     /*
     |--------------------------------------------------------------------------
@@ -106,14 +105,12 @@ return [
     |
     */
 
-    'cipher' => 'AES-256-CBC',
+    "cipher" => "AES-256-CBC",
 
-    'key' => env('APP_KEY'),
+    "key" => env("APP_KEY"),
 
-    'previous_keys' => [
-        ...array_filter(
-            explode(',', env('APP_PREVIOUS_KEYS', ''))
-        ),
+    "previous_keys" => [
+        ...array_filter(explode(",", env("APP_PREVIOUS_KEYS", ""))),
     ],
 
     /*
@@ -129,9 +126,8 @@ return [
     |
     */
 
-    'maintenance' => [
-        'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
-        'store' => env('APP_MAINTENANCE_STORE', 'database'),
+    "maintenance" => [
+        "driver" => env("APP_MAINTENANCE_DRIVER", "file"),
+        "store" => env("APP_MAINTENANCE_STORE", "database"),
     ],
-
 ];

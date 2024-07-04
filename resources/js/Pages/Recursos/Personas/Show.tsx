@@ -17,6 +17,7 @@ import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
 import FormLayout from "@/Layouts/Recursos/FormLayout";
 import FormTitle from "@/Components/Forms/FormTitle";
+import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 
 const schema = formSchema;
 
@@ -26,9 +27,6 @@ interface Props extends LayoutProps {
 }
 
 export default function Show({ data, urls }: Props) {
-  console.debug(data);
-  console.debug(urls);
-
   data.created_at = new Date(data.created_at);
   data.updated_at = new Date(data.updated_at);
 
@@ -71,13 +69,7 @@ export default function Show({ data, urls }: Props) {
             className="grid items-center"
             style={{ gridTemplateColumns: "15ch auto 1fr" }}
           >
-            <FormLabel
-              id="label-id_nac"
-              className={
-                form.getFieldState("id_nac").invalid ? " text-destructive" : ""
-              }
-              htmlFor="input-id_nac"
-            >
+            <FormLabel id="label-id_nac" htmlFor="input-id_nac">
               Identificación
             </FormLabel>
             <FormField
@@ -218,11 +210,10 @@ export default function Show({ data, urls }: Props) {
               control={form.control}
               name="ropo.caducidad"
               render={({ field }) => (
-                <FormItemConstructor
+                <FormDatePickerConstructor
                   id={field.name}
                   name={field.name}
-                  placeholder="No posee"
-                  value={field.value ? format(field.value, "dd/MM/yyyy") : ""}
+                  value={field.value || null}
                   onChange={field.onChange}
                   label="Caducidad"
                   disabled

@@ -25,14 +25,14 @@ export function ColumnToggle<TData>({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger id="visibilidad-btn" asChild>
-        <Button variant={"outline"} size={"sm"} className="h-8 flex">
+        <Button variant={"outline"} size={"sm"} className="flex h-8">
           <MixerHorizontalIcon className="mr-2 h-4 w-4" />
           Ver
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="w-fit z-10"
+        className="z-10 w-fit"
         id="visibilidad-content"
       >
         <DropdownMenuLabel>Alternar columnas</DropdownMenuLabel>

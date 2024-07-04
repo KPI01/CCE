@@ -17,7 +17,7 @@ class AppController extends Controller
      */
     public function __construct()
     {
-        $this->adm_role = Role::where('name', 'Admin')->first()->id;
+        $this->adm_role = Role::where("name", "Admin")->first()->id;
         $this->user = Auth::user();
     }
 
@@ -26,11 +26,10 @@ class AppController extends Controller
      */
     public function index()
     {
-
         if ($this->user->role_id == $this->adm_role) {
-            return Inertia::render('Dashboard');
+            return Inertia::render("Dashboard");
         }
-        return Inertia::render('User/Dashboard');
+        return Inertia::render("User/Dashboard");
     }
 
     /**
@@ -43,10 +42,9 @@ class AppController extends Controller
         $source = $req->path();
 
         if (Auth::check()) {
-            return redirect()->route('home')->with('from', $source);
+            return redirect()->route("home")->with("from", $source);
         }
 
-        return redirect()->route('login')->with('', $source);
-
+        return redirect()->route("login")->with("", $source);
     }
 }

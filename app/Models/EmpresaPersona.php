@@ -11,5 +11,5 @@ class EmpresaPersona extends Pivot
     //
     use HasUuids;
 
-    protected $table = 'empresa_persona';
+    protected $table = "empresa_persona";
 }

@@ -58,7 +58,7 @@ export function DataTableColumnHeader<TData, TValue>({
                 onClick={() => column.toggleSorting(false)}
                 className="cursor-pointer"
               >
-                <ArrowUpIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70 cursor-pointer" />
+                <ArrowUpIcon className="mr-2 h-3.5 w-3.5 cursor-pointer text-muted-foreground/70" />
                 Asc
               </DropdownMenuItem>
               <DropdownMenuItem

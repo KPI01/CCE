@@ -51,7 +51,7 @@ export function FormItemSelectConstructor({
   );
 
   const Descripcion = (
-    <FormDescription className="select-none text-xs col-start-2">
+    <FormDescription className="col-start-2 select-none text-xs">
       {descripcion}
     </FormDescription>
   );

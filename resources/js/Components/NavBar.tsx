@@ -89,7 +89,7 @@ export default function NavBar({ username, email, isAdmin }: NavbarProps) {
     <nav
       id="navbar"
       role="navigation"
-      className="basis-auto px-7 py-4 pb-0 flex flex-col gap-3"
+      className="flex basis-auto flex-col gap-3 px-7 py-4 pb-0"
     >
       <div className="flex items-center justify-center gap-3">
         {!currentRoute?.includes("home") && (
@@ -102,21 +102,21 @@ export default function NavBar({ username, email, isAdmin }: NavbarProps) {
             <Separator orientation="vertical" className="h-[3ch]" />
           </>
         )}
-        <div className="flex justify-between items-center basis-full">
-          <h2 className="font-semibold text-sm md:text-lg lg:text-xl">
+        <div className="flex basis-full items-center justify-between">
+          <h2 className="text-sm font-semibold md:text-lg lg:text-xl">
             Bienvenido, <span className="font-bold">{username}</span>
           </h2>
           <NavigationMenu
             id="navbar-nav"
             orientation="vertical"
-            className="bg-primary text-accent px-4 py-2 rounded-md font-medium hidden xl :flex"
+            className="xl:flex hidden rounded-md bg-primary px-4 py-2 font-medium text-accent"
           >
             <NavigationMenuList id="navbar-nav-list" className="space-x-8">
               <NoDropDownItem title="Visitas" />
               <NoDropDownItem title="Campañas" />
               <NoDropDownItem title="Tratamientos" />
               <NavigationMenuItem id="navbar-rsrc" className="ms-12">
-                <NavigationMenuTrigger className="font-medium text-md">
+                <NavigationMenuTrigger className="text-md font-medium">
                   Recursos
                 </NavigationMenuTrigger>
                 <NavigationMenuContent id="rsrc-content">
@@ -136,7 +136,7 @@ export default function NavBar({ username, email, isAdmin }: NavbarProps) {
               </NavigationMenuItem>
               {isAdmin && (
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="font-medium text-md">
+                  <NavigationMenuTrigger className="text-md font-medium">
                     Mantenimiento
                   </NavigationMenuTrigger>
                   <NavigationMenuContent className={MENUCONTENT_CLASS} asChild>
@@ -163,7 +163,7 @@ export default function NavBar({ username, email, isAdmin }: NavbarProps) {
                 Configuración
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="hidden lg:block px-2 me-5">
+            <DropdownMenuContent className="me-5 hidden px-2 lg:block">
               <DropdownMenuLabel className="text-sm font-semibold">
                 {email}
               </DropdownMenuLabel>
@@ -182,7 +182,7 @@ export default function NavBar({ username, email, isAdmin }: NavbarProps) {
                   href={route("logout")}
                   method="post"
                   as="button"
-                  className="flex gap-3 items-center"
+                  className="flex items-center gap-3"
                 >
                   <LogOut className="h-4 w-4" />
                   Cerrar sesión
@@ -197,7 +197,7 @@ export default function NavBar({ username, email, isAdmin }: NavbarProps) {
               <Menu className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="block: lg:hidden px-2 me-5">
+          <DropdownMenuContent className="block: me-5 px-2 lg:hidden">
             <DropdownMenuLabel>Secciones</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
@@ -228,7 +228,7 @@ export default function NavBar({ username, email, isAdmin }: NavbarProps) {
             </DropdownMenuSub>
             <DropdownMenuSeparator />
             <DropdownMenuLabel>Configuración</DropdownMenuLabel>
-            <DropdownMenuLabel className="text-xs font-light pt-0">
+            <DropdownMenuLabel className="pt-0 text-xs font-light">
               {email}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -288,7 +288,7 @@ function NoDropDownItem({
   currentRoute?: string;
 }) {
   return (
-    <NavigationMenuItem className="transition hover:text-primary hover:bg-accent px-3 py-2 rounded-md cursor-pointer">
+    <NavigationMenuItem className="cursor-pointer rounded-md px-3 py-2 transition hover:bg-accent hover:text-primary">
       <NavigationMenuLink active={currentRoute?.includes(ref)} asChild>
         <Link href={ref}>{title}</Link>
       </NavigationMenuLink>

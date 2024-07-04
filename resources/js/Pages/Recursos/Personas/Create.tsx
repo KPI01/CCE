@@ -98,7 +98,7 @@ export default function Create({ urls }: Props) {
           >
             <FormLabel
               className={
-                form.getFieldState("id_nac").invalid ? " text-destructive" : ""
+                form.getFieldState("id_nac").invalid ? "text-destructive" : ""
               }
               htmlFor="id_nac"
               asChild
@@ -234,7 +234,7 @@ export default function Create({ urls }: Props) {
                   name={field.name}
                   placeholder="..."
                   onChange={field.onChange}
-                  value={field.value}
+                  value={field.value || undefined}
                 />
               )}
             />
@@ -267,7 +267,7 @@ export default function Create({ urls }: Props) {
               )}
             />
           </div>
-          <div className="col-span-2 flex justify-between items-center">
+          <div className="col-span-2 flex items-center justify-between">
             <FormButton
               variant={"destructive"}
               className="col-span-2"
@@ -277,7 +277,7 @@ export default function Create({ urls }: Props) {
               Vaciar
             </FormButton>
             <Button type="submit">
-              <Save className="h-4 mr-2" />
+              <Save className="mr-2 h-4" />
               Crear
             </Button>
           </div>

@@ -50,19 +50,33 @@ export default function Edit({ data, urls }: Props) {
       perfil: data.perfil || "",
       observaciones: data.observaciones || "",
       ropo: {
-        tipo: data.ropo?.tipo || "",
+        tipo: data.ropo?.tipo || null,
         caducidad: data.ropo?.caducidad || null,
-        nro: data.ropo?.nro || "",
-        tipo_aplicador: data.ropo?.tipo_aplicador || "",
+        nro: data.ropo?.nro || null,
+        tipo_aplicador: data.ropo?.tipo_aplicador || null,
       },
     },
   });
 
   function onSubmit(formValues: z.infer<typeof schema>) {
+    const dirty = form.formState.dirtyFields;
     const validation = schema.parse(formValues);
 
-    if (Object.keys(form.formState.dirtyFields).length > 0) {
-      router.put(urls.update, validation);
+    const toSend = Object.keys(dirty).reduce(
+      (acc, key) => {
+        const aux: { [key: string]: any } = validation;
+        if (key in aux) {
+          acc[key] = aux[key];
+        }
+        return acc;
+      },
+      {} as { [key: string]: any },
+    );
+
+    if (Object.keys(toSend).length > 0) {
+      console.debug(toSend);
+      console.debug("Enviado!");
+      router.put(urls.update, toSend);
     } else {
       console.warn("Sin cambios!");
       toast({
@@ -125,7 +139,7 @@ export default function Edit({ data, urls }: Props) {
             <FormLabel
               id="label-id_nac"
               className={
-                form.getFieldState("id_nac").invalid ? " text-destructive" : ""
+                form.getFieldState("id_nac").invalid ? "text-destructive" : ""
               }
               htmlFor="input-id_nac"
             >
@@ -288,17 +302,17 @@ export default function Edit({ data, urls }: Props) {
             )}
           />
 
-          <div className="flex gap-x-6 justify-end col-span-full mt-4">
+          <div className="col-span-full mt-4 flex justify-end gap-x-6">
             <FormButton
               type="reset"
               variant={"destructive"}
               onClick={() => router.get(urls.show)}
             >
-              <CircleX className="size-4 mr-2" />
+              <CircleX className="mr-2 size-4" />
               Cancelar
             </FormButton>
             <FormButton type="submit">
-              <Save className="size-4 mr-2" />
+              <Save className="mr-2 size-4" />
               Guardar
             </FormButton>
           </div>

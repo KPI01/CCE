@@ -14,7 +14,7 @@ class HandleInertiaRequests extends Middleware
      *
      * @var string
      */
-    protected $rootView = 'root';
+    protected $rootView = "root";
 
     /**
      * Determine the current asset version.
@@ -32,40 +32,43 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         if (Auth::check()) {
+            $user = $request->user()
+                ? $request
+                    ->user()
+                    ->only("id", "name", "email", "email_verified_at")
+                : null;
 
-            $user = $request->user() ? $request->user()->only('id', 'name', 'email', 'email_verified_at') : null;
-
-            $user['verified'] = $user['email_verified_at'] ? true : false;
-            unset($user['email_verified_at']);
+            $user["verified"] = $user["email_verified_at"] ? true : false;
+            unset($user["email_verified_at"]);
 
             $role = $request->user() ? $request->user()->role : null;
 
-            $user['role'] = $role->only('id', 'name');
+            $user["role"] = $role->only("id", "name");
 
-            $previous = $request->session()->get('_previous');
-            $errors = $request->session()->get('errors');
+            $previous = $request->session()->get("_previous");
+            $errors = $request->session()->get("errors");
 
             $props = [
-                'appName' => config('app.name'),
-                'previous' => [
-                    'url' => $previous ? $previous['url'] : null,
+                "appName" => config("app.name"),
+                "previous" => [
+                    "url" => $previous ? $previous["url"] : null,
                 ],
-                'auth' => [
-                    'user' => $user,
+                "auth" => [
+                    "user" => $user,
                 ],
-                'flash' => [
-                    'message' => $request->session()->get('message'),
+                "flash" => [
+                    "message" => $request->session()->get("message"),
                 ],
-                'debug' => $request->session()->all(),
+                "debug" => $request->session()->all(),
             ];
 
-            $errors ?? $props['errors'] = $errors;
+            $errors ?? ($props["errors"] = $errors);
 
             return array_merge(parent::share($request), $props);
         }
 
         return array_merge(parent::share($request), [
-            'appName' => config('app.name'),
+            "appName" => config("app.name"),
         ]);
     }
 }

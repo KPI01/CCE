@@ -10,10 +10,8 @@ class Recurso extends Model
 {
     use HasFactory, HasUuids;
 
-
-    protected $appends = ['relaciones'];
+    protected $appends = ["relaciones"];
     protected $relaciones = [];
-
 
     public function getRelacionesAttribute()
     {

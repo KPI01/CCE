@@ -47,6 +47,7 @@ export default function FormItemConstructor({
   const toId = id.includes(".") ? id.replace(".", "_") : id;
   const inputId = `input-${toId}`;
   const labelId = `label-${toId}`;
+  const descripId = `descrip-${toId}`;
 
   const InputField = textarea ? Textarea : Input;
   // console.debug({name, withLabel})
@@ -58,7 +59,7 @@ export default function FormItemConstructor({
   );
 
   const Descripcion = (
-    <FormDescription className="select-none text-xs col-start-2">
+    <FormDescription id={descripId} className="col-start-2 select-none text-xs">
       {descripcion}
     </FormDescription>
   );

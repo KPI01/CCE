@@ -21,8 +21,8 @@ class Show extends Page
      */
     public function url(): string
     {
-        $url = Request::create(route('personas.show', $this->p->id));
-        return '/'.$url->path();
+        $url = Request::create(route("personas.show", $this->p->id));
+        return "/" . $url->path();
     }
 
     /**
@@ -41,13 +41,14 @@ class Show extends Page
     public function elements(): array
     {
         return [
-            '@form' => 'form#show-form-' . $this->p->id,
-            '@h3-' => 'h3#h3-',
-            '@separator' => 'div[data-orientation="horizontal"]',
-            '@input-' => 'input#input-',
-            '@trigger-' => 'button#trigger-',
-            '@label-' => 'label#label-',
-            '@txt-observaciones' => 'textarea[name=observaciones]#input-observaciones',
+            "@form" => "form#show-form-" . $this->p->id,
+            "@h3-" => "h3#h3-",
+            "@separator" => 'div[data-orientation="horizontal"]',
+            "@input-" => "input#input-",
+            "@trigger-" => "button#trigger-",
+            "@label-" => "label#label-",
+            "@txt-observaciones" =>
+                "textarea[name=observaciones]#input-observaciones",
         ];
     }
 }

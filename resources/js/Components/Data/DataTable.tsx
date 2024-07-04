@@ -70,7 +70,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div id="data_table-container" className="select-none">
-      <div className="flex items-center justify-end gap-3 mb-3">
+      <div className="mb-3 flex items-center justify-end gap-3">
         <ColumnFilters
           table={table}
           filterState={columnFilters}
@@ -79,7 +79,7 @@ export function DataTable<TData, TValue>({
         <Separator className="h-10" orientation="vertical" />
         <ColumnToggle table={table} />
       </div>
-      <div className="rounded-md border overflow-auto w-full mx-auto">
+      <div className="mx-auto w-full overflow-auto rounded-md border">
         <Table className="w-full" id="data-table">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => {
@@ -140,7 +140,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex w-full p-4 justify-end">
+      <div className="flex w-full justify-end p-4">
         <Pagination table={table} />
       </div>
     </div>

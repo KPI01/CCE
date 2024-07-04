@@ -23,7 +23,7 @@ abstract class Controller
     // Constructor
     public function __construct()
     {
-        $this->adm_role = Role::where('name', 'Admin')->first()->id;
+        $this->adm_role = Role::where("name", "Admin")->first()->id;
         $this->user = Auth::user();
     }
 }

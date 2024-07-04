@@ -22,11 +22,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
-        VerifyEmail::   toMailUsing(function ($notifiable, $url) {
-            return (new MailMessage)
-                ->subject('Verificar correo')
-                ->line('Presiona el botón de abajo para verificar tu correo')
-                ->action('Verificar correo', $url);
+        VerifyEmail::toMailUsing(function ($notifiable, $url) {
+            return (new MailMessage())
+                ->subject("Verificar correo")
+                ->line("Presiona el botón de abajo para verificar tu correo")
+                ->action("Verificar correo", $url);
         });
     }
 }

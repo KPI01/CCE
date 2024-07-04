@@ -12,7 +12,7 @@ class Login extends Page
      */
     public function url(): string
     {
-        return '/cce/auth/login';
+        return "/cce/auth/login";
     }
 
     /**
@@ -31,12 +31,12 @@ class Login extends Page
     public function elements(): array
     {
         return [
-            '@form' => '#app main form',
-            '@email' => '#app main form input[name="email"]',
-            '@pass' => '#app main form input[name="password"]',
-            '@submit' => '#app main form button[type="submit"]',
-            '@toggle-visibility' => '#app main form button[id="show-password"]',
-            '@reset-link' => '#app main form a',
+            "@form" => "#app main form",
+            "@email" => '#app main form input[name="email"]',
+            "@pass" => '#app main form input[name="password"]',
+            "@submit" => '#app main form button[type="submit"]',
+            "@toggle-visibility" => '#app main form button[id="show-password"]',
+            "@reset-link" => "#app main form a",
         ];
     }
 }

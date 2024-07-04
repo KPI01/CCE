@@ -5,8 +5,9 @@
   "tasks": [
     {
       "type": "shell",
-      "label": "pnpm: prettier",
+      "label": "pn: prettier",
       "command": "pnpm exec prettier . --write",
+      "detail": "linter",
       "presentation": {
         "echo": true,
         "reveal": "silent",
@@ -20,7 +21,7 @@
       "type": "shell",
       "command": "pnpm run dev",
       "problemMatcher": [],
-      "label": "pnpm: dev",
+      "label": "pn: dev",
       "detail": "vite",
       "runOptions": {
         "runOn": "folderOpen"
@@ -43,7 +44,7 @@
       "type": "shell",
       "command": "php artisan serve",
       "problemMatcher": [],
-      "label": "artisan: serve",
+      "label": "art: serve",
       "detail": "laravel",
       "runOptions": {
         "runOn": "folderOpen"
@@ -66,7 +67,7 @@
       "type": "shell",
       "command": "php artisan migrate",
       "problemMatcher": [],
-      "label": "artisan: migrate",
+      "label": "art: migrate",
       "detail": "laravel",
       "group": {
         "kind": "test",
@@ -86,7 +87,7 @@
       "type": "shell",
       "command": "php artisan db:seed --class=${input:seeder}",
       "problemMatcher": [],
-      "label": "artisan: seed",
+      "label": "art: seed",
       "detail": "laravel",
       "group": {
         "kind": "test",
@@ -106,7 +107,7 @@
       "type": "shell",
       "command": "php artisan migrate:refresh",
       "problemMatcher": [],
-      "label": "artisan: refresh",
+      "label": "art: refresh",
       "detail": "laravel",
       "group": {
         "kind": "test",
@@ -124,29 +125,9 @@
     },
     {
       "type": "shell",
-      "command": "php artisan db:wipe",
+      "command": "New-Item Item-Type File -Name ${workspaceFolder}\\resources\\js\\${input:name}.tsx -Value \"\" -Force",
       "problemMatcher": [],
-      "label": "artisan: wipe database",
-      "detail": "laravel",
-      "group": {
-        "kind": "test",
-        "isDefault": true
-      },
-      "presentation": {
-        "echo": false,
-        "reveal": "silent",
-        "focus": false,
-        "panel": "dedicated",
-        "showReuseMessage": false,
-        "clear": true,
-        "group": "database"
-      }
-    },
-    {
-      "type": "shell",
-      "command": "php artisan make:view ${input:view}",
-      "problemMatcher": [],
-      "label": "artisan: make view",
+      "label": "ps: make tsx",
       "detail": "laravel",
       "group": {
         "kind": "test",
@@ -166,7 +147,7 @@
       "type": "shell",
       "command": "php artisan dusk --without-tty",
       "problemMatcher": [],
-      "label": "artisan: browser test",
+      "label": "art dusk: test",
       "detail": "laravel",
       "group": {
         "kind": "test",
@@ -186,7 +167,67 @@
       "type": "shell",
       "command": "php artisan dusk --without-tty --filter ${input:filter}",
       "problemMatcher": [],
-      "label": "artisan: browser test w/ filtro",
+      "label": "art dusk: test -f",
+      "detail": "laravel",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true,
+        "group": "testing"
+      }
+    },
+    {
+      "type": "shell",
+      "command": "php artisan dusk:make ${input:dusk_name}",
+      "problemMatcher": [],
+      "label": "art dusk: make",
+      "detail": "laravel",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true,
+        "group": "testing"
+      }
+    },
+    {
+      "type": "shell",
+      "command": "php artisan dusk:page ${input:dusk_page}",
+      "problemMatcher": [],
+      "label": "art dusk: page",
+      "detail": "laravel",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true,
+        "group": "testing"
+      }
+    },
+    {
+      "type": "shell",
+      "command": "php artisan dusk:component ${input:dusk_component}",
+      "problemMatcher": [],
+      "label": "art dusk: component",
       "detail": "laravel",
       "group": {
         "kind": "test",
@@ -232,13 +273,28 @@
     },
     {
       "type": "promptString",
-      "id": "view",
-      "description": "Nombre para la vista"
+      "id": "filter",
+      "description": "Nombre del test"
     },
     {
       "type": "promptString",
-      "id": "filter",
-      "description": "Nombre del test"
+      "id": "name",
+      "description": "Nombre/Ruta del componente"
+    },
+    {
+      "type": "promptString",
+      "id": "dusk_name",
+      "description": "Nombre/Ruta del test"
+    },
+    {
+      "type": "promptString",
+      "id": "dusk_page",
+      "description": "Nombre/Ruta de la pagina"
+    },
+    {
+      "type": "promptString",
+      "id": "dusk_component",
+      "description": "Nombre/Ruta del componente"
     }
   ]
 }

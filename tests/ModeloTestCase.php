@@ -25,22 +25,22 @@ abstract class ModeloTestCase extends BaseTestCase
      */
     public string $id;
 
-
     public static function setUpBeforeClass(): void
     {
-        echo 'Inicio de los tests' . PHP_EOL;
-        static::$ommit_msj = 'No se aplica ';
+        echo "Inicio de los tests" . PHP_EOL;
+        static::$ommit_msj = "No se aplica ";
     }
     public static function tearDownAfterClass(): void
     {
-        echo 'Fin de los tests' . PHP_EOL;
+        echo "Fin de los tests" . PHP_EOL;
     }
 
     /**
      * Test básico de uso del factory.
      */
     public function test_factory(): void
-    {}
+    {
+    }
     /**
      * Test de los estados del factory
      * (si es que aplica)
@@ -54,8 +54,9 @@ abstract class ModeloTestCase extends BaseTestCase
      * Test de las secuencias del factory
      * (si es que aplica)
      */
-    public function test_secuencias(): void /** Si es que aplica */
+    public function test_secuencias(): void
     {
+        /** Si es que aplica */
         echo static::$ommit_msj . __FUNCTION__ . PHP_EOL;
         $this->assertTrue(true);
     }
@@ -66,28 +67,24 @@ abstract class ModeloTestCase extends BaseTestCase
      */
     public function test_create(): void
     {
-
     }
     /**
      * Test para el READ
      */
     public function test_read(): void
     {
-
     }
     /**
      * Test para el UPDATE
      */
     public function test_update(): void
     {
-
     }
     /**
      * Test para el DELETE
      */
     public function test_delete(): void
     {
-
     }
 
     /**
@@ -95,6 +92,5 @@ abstract class ModeloTestCase extends BaseTestCase
      */
     public function test_seeder(): void
     {
-
     }
 }

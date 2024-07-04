@@ -16,8 +16,8 @@ export default function DataLayout({
   return (
     <MainLayout>
       <Head title={`Recurso: ${title}`} />
-      <div className="flex justify-between my-10">
-        <h1 className="font-semibold text-4xl">{title}</h1>
+      <div className="my-10 flex justify-between">
+        <h1 className="text-4xl font-semibold">{title}</h1>
         <Button asChild size={"lg"} className="text-lg">
           <Link href={route(`${recurso}.create`)} as="button">
             Crear

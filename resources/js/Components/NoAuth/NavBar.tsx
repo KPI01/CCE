@@ -16,7 +16,7 @@ export default function NavBar({
     <nav
       id="navbar"
       role="navigation"
-      className="basis-auto px-7 py-4 flex flex-col"
+      className="flex basis-auto flex-col px-7 py-4"
     >
       <div className="flex justify-between py-5">
         <h2 className="text-xl font-extrabold tracking-tight lg:text-4xl">

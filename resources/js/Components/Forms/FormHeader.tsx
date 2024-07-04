@@ -2,7 +2,7 @@ import { Badge, badgeVariants } from "@/Components/ui/badge";
 import { Button, buttonVariants } from "@/Components/ui/button";
 import { Separator } from "@/Components/ui/separator";
 import { cn } from "@/lib/utils";
-import { Actions, LayoutProps, Urls, UUID } from "@/types";
+import { LayoutProps } from "@/types";
 import { Link, router } from "@inertiajs/react";
 import { ChevronLeft, Pen, Trash } from "lucide-react";
 import {
@@ -41,26 +41,26 @@ export default function FormHeader({
   return (
     <div className={cn("flex items-center gap-4", className)}>
       <Button variant={"outline"} size={"sm"} className="px-2 py-1" asChild>
-        <Link as="button" id="back" href={backUrl}>
+        <Link as="button" id="back-btn" href={backUrl}>
           <ChevronLeft className="h-4" />
         </Link>
       </Button>
       <Separator orientation="vertical" className="h-10" />
       <div className="flex gap-4">
         <div className="flex flex-col">
-          <h1 className="font-extrabold text-5xl my-3">{title}</h1>
-          <div className="flex gap-x-4 select-none">
+          <h1 className="my-3 text-5xl font-extrabold">{title}</h1>
+          <div className="flex select-none gap-x-4">
             {urls && (
               <>
                 <AlertDialog>
                   <AlertDialogTrigger
-                    id={`delete-${id}`}
+                    id={`badge-destroy-${id}`}
                     className={badgeVariants({ variant: "destructive" })}
                   >
                     <Trash className="size-4" />
                   </AlertDialogTrigger>
                   <AlertDialogContent id={`delete-${id}`}>
-                    <AlertDialogHeader>
+                    <AlertDialogHeader id="alert-title">
                       <AlertDialogTitle>
                         Confirmación para eliminar
                       </AlertDialogTitle>
@@ -69,13 +69,15 @@ export default function FormHeader({
                         ¿Estás seguro?
                       </AlertDialogDescription>
                     </AlertDialogHeader>
-                    <AlertDialogFooter>
+                    <AlertDialogFooter id="alert-footer">
                       <AlertDialogCancel
+                        id="alert-cancel"
                         className={buttonVariants({ variant: "outline" })}
                       >
                         No
                       </AlertDialogCancel>
                       <AlertDialogAction
+                        id="alert-confirm"
                         className={buttonVariants({ variant: "destructive" })}
                         onClick={handleDelete}
                       >
@@ -86,7 +88,7 @@ export default function FormHeader({
                 </AlertDialog>
                 <Link
                   href={urls.edit || "#"}
-                  id={`edit-${id}`}
+                  id={`badge-edit-${id}`}
                   className={badgeVariants({ variant: "default" })}
                   as="button"
                 >
@@ -95,13 +97,13 @@ export default function FormHeader({
               </>
             )}
             {created_at && (
-              <Badge variant={"outline"} className="">
+              <Badge variant={"outline"} id={`badge-created-${id}`}>
                 Creación: <span className="ml-3 font-thin">{created_at}</span>
               </Badge>
             )}
 
             {updated_at && (
-              <Badge variant={"secondary"} className="">
+              <Badge variant={"secondary"} id={`badge-updated-${id}`}>
                 Últ. Ed: <span className="ml-3 font-thin">{updated_at}</span>
               </Badge>
             )}

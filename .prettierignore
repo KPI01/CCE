@@ -1,0 +1,6 @@
+/vendor
+/node_modules
+/app/Providers
+/storage
+artisan
+/public

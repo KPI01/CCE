@@ -58,7 +58,7 @@ export default function Login() {
   return (
     <NoAuthLayout>
       <Head title="Inicio de Sesión" />
-      <Card className="w-3/4 lg:w-full mx-auto">
+      <Card className="mx-auto w-3/4 lg:w-full">
         <CardHeader>
           <CardTitle className="lg:text-4xl">Inicio de Sesión</CardTitle>
           <CardDescription className="lg:text-xl">

@@ -23,7 +23,7 @@ class UserController extends Controller
      */
     public function register_form()
     {
-        return Inertia::render('NoAuth/Register');
+        return Inertia::render("NoAuth/Register");
     }
 
     /**
@@ -31,7 +31,7 @@ class UserController extends Controller
      */
     public function login_form()
     {
-        return Inertia::render('NoAuth/Login');
+        return Inertia::render("NoAuth/Login");
     }
 
     /**
@@ -39,7 +39,7 @@ class UserController extends Controller
      */
     public function reset_pass_request_form()
     {
-        return Inertia::render('NoAuth/ResetPasswordRequest');
+        return Inertia::render("NoAuth/ResetPasswordRequest");
     }
 
     /**
@@ -47,7 +47,7 @@ class UserController extends Controller
      */
     public function confirm_email_form()
     {
-        return Inertia::render('NoAuth/ConfirmEmail');
+        return Inertia::render("NoAuth/ConfirmEmail");
     }
 
     /**
@@ -59,17 +59,17 @@ class UserController extends Controller
     {
         $vals = $req->input();
         $user_role = Role::firstOrCreate([
-            'name' => 'Usuario',
+            "name" => "Usuario",
         ]);
 
-        $vals['role_id'] = $user_role->id;
+        $vals["role_id"] = $user_role->id;
 
         $user = User::create($vals);
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('verification.notice'));
+        return redirect(route("verification.notice"));
     }
 
     /**
@@ -81,7 +81,7 @@ class UserController extends Controller
     {
         $req->fulfill();
 
-        return redirect(route('dashboard.usuario'));
+        return redirect(route("dashboard.usuario"));
     }
 
     /**
@@ -93,7 +93,7 @@ class UserController extends Controller
     {
         $req->user()->sendEmailVerificationNotification();
 
-        return back()->with('msj', 'Correo de verificación enviado');
+        return back()->with("msj", "Correo de verificación enviado");
     }
 
     /**
@@ -104,7 +104,6 @@ class UserController extends Controller
      */
     public function update(Request $req, string $id)
     {
-
     }
 
     /**
@@ -115,26 +114,27 @@ class UserController extends Controller
     public function login(Request $req)
     {
         $credentials = $req->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+            "email" => ["required", "email"],
+            "password" => ["required"],
         ]);
 
-        $user = User::where('email', $credentials['email'])->first();
+        $user = User::where("email", $credentials["email"])->first();
 
         if (Auth::check()) {
-            return redirect()->intended(route('dashboard.usuario'));
+            return redirect()->intended(route("dashboard.usuario"));
         }
 
         if (Auth::attempt($credentials)) {
             Auth::login($user, true);
 
-            return redirect()->intended(route('home'));
+            return redirect()->intended(route("home"));
         }
 
-        return back()->withErrors([
-            'email' => 'Las credenciales son inválidas.',
-        ])->onlyInput('email');
-
+        return back()
+            ->withErrors([
+                "email" => "Las credenciales son inválidas.",
+            ])
+            ->onlyInput("email");
     }
 
     /**
@@ -144,11 +144,13 @@ class UserController extends Controller
     {
         if (Auth::check()) {
             Auth::logout();
-            return redirect(route('login'));
+            return redirect(route("login"));
         } else {
-            return redirect()->intended(route('login'))->withErrors([
-                'email' => 'No hay una sesión activa.',
-            ]);
+            return redirect()
+                ->intended(route("login"))
+                ->withErrors([
+                    "email" => "No hay una sesión activa.",
+                ]);
         }
     }
 
@@ -159,15 +161,13 @@ class UserController extends Controller
      */
     public function reset_pass_request(Request $req)
     {
-        $req->validate(['email' => 'required|email']);
+        $req->validate(["email" => "required|email"]);
 
-        $status = Password::sendResetLink(
-            $req->only('email')
-        );
+        $status = Password::sendResetLink($req->only("email"));
 
         return $status === Password::RESET_LINK_SENT
-                    ? back()->with(['status' => __($status)])
-                    : back()->withErrors(['email' => __($status)]);
+            ? back()->with(["status" => __($status)])
+            : back()->withErrors(["email" => __($status)]);
     }
 
     /**
@@ -177,7 +177,7 @@ class UserController extends Controller
      */
     public function reset_pass_form(string $token)
     {
-        return Inertia::render('NoAuth/ResetPasswordForm', ['token' => $token]);
+        return Inertia::render("NoAuth/ResetPasswordForm", ["token" => $token]);
     }
 
     /**
@@ -188,18 +188,19 @@ class UserController extends Controller
     public function reset_pass(Request $req)
     {
         $req->validate([
-            'email'=> ['required','email'],
-            'token'=> ['required'],
-            'password'=> ['required', 'confirmed'],
+            "email" => ["required", "email"],
+            "token" => ["required"],
+            "password" => ["required", "confirmed"],
         ]);
 
         $status = Password::reset(
-            $req->only('email', 'password', 'password_confirmation', 'token'),
-            function(User $user, string $password) {
-                $user->forceFill([
-                    'password' => Hash::make($password)
-                ])
-                ->setRememberToken(Str::random(60));
+            $req->only("email", "password", "password_confirmation", "token"),
+            function (User $user, string $password) {
+                $user
+                    ->forceFill([
+                        "password" => Hash::make($password),
+                    ])
+                    ->setRememberToken(Str::random(60));
 
                 $user->save();
 
@@ -208,7 +209,7 @@ class UserController extends Controller
         );
 
         return $status === Password::PASSWORD_RESET
-            ? redirect()->route('login')->with('status', __($status))
-            : back()->withErrors(['email' => [__($status)]]);
+            ? redirect()->route("login")->with("status", __($status))
+            : back()->withErrors(["email" => [__($status)]]);
     }
 }

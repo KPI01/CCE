@@ -6,7 +6,7 @@ export default function FormTitle({
   id: string;
 }) {
   return (
-    <h3 id={id} className="font-bold text-xl mb-4 col-span-2">
+    <h3 id={id} className="col-span-2 mb-4 text-xl font-bold">
       {title}
     </h3>
   );

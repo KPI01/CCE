@@ -14,7 +14,6 @@ use Inertia\Inertia;
 
 class PersonaController extends RecursoController
 {
-
     /**
      * Constructor
      */
@@ -29,7 +28,7 @@ class PersonaController extends RecursoController
         $this->data = Persona::all();
 
         return Inertia::render("Recursos/Personas/Table", [
-            'data' => $this->indexAll('personas', $this->data),
+            "data" => $this->indexAll("personas", $this->data),
         ]);
     }
 
@@ -37,10 +36,10 @@ class PersonaController extends RecursoController
     {
         //
         return Inertia::render("Recursos/Personas/Create", [
-            'urls' => [
-                'store' => route('personas.store'),
-                'index' => route('personas.index'),
-            ]
+            "urls" => [
+                "store" => route("personas.store"),
+                "index" => route("personas.index"),
+            ],
         ]);
     }
 
@@ -51,7 +50,7 @@ class PersonaController extends RecursoController
         $ropo = [];
 
         foreach ($data as $key => $value) {
-            if (str_contains($key, 'ropo')) {
+            if (str_contains($key, "ropo")) {
                 foreach ($value as $k => $v) {
                     $ropo[$k] = $v;
                 }
@@ -61,32 +60,29 @@ class PersonaController extends RecursoController
 
         $ropo = count($ropo) > 0 ? $ropo : null;
 
-        if (Persona::where('email', $data['email'])->exists()) {
-            $email = $data['email'];
-            return Redirect::back()
-                ->withErrors([
-                    'email' => "[$email] ya existe está registrado."
-                ]);
-        } else if (Persona::where('id_nac', $data['id_nac'])->exists()) {
-            $id_nac = $data['id_nac'];
-            $tipo_id_nac = $data['tipo_id_nac'];
-            return Redirect::back()
-                ->withErrors([
-                    'id_nac' => "[$tipo_id_nac: $id_nac] ya está registrado."
-                ]);
+        if (Persona::where("email", $data["email"])->exists()) {
+            $email = $data["email"];
+            return Redirect::back()->withErrors([
+                "email" => "[$email] ya existe está registrado.",
+            ]);
+        } elseif (Persona::where("id_nac", $data["id_nac"])->exists()) {
+            $id_nac = $data["id_nac"];
+            $tipo_id_nac = $data["tipo_id_nac"];
+            return Redirect::back()->withErrors([
+                "id_nac" => "[$tipo_id_nac: $id_nac] ya está registrado.",
+            ]);
         }
 
         $this->instance = Persona::create($data);
         $this->instance->save();
 
         if ($ropo) {
-            $ropo_nro = $ropo['nro'];
+            $ropo_nro = $ropo["nro"];
 
-            if (DB::table('persona_ropo')->where('nro', $ropo_nro)->exists()) {
-                return Redirect::back()
-                    ->withErrors([
-                        'ropo.nro' => "[Nro Ropo:$ropo_nro] ya existe está registrado."
-                    ]);
+            if (DB::table("persona_ropo")->where("nro", $ropo_nro)->exists()) {
+                return Redirect::back()->withErrors([
+                    "ropo.nro" => "[Nro Ropo:$ropo_nro] ya existe está registrado.",
+                ]);
             }
 
             $this->instance->setRopoAttribute($ropo);
@@ -97,9 +93,9 @@ class PersonaController extends RecursoController
 
         $this->message = "Persona con $tipo_id_nac $id_nac creada con éxito";
 
-        return Redirect::intended(route('personas.index'))->with([
-            'from' => 'store.persona',
-            'message' => ['content' => $this->message]
+        return Redirect::intended(route("personas.index"))->with([
+            "from" => "store.persona",
+            "message" => ["content" => $this->message],
         ]);
     }
 
@@ -109,16 +105,16 @@ class PersonaController extends RecursoController
         $this->data = Persona::findOrFail($id);
 
         return Inertia::render("Recursos/Personas/Show", [
-            'data' => [
-                ...$this->data->only(['id', 'nombres', 'apellidos', 'tipo_id_nac', 'id_nac', 'email', 'tel', 'perfil', 'observaciones', 'ropo']),
-                'created_at' => $this->data->created_at->format('Y-m-d H:i:s'),
-                'updated_at' => $this->data->updated_at->format('Y-m-d H:i:s'),
+            "data" => [
+                ...$this->data->toArray(),
+                "created_at" => $this->data->created_at->format("Y-m-d H:i:s"),
+                "updated_at" => $this->data->updated_at->format("Y-m-d H:i:s"),
             ],
-            'urls' => [
-                'index' => route('personas.index'),
-                'edit' => route('personas.edit', $this->data->id),
-                'destroy' => route('personas.destroy', $this->data->id),
-            ]
+            "urls" => [
+                "index" => route("personas.index"),
+                "edit" => route("personas.edit", $this->data->id),
+                "destroy" => route("personas.destroy", $this->data->id),
+            ],
         ]);
     }
 
@@ -128,14 +124,25 @@ class PersonaController extends RecursoController
         $this->data = Persona::findOrFail($id);
 
         return Inertia::render("Recursos/Personas/Edit", [
-            'data' => [
-                ...$this->data->only(['id', 'nombres', 'apellidos', 'tipo_id_nac', 'id_nac', 'email', 'tel', 'perfil', 'observaciones', 'ropo']),
-                'created_at' => $this->data->created_at->format('Y-m-d H:i:s'),
-                'updated_at' => $this->data->updated_at->format('Y-m-d H:i:s'),
+            "data" => [
+                ...$this->data->only([
+                    "id",
+                    "nombres",
+                    "apellidos",
+                    "tipo_id_nac",
+                    "id_nac",
+                    "email",
+                    "tel",
+                    "perfil",
+                    "observaciones",
+                    "ropo",
+                ]),
+                "created_at" => $this->data->created_at->format("Y-m-d H:i:s"),
+                "updated_at" => $this->data->updated_at->format("Y-m-d H:i:s"),
             ],
-            'urls' => [
-                'update' => route('personas.update', $this->data->id),
-                'show' => route('personas.show', $this->data->id),
+            "urls" => [
+                "update" => route("personas.update", $this->data->id),
+                "show" => route("personas.show", $this->data->id),
             ],
         ]);
     }
@@ -143,27 +150,35 @@ class PersonaController extends RecursoController
     public function update(UpdateRecursoRequest $request, string $id)
     {
         //
-        $this->data = Persona::findOrFail($id)->first();
         $aux = $request->all();
+        $r = $aux["ropo"];
+        $r["caducidad"] = date("Y-m-d", strtotime($r["caducidad"]));
+        unset($aux["ropo"]);
 
-        $this->data->update($aux);
-        $this->data->save();
+        $this->data = Persona::where("id", $id)->update($aux);
+        DB::table("persona_ropo")->where("persona_id", $id)->update($r);
+        $this->instance = Persona::findOrFail($id);
 
-        return Redirect::intended(route('personas.index'))
-            ->with([
-                'from' => 'update.persona',
-                'message' => [
-                    'action' => [
-                        'type' => 'update',
-                        'data' => $this->data
-                    ],
-                    'toast' => [
-                        'variant' => 'default',
-                        'title' => 'Recurso: Persona',
-                        'description' => $this->data->nombres . ' ' . $this->data->apellidos . ' (' . $this->data->id_nac . ') se ha actualizado de los registros.'
-                    ]
-                ]
-            ]);
+        return Redirect::intended(route("personas.index"))->with([
+            "from" => "update.persona",
+            "message" => [
+                "action" => [
+                    "type" => "update",
+                    "data" => $this->instance,
+                ],
+                "toast" => [
+                    "variant" => "default",
+                    "title" => "Recurso: Persona",
+                    "description" =>
+                        $this->instance->nombres .
+                        " " .
+                        $this->instance->apellidos .
+                        " (" .
+                        $this->instance->id_nac .
+                        ") se ha actualizado de los registros.",
+                ],
+            ],
+        ]);
     }
 
     public function destroy(DestroyRecursoRequest $req, string $id)
@@ -172,20 +187,25 @@ class PersonaController extends RecursoController
         $this->data = Persona::findOrFail($id);
         $this->data->delete();
 
-        return Redirect::intended(route('personas.index'))
-            ->with([
-                'from' => 'destroy.persona',
-                'message' => [
-                    'action' => [
-                        'type' => 'destroy',
-                        'data' => $this->data
-                    ],
-                    'toast' => [
-                        'variant' => 'destructive',
-                        'title' => 'Recurso: Persona',
-                        'description' => $this->data->nombres . ' ' . $this->data->apellidos . ' (' . $this->data->id_nac . ') se ha eliminado de los registros.'
-                    ]
-                ]
-            ]);
+        return Redirect::intended(route("personas.index"))->with([
+            "from" => "destroy.persona",
+            "message" => [
+                "action" => [
+                    "type" => "destroy",
+                    "data" => $this->data,
+                ],
+                "toast" => [
+                    "variant" => "destructive",
+                    "title" => "Recurso: Persona",
+                    "description" =>
+                        $this->data->nombres .
+                        " " .
+                        $this->data->apellidos .
+                        " (" .
+                        $this->data->id_nac .
+                        ") se ha eliminado de los registros.",
+                ],
+            ],
+        ]);
     }
 }

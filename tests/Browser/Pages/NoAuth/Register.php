@@ -12,7 +12,7 @@ class Register extends Page
      */
     public function url(): string
     {
-        return '/cce/auth/registro';
+        return "/cce/auth/registro";
     }
 
     /**
@@ -31,14 +31,15 @@ class Register extends Page
     public function elements(): array
     {
         return [
-            '@form' => '#app main form',
-            '@name' => '#app main form input[name="name"]',
-            '@email' => '#app main form input[name="email"]',
-            '@pass' => '#app main form input[name="password"]',
-            '@pass-toggle' => '#app main form button[id="show-password"]',
-            '@confirm-pass' => '#app main form input[name="confirmPassword"]',
-            '@confirm-toggle' => '#app main form button[id="show-confirmPassword"]',
-            '@submit' => '#app main form button[type="submit"]',
+            "@form" => "#app main form",
+            "@name" => '#app main form input[name="name"]',
+            "@email" => '#app main form input[name="email"]',
+            "@pass" => '#app main form input[name="password"]',
+            "@pass-toggle" => '#app main form button[id="show-password"]',
+            "@confirm-pass" => '#app main form input[name="confirmPassword"]',
+            "@confirm-toggle" =>
+                '#app main form button[id="show-confirmPassword"]',
+            "@submit" => '#app main form button[type="submit"]',
         ];
     }
 }

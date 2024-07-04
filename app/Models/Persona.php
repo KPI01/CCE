@@ -7,26 +7,18 @@ use Illuminate\Support\Facades\DB;
 
 class Persona extends Recurso
 {
-    protected $fillable = [
-        'id',
-        'nombres',
-        'apellidos',
-        'tipo_id_nac',
-        'id_nac',
-        'email',
-    ];
-
-    protected $appends = ['ropo'];
+    protected $guard = [];
+    protected $appends = ["ropo"];
     protected $ropo = [
-        'tipo' => null,
-        'caducidad' => null,
-        'nro' => null,
-        'tipo_aplicador' => null,
+        "tipo" => null,
+        "caducidad" => null,
+        "nro" => null,
+        "tipo_aplicador" => null,
     ];
 
     private function getParentAppends()
     {
-        return (new parent)->getArrayableAppends();
+        return (new parent())->getArrayableAppends();
     }
 
     public function __construct(array $attributes = [])
@@ -38,10 +30,10 @@ class Persona extends Recurso
     public function getRopoAttribute()
     {
         if (
-            empty($this->ropo['tipo'])
-            && empty($this->ropo['caducidad'])
-            && empty($this->ropo['nro'])
-            && empty($this->ropo['tipo_aplicador'])
+            empty($this->ropo["tipo"]) &&
+            empty($this->ropo["caducidad"]) &&
+            empty($this->ropo["nro"]) &&
+            empty($this->ropo["tipo_aplicador"])
         ) {
             $this->retrieveRopoAttribute();
         }
@@ -51,36 +43,43 @@ class Persona extends Recurso
 
     public function setRopoAttribute(array $ropo)
     {
-        DB::table('persona_ropo')->updateOrInsert(
-            ['persona_id' => $this->id],
-            [
-                'tipo' => $ropo['tipo'] ?? null,
-                'caducidad' => isset($ropo['caducidad']) ? date('Y-m-d', strtotime($ropo['caducidad'])) : null,
-                'nro' => $ropo['nro'] ?? null,
-                'tipo_aplicador' => $ropo['tipo_aplicador'] ?? null,
-            ]
-        );
+        // dd($ropo);
+        if (!is_null($ropo["tipo"]) && !is_null($ropo["nro"])) {
+            DB::table("persona_ropo")->updateOrInsert(
+                ["persona_id" => $this->id],
+                [
+                    "tipo" => $ropo["tipo"],
+                    "caducidad" => isset($ropo["caducidad"])
+                        ? date("Y-m-d", strtotime($ropo["caducidad"]))
+                        : null,
+                    "nro" => $ropo["nro"],
+                    "tipo_aplicador" => $ropo["tipo_aplicador"] ?? null,
+                ]
+            );
+        }
 
         $this->ropo = array_merge($this->ropo, $ropo);
     }
 
     private function retrieveRopoAttribute()
     {
-        $record = DB::table('persona_ropo')->where('persona_id', $this->id)->first();
+        $record = DB::table("persona_ropo")
+            ->where("persona_id", $this->id)
+            ->first();
 
         if ($record) {
             $this->ropo = [
-                'tipo' => $record->tipo,
-                'caducidad' => $record->caducidad,
-                'nro' => $record->nro,
-                'tipo_aplicador' => $record->tipo_aplicador,
+                "tipo" => $record->tipo,
+                "caducidad" => $record->caducidad,
+                "nro" => $record->nro,
+                "tipo_aplicador" => $record->tipo_aplicador,
             ];
         } else {
             $this->ropo = [
-                'tipo' => null,
-                'caducidad' => null,
-                'nro' => null,
-                'tipo_aplicador' => null,
+                "tipo" => null,
+                "caducidad" => null,
+                "nro" => null,
+                "tipo_aplicador" => null,
             ];
         }
     }
@@ -94,9 +93,9 @@ class Persona extends Recurso
 
     public function update(array $attributes = [], array $options = [])
     {
-        if (isset($attributes['ropo'])) {
-            $this->setRopoAttribute($attributes['ropo']);
-            unset($attributes['ropo']);
+        if (isset($attributes["ropo"])) {
+            $this->setRopoAttribute($attributes["ropo"]);
+            unset($attributes["ropo"]);
         }
 
         return parent::update($attributes, $options);

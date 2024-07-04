@@ -39,6 +39,7 @@ export default function FormDatePickerConstructor({
   triggerClass,
   triggerStyle,
   descripcion,
+  disabled = false,
 }: Props) {
   const toId = id.includes(".") ? id.replace(".", "_") : id;
   const labelId = `label-${toId}`;
@@ -53,7 +54,7 @@ export default function FormDatePickerConstructor({
   );
 
   const Descripcion = descripcion && (
-    <FormDescription className="select-none text-xs col-start-2">
+    <FormDescription className="col-start-2 select-none text-xs">
       {descripcion}
     </FormDescription>
   );
@@ -72,6 +73,7 @@ export default function FormDatePickerConstructor({
       {withLabel && Label}
       <Popover>
         <PopoverTrigger
+          disabled={disabled}
           className={customTriggerClass}
           style={customTriggerStyle}
           asChild
@@ -81,7 +83,7 @@ export default function FormDatePickerConstructor({
               id={triggerId}
               variant={"outline"}
               className={cn(
-                "pl-3 text-left font-normal mt-0",
+                "mt-0 pl-3 text-left font-normal",
                 !value && "text-muted-foreground",
               )}
               value={value ? format(value, "dd/MM/yyyy") : "dd/mm/aaaa"}

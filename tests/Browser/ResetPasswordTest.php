@@ -17,17 +17,20 @@ class ResetPasswordTest extends DuskTestCase
     public function testAccesoDesdeLogin(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Login)
-                ->within('#app div form', function (Browser $browser) {
-                    $browser->screenshot('reset_pass/acceso_login_1');
-                    $browser->assertSee('¿Clave olvidada?')
-                        ->clickLink('¿Clave olvidada?')
+            $browser
+                ->visit(new Login())
+                ->within("#app div form", function (Browser $browser) {
+                    $browser->screenshot("reset_pass/acceso_login_1");
+                    $browser
+                        ->assertSee("¿Clave olvidada?")
+                        ->clickLink("¿Clave olvidada?")
                         ->pause(1000)
-                        ->assertPathIs('/cce/auth/clave/olvido');
+                        ->assertPathIs("/cce/auth/clave/olvido");
                 });
 
-            $browser->screenshot('reset_pass/acceso_login_2')
-                ->storeConsoleLog('reset_pass/acceso_login');
+            $browser
+                ->screenshot("reset_pass/acceso_login_2")
+                ->storeConsoleLog("reset_pass/acceso_login");
         });
     }
 
@@ -37,14 +40,16 @@ class ResetPasswordTest extends DuskTestCase
     public function testVolverLogin(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new ResetPassword)
-                ->screenshot('reset_pass/volver_login_1')
-                ->within(new NavBar, function (Browser $browser) {
-                    $browser->clickLink('Volver al inicio de sesión')
+            $browser
+                ->visit(new ResetPassword())
+                ->screenshot("reset_pass/volver_login_1")
+                ->within(new NavBar(), function (Browser $browser) {
+                    $browser
+                        ->clickLink("Volver al inicio de sesión")
                         ->pause(1000)
-                        ->assertPathIs('/cce/auth/login');
+                        ->assertPathIs("/cce/auth/login");
                 })
-                ->screenshot('reset_pass/volver_login_2');
+                ->screenshot("reset_pass/volver_login_2");
         });
     }
 
@@ -54,20 +59,24 @@ class ResetPasswordTest extends DuskTestCase
     public function testAccesibilidad(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new ResetPassword)
-                ->within(new NavBar, function (Browser $browser) {
-                    $browser->assertSeeIn('@title', 'Cuaderno de Campo Electrónico')
-                        ->assertSeeIn('@button', 'Volver al inicio de sesión');
+            $browser
+                ->visit(new ResetPassword())
+                ->within(new NavBar(), function (Browser $browser) {
+                    $browser
+                        ->assertSeeIn("@title", "Cuaderno de Campo Electrónico")
+                        ->assertSeeIn("@button", "Volver al inicio de sesión");
                 });
 
-            $browser->assertVisible('@card-title')
-                ->assertVisible('@card-description')
-                ->assertVisible('@form')
-                ->assertVisible('@email')
-                ->assertVisible('@submit-email');
+            $browser
+                ->assertVisible("@card-title")
+                ->assertVisible("@card-description")
+                ->assertVisible("@form")
+                ->assertVisible("@email")
+                ->assertVisible("@submit-email");
 
-            $browser->screenshot('reset_pass/accesibilidad')
-                ->storeConsoleLog('reset_pass/accesibilidad');
+            $browser
+                ->screenshot("reset_pass/accesibilidad")
+                ->storeConsoleLog("reset_pass/accesibilidad");
         });
     }
 
@@ -77,13 +86,15 @@ class ResetPasswordTest extends DuskTestCase
     public function testCampoVacio(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new ResetPassword);
+            $browser->visit(new ResetPassword());
 
-            $browser->press('@submit-email')
-                ->assertSeeIn('@email + p', 'Correo inválido.');
+            $browser
+                ->press("@submit-email")
+                ->assertSeeIn("@email + p", "Correo inválido.");
 
-            $browser->screenshot('reset_pass/campo_vacio')
-                ->storeConsoleLog('reset_pass/campo_vacio');
+            $browser
+                ->screenshot("reset_pass/campo_vacio")
+                ->storeConsoleLog("reset_pass/campo_vacio");
         });
     }
 
@@ -93,15 +104,15 @@ class ResetPasswordTest extends DuskTestCase
     public function testCorreoInvalido(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new ResetPassword);
+            $browser->visit(new ResetPassword());
 
-            $browser->type('@email', 'mal_correo%.com')
-                ->press('@submit-email');
+            $browser->type("@email", "mal_correo%.com")->press("@submit-email");
 
-            $browser->assertSeeIn('@email + p', 'Correo inválido.');
+            $browser->assertSeeIn("@email + p", "Correo inválido.");
 
-            $browser->screenshot('reset_pass/correo_invalido')
-                ->storeConsoleLog('reset_pass/correo_invalido');
+            $browser
+                ->screenshot("reset_pass/correo_invalido")
+                ->storeConsoleLog("reset_pass/correo_invalido");
         });
     }
 
@@ -111,15 +122,17 @@ class ResetPasswordTest extends DuskTestCase
     public function testEnvioCorreo(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new ResetPassword);
+            $browser->visit(new ResetPassword());
 
-            $browser->type('@email', 'informatica@fruveco.com')
-                ->press('@submit-email')
-                ->assertDontSee('Correo inválido.')
+            $browser
+                ->type("@email", "informatica@fruveco.com")
+                ->press("@submit-email")
+                ->assertDontSee("Correo inválido.")
                 ->pause(1000);
 
-            $browser->screenshot('reset_pass/correo_adecuado')
-                ->storeConsoleLog('reset_pass/correo_adecuado');
+            $browser
+                ->screenshot("reset_pass/correo_adecuado")
+                ->storeConsoleLog("reset_pass/correo_adecuado");
         });
     }
 }

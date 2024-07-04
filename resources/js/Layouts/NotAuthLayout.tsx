@@ -35,7 +35,7 @@ export default function NoAuthLayout({ children }: PropsWithChildren) {
   return (
     <>
       <NavBar uri={routes[uri]?.uri} txt={routes[uri]?.text} />
-      <main className="basis-full grid place-content-center">{children}</main>
+      <main className="grid basis-full place-content-center">{children}</main>
     </>
   );
 }
