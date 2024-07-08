@@ -40,9 +40,9 @@ export function FormItemSelectConstructor({
   TriggerStyle,
   descripcion = undefined,
 }: Props) {
-  id = id.includes(".") ? id.replace(".", "_") : id;
-  const triggerId = `trigger-${id}`;
-  const labelId = `label-${id}`;
+  const toId = id.includes(".") ? id.replace(".", "_") : id;
+  const triggerId = `trigger-${toId}`;
+  const labelId = `label-${toId}`;
 
   const Label = (
     <FormLabel id={labelId} htmlFor={triggerId}>
@@ -51,21 +51,13 @@ export function FormItemSelectConstructor({
   );
 
   const Descripcion = (
-    <FormDescription className="col-start-2 select-none text-xs">
+    <FormDescription
+      id={`descrip-${toId}`}
+      className="col-start-2 select-none text-xs"
+    >
       {descripcion}
     </FormDescription>
   );
-
-  // console.debug('params:',{
-  //     id,
-  //     label,
-  //     name,
-  //     value,
-  //     options,
-  //     placeholder,
-  //     onChange,
-  //     disabled
-  // })
 
   const formItemClass = cn("grid gap-x-2 items-center", itemClass);
   const formItemStyle = { gridTemplateColumns: "15ch 1fr", ...itemStyle };
@@ -102,7 +94,7 @@ export function FormItemSelectConstructor({
         </Select>
       </FormControl>
       {descripcion && Descripcion}
-      <FormMessage id={`${name}-message`} className="col-span-full" />
+      <FormMessage id={`msg-${toId}`} className="col-span-full" />
     </FormItem>
   );
 }

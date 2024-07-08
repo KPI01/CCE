@@ -8,21 +8,17 @@ interface Modelo {
 
 type Perfiles = "" | "Aplicador" | "Técnico" | "Supervisor" | "Productor";
 
-type TiposCarnetROPO = "" | "Aplicador" | "Técnico";
-
-type TipoAplicador =
+type Capacitaciones =
   | ""
   | "Básico"
   | "Cualificado"
-  | "Fumigación"
-  | "Piloto"
-  | "Aplicación Fitosanitarios";
+  | "Fumigador"
+  | "Piloto Aplicador";
 
 type ROPO = {
-  tipo: TiposCarnetROPO;
   caducidad?: Date | null;
   nro?: string;
-  tipo_aplicador?: TipoAplicador;
+  capacitacion?: Capacitaciones;
 };
 
 export interface User extends Modelo {
