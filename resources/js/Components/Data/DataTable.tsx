@@ -69,7 +69,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div id="data_table-container" className="select-none">
+    <div id="dt-container">
       <div className="mb-3 flex items-center justify-end gap-3">
         <ColumnFilters
           table={table}

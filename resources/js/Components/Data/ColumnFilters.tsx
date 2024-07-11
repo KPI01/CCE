@@ -27,7 +27,6 @@ import {
   AccordionTrigger,
 } from "@/Components/ui/accordion";
 import { Search, X } from "lucide-react";
-import { ScrollArea } from "../ui/scroll-area";
 
 interface DataTableViewOptionsProps<TData> {
   table: Table<TData>;

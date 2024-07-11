@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { Button, ButtonProps } from "../ui/button";
+import { Button, ButtonProps, buttonVariants } from "../ui/button";
 import { cn } from "@/lib/utils";
 
 interface BaseProps extends PropsWithChildren {
@@ -8,6 +8,7 @@ interface BaseProps extends PropsWithChildren {
   onClick?: () => void;
   type?: "submit" | "reset" | "button";
   variant?: ButtonProps["variant"];
+  size?: ButtonProps["size"]
 }
 
 interface FormButtonPropsWithText extends BaseProps {
@@ -22,12 +23,14 @@ export default function FormButton({
   text,
   type = "button",
   variant = "default",
+  size = "default"
 }: BaseProps & FormButtonPropsWithText) {
   const content = children ? children : text;
   const buttonClass = cn("w-fit", className);
 
   return (
     <Button
+      size={size}
       variant={variant}
       type={type}
       id={id}

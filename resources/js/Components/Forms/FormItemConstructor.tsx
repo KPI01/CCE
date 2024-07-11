@@ -33,7 +33,7 @@ export default function FormItemConstructor({
   value,
   onChange,
   disabled = false,
-  placeholder = "...",
+  placeholder = "(Vacío)",
   textarea = false,
   withLabel = true,
   itemStyle,

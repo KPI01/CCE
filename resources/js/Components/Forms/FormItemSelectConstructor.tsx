@@ -30,7 +30,7 @@ export function FormItemSelectConstructor({
   name,
   value,
   options,
-  placeholder = "...",
+  placeholder = "(Vacío)",
   onChange,
   disabled = false,
   withLabel = true,

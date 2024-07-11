@@ -109,7 +109,7 @@ export default function NavBar({ username, email, isAdmin }: NavbarProps) {
           <NavigationMenu
             id="navbar-nav"
             orientation="vertical"
-            className="xl:flex hidden rounded-md bg-primary px-4 py-2 font-medium text-accent"
+            className="hidden rounded-md bg-primary px-4 py-2 font-medium text-accent xl:flex"
           >
             <NavigationMenuList id="navbar-nav-list" className="space-x-8">
               <NoDropDownItem title="Visitas" />

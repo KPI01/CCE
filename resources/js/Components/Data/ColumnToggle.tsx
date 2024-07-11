@@ -24,7 +24,7 @@ export function ColumnToggle<TData>({
 }: DataTableViewOptionsProps<TData>) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger id="visibilidad-btn" asChild>
+      <DropdownMenuTrigger id="visibilidad-btn" className="select-none" asChild>
         <Button variant={"outline"} size={"sm"} className="flex h-8">
           <MixerHorizontalIcon className="mr-2 h-4 w-4" />
           Ver
