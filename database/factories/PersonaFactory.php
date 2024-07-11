@@ -55,27 +55,24 @@ class PersonaFactory extends Factory
     public function withRopo(): Factory
     {
         return $this->afterCreating(function (Persona $persona) {
-            $tipo = fake()->randomElement(["Aplicador", "Técnico"]);
             $regex1 = '^[0-9]{7,12}[S]?[ASTU]$';
             $regex2 = '^[0-9]{1,3}/[0-9]{1,3}$';
             $nro = fake()->boolean()
                 ? fake()->regexify($regex1)
                 : fake()->regexify($regex2);
             $cad = fake()->dateTimeBetween("now", "+5 years")->format("Y-m-d");
-            $tipo_apl = fake()->randomElement([
+            $cap = fake()->randomElement([
                 "Básico",
                 "Cualificado",
-                "Fumigación",
-                "Piloto",
-                "Aplicación Fitosanitarios",
+                "Fumigador",
+                "Piloto Aplicador",
             ]);
 
             DB::table("persona_ropo")->insert([
                 "persona_id" => $persona->id,
-                "tipo" => $tipo,
                 "caducidad" => $cad,
                 "nro" => $nro,
-                "tipo_aplicador" => $tipo_apl,
+                "capacitacion" => $cap,
             ]);
         });
     }

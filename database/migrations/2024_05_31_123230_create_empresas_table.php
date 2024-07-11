@@ -31,7 +31,7 @@ return new class extends Migration {
                 ->on("empresas")
                 ->cascadeOnDelete();
             $table->string("tipo", 15);
-            $table->string("nro", 25);
+            $table->string("nro", 55);
             $table->date("caducidad")->nullable();
             $table->string("tipo_aplicador", 30)->nullable();
         });

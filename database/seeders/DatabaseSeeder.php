@@ -38,12 +38,11 @@ class DatabaseSeeder extends Seeder
             )
             ->create([
                 "name" => fake()->name(),
-                "email" => fake()->unique()->safeEmail(),
+                "email" => "correo@dominio.com",
                 "password" => '0dEwSl-!$*',
                 "email_verified_at" => null,
                 "remember_token" => null,
             ]);
 
-        $this->call([PersonaSeeder::class, EmpresaSeeder::class]);
     }
 }
