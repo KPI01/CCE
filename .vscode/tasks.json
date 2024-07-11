@@ -46,9 +46,6 @@
       "problemMatcher": [],
       "label": "art: serve",
       "detail": "laravel",
-      "runOptions": {
-        "runOn": "folderOpen"
-      },
       "group": {
         "kind": "test",
         "isDefault": true
@@ -61,6 +58,9 @@
         "showReuseMessage": false,
         "clear": true,
         "group": "dev-server"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
       }
     },
     {
@@ -156,7 +156,7 @@
       "presentation": {
         "echo": true,
         "reveal": "always",
-        "focus": true,
+        "focus": false,
         "panel": "dedicated",
         "showReuseMessage": false,
         "clear": false,
@@ -247,7 +247,7 @@
       "type": "shell",
       "command": "php artisan test",
       "problemMatcher": [],
-      "label": "artisan: test",
+      "label": "art: test",
       "detail": "laravel",
       "group": {
         "kind": "test",
@@ -262,9 +262,34 @@
         "clear": false,
         "group": "testing"
       }
+    },
+    {
+      "type": "shell",
+      "command": "php artisan make:migration ${input:migration_name}",
+      "problemMatcher": [],
+      "label": "art make: migration",
+      "detail": "laravel",
+      "group": {
+        "kind": "none",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true,
+        "group": "database"
+      }
     }
   ],
   "inputs": [
+    {
+      "type": "promptString",
+      "id": "env",
+      "description": "Escribe el nombre del entorno de ejecución",
+    },
     {
       "type": "promptString",
       "id": "seeder",
@@ -295,6 +320,11 @@
       "type": "promptString",
       "id": "dusk_component",
       "description": "Nombre/Ruta del componente"
+    },
+    {
+      "type": "promptString",
+      "id": "migration_name",
+      "description": "Nombre de la migración"
     }
   ]
 }
