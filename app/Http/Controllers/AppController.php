@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -17,8 +15,7 @@ class AppController extends Controller
      */
     public function __construct()
     {
-        $this->adm_role = Role::where("name", "Admin")->first()->id;
-        $this->user = Auth::user();
+        parent::__construct();
     }
 
     /**
@@ -26,10 +23,7 @@ class AppController extends Controller
      */
     public function index()
     {
-        if ($this->user->role_id == $this->adm_role) {
-            return Inertia::render("Dashboard");
-        }
-        return Inertia::render("User/Dashboard");
+        return Inertia::render("Dashboard");
     }
 
     /**

@@ -2,28 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 abstract class Controller
 {
     //
-
-    // Variable para almacenar datos recuperados de la BD o request
-    public $data;
-    // Variable para el rol de administrador
-    public $adm_role;
-    // Variable para el usuario
-    public $user;
-    // Variable para instancia de modelo
-    public $instance;
-    // Variable para devolver mensajes al usuario
-    public $message;
+    protected Authenticatable | null $user;
+    protected Model $inst;
+    protected Collection | Model $data;
+    protected string $msg;
 
     // Constructor
     public function __construct()
     {
-        $this->adm_role = Role::where("name", "Admin")->first()->id;
         $this->user = Auth::user();
+    }
+
+    protected function indexAll(string $recurso, Collection $data)
+    {
+        return $data->map(function ($data) use ($recurso) {
+            return [
+                ...$data->toArray(),
+                "urls" => [
+                    "edit" => route("$recurso.edit", $data->id),
+                    "destroy" => route("$recurso.destroy", $data->id),
+                    "show" => route("$recurso.show", $data->id),
+                ],
+            ];
+        });
     }
 }
