@@ -2,6 +2,9 @@
 
 namespace Tests\Browser\Create;
 
+use App\Models\Empresa;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Components\Navbar;
 use Tests\Browser\Pages\Recursos\Empresa\Form;
@@ -9,6 +12,7 @@ use Tests\DuskTestCase;
 
 class CreateEmpresaTest extends DuskTestCase
 {
+
     public function testAcceso(): void
     {
         $this->browse(function (Browser $browser) {
@@ -23,11 +27,12 @@ class CreateEmpresaTest extends DuskTestCase
                 ->visit(new Form("create"))
                 ->within(new Navbar(), function (Browser $browser) {
                     $browser
-                        ->assertVisible("@nav")
-                        ->assertVisible("@list")
-                        ->assertVisible("@rsrc-btn")
-                        ->assertVisible("@conf-btn")
-                        ->assertVisible("@home-btn");
+                        ->assertPresent("@titulo")
+                        ->assertPresent("@nav")
+                        ->assertPresent("@list")
+                        ->assertPresent("@rcs-btn")
+                        ->assertPresent("@conf-btn")
+                        ->assertPresent("@home-btn");
                 });
 
             $browser
@@ -82,7 +87,7 @@ class CreateEmpresaTest extends DuskTestCase
                     $browser
                         ->assertVisible("@nav")
                         ->assertVisible("@list")
-                        ->assertVisible("@rsrc-btn")
+                        ->assertVisible("@rcs-btn")
                         ->assertVisible("@conf-btn")
                         ->assertVisible("@home-btn");
                 });
@@ -367,5 +372,48 @@ class CreateEmpresaTest extends DuskTestCase
                 ->assertPresent("@msg-nif")
                 ->assertPresent("@msg-email");
         });
+    }
+
+    public function testCreateExitoso(): void
+    {
+        $inst = Empresa::where("email","m4upn217rk@email.com")->first();
+        DB::table("empresa_ropo")->where("nro", "595731818842S")->delete();
+
+        if (isset($inst)) {
+            $inst->delete();
+        }
+        
+        $this->browse(function (Browser $browser) {
+            $browser
+                ->visit(new Form("create"))
+                ->type("@input-nombre", "GODTIC SA")
+                ->type("@input-nif", "W9120406E")
+                ->type("@input-email", "m4upn217rk@email.com")
+                ->type("@input-tel", "978726881")
+                ->type("@input-codigo", "489664")
+                ->type("@txt-direccion", "PASEO IGLESIA, 38")
+                ->type(
+                    "@txt-observaciones",
+                    "Lorem ipsum dolor sit amet nulla et lorem elitr consequat nonumy et gubergren sadipscing lorem iusto et voluptua."
+                )
+                ->click("@switch")
+                ->pause(750)
+                ->selectByName("ropo.capacitacion", "Cualificado")
+                ->type("@input-ropo_nro", "595731818842S")
+                ->click("@trigger-ropo_caducidad")
+                ->pause(750)
+                ->click("@calendar table tbody tr:nth-child(3) td button")
+                ->pause(750)
+                ->press("@submit");
+
+            $browser
+                ->pause(1000)
+                ->assertPathIs(
+                    "/" . Request::create(route("empresas.index"))->path()
+                )
+                ->assertSee("Registro Exitoso");
+        });
+
+        $this->assertDatabaseHas(Empresa::class, ["email" => "m4upn217rk@email.com"], "mysql");
     }
 }

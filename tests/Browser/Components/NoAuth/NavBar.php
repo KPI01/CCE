@@ -12,7 +12,7 @@ class NavBar extends BaseComponent
      */
     public function selector(): string
     {
-        return '#app > nav';
+        return "#app > nav";
     }
 
     /**
@@ -31,8 +31,8 @@ class NavBar extends BaseComponent
     public function elements(): array
     {
         return [
-            '@title' => 'h1',
-            '@button' => 'a',
+            "@title" => "h1",
+            "@button" => "a",
         ];
     }
 }

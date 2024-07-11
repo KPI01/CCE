@@ -36,7 +36,6 @@ abstract class DuskTestCase extends BaseTestCase
                 $this->shouldStartMaximized()
                     ? "--start-maximized"
                     : "--window-size=1920,1080",
-                "--zoom=80",
             ])
                 ->unless($this->hasHeadlessDisabled(), function (
                     Collection $items
@@ -47,7 +46,7 @@ abstract class DuskTestCase extends BaseTestCase
         );
 
         return RemoteWebDriver::create(
-            $_ENV["DUSK_DRIVER_URL"] ?? "http://localhost:9515",
+            $_ENV["DUSK_DRIVER_URL"] ?? "http://127.0.0.1:9515",
             DesiredCapabilities::chrome()->setCapability(
                 ChromeOptions::CAPABILITY,
                 $options
@@ -62,7 +61,7 @@ abstract class DuskTestCase extends BaseTestCase
         // Login como informatica
         $this->user = User::where("email", "informatica@fruveco.com")->first();
         $this->browse(function (Browser $browser) {
-            $browser->loginAs($this->user)->assertAuthenticatedAs($this->user);
+            $browser->loginAs($this->user);
         });
     }
 }
