@@ -16,7 +16,7 @@ export const columns: ColumnDef<Empresa & { urls: ActionUrls }>[] = [
     enableSorting: true,
     enableHiding: false,
 
-    size: 150,
+    size: 250,
     meta: {
       header: "Nombre",
       key: "nombre",
@@ -79,48 +79,37 @@ export const columns: ColumnDef<Empresa & { urls: ActionUrls }>[] = [
     },
   },
   {
+    accessorKey: "codigo",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Código" />
+    ),
+    enableColumnFilter: false,
+    enableSorting: false,
+    enableHiding: true,
+    minSize: 250,
+    meta: {
+      header: "Teléfono",
+      key: "tel",
+    },
+  },
+  {
     accessorFn: (row) => {
-      if (row.ropo?.tipo) {
-        return row.ropo.tipo;
+      if (row.ropo?.capacitacion) {
+        return row.ropo.capacitacion;
       }
       return null;
     },
-    id: "ropo_tipo",
+    id: "ropo_capacitacion",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Tipo Carnet ROPO" />
+      <DataTableColumnHeader column={column} title="Capacitación ROPO" />
     ),
     enableColumnFilter: true,
     enableHiding: true,
     size: 250,
     meta: {
-      header: "Tipo de Carnet ROPO",
-      key: "ropo_tipo",
+      header: "Capacitación ROPO",
+      key: "ropo_capacitacion",
       tipo: "select",
-      options: ["*", "Aplicador", "Técnico"],
-    },
-  },
-  {
-    accessorFn: (row) => {
-      if (row.ropo?.caducidad) {
-        return row.ropo.caducidad;
-      }
-      return null;
-    },
-    id: "ropo_caducidad",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Caducidad" />
-    ),
-    cell: (info) => {
-      if (info.getValue()) {
-        return new Date(info.getValue() as string).toLocaleDateString();
-      }
-    },
-    enableColumnFilter: true,
-    enableSorting: true,
-    enableHiding: true,
-    meta: {
-      header: "Caducidad Carnet ROPO",
-      key: "ropo_caducidad",
     },
   },
   {
@@ -132,31 +121,37 @@ export const columns: ColumnDef<Empresa & { urls: ActionUrls }>[] = [
     },
     id: "ropo_nro",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Nº Carnet" />
+      <DataTableColumnHeader column={column} title="Id. ROPO" />
     ),
     enableColumnFilter: true,
     enableSorting: false,
     meta: {
-      header: "N° de Carnet ROPO",
+      header: "Id. ROPO",
       key: "ropo_nro",
     },
   },
   {
     accessorFn: (row) => {
-      if (row.ropo?.tipo_aplicador) {
-        return row.ropo.tipo_aplicador;
+      if (row.ropo?.caducidad) {
+        return row.ropo.caducidad;
       }
       return null;
     },
-    id: "ropo_tipo_aplicador",
+    id: "ropo_caducidad",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Tipo Aplicador" />
+      <DataTableColumnHeader column={column} title="Caducidad ROPO" />
     ),
+    cell: (info) => {
+      if (info.getValue()) {
+        return new Date(info.getValue() as string).toLocaleDateString();
+      }
+    },
     enableColumnFilter: true,
     enableSorting: true,
+    enableHiding: true,
     meta: {
-      header: "Tipo Aplicador ROPO",
-      key: "ropo_tipo_aplicador",
+      header: "Caducidad ROPO",
+      key: "ropo_caducidad",
     },
   },
   {
@@ -170,5 +165,6 @@ export const columns: ColumnDef<Empresa & { urls: ActionUrls }>[] = [
       return <Actions item={empresa} />;
     },
     enableHiding: false,
+    enablePinning: true,
   },
 ];

@@ -43,23 +43,18 @@ class HandleInertiaRequests extends Middleware
 
             $role = $request->user() ? $request->user()->role : null;
 
-            $user["role"] = $role->only("id", "name");
+            $user["role"] = $role->only("name");
 
-            $previous = $request->session()->get("_previous");
             $errors = $request->session()->get("errors");
 
             $props = [
                 "appName" => config("app.name"),
-                "previous" => [
-                    "url" => $previous ? $previous["url"] : null,
-                ],
                 "auth" => [
                     "user" => $user,
                 ],
                 "flash" => [
                     "message" => $request->session()->get("message"),
                 ],
-                "debug" => $request->session()->all(),
             ];
 
             $errors ?? ($props["errors"] = $errors);

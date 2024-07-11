@@ -7,7 +7,7 @@ import {
 import { Button } from "@/Components/ui/button";
 import { Link, router } from "@inertiajs/react";
 import { File, MoreHorizontal, Pen, Trash } from "lucide-react";
-import { ActionUrls, Empresa, Persona, Urls } from "@/types";
+import { ActionUrls, Empresa } from "@/types";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,14 +26,7 @@ interface Props {
 
 export default function Actions({ item }: Props) {
   function handleDelete(url: string) {
-    console.log(url);
-
-    router.visit(url, {
-      method: "delete",
-      onSuccess: () => {
-        console.log("Eliminado");
-      },
-    });
+    router.delete(url);
   }
 
   if (item.urls)
@@ -47,13 +40,13 @@ export default function Actions({ item }: Props) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent forceMount align="end">
-            <DropdownMenuItem asChild className="cursor-pointer w-full">
+            <DropdownMenuItem asChild className="w-full cursor-pointer">
               <Link href={item.urls?.show}>
                 <File className="mr-2 h-4 w-4" />
                 Ver detalles
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild className="cursor-pointer w-full">
+            <DropdownMenuItem asChild className="w-full cursor-pointer">
               <Link href={item.urls?.edit} method="get" as="button">
                 <Pen className="mr-2 h-4 w-4" />
                 Editar
@@ -61,7 +54,7 @@ export default function Actions({ item }: Props) {
             </DropdownMenuItem>
             <DropdownMenuItem
               asChild
-              className="cursor-pointer w-full hover:!bg-destructive/25"
+              className="w-full cursor-pointer hover:!bg-destructive/25"
             >
               <AlertDialogTrigger>
                 <Trash className="mr-2 h-4 w-4" />

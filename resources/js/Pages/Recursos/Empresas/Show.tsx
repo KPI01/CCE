@@ -1,149 +1,219 @@
-import { AccordionContent } from "@/Components/ui/accordion";
-import { Card, CardDescription, CardHeader } from "@/Components/ui/card";
-import { Input } from "@/Components/ui/input";
-import { Label } from "@/Components/ui/label";
-import { Separator } from "@/Components/ui/separator";
-import { Textarea } from "@/Components/ui/textarea";
-import ShowLayout from "@/Layouts/ShowLayout";
-import { Empresa } from "@/types";
-import { Link } from "@inertiajs/react";
+import { Empresa, LayoutProps, Urls } from "@/types";
 import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-} from "@radix-ui/react-accordion";
-import { PersonIcon } from "@radix-ui/react-icons";
+  CONTAINER_CLASS,
+  formSchema,
+  PERFILES,
+  CAPACITACIONES,
+} from "./formSchema";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import FormLayout from "@/Layouts/Recursos/FormLayout";
+import FormTitle from "@/Components/Forms/FormTitle";
+import { Form, FormField } from "@/Components/ui/form";
+import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
+import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
+import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
 
-interface Props {
+const schema = formSchema;
+
+interface Props extends LayoutProps {
   data: Empresa;
-  isAdmin: boolean;
+  urls: Urls;
 }
 
-function Title({ title }: { title: string }) {
-  return <h3 className="font-semibold text-2xl mb-4">{title}</h3>;
-}
+export default function Show({ data, urls }: Props) {
+  console.debug(data);
+  data.created_at = new Date(data.created_at);
+  data.updated_at = new Date(data.updated_at);
 
-function ItemProperty({
-  title,
-  value,
-  textarea = false,
-}: {
-  title: string;
-  value: string;
-  textarea?: boolean;
-}) {
-  value = value === null ? "" : value;
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      nombre: data.nombre,
+      nif: data.nif,
+      email: data.email,
+      tel: data.tel || undefined,
+      codigo: data.codigo || undefined,
+      perfil: data.perfil || undefined,
+      direccion: data.direccion || undefined,
+      observaciones: data.observaciones || undefined,
+      ropo: {
+        nro: data.ropo?.nro || null,
+        caducidad: data.ropo?.caducidad ? new Date(data.ropo.caducidad) : null,
+        capacitacion: data.ropo?.capacitacion || null,
+      },
+    },
+  });
+
   return (
-    <div className="grid grid-cols-[8ch_1fr] items-center basis-auto">
-      {textarea ? (
-        <>
-          <div className="grid w-full gap-1.5 col-span-2">
-            <Label className="mb-2" htmlFor={`val-${title}`}>
-              {title}
-            </Label>
-            <Textarea
-              className="w-full"
-              id={`val-${title}`}
-              value={value}
-              disabled
-              cols={35}
-              rows={2}
-            />
-          </div>
-        </>
-      ) : (
-        <>
-          <Label htmlFor={`val-${title}`} className="text-start w-fit">
-            {title}
-          </Label>
-          <Input
-            id={`val-${title}`}
-            className="w-fit me-5"
-            type="text"
-            disabled
-            value={value}
-          />
-        </>
-      )}
-    </div>
-  );
-}
-
-export default function Show(props: Props) {
-  console.log(props.data);
-  return (
-    <ShowLayout
+    <FormLayout
+      id={data.id}
       pageTitle="Empresa"
-      title={`${props.data.nombre}`}
-      isAdmin={props.isAdmin}
-      updated_at={props.data.updated_at}
-      recurso="empresa"
+      mainTitle={data.nombre}
+      created_at={data.created_at.toLocaleString()}
+      updated_at={data.updated_at.toLocaleString()}
+      urls={urls}
+      backUrl={urls.index}
     >
-      <div className="flex flex-col items-start gap-8 pt-10 px-48">
-        <div>
-          <Title title="Datos básicos" />
-          <div className="flex items-start justify-start gap-3 pt-4 flex-wrap basis-full">
-            <ItemProperty title="NIF" value={props.data.nif} />
-            <ItemProperty title="Correo" value={props.data.email} />
-            <ItemProperty title="Teléfono" value={props.data.tel} />
-            <ItemProperty title="Código" value={props.data.codigo} />
-            <ItemProperty title="Perfil" value={props.data.perfil} />
-          </div>
-          <div className="flex items-start gap-x-12 my-12">
-            <ItemProperty
-              title="Dirección"
-              value={props.data.direccion}
-              textarea
+      <Form {...form}>
+        <form id={`show-${data.id}`} className={CONTAINER_CLASS}>
+          <div className="space-y-4">
+            <FormTitle title="Información General" id="h3-general" />
+            <FormField
+              control={form.control}
+              name="nif"
+              render={({ field }) => (
+                <FormItemConstructor
+                  label="NIF"
+                  id={field.name}
+                  name={field.name}
+                  onChange={field.onChange}
+                  value={field.value}
+                  disabled
+                />
+              )}
             />
-            <ItemProperty
-              title="Observaciones"
-              value={props.data.observaciones}
-              textarea
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItemConstructor
+                  label="Correo"
+                  id={field.name}
+                  name={field.name}
+                  onChange={field.onChange}
+                  value={field.value}
+                  disabled
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="tel"
+              render={({ field }) => (
+                <FormItemConstructor
+                  label="Teléfono"
+                  id={field.name}
+                  name={field.name}
+                  onChange={field.onChange}
+                  value={field.value}
+                  disabled
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="codigo"
+              render={({ field }) => (
+                <FormItemConstructor
+                  label="Código"
+                  id={field.name}
+                  name={field.name}
+                  onChange={field.onChange}
+                  value={field.value}
+                  disabled
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="perfil"
+              render={({ field }) => (
+                <FormItemSelectConstructor
+                  label="Perfil"
+                  id={field.name}
+                  name={field.name}
+                  onChange={field.onChange}
+                  value={field.value || ""}
+                  options={PERFILES}
+                  disabled
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="direccion"
+              render={({ field }) => (
+                <FormItemConstructor
+                  textarea
+                  inputClass="resize-none"
+                  label="Dirección"
+                  id={field.name}
+                  name={field.name}
+                  onChange={field.onChange}
+                  value={field.value}
+                  disabled
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="observaciones"
+              render={({ field }) => (
+                <FormItemConstructor
+                  textarea
+                  inputClass="resize-none"
+                  label="Observaciones"
+                  id={field.name}
+                  name={field.name}
+                  onChange={field.onChange}
+                  value={field.value || ""}
+                  disabled
+                />
+              )}
             />
           </div>
-        </div>
-        <div className="w-full">
-          <Accordion type="single" collapsible className="w-full">
-            {props.data.personas && (
-              <>
-                <AccordionItem value="personas">
-                  <AccordionTrigger>
-                    <Title
-                      title={`Personas (${props.data.personas?.length})`}
-                    />
-                  </AccordionTrigger>
-                  <AccordionContent className="flex">
-                    {props.data.personas?.map((p) => {
-                      return (
-                        <Link
-                          key={p.id}
-                          href={route("recurso.persona.show", p.id)}
-                          className="w-fit"
-                        >
-                          <Card className="hover:bg-secondary transition ">
-                            <CardHeader className="p-4 font-medium">
-                              <div className="flex gap-1 items-center">
-                                <PersonIcon />
-                                {p.nombres} {p.apellidos}
-                              </div>
-                              <CardDescription>
-                                <span className="font-light ms-4">
-                                  {p.tipo_id_nac}: {p.id_nac}
-                                </span>
-                              </CardDescription>
-                            </CardHeader>
-                          </Card>
-                        </Link>
-                      );
-                    })}
-                  </AccordionContent>
-                </AccordionItem>
-                <Separator />
-              </>
-            )}
-          </Accordion>
-        </div>
-      </div>
-    </ShowLayout>
+
+          <div className="space-y-4">
+            <FormTitle title="Datos ROPO" id="h3-ropo" />
+            <FormField
+              control={form.control}
+              name="ropo.capacitacion"
+              render={({ field }) => (
+                <FormItemSelectConstructor
+                  label="Capacitación"
+                  id={field.name}
+                  name={field.name}
+                  onChange={field.onChange}
+                  value={field.value || ""}
+                  options={CAPACITACIONES}
+                  disabled
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="ropo.nro"
+              render={({ field }) => (
+                <FormItemConstructor
+                  label="Identificación"
+                  id={field.name}
+                  name={field.name}
+                  onChange={field.onChange}
+                  value={field.value || ""}
+                  disabled
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="ropo.caducidad"
+              render={({ field }) => (
+                <FormDatePickerConstructor
+                  label="Caducidad"
+                  id={field.name}
+                  name={field.name}
+                  onChange={field.onChange}
+                  value={field.value || null}
+                  disabled
+                />
+              )}
+            />
+           
+          </div>
+        </form>
+      </Form>
+    </FormLayout>
   );
 }

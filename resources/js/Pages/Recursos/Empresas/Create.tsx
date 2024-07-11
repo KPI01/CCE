@@ -11,16 +11,18 @@ import { z } from "zod";
 import { Form, FormField } from "@/Components/ui/form";
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Switch } from "@/Components/ui/switch";
 import { Label } from "@/Components/ui/label";
 import FormButton from "@/Components/Forms/FormButton";
 import { Save } from "lucide-react";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
+import { router } from "@inertiajs/react";
+import { Urls } from "@/types";
 
 const schema = formSchema;
 
-export default function Create() {
+export default function Create({ urls } : {urls: Required<Pick<Urls, "store" | "index">>}) {
   const [showRopo, setShowRopo] = useState(false);
 
   const form = useForm<z.infer<typeof schema>>({
@@ -35,7 +37,7 @@ export default function Create() {
   });
 
   function onSubmit(values: z.infer<typeof schema>) {
-    console.debug("Enviando:", values);
+    router.post(urls.store, values)
   }
 
   return (
@@ -134,6 +136,7 @@ export default function Create() {
                   value={field.value || ""}
                   placeholder="Selecciona el perfil para la empresa"
                   options={PERFILES}
+                  descripcion='Por defecto, se asignará "Aplicador"'
                 />
               )}
             />
@@ -162,7 +165,7 @@ export default function Create() {
                   id={field.name}
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value}
+                  value={field.value || ""}
                   textarea
                 />
               )}
@@ -185,7 +188,7 @@ export default function Create() {
                   name="ropo.capacitacion"
                   render={({ field }) => (
                     <FormItemSelectConstructor
-                      label="Nivel de capacitación"
+                      label="Capacitación"
                       id={field.name}
                       name={field.name}
                       onChange={field.onChange}
@@ -200,7 +203,7 @@ export default function Create() {
                   name="ropo.nro"
                   render={({ field }) => (
                     <FormItemConstructor
-                      label="N° de Carnet"
+                      label="Identificación"
                       id={field.name}
                       name={field.name}
                       onChange={field.onChange}

@@ -13,10 +13,9 @@ interface Props {
 }
 
 interface ropoVisibility {
-  ropo_tipo: boolean;
+  ropo_capacitacion: boolean;
   ropo_caducidad: boolean;
   ropo_nro: boolean;
-  ropo_tipo_aplicador: boolean;
 }
 export default function Table({ data }: Props) {
   const initVisibility: Record<
@@ -37,11 +36,10 @@ export default function Table({ data }: Props) {
     email: true,
     tel: true,
     perfil: true,
-    codigo: false,
-    ropo_tipo: false,
+    codigo: true,
+    ropo_capacitacion: false,
     ropo_caducidad: false,
     ropo_nro: false,
-    ropo_tipo_aplicador: false,
   };
 
   return (

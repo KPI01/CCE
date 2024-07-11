@@ -41,7 +41,7 @@ export const formSchema = z.object({
     })
     .min(3, "El nombre debe tener al menos 3 caracteres.")
     .max(100, "El nombre debe tener menos de 50 caracteres.")
-    .regex(/^[A-Za-z ]*$/gm, "El nombre solo puede contener letras."),
+    .regex(/^[A-Za-záéíóúÁÉÍÓÚñÑ ,.-]*$/gm, "El nombre solo puede contener letras."),
   nif: z
     .string({
       required_error: REQUIRED_MSG,
@@ -64,7 +64,7 @@ export const formSchema = z.object({
     )
     .optional()
     .transform((value) => (value === "" ? undefined : value)),
-  codigo: z.string().regex(/^\d$/, { message: SHOULD_BE_VALID_MSG }).optional(),
+  codigo: z.string().regex(/\d/, { message: SHOULD_BE_VALID_MSG }).optional(),
   perfil: z
     .enum(PERFILES_READONLY, {
       invalid_type_error: SHOULD_BE_VALID_MSG,
@@ -80,23 +80,29 @@ export const formSchema = z.object({
     .string()
     .max(300, "Las observaciones deben tener menos de 300 caracteres.")
     .optional()
-    .transform((value) => (value === "" ? undefined : value)),
+    .nullable()
+    .transform((value) => (value === "" ? null : value)),
   ropo: z
     .object({
-      nro: z.string().max(55, "El nro. de ROPO debe ser más corto.").nullable(),
-      caducidad: z
-        .date({
-          invalid_type_error: SHOULD_BE_VALID_MSG,
-        })
-        .optional()
-        .nullable()
-        .transform((value) => (value === undefined ? null : value)),
+      nro: z
+      .string()
+      .regex(/^([\d]{7,12}[SASTU]*([/][\d]{1,3})?|[\d]{1,3}[/][\d]{1,3})$/gm, {
+        message: "La identificación ROPO debe estar en el formato adecuado"
+      })
+      .max(55, "El ID ROPO debe ser más corto.")
+      .nullable(),
       capacitacion: z
         .enum(CAPACITACIONES_READONLY, {
           invalid_type_error: SHOULD_BE_VALID_MSG,
         })
-        .optional()
         .nullable(),
+      caducidad: z
+        .date({
+          invalid_type_error: SHOULD_BE_VALID_MSG,
+        })
+        .nullable()
+        .optional()
+        .transform((value) => (value === undefined ? null : value)),
     })
     .optional()
     .superRefine((data, ctx) => {
