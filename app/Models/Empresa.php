@@ -5,66 +5,90 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\DB;
 
-class Empresa extends Recurso
+class Empresa extends RecursoBase
 {
+    protected $keyType = "string";
+    public $incrementing = false;
+
+    protected $attributes = [
+        'perfil' => 'Aplicador'
+    ];
+
+    protected $guarded = [];
 
     protected $appends = ['ropo'];
 
     protected $ropo = [
-        'tipo' => null,
         'caducidad' => null,
         'nro' => null,
-        'tipo_aplicador' => null,
+        'capacitacion' => null,
+    ];
+
+    protected $casts = [
+        "ropo" => "array"
     ];
 
     public function getRopoAttribute()
     {
-        if (
-            empty($this->ropo['tipo'])
-            && empty($this->ropo['caducidad'])
-            && empty($this->ropo['nro'])
-            && empty($this->ropo['tipo_aplicador'])
-        ) {
-            $this->retrieveRopoAttribute();
-        }
+        $this->retrieveRopoAttribute();
 
         return $this->ropo;
     }
 
-    public function setRopoAttribute(array $ropo)
+    public function setRopoAttribute(array $ropo): void
     {
-        DB::table('empresa_ropo')->updateOrInsert(
-            ['empresa_id' => $this->id],
-            [
-                'tipo' => $ropo['tipo'] ?? null,
-                'caducidad' => isset($ropo['caducidad']) ? date('Y-m-d', strtotime($ropo['caducidad'])) : null,
-                'nro' => $ropo['nro'] ?? null,
-                'tipo_aplicador' => $ropo['tipo_aplicador'] ?? null,
-            ]
-        );
+        if (!empty($ropo["caducidad"])) {
+            $ropo["caducidad"] = date("Y-m-d", strtotime($ropo["caducidad"]));
+        }
 
+        $this->upsertRopoAttribute($ropo);
         $this->ropo = array_merge($this->ropo, $ropo);
     }
 
     private function retrieveRopoAttribute()
     {
-        $record = DB::table('empresa_ropo')->where('empresa_id', $this->id)->first();
+        $record = DB::table('empresa_ropo')
+            ->where('empresa_id', $this->id)
+            ->first();
 
         if ($record) {
             $this->ropo = [
-                'tipo' => $record->tipo,
                 'caducidad' => $record->caducidad,
                 'nro' => $record->nro,
-                'tipo_aplicador' => $record->tipo_aplicador,
+                'capacitacion' => $record->capacitacion,
             ];
         } else {
             $this->ropo = [
-                'tipo' => null,
                 'caducidad' => null,
                 'nro' => null,
-                'tipo_aplicador' => null,
+                'capacitacion' => null,
             ];
         }
+    }
+
+    private function upsertRopoAttribute(array $ropo)
+    {
+        $cad = $ropo["caducidad"];
+
+        if (!is_null($cad)) {
+            $cad = strtotime($cad);
+        }
+
+        DB::table('empresa_ropo')->upsert(
+            values: [
+                'empresa_id' => $this->id,
+                'caducidad' => isset($ropo['caducidad'])
+                    ? date('Y-m-d', $cad)
+                    : null,
+                'nro' => $ropo['nro'] ?? null,
+                'capacitacion' => $ropo['capacitacion'] ?? null,
+            ],
+            uniqueBy: ["empresa_id", "nro"],
+            update: ["caducidad", "nro", "capacitacion"],
+        );
+
+        $this->setUpdatedAt(now());
+        $this->save();
     }
 
     public function personas(): BelongsToMany
