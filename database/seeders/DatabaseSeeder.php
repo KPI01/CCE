@@ -43,6 +43,5 @@ class DatabaseSeeder extends Seeder
                 "email_verified_at" => null,
                 "remember_token" => null,
             ]);
-
     }
 }

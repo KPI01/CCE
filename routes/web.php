@@ -1,8 +1,6 @@
 <?php
 
 use App\Http\Controllers\AppController;
-use App\Http\Controllers\EmpresaController;
-use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -60,37 +58,9 @@ Route::prefix("auth")->group(function () {
                 Route::get("/reseteo/{token}", "reset_pass_form")->name(
                     "password.reset"
                 );
-                Route::post("/reseteo", "reset_pass")->name(
-                    "password.update"
-                );
+                Route::post("/reseteo", "reset_pass")->name("password.update");
             });
 
         Route::post("/logout", "logout")->name("logout");
     });
 });
-
-Route::prefix("app")
-    ->middleware(["auth", "verified"])
-    ->group(function () {
-        Route::controller(AppController::class)->group(function () {
-            Route::get("/", "redirect_home");
-            Route::get("home", "index")->name("home");
-        });
-
-        Route::prefix("admin")
-            ->middleware("auth")
-            ->group(function () {
-                Route::controller(AppController::class)->group(function () {
-                    Route::get("/", "redirect_home");
-                });
-            });
-
-        Route::prefix("recurso")->group(function () {
-            Route::resource("personas", PersonaController::class)->missing(
-                function () {
-                    return redirect(route("personas.index"));
-                }
-            );
-            Route::resource("empresas", EmpresaController::class);
-        });
-    });
