@@ -11,7 +11,7 @@ import { z } from "zod";
 import { Form, FormField } from "@/Components/ui/form";
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Switch } from "@/Components/ui/switch";
 import { Label } from "@/Components/ui/label";
 import FormButton from "@/Components/Forms/FormButton";
@@ -22,7 +22,11 @@ import { Urls } from "@/types";
 
 const schema = formSchema;
 
-export default function Create({ urls } : {urls: Required<Pick<Urls, "store" | "index">>}) {
+export default function Create({
+  urls,
+}: {
+  urls: Required<Pick<Urls, "store" | "index">>;
+}) {
   const [showRopo, setShowRopo] = useState(false);
 
   const form = useForm<z.infer<typeof schema>>({
@@ -37,7 +41,7 @@ export default function Create({ urls } : {urls: Required<Pick<Urls, "store" | "
   });
 
   function onSubmit(values: z.infer<typeof schema>) {
-    router.post(urls.store, values)
+    router.post(urls.store, values);
   }
 
   return (

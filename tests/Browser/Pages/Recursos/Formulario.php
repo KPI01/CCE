@@ -1,44 +1,48 @@
 <?php
 
-namespace Tests\Browser\Pages\Recursos\Empresa;
+namespace Tests\Browser\Pages\Recursos;
 
-use App\Models\Empresa;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use InvalidArgumentException;
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\Page;
 
-class Form extends Page
+class Formulario extends Page
 {
-    protected string $rcs;
-    protected string $acc;
-    protected Empresa $inst;
+    private string $rcs;
+    private string $acc;
+    private Model $inst;
 
-    public function __construct(string $accion, Empresa $instancia = null)
-    {
-        if (!in_array($accion, ["index", "show", "edit", "create"])) {
-            throw new InvalidArgumentException("Acción invalida");
+    public function __construct(
+        string $recurso,
+        string $accion,
+        Model $modelo = null
+    ) {
+        echo "__construct: Formulario";        
+        if (!in_array($accion, ["show", "edit", "create"])) {
+            echo "Acción no válida";
+            $arr_str = implode(", ", ["show", "edit", "create"]);
+            report("La acción debe ser alguna de las siguientes: $arr_str");
         }
 
-        $this->rcs = "empresas";
+        $this->rcs = $recurso;
         $this->acc = $accion;
-        !is_null($instancia) && ($this->inst = $instancia);
+        $this->inst = $modelo;
     }
-
     /**
      * Get the URL for the page.
      */
     public function url(): string
     {
-        if (in_array($this->acc, ["show", "edit"])) {
-            $url = Request::create(
-                route("$this->rcs.$this->acc", $this->inst->id)
-            );
-            return "/" . $url->path();
-        }
+        $accion = implode(".", [$this->rcs, $this->acc]);
+        (in_array($this->acc, ["edit", "show"]) && isset($this->inst))
+            ? ($rt = Request::create(
+                route($accion, $this->inst->id)
+            ))
+            : ($rt = Request::create(route($accion)));
+        echo "url: " . $rt->path() . PHP_EOL;
 
-        $url = Request::create(route("$this->rcs.$this->acc"));
-        return "/" . $url->path();
+        return "/" . $rt->path();
     }
 
     /**

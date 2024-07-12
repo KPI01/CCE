@@ -50,7 +50,7 @@ class Table extends Page
             "@p-" => "#pag-",
             "@pag-" => "#pag-nav-",
             "@radix-popper" => "div[data-radix-popper-content-wrapper]",
-            "@radix-item" => "div[data-radix-collection-item]"
+            "@radix-item" => "div[data-radix-collection-item]",
         ];
     }
 }

@@ -19,23 +19,19 @@ const PERFILES_READONLY = [
   "Supervisor",
   "Productor",
 ] as const;
-export const TIPOS_ROPO = ["", "Aplicador", "Técnico"];
-const TIPOS_ROPO_READONLY = ["", "Aplicador", "Técnico"] as const;
-export const TIPOS_APLICADOR = [
+export const CAPACITACIONES = [
   "",
   "Básico",
   "Cualificado",
-  "Fumigación",
-  "Piloto",
-  "Aplicación Fitosanitarios",
+  "Fumigador",
+  "Piloto Aplicador",
 ];
-const TIPOS_APLICADOR_READONLY = [
+const CAPACITACIONES_READONLY = [
   "",
   "Básico",
   "Cualificado",
-  "Fumigación",
-  "Piloto",
-  "Aplicación Fitosanitarios",
+  "Fumigador",
+  "Piloto Aplicador",
 ] as const;
 
 export const formSchema = z
@@ -108,15 +104,15 @@ export const formSchema = z
       .optional(),
     ropo: z
       .object({
-        tipo: z
-          .enum(TIPOS_ROPO_READONLY, {
+        capacitacion: z
+          .enum(CAPACITACIONES_READONLY, {
             errorMap: (issue, _ctx) => {
               switch (issue.code) {
                 case "invalid_type":
                   return { message: `${FIELD_MSG} debe ser solo texto` };
                 case "invalid_enum_value":
                   return {
-                    message: `${FIELD_MSG} debe ser uno de los siguientes: ${TIPOS_ROPO.join(", ")}`,
+                    message: `${FIELD_MSG} debe ser uno de los siguientes: ${CAPACITACIONES.join(", ")}`,
                   };
                 default:
                   return { message: SHOULD_BE_VALID_MSG };
@@ -132,39 +128,22 @@ export const formSchema = z
           .optional()
           .nullable(),
         nro: z.string().nullable(),
-        tipo_aplicador: z
-          .enum(TIPOS_APLICADOR_READONLY, {
-            errorMap: (issue, _ctx) => {
-              switch (issue.code) {
-                case "invalid_type":
-                  return { message: `${FIELD_MSG} debe ser solo texto` };
-                case "invalid_enum_value":
-                  return {
-                    message: `${FIELD_MSG} debe ser uno de los siguientes: ${TIPOS_APLICADOR.join(", ")}`,
-                  };
-                default:
-                  return { message: SHOULD_BE_VALID_MSG };
-              }
-            },
-          })
-          .nullable()
-          .optional(),
       })
       .optional()
       .superRefine((data, ctx) => {
-        if (data?.tipo && !data?.nro) {
+        if (data?.capacitacion && !data?.nro) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: "Debes ingresar el Nº del carnet.",
             path: ["nro"],
           });
-        } else if (!data?.tipo && data?.nro) {
+        } else if (!data?.capacitacion && data?.nro) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: "Debes seleccionar el tipo de carnet.",
             path: ["tipo"],
           });
-        } else if (data?.tipo && data?.nro) {
+        } else if (data?.capacitacion && data?.nro) {
           const regex =
             /(^[\d]{7,12}([S]?[ASTU])(?:[/][\d]{1,3})?$)|([\d]{1,3}[/][\d]{1,3})/gm;
 
@@ -175,7 +154,7 @@ export const formSchema = z
               path: ["nro"],
             });
           }
-        } else if (!data?.tipo && !data?.nro) {
+        } else if (!data?.capacitacion && !data?.nro) {
           return true;
         }
       }),

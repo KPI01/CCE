@@ -23,7 +23,7 @@ class TableEmpresaTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser
                 ->visit(new Table("empresas"))
-                ->within(new Navbar, function (Browser $browser) {
+                ->within(new Navbar(), function (Browser $browser) {
                     $browser
                         ->assertPresent("@titulo")
                         ->assertPresent("@nav")
@@ -40,20 +40,23 @@ class TableEmpresaTest extends DuskTestCase
                 ->assertPresent("@tbody")
                 ->assertPresent("@v-btn")
                 ->assertEnabled("@v-btn")
-                ->click("@v-btn")->pause(500)
+                ->click("@v-btn")
+                ->pause(500)
                 ->assertPresent("@v-content")
                 ->visit(new Table("empresas"))
                 ->assertNotPresent("@v-content")
                 ->assertPresent("@f-btn")
                 ->assertEnabled("@f-btn")
-                ->click("@f-btn")->pause(500)
+                ->click("@f-btn")
+                ->pause(500)
                 ->assertPresent("@f-content")
                 ->visit(new Table("empresas"))
                 ->assertNotPresent("@f-content")
                 ->assertPresent("@p-container")
                 ->assertPresent("@p-size-btn")
                 ->assertEnabled("@p-size-btn")
-                ->click("@p-size-btn")->pause(500)
+                ->click("@p-size-btn")
+                ->pause(500)
                 ->assertPresent("@radix-popper")
                 ->assertPresent("@p-indexing")
                 ->assertSeeIn("@p-indexing", "Página")
@@ -69,7 +72,7 @@ class TableEmpresaTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser
                 ->visit(new Table("empresas"))
-                ->within(new Navbar, function (Browser $browser) {
+                ->within(new Navbar(), function (Browser $browser) {
                     $browser
                         ->assertVisible("@titulo")
                         ->assertVisible("@nav")
@@ -87,18 +90,21 @@ class TableEmpresaTest extends DuskTestCase
                 ->assertVisible("@tbody")
                 ->assertVisible("@v-btn")
                 ->assertEnabled("@v-btn")
-                ->click("@v-btn")->pause(750)
+                ->click("@v-btn")
+                ->pause(750)
                 ->assertVisible("@v-content")
                 ->visit(new Table("empresas"))
                 ->assertVisible("@f-btn")
                 ->assertEnabled("@f-btn")
-                ->click("@f-btn")->pause(750)
+                ->click("@f-btn")
+                ->pause(750)
                 ->assertVisible("@f-content")
                 ->visit(new Table("empresas"))
                 ->assertVisible("@p-container")
                 ->assertVisible("@p-size-btn")
                 ->assertEnabled("@p-size-btn")
-                ->click("@p-size-btn")->pause(500)
+                ->click("@p-size-btn")
+                ->pause(500)
                 ->assertVisible("@radix-popper")
                 ->assertVisible("@p-indexing")
                 ->assertSeeIn("@p-indexing", "Página")
@@ -130,10 +136,8 @@ class TableEmpresaTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit(new Table("empresas"));
 
-            $browser
-                ->assertDontSeeIn("@tbody","Sin registros.");
+            $browser->assertDontSeeIn("@tbody", "Sin registros.");
         });
-
     }
 
     public function testFiltros(): void
@@ -144,7 +148,8 @@ class TableEmpresaTest extends DuskTestCase
             $browser
                 ->assertPresent("@f-btn")
                 ->assertEnabled("@f-btn")
-                ->click("@f-btn")->pause(750)
+                ->click("@f-btn")
+                ->pause(750)
                 ->assertPresent("@f-content")
                 ->assertVisible("@f-content");
         });
@@ -158,7 +163,8 @@ class TableEmpresaTest extends DuskTestCase
             $browser
                 ->assertPresent("@v-btn")
                 ->assertEnabled("@v-btn")
-                ->click("@v-btn")->pause(750)
+                ->click("@v-btn")
+                ->pause(750)
                 ->assertPresent("@v-content")
                 ->assertVisible("@v-content");
         });
@@ -173,11 +179,11 @@ class TableEmpresaTest extends DuskTestCase
                 ->assertPresent("@p-container")
                 ->assertPresent("@p-size-btn")
                 ->assertEnabled("@p-size-btn")
-                ->click("@p-size-btn")->pause(750)
+                ->click("@p-size-btn")
+                ->pause(750)
                 ->assertPresent("@radix-popper")
                 ->assertVisible("@radix-popper")
-                ->assertPresent("@radix-item:nth-child(n)")
-                ;
+                ->assertPresent("@radix-item:nth-child(n)");
         });
     }
 }

@@ -6,9 +6,8 @@ import {
   CONTAINER_CLASS,
   formSchema,
   PERFILES,
-  TIPOS_APLICADOR,
   TIPOS_ID_NAC,
-  TIPOS_ROPO,
+  CAPACITACIONES,
 } from "./formSchema";
 import { Form, FormField, FormLabel } from "@/Components/ui/form";
 import { Separator } from "@/Components/ui/separator";
@@ -50,17 +49,17 @@ export default function Edit({ data, urls }: Props) {
       perfil: data.perfil || "",
       observaciones: data.observaciones || "",
       ropo: {
-        tipo: data.ropo?.tipo || null,
+        capacitacion: data.ropo?.capacitacion || null,
         caducidad: data.ropo?.caducidad || null,
         nro: data.ropo?.nro || null,
-        tipo_aplicador: data.ropo?.tipo_aplicador || null,
       },
     },
   });
 
-  function onSubmit(formValues: z.infer<typeof schema>) {
+  function onSubmit(values: z.infer<typeof schema>) {
+    console.debug(values);
     const dirty = form.formState.dirtyFields;
-    const validation = schema.parse(formValues);
+    const validation = schema.parse(values);
 
     const toSend = Object.keys(dirty).reduce(
       (acc, key) => {
@@ -74,11 +73,8 @@ export default function Edit({ data, urls }: Props) {
     );
 
     if (Object.keys(toSend).length > 0) {
-      console.debug(toSend);
-      console.debug("Enviado!");
       router.put(urls.update, toSend);
     } else {
-      console.warn("Sin cambios!");
       toast({
         title: "No se han detectado cambios!",
         variant: "muted",
@@ -101,206 +97,192 @@ export default function Edit({ data, urls }: Props) {
           onSubmit={form.handleSubmit(onSubmit)}
           className={CONTAINER_CLASS}
         >
-          <FormTitle id="h3-datos_personales" title="Datos Personales" />
-          <FormField
-            control={form.control}
-            name="nombres"
-            render={({ field }) => (
-              <FormItemConstructor
-                id={field.name}
-                label="Nombres"
-                name={field.name}
-                value={field.value}
-                autoComplete={"given-name"}
-                onChange={field.onChange}
-              />
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="apellidos"
-            render={({ field }) => (
-              <FormItemConstructor
-                id={field.name}
-                label="Apellidos"
-                name={field.name}
-                value={field.value}
-                autoComplete={"family-name"}
-                onChange={field.onChange}
-              />
-            )}
-          />
-
-          <div
-            className="grid items-center"
-            style={{ gridTemplateColumns: "15ch auto 1fr" }}
-          >
-            <FormLabel
-              id="label-id_nac"
-              className={
-                form.getFieldState("id_nac").invalid ? "text-destructive" : ""
-              }
-              htmlFor="input-id_nac"
-            >
-              Identificación
-            </FormLabel>
+          <div className="space-y-4">
+            <FormTitle id="h3-datos_personales" title="Datos Personales" />
             <FormField
               control={form.control}
-              name="tipo_id_nac"
+              name="nombres"
               render={({ field }) => (
-                <FormItemSelectConstructor
+                <FormItemConstructor
                   id={field.name}
+                  label="Nombres"
                   name={field.name}
-                  label="Tipo de identificación"
-                  withLabel={false}
                   value={field.value}
+                  autoComplete={"given-name"}
                   onChange={field.onChange}
-                  options={TIPOS_ID_NAC}
-                  TriggerClass="w-full ml-2"
                 />
               )}
             />
+
             <FormField
               control={form.control}
-              name="id_nac"
+              name="apellidos"
               render={({ field }) => (
                 <FormItemConstructor
-                  withLabel={false}
                   id={field.name}
-                  label="Identificación"
+                  label="Apellidos"
                   name={field.name}
-                  onChange={field.onChange}
                   value={field.value}
-                  itemClass="ml-3"
-                  inputClass="col-span-2"
+                  autoComplete={"family-name"}
+                  onChange={field.onChange}
+                />
+              )}
+            />
+
+            <div
+              className="grid items-center"
+              style={{ gridTemplateColumns: "15ch auto 1fr" }}
+            >
+              <FormLabel
+                id="label-id_nac"
+                className={
+                  form.getFieldState("id_nac").invalid ? "text-destructive" : ""
+                }
+                htmlFor="input-id_nac"
+              >
+                Identificación
+              </FormLabel>
+              <FormField
+                control={form.control}
+                name="tipo_id_nac"
+                render={({ field }) => (
+                  <FormItemSelectConstructor
+                    id={field.name}
+                    name={field.name}
+                    label="Tipo de identificación"
+                    withLabel={false}
+                    value={field.value}
+                    onChange={field.onChange}
+                    options={TIPOS_ID_NAC}
+                    TriggerClass="w-full ml-2"
+                  />
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="id_nac"
+                render={({ field }) => (
+                  <FormItemConstructor
+                    withLabel={false}
+                    id={field.name}
+                    label="Identificación"
+                    name={field.name}
+                    onChange={field.onChange}
+                    value={field.value}
+                    itemClass="ml-3"
+                    inputClass="col-span-2"
+                  />
+                )}
+              />
+            </div>
+
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItemConstructor
+                  id={field.name}
+                  label="Email"
+                  name={field.name}
+                  value={field.value}
+                  autoComplete={"email"}
+                  onChange={field.onChange}
+                />
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="tel"
+              render={({ field }) => (
+                <FormItemConstructor
+                  id={field.name}
+                  label="Teléfono"
+                  name={field.name}
+                  value={field.value}
+                  autoComplete={"tel"}
+                  onChange={field.onChange}
+                  descripcion="Formato: 123-45-67-89"
+                />
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="perfil"
+              render={({ field }) => (
+                <FormItemSelectConstructor
+                  id={field.name}
+                  label="Perfil"
+                  name={field.name}
+                  value={field.value || ""}
+                  onChange={field.onChange}
+                  options={PERFILES}
+                />
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="observaciones"
+              render={({ field }) => (
+                <FormItemConstructor
+                  textarea
+                  id={field.name}
+                  label="Observaciones"
+                  name={field.name}
+                  value={field.value}
+                  onChange={field.onChange}
                 />
               )}
             />
           </div>
+          <div className="space-y-4">
+            <FormTitle id="h3-ropo" title="Datos ROPO" />
+            <FormField
+              control={form.control}
+              name="ropo.capacitacion"
+              render={({ field }) => (
+                <FormItemSelectConstructor
+                  id={field.name}
+                  label="Tipo de carnet"
+                  name={field.name}
+                  value={field.value || ""}
+                  onChange={field.onChange}
+                  options={CAPACITACIONES}
+                />
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItemConstructor
-                id={field.name}
-                label="Email"
-                name={field.name}
-                value={field.value}
-                autoComplete={"email"}
-                onChange={field.onChange}
-              />
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="ropo.nro"
+              render={({ field }) => (
+                <FormItemConstructor
+                  id={field.name}
+                  label="N° de carnet"
+                  name={field.name}
+                  value={field.value || ""}
+                  onChange={field.onChange}
+                />
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="tel"
-            render={({ field }) => (
-              <FormItemConstructor
-                id={field.name}
-                label="Teléfono"
-                name={field.name}
-                value={field.value}
-                autoComplete={"tel"}
-                onChange={field.onChange}
-                descripcion="Formato: 123-45-67-89"
-              />
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="perfil"
-            render={({ field }) => (
-              <FormItemSelectConstructor
-                id={field.name}
-                label="Perfil"
-                name={field.name}
-                value={field.value || ""}
-                onChange={field.onChange}
-                options={PERFILES}
-              />
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="observaciones"
-            render={({ field }) => (
-              <FormItemConstructor
-                textarea
-                id={field.name}
-                label="Observaciones"
-                name={field.name}
-                value={field.value}
-                onChange={field.onChange}
-              />
-            )}
-          />
-
-          <Separator className="col-span-full my-4" />
-          <FormTitle id="h3-ropo" title="Datos ROPO" />
-
-          <FormField
-            control={form.control}
-            name="ropo.tipo"
-            render={({ field }) => (
-              <FormItemSelectConstructor
-                id={field.name}
-                label="Tipo de carnet"
-                name={field.name}
-                value={field.value || ""}
-                onChange={field.onChange}
-                options={TIPOS_ROPO}
-              />
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="ropo.nro"
-            render={({ field }) => (
-              <FormItemConstructor
-                id={field.name}
-                label="N° de carnet"
-                name={field.name}
-                value={field.value || ""}
-                onChange={field.onChange}
-              />
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="ropo.caducidad"
-            render={({ field }) => (
-              <FormDatePickerConstructor
-                triggerClass="w-full mt-0"
-                id={field.name}
-                label="Fecha de caducidad"
-                name={field.name}
-                value={field.value || null}
-                onChange={field.onChange}
-              />
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="ropo.tipo_aplicador"
-            render={({ field }) => (
-              <FormItemSelectConstructor
-                id={field.name}
-                label="Tipo de aplicador"
-                name={field.name}
-                value={field.value || ""}
-                onChange={field.onChange}
-                options={TIPOS_APLICADOR}
-              />
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="ropo.caducidad"
+              render={({ field }) => (
+                <FormDatePickerConstructor
+                  triggerClass="w-full mt-0"
+                  id={field.name}
+                  label="Fecha de caducidad"
+                  name={field.name}
+                  value={field.value || null}
+                  onChange={field.onChange}
+                />
+              )}
+            />
+          </div>
 
           <div className="col-span-full mt-4 flex justify-end gap-x-6">
             <FormButton

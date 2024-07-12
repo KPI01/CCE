@@ -1,18 +1,14 @@
 import { StrictMode, useEffect } from "react";
-
 import { usePage } from "@inertiajs/react";
-
 import { cn } from "@/lib/utils";
 import { Flash, MainLayoutProps } from "@/types";
-
 import NavBar from "@/Components/NavBar";
 import { Toaster } from "@/Components/ui/toaster";
-import { toast, useToast } from "@/Components/ui/use-toast";
+import { useToast } from "@/Components/ui/use-toast";
 
 export default function MainLayout({ children, className }: MainLayoutProps) {
-  const { auth, errors }: any = usePage().props;
+  const { auth }: any = usePage().props;
   const isAdmin: boolean = auth.user.role.name === "Admin";
-  // console.debug(usePage().props);
 
   const { toast } = useToast();
   const pageProps = usePage().props;

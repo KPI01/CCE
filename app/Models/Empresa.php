@@ -11,21 +11,21 @@ class Empresa extends RecursoBase
     public $incrementing = false;
 
     protected $attributes = [
-        'perfil' => 'Aplicador'
+        "perfil" => "Aplicador",
     ];
 
     protected $guarded = [];
 
-    protected $appends = ['ropo'];
+    protected $appends = ["ropo"];
 
     protected $ropo = [
-        'caducidad' => null,
-        'nro' => null,
-        'capacitacion' => null,
+        "caducidad" => null,
+        "nro" => null,
+        "capacitacion" => null,
     ];
 
     protected $casts = [
-        "ropo" => "array"
+        "ropo" => "array",
     ];
 
     public function getRopoAttribute()
@@ -35,7 +35,7 @@ class Empresa extends RecursoBase
         return $this->ropo;
     }
 
-    public function setRopoAttribute(array $ropo): void
+    public function setRopoAttribute(array $ropo): Empresa
     {
         if (!empty($ropo["caducidad"])) {
             $ropo["caducidad"] = date("Y-m-d", strtotime($ropo["caducidad"]));
@@ -43,25 +43,27 @@ class Empresa extends RecursoBase
 
         $this->upsertRopoAttribute($ropo);
         $this->ropo = array_merge($this->ropo, $ropo);
+
+        return $this;
     }
 
     private function retrieveRopoAttribute()
     {
-        $record = DB::table('empresa_ropo')
-            ->where('empresa_id', $this->id)
+        $record = DB::table("empresa_ropo")
+            ->where("empresa_id", $this->id)
             ->first();
 
         if ($record) {
             $this->ropo = [
-                'caducidad' => $record->caducidad,
-                'nro' => $record->nro,
-                'capacitacion' => $record->capacitacion,
+                "caducidad" => $record->caducidad,
+                "nro" => $record->nro,
+                "capacitacion" => $record->capacitacion,
             ];
         } else {
             $this->ropo = [
-                'caducidad' => null,
-                'nro' => null,
-                'capacitacion' => null,
+                "caducidad" => null,
+                "nro" => null,
+                "capacitacion" => null,
             ];
         }
     }
@@ -69,23 +71,24 @@ class Empresa extends RecursoBase
     private function upsertRopoAttribute(array $ropo)
     {
         $cad = $ropo["caducidad"];
+        $nro = $ropo["nro"];
 
-        if (!is_null($cad)) {
+        if (isset($cad)) {
             $cad = strtotime($cad);
+        } elseif (isset($nro)) {
+            DB::table("empresa_ropo")->upsert(
+                values: [
+                    "empresa_id" => $this->id,
+                    "caducidad" => isset($ropo["caducidad"])
+                        ? date("Y-m-d", $cad)
+                        : null,
+                    "nro" => $ropo["nro"] ?? null,
+                    "capacitacion" => $ropo["capacitacion"] ?? null,
+                ],
+                uniqueBy: ["empresa_id", "nro"],
+                update: ["caducidad", "nro", "capacitacion"]
+            );
         }
-
-        DB::table('empresa_ropo')->upsert(
-            values: [
-                'empresa_id' => $this->id,
-                'caducidad' => isset($ropo['caducidad'])
-                    ? date('Y-m-d', $cad)
-                    : null,
-                'nro' => $ropo['nro'] ?? null,
-                'capacitacion' => $ropo['capacitacion'] ?? null,
-            ],
-            uniqueBy: ["empresa_id", "nro"],
-            update: ["caducidad", "nro", "capacitacion"],
-        );
 
         $this->setUpdatedAt(now());
         $this->save();

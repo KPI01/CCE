@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DestroyRecursoRequest;
 use App\Models\Persona;
-use App\Http\Requests\StorePersonaRequest;
-use App\Http\Requests\StoreRecursoRequest;
-use App\Http\Requests\UpdateRecursoRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
-class PersonaController extends RecursoController
+class PersonaController extends Controller
 {
     /**
      * Constructor
@@ -43,10 +39,10 @@ class PersonaController extends RecursoController
         ]);
     }
 
-    public function store(StoreRecursoRequest $request)
+    public function store(Request $request)
     {
         //
-        $data = $request->all();
+        $data = $request->input();
         $ropo = [];
 
         foreach ($data as $key => $value) {
@@ -73,8 +69,8 @@ class PersonaController extends RecursoController
             ]);
         }
 
-        $this->instance = Persona::create($data);
-        $this->instance->save();
+        $this->inst = Persona::create($data);
+        $this->inst->save();
 
         if ($ropo) {
             $ropo_nro = $ropo["nro"];
@@ -85,21 +81,21 @@ class PersonaController extends RecursoController
                 ]);
             }
 
-            $this->instance->setRopoAttribute($ropo);
+            $this->inst->setRopoAttribute($ropo);
         }
 
-        $tipo_id_nac = $this->instance->tipo_id_nac;
-        $id_nac = $this->instance->id_nac;
+        $tipo_id_nac = $this->inst->tipo_id_nac;
+        $id_nac = $this->inst->id_nac;
 
-        $this->message = "Persona con $tipo_id_nac $id_nac creada con éxito";
+        $this->msg = "Persona con $tipo_id_nac $id_nac creada con éxito";
 
         return Redirect::intended(route("personas.index"))->with([
             "from" => "store.persona",
-            "message" => ["content" => $this->message],
+            "message" => ["content" => $this->msg],
         ]);
     }
 
-    public function show(Request $req, string $id)
+    public function show(string $id)
     {
         //
         $this->data = Persona::findOrFail($id);
@@ -147,7 +143,7 @@ class PersonaController extends RecursoController
         ]);
     }
 
-    public function update(UpdateRecursoRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
         //
         $aux = $request->all();
@@ -155,33 +151,34 @@ class PersonaController extends RecursoController
         $r["caducidad"] = date("Y-m-d", strtotime($r["caducidad"]));
         unset($aux["ropo"]);
 
-        $this->data = Persona::where("id", $id)->update($aux);
+        $this->data = Persona::where("id", $id);
+        $this->data->update($aux);
         DB::table("persona_ropo")->where("persona_id", $id)->update($r);
-        $this->instance = Persona::findOrFail($id);
+        $this->inst = Persona::findOrFail($id);
 
         return Redirect::intended(route("personas.index"))->with([
             "from" => "update.persona",
             "message" => [
                 "action" => [
                     "type" => "update",
-                    "data" => $this->instance,
+                    "data" => $this->inst,
                 ],
                 "toast" => [
                     "variant" => "default",
                     "title" => "Recurso: Persona",
                     "description" =>
-                        $this->instance->nombres .
+                        $this->inst->nombres .
                         " " .
-                        $this->instance->apellidos .
+                        $this->inst->apellidos .
                         " (" .
-                        $this->instance->id_nac .
+                        $this->inst->id_nac .
                         ") se ha actualizado de los registros.",
                 ],
             ],
         ]);
     }
 
-    public function destroy(DestroyRecursoRequest $req, string $id)
+    public function destroy(string $id)
     {
         //
         $this->data = Persona::findOrFail($id);

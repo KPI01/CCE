@@ -30,10 +30,9 @@ class Persona extends Recurso
     public function getRopoAttribute()
     {
         if (
-            empty($this->ropo["tipo"]) &&
+            empty($this->ropo["capacitacion"]) &&
             empty($this->ropo["caducidad"]) &&
-            empty($this->ropo["nro"]) &&
-            empty($this->ropo["tipo_aplicador"])
+            empty($this->ropo["nro"])
         ) {
             $this->retrieveRopoAttribute();
         }
@@ -44,16 +43,15 @@ class Persona extends Recurso
     public function setRopoAttribute(array $ropo)
     {
         // dd($ropo);
-        if (!is_null($ropo["tipo"]) && !is_null($ropo["nro"])) {
+        if (!is_null($ropo["capacitacion"]) && !is_null($ropo["nro"])) {
             DB::table("persona_ropo")->updateOrInsert(
                 ["persona_id" => $this->id],
                 [
-                    "tipo" => $ropo["tipo"],
+                    "capacitacion" => $ropo["capacitacion"],
                     "caducidad" => isset($ropo["caducidad"])
                         ? date("Y-m-d", strtotime($ropo["caducidad"]))
                         : null,
                     "nro" => $ropo["nro"],
-                    "tipo_aplicador" => $ropo["tipo_aplicador"] ?? null,
                 ]
             );
         }
@@ -69,17 +67,15 @@ class Persona extends Recurso
 
         if ($record) {
             $this->ropo = [
-                "tipo" => $record->tipo,
+                "capacitacion" => $record->capacitacion,
                 "caducidad" => $record->caducidad,
                 "nro" => $record->nro,
-                "tipo_aplicador" => $record->tipo_aplicador,
             ];
         } else {
             $this->ropo = [
-                "tipo" => null,
+                "capacitacion" => null,
                 "caducidad" => null,
                 "nro" => null,
-                "tipo_aplicador" => null,
             ];
         }
     }

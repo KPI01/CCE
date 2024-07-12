@@ -14,6 +14,7 @@ import { Form, FormField } from "@/Components/ui/form";
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
+import { formatDate } from "@/lib/dates";
 
 const schema = formSchema;
 
@@ -51,10 +52,10 @@ export default function Show({ data, urls }: Props) {
       id={data.id}
       pageTitle="Empresa"
       mainTitle={data.nombre}
-      created_at={data.created_at.toLocaleString()}
-      updated_at={data.updated_at.toLocaleString()}
+      created_at={formatDate(data.created_at)}
+      updated_at={formatDate(data.updated_at)}
       urls={urls}
-      backUrl={urls.index}
+      backUrl={route("empresas.index")}
     >
       <Form {...form}>
         <form id={`show-${data.id}`} className={CONTAINER_CLASS}>
@@ -210,7 +211,6 @@ export default function Show({ data, urls }: Props) {
                 />
               )}
             />
-           
           </div>
         </form>
       </Form>

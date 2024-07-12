@@ -8,7 +8,7 @@ interface BaseProps extends PropsWithChildren {
   onClick?: () => void;
   type?: "submit" | "reset" | "button";
   variant?: ButtonProps["variant"];
-  size?: ButtonProps["size"]
+  size?: ButtonProps["size"];
 }
 
 interface FormButtonPropsWithText extends BaseProps {
@@ -23,7 +23,7 @@ export default function FormButton({
   text,
   type = "button",
   variant = "default",
-  size = "default"
+  size = "default",
 }: BaseProps & FormButtonPropsWithText) {
   const content = children ? children : text;
   const buttonClass = cn("w-fit", className);

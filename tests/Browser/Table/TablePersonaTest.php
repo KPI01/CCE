@@ -2,7 +2,6 @@
 
 namespace Tests\Browser\Table;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\Recursos\Persona\Table;
 use Tests\DuskTestCase;

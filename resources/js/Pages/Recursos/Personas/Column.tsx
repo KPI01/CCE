@@ -92,23 +92,21 @@ export const columns: ColumnDef<Persona & { urls: ActionUrls }>[] = [
   },
   {
     accessorFn: (row) => {
-      if (row.ropo?.tipo) {
-        return row.ropo.tipo;
+      if (row.ropo?.capacitacion) {
+        return row.ropo.capacitacion;
       }
       return null;
     },
-    id: "ropo_tipo",
+    id: "ropo_capacitacion",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Tipo Carnet ROPO" />
+      <DataTableColumnHeader column={column} title="Capacitación ROPO" />
     ),
     enableColumnFilter: true,
     enableHiding: true,
     size: 250,
     meta: {
       header: "Tipo de Carnet ROPO",
-      key: "ropo_tipo",
-      tipo: "select",
-      options: ["*", "Aplicador", "Técnico"],
+      key: "ropo_capacitacion",
     },
   },
   {
@@ -151,24 +149,6 @@ export const columns: ColumnDef<Persona & { urls: ActionUrls }>[] = [
     meta: {
       header: "N° de Carnet ROPO",
       key: "ropo_nro",
-    },
-  },
-  {
-    accessorFn: (row) => {
-      if (row.ropo?.tipo_aplicador) {
-        return row.ropo.tipo_aplicador;
-      }
-      return null;
-    },
-    id: "ropo_tipo_aplicador",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Tipo Aplicador" />
-    ),
-    enableColumnFilter: true,
-    enableSorting: true,
-    meta: {
-      header: "Tipo Aplicador ROPO",
-      key: "ropo_tipo_aplicador",
     },
   },
   {

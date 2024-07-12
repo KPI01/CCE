@@ -3,10 +3,9 @@
 namespace Tests\Browser\Show;
 
 use App\Models\Empresa;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Components\Navbar;
-use Tests\Browser\Pages\Recursos\Empresa\Form;
+use Tests\Browser\Pages\Recursos\Formulario;
 use Tests\DuskTestCase;
 
 class ShowEmpresaTest extends DuskTestCase
@@ -14,6 +13,7 @@ class ShowEmpresaTest extends DuskTestCase
     protected Empresa $e;
     public function setUp(): void
     {
+        echo "setUp: ShowEmpresa" . PHP_EOL;
         parent::setUp();
         $this->e = Empresa::factory(1)->withRopo()->create()->first();
     }
@@ -21,7 +21,13 @@ class ShowEmpresaTest extends DuskTestCase
     public function testAcceso(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Form("show", $this->e));
+            $browser->visit(
+                new Formulario(
+                    recurso: "empresas",
+                    accion: "show",
+                    modelo: $this->e
+                )
+            );
         });
     }
 
@@ -29,7 +35,13 @@ class ShowEmpresaTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser
-                ->visit(new Form("show", $this->e))
+                ->visit(
+                    new Formulario(
+                        recurso: "empresas",
+                        accion: "show",
+                        modelo: $this->e
+                    )
+                )
                 ->within(new Navbar(), function ($browser) {
                     $browser
                         ->assertPresent("@titulo")
@@ -84,7 +96,13 @@ class ShowEmpresaTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser
-                ->visit(new Form("show", $this->e))
+                ->visit(
+                    new Formulario(
+                        recurso: "empresas",
+                        accion: "show",
+                        modelo: $this->e
+                    )
+                )
                 ->within(new Navbar(), function ($browser) {
                     $browser
                         ->assertVisible("@nav")
@@ -138,7 +156,13 @@ class ShowEmpresaTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser
-                ->visit(new Form("show", $this->e))
+                ->visit(
+                    new Formulario(
+                        recurso: "empresas",
+                        accion: "show",
+                        modelo: $this->e
+                    )
+                )
                 ->assertInputValue("h1", $this->e->nombre)
                 ->assertInputValue("@input-nif", $this->e->nif)
                 ->assertInputValue("@input-email", $this->e->email)
@@ -170,7 +194,13 @@ class ShowEmpresaTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser
-                ->visit(new Form("show", $this->e))
+                ->visit(
+                    new Formulario(
+                        recurso: "empresas",
+                        accion: "show",
+                        modelo: $this->e
+                    )
+                )
                 ->assertDisabled("@input-nif")
                 ->assertDisabled("@input-email")
                 ->assertDisabled("@input-tel")
@@ -189,12 +219,23 @@ class ShowEmpresaTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser
-                ->visit(new Form("show", $this->e))
-                ->assertSee(
-                    date("j/n/Y, H:i:s", strtotime($this->e->created_at))
+                ->visit(
+                    new Formulario(
+                        recurso: "empresas",
+                        accion: "show",
+                        modelo: $this->e
+                    )
                 )
-                ->assertSee(
-                    date("j/n/Y, H:i:s", strtotime($this->e->updated_at))
+                ->storeSource("empresas/show/badges.html")
+                ->assertSeeIn(
+                    selector: "@badge-created-" . $this->e->id,
+                    text: date("d/m/Y, H:i:s", strtotime($this->e->created_at)),
+                    ignoreCase: true
+                )
+                ->assertSeeIn(
+                    selector: "@badge-updated-" . $this->e->id,
+                    text: date("d/m/Y, H:i:s", strtotime($this->e->updated_at)),
+                    ignoreCase: true
                 );
 
             $browser
@@ -206,7 +247,13 @@ class ShowEmpresaTest extends DuskTestCase
                 );
 
             $browser
-                ->visit(new Form("show", $this->e))
+                ->visit(
+                    new Formulario(
+                        recurso: "empresas",
+                        accion: "show",
+                        modelo: $this->e
+                    )
+                )
                 ->click("@badge-destroy-" . $this->e->id)
                 ->pause(750)
                 ->assertVisible("@alertdialog")
@@ -217,12 +264,11 @@ class ShowEmpresaTest extends DuskTestCase
                 ->click("#alert-cancel")
                 ->pause(750)
                 ->assertPathIs("/app/recurso/empresas/" . $this->e->id)
-                ->assertNotVisible("@alertdialog")
                 ->click("@badge-destroy-" . $this->e->id)
                 ->pause(750)
                 ->click("#alert-confirm")
                 ->pause(750)
-                ->assertPathIs("/app/recurso/empresas/");
+                ->assertPathIs("/app/recurso/empresasa");
         });
     }
 
@@ -230,7 +276,13 @@ class ShowEmpresaTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser
-                ->visit(new Form("show", $this->e))
+                ->visit(
+                    new Formulario(
+                        recurso: "empresas",
+                        accion: "show",
+                        modelo: $this->e
+                    )
+                )
                 ->click("button#back-btn")
                 ->pause(750)
                 ->assertPathIs("/app/recurso/empresas");

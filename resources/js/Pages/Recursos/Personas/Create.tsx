@@ -5,11 +5,10 @@ import { Button } from "@/Components/ui/button";
 import { Form, FormField, FormLabel } from "@/Components/ui/form";
 import { Save, Trash2 } from "lucide-react";
 import {
+  CAPACITACIONES,
   formSchema,
   PERFILES,
-  TIPOS_APLICADOR,
   TIPOS_ID_NAC,
-  TIPOS_ROPO,
 } from "./formSchema";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
@@ -34,7 +33,7 @@ interface Props {
 }
 
 export default function Create({ urls }: Props) {
-  const [fillRopo, setFillRopo] = useState<boolean>(false);
+  const [showRopo, setFillRopo] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -64,209 +63,202 @@ export default function Create({ urls }: Props) {
           className={CONTAINER_CLASS}
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          <FormField
-            control={form.control}
-            name="nombres"
-            render={({ field }) => (
-              <FormItemConstructor
-                id={field.name}
-                label="Nombre(s) *"
-                name={field.name}
-                placeholder="..."
-                onChange={field.onChange}
-                value={field.value}
-              />
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="apellidos"
-            render={({ field }) => (
-              <FormItemConstructor
-                id={field.name}
-                label="Apellido(s) *"
-                name={field.name}
-                placeholder="..."
-                onChange={field.onChange}
-                value={field.value}
-              />
-            )}
-          />
-          <div
-            className="grid items-center"
-            style={{ gridTemplateColumns: "15ch auto 1fr" }}
-          >
-            <FormLabel
-              className={
-                form.getFieldState("id_nac").invalid ? "text-destructive" : ""
-              }
-              htmlFor="id_nac"
-              asChild
-            >
-              <span>Identificación *</span>
-            </FormLabel>
+          <div className="space-y-4">
             <FormField
               control={form.control}
-              name="tipo_id_nac"
-              render={({ field }) => (
-                <FormItemSelectConstructor
-                  id={field.name.replace(".", "-")}
-                  name={field.name}
-                  label="Tipo de identificación"
-                  withLabel={false}
-                  value={field.value}
-                  onChange={field.onChange}
-                  options={TIPOS_ID_NAC}
-                  TriggerClass="w-full ml-2"
-                />
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="id_nac"
+              name="nombres"
               render={({ field }) => (
                 <FormItemConstructor
-                  withLabel={false}
                   id={field.name}
-                  label="Identificación"
-                  name={field.name}
-                  onChange={field.onChange}
-                  value={field.value}
-                  itemClass="ml-3"
-                  inputClass="col-span-2"
-                />
-              )}
-            />
-          </div>
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItemConstructor
-                id={field.name}
-                label="Email"
-                name={field.name}
-                placeholder="..."
-                onChange={field.onChange}
-                value={field.value}
-              />
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="tel"
-            render={({ field }) => (
-              <FormItemConstructor
-                id={field.name}
-                label="Nro. de Teléfono"
-                name={field.name}
-                placeholder="..."
-                onChange={field.onChange}
-                value={field.value}
-                descripcion="Formato: 123-45-67-89"
-              />
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="perfil"
-            render={({ field }) => (
-              <FormItemSelectConstructor
-                id={field.name}
-                name={field.name}
-                label="Perfil"
-                value={field.value as string}
-                placeholder="Seleccionar perfil..."
-                onChange={field.onChange}
-                options={PERFILES}
-              />
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="observaciones"
-            render={({ field }) => (
-              <FormItemConstructor
-                id={field.name}
-                label="Observaciones"
-                textarea
-                name={field.name}
-                placeholder="..."
-                onChange={field.onChange}
-                value={field.value}
-              />
-            )}
-          />
-          <div className="col-span-full flex items-center space-x-2 font-medium">
-            <Switch
-              name="ropo"
-              id="show-ropo"
-              onClick={() => handleRopoShow(fillRopo)}
-            />
-            <Label htmlFor="show-ropo">¿Datos ROPO?</Label>
-          </div>
-          <div
-            id="ropo-form"
-            className={`col-span-2 grid grid-cols-2 place-content-start gap-x-12 gap-y-4 ${fillRopo ? "" : "hidden"}`}
-          >
-            <FormField
-              control={form.control}
-              name="ropo.tipo"
-              render={({ field }) => (
-                <FormItemSelectConstructor
-                  id={field.name.replace(".", "_")}
-                  name={field.name}
-                  label="Tipo de ROPO"
-                  value={field.value as string}
-                  placeholder="Seleccionar tipo..."
-                  onChange={field.onChange}
-                  options={TIPOS_ROPO}
-                />
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="ropo.nro"
-              render={({ field }) => (
-                <FormItemConstructor
-                  id={field.name.replace(".", "_")}
-                  label="Nº Carnet"
+                  label="Nombre(s) *"
                   name={field.name}
                   placeholder="..."
                   onChange={field.onChange}
-                  value={field.value || undefined}
+                  value={field.value}
                 />
               )}
             />
             <FormField
               control={form.control}
-              name="ropo.caducidad"
+              name="apellidos"
               render={({ field }) => (
-                <FormDatePickerConstructor
-                  id={field.name.replace(".", "_")}
+                <FormItemConstructor
+                  id={field.name}
+                  label="Apellido(s) *"
                   name={field.name}
-                  label="Caducidad"
+                  placeholder="..."
                   onChange={field.onChange}
-                  value={field.value || null}
+                  value={field.value}
+                />
+              )}
+            />
+            <div
+              className="grid items-center"
+              style={{ gridTemplateColumns: "15ch auto 1fr" }}
+            >
+              <FormLabel
+                className={
+                  form.getFieldState("id_nac").invalid ? "text-destructive" : ""
+                }
+                htmlFor="id_nac"
+                asChild
+              >
+                <span>Identificación *</span>
+              </FormLabel>
+              <FormField
+                control={form.control}
+                name="tipo_id_nac"
+                render={({ field }) => (
+                  <FormItemSelectConstructor
+                    id={field.name.replace(".", "-")}
+                    name={field.name}
+                    label="Tipo de identificación"
+                    withLabel={false}
+                    value={field.value}
+                    onChange={field.onChange}
+                    options={TIPOS_ID_NAC}
+                    TriggerClass="w-full ml-2"
+                  />
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="id_nac"
+                render={({ field }) => (
+                  <FormItemConstructor
+                    withLabel={false}
+                    id={field.name}
+                    label="Identificación"
+                    name={field.name}
+                    onChange={field.onChange}
+                    value={field.value}
+                    itemClass="ml-3"
+                    inputClass="col-span-2"
+                  />
+                )}
+              />
+            </div>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItemConstructor
+                  id={field.name}
+                  label="Email"
+                  name={field.name}
+                  placeholder="..."
+                  onChange={field.onChange}
+                  value={field.value}
                 />
               )}
             />
             <FormField
               control={form.control}
-              name="ropo.tipo_aplicador"
+              name="tel"
+              render={({ field }) => (
+                <FormItemConstructor
+                  id={field.name}
+                  label="Nro. de Teléfono"
+                  name={field.name}
+                  placeholder="..."
+                  onChange={field.onChange}
+                  value={field.value}
+                  descripcion="Formato: 123-45-67-89"
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="perfil"
               render={({ field }) => (
                 <FormItemSelectConstructor
                   id={field.name}
-                  label="Tipo de aplicador"
-                  options={TIPOS_APLICADOR}
-                  value={field.value as string}
-                  onChange={field.onChange}
                   name={field.name}
-                  placeholder="Selecciona el tipo de aplicador"
+                  label="Perfil"
+                  value={field.value as string}
+                  placeholder="Seleccionar perfil..."
+                  onChange={field.onChange}
+                  options={PERFILES}
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="observaciones"
+              render={({ field }) => (
+                <FormItemConstructor
+                  id={field.name}
+                  label="Observaciones"
+                  textarea
+                  name={field.name}
+                  placeholder="..."
+                  onChange={field.onChange}
+                  value={field.value}
                 />
               )}
             />
           </div>
+          <div className="space-y-8">
+            <div className="flex items-center gap-2">
+              <Switch
+                name="ropo"
+                id="show-ropo"
+                onClick={() => handleRopoShow(showRopo)}
+              />
+              <Label className="font-medium" htmlFor="show-ropo">
+                ¿Datos ROPO?
+              </Label>
+            </div>
+            {showRopo && (
+              <div id="ropo-form" className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="ropo.capacitacion"
+                  render={({ field }) => (
+                    <FormItemSelectConstructor
+                      id={field.name.replace(".", "_")}
+                      name={field.name}
+                      label="Capacitación"
+                      value={field.value as string}
+                      placeholder="Seleccionar tipo..."
+                      onChange={field.onChange}
+                      options={CAPACITACIONES}
+                    />
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="ropo.nro"
+                  render={({ field }) => (
+                    <FormItemConstructor
+                      id={field.name.replace(".", "_")}
+                      label="Identificación"
+                      name={field.name}
+                      placeholder="..."
+                      onChange={field.onChange}
+                      value={field.value || undefined}
+                    />
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="ropo.caducidad"
+                  render={({ field }) => (
+                    <FormDatePickerConstructor
+                      id={field.name.replace(".", "_")}
+                      name={field.name}
+                      label="Caducidad"
+                      onChange={field.onChange}
+                      value={field.value || null}
+                    />
+                  )}
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="col-span-full flex items-center space-x-2 font-medium"></div>
+
           <div className="col-span-2 flex items-center justify-between">
             <FormButton
               variant={"destructive"}

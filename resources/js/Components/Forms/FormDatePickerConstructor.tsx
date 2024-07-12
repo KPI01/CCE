@@ -25,8 +25,8 @@ interface Props extends Omit<ConstructorProps, "value"> {
   triggerClass?: string;
   triggerStyle?: React.CSSProperties;
   value: Date | null;
-  resetBtn?: boolean,
-  resetFn?: (...events: any[]) => void
+  resetBtn?: boolean;
+  resetFn?: (...events: any[]) => void;
 }
 
 export default function FormDatePickerConstructor({
@@ -44,7 +44,7 @@ export default function FormDatePickerConstructor({
   disabled = false,
   resetBtn = false,
   resetFn,
-  placeholder = "(Vacío)"
+  placeholder = "(Vacío)",
 }: Props) {
   const toId = id.includes(".") ? id.replace(".", "_") : id;
   const labelId = `label-${toId}`;
@@ -64,7 +64,7 @@ export default function FormDatePickerConstructor({
     </FormDescription>
   );
 
-  const gridCols = resetBtn ? "15ch 1fr auto" : "15ch 1fr"
+  const gridCols = resetBtn ? "15ch 1fr auto" : "15ch 1fr";
   const customItemClass = cn("grid gap-x-2 items-center", itemClass);
   const customStyle = { gridTemplateColumns: gridCols, ...itemStyle };
   const customTriggerClass = cn("grid items-center", triggerClass);
@@ -93,7 +93,7 @@ export default function FormDatePickerConstructor({
                 !value && "text-muted-foreground",
               )}
               value={value ? format(value, "dd/MM/yyyy") : placeholder}
-              >
+            >
               <span>{value ? format(value, "dd/MM/yyyy") : placeholder}</span>
               <Input
                 id={inputId}
@@ -101,7 +101,7 @@ export default function FormDatePickerConstructor({
                 name={name}
                 value={value ? format(value, "yyyy-MM-dd") : ""}
                 onChange={onChange}
-                />
+              />
               <CalendarDays className="ml-auto h-4 w-4 opacity-50" />
             </Button>
           </FormControl>
@@ -118,7 +118,13 @@ export default function FormDatePickerConstructor({
         </PopoverContent>
       </Popover>
       {resetBtn && (
-        <Button type="button" size={"sm"} variant={"destructive"} className="!mt-0" onClick={resetFn}>
+        <Button
+          type="button"
+          size={"sm"}
+          variant={"destructive"}
+          className="!mt-0"
+          onClick={resetFn}
+        >
           <Eraser className="size-4" />
         </Button>
       )}
