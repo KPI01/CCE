@@ -37,9 +37,11 @@ class Formulario extends Page
         $accion = implode(".", [$this->rcs, $this->acc]);
         (in_array($this->acc, ["edit", "show"]) && isset($this->inst))
             ? ($rt = Request::create(
-                route($accion, $this->inst->id)
+                uri: route($accion, $this->inst->id)
             ))
-            : ($rt = Request::create(route($accion)));
+            : ($rt = Request::create(
+                uri: route($accion)
+            ));
         echo "url: " . $rt->path() . PHP_EOL;
 
         return "/" . $rt->path();
