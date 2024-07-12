@@ -200,7 +200,7 @@
         "panel": "dedicated",
         "showReuseMessage": false,
         "clear": true,
-        "group": "testing"
+        "group": "dusk"
       }
     },
     {
@@ -220,7 +220,7 @@
         "panel": "dedicated",
         "showReuseMessage": false,
         "clear": true,
-        "group": "testing"
+        "group": "dusk"
       }
     },
     {
@@ -240,7 +240,7 @@
         "panel": "dedicated",
         "showReuseMessage": false,
         "clear": true,
-        "group": "testing"
+        "group": "dusk"
       }
     },
     {
@@ -288,7 +288,7 @@
     {
       "type": "promptString",
       "id": "env",
-      "description": "Escribe el nombre del entorno de ejecución",
+      "description": "Escribe el nombre del entorno de ejecución"
     },
     {
       "type": "promptString",
