@@ -43,14 +43,18 @@ export const formSchema = z
         invalid_type_error: TEXT_MSG,
       })
       .min(3, "El nombre debe tener al menos 3 caracteres.")
-      .max(50, "El nombre debe tener menos de 50 caracteres."),
+      .max(50, "El nombre debe tener menos de 50 caracteres.")
+      .regex(
+      /^[A-Za-záéíóúÁÉÍÓÚñÑ ,.-]*$/gm,
+        "El nombre solo puede contener letras.",
+      ),
     apellidos: z
       .string({
         required_error: REQUIRED_MSG,
         invalid_type_error: TEXT_MSG,
       })
-      .min(3, "Los apellidos deben tener al menos 3 caracteres.")
-      .max(50, "Los apellidos deben tener menos de 50 caracteres."),
+      .min(3, "El apellido debe tener al menos 3 caracteres.")
+      .max(50, "El apellido debe tener menos de 50 caracteres."),
     tipo_id_nac: z.enum(TIPOS_ID_NAC_READONLY, {
       errorMap: (issue, _ctx) => {
         switch (issue.code) {
@@ -69,7 +73,7 @@ export const formSchema = z
       .string({
         required_error: REQUIRED_MSG,
       })
-      .max(12, "El DNI/NIE debe ser de 12 caracteres."),
+      .max(12, "La identificación debe ser de 12 caracteres."),
     email: z
       .string({
         required_error: REQUIRED_MSG,
@@ -78,8 +82,8 @@ export const formSchema = z
     tel: z
       .string()
       .regex(
-        /^[0-9]{3}-[0-9]{2}-[0-9]{2}-[0-9]{2}$/,
-        "El número debe estar en el formato indicado.",
+        /^((\+34|0034|34)?[6|7|8|9]\d{8}|(800|900)\d{6,7}|(901|902|905|803|806|807)\d{6})$/,
+      "El número de teléfono debe ser válido."
       )
       .optional(),
     perfil: z
@@ -105,21 +109,11 @@ export const formSchema = z
     ropo: z
       .object({
         capacitacion: z
-          .enum(CAPACITACIONES_READONLY, {
-            errorMap: (issue, _ctx) => {
-              switch (issue.code) {
-                case "invalid_type":
-                  return { message: `${FIELD_MSG} debe ser solo texto` };
-                case "invalid_enum_value":
-                  return {
-                    message: `${FIELD_MSG} debe ser uno de los siguientes: ${CAPACITACIONES.join(", ")}`,
-                  };
-                default:
-                  return { message: SHOULD_BE_VALID_MSG };
-              }
-            },
-          })
-          .nullable(),
+        .enum(CAPACITACIONES_READONLY, {
+          required_error: "Debes seleccionar el tipo de capacitación.",
+          invalid_type_error: SHOULD_BE_VALID_MSG,
+        })
+        .nullable(),
         caducidad: z
           .date({
             required_error: REQUIRED_MSG,
@@ -134,13 +128,13 @@ export const formSchema = z
         if (data?.capacitacion && !data?.nro) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: "Debes ingresar el Nº del carnet.",
+            message: "Debes ingresar el Nº del carné.",
             path: ["nro"],
           });
         } else if (!data?.capacitacion && data?.nro) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: "Debes seleccionar el tipo de carnet.",
+            message: "Debes seleccionar el tipo de carné.",
             path: ["tipo"],
           });
         } else if (data?.capacitacion && data?.nro) {
@@ -150,7 +144,7 @@ export const formSchema = z
           if (!regex.test(data.nro)) {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,
-              message: "El Nº del carnet debe estar en el formato adecuado.",
+              message: "La identificación ROPO debe estar en el formato adecuado.",
               path: ["nro"],
             });
           }

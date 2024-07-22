@@ -7,42 +7,51 @@ use Illuminate\Http\Request;
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\Page;
 
-class Formulario extends Page
+class Form extends Page
 {
+    private array $validAcc = ["show", "edit", "create"];
     private string $rcs;
     private string $acc;
-    private Model $inst;
+    private string | null $id;
 
     public function __construct(
         string $recurso,
         string $accion,
-        Model $modelo = null
+        string $id = null
     ) {
-        echo "__construct: Formulario";        
-        if (!in_array($accion, ["show", "edit", "create"])) {
-            echo "Acción no válida";
-            $arr_str = implode(", ", ["show", "edit", "create"]);
+        echo PHP_EOL . "__construct: Formulario" . PHP_EOL;
+        
+        if (!in_array($accion, $this->validAcc)) {
+            echo "Acción no válida" . PHP_EOL;
+            $arr_str = implode(", ", $this->validAcc);
             report("La acción debe ser alguna de las siguientes: $arr_str");
         }
 
         $this->rcs = $recurso;
         $this->acc = $accion;
-        $this->inst = $modelo;
+        $this->id = $id;
+
+        echo "Accion: $this->acc" . PHP_EOL;
+        echo "Id: " . ($this->id ? $this->id : "null") . PHP_EOL;
     }
     /**
      * Get the URL for the page.
      */
     public function url(): string
     {
+        $rt = null;
         $accion = implode(".", [$this->rcs, $this->acc]);
-        (in_array($this->acc, ["edit", "show"]) && isset($this->inst))
-            ? ($rt = Request::create(
-                uri: route($accion, $this->inst->id)
-            ))
-            : ($rt = Request::create(
+        if (in_array($this->acc, ["edit", "show"]) && isset($this->id)) {
+            $rt = Request::create(
+                uri: route($accion, $this->id)
+            );
+        } else {
+            $rt = Request::create(
                 uri: route($accion)
-            ));
-        echo "url: " . $rt->path() . PHP_EOL;
+            );
+        }
+
+        echo "path: " . $rt->path() . PHP_EOL;
 
         return "/" . $rt->path();
     }

@@ -59,7 +59,7 @@ export default function Create({ urls }: Props) {
     >
       <Form {...form}>
         <form
-          id="create-persona-form"
+          id="create-persona"
           className={CONTAINER_CLASS}
           onSubmit={form.handleSubmit(onSubmit)}
         >
@@ -97,13 +97,13 @@ export default function Create({ urls }: Props) {
               style={{ gridTemplateColumns: "15ch auto 1fr" }}
             >
               <FormLabel
+                id="label-id_nac"
                 className={
                   form.getFieldState("id_nac").invalid ? "text-destructive" : ""
                 }
                 htmlFor="id_nac"
-                asChild
               >
-                <span>Identificación *</span>
+                Identificación *
               </FormLabel>
               <FormField
                 control={form.control}
@@ -112,7 +112,6 @@ export default function Create({ urls }: Props) {
                   <FormItemSelectConstructor
                     id={field.name.replace(".", "-")}
                     name={field.name}
-                    label="Tipo de identificación"
                     withLabel={false}
                     value={field.value}
                     onChange={field.onChange}
@@ -126,9 +125,8 @@ export default function Create({ urls }: Props) {
                 name="id_nac"
                 render={({ field }) => (
                   <FormItemConstructor
-                    withLabel={false}
                     id={field.name}
-                    label="Identificación"
+                    withLabel={false}
                     name={field.name}
                     onChange={field.onChange}
                     value={field.value}
@@ -219,7 +217,7 @@ export default function Create({ urls }: Props) {
                       id={field.name.replace(".", "_")}
                       name={field.name}
                       label="Capacitación"
-                      value={field.value as string}
+                      value={field.value || ""}
                       placeholder="Seleccionar tipo..."
                       onChange={field.onChange}
                       options={CAPACITACIONES}

@@ -24,7 +24,7 @@ class PersonaController extends Controller
         $this->data = Persona::all();
 
         return Inertia::render("Recursos/Personas/Table", [
-            "data" => $this->indexAll("personas", $this->data),
+            "data" => $this->appendUrls("personas", $this->data),
         ]);
     }
 
@@ -42,57 +42,98 @@ class PersonaController extends Controller
     public function store(Request $request)
     {
         //
-        $data = $request->input();
-        $ropo = [];
+        $basic = $request->all();
+        unset($basic["ropo"]);
+        $uniques = $request->all(["email", "id_nac"]);
 
-        foreach ($data as $key => $value) {
-            if (str_contains($key, "ropo")) {
-                foreach ($value as $k => $v) {
-                    $ropo[$k] = $v;
-                }
-                unset($data[$key]);
-            }
-        }
-
-        $ropo = count($ropo) > 0 ? $ropo : null;
-
-        if (Persona::where("email", $data["email"])->exists()) {
-            $email = $data["email"];
-            return Redirect::back()->withErrors([
-                "email" => "[$email] ya existe está registrado.",
-            ]);
-        } elseif (Persona::where("id_nac", $data["id_nac"])->exists()) {
-            $id_nac = $data["id_nac"];
-            $tipo_id_nac = $data["tipo_id_nac"];
-            return Redirect::back()->withErrors([
-                "id_nac" => "[$tipo_id_nac: $id_nac] ya está registrado.",
-            ]);
-        }
-
-        $this->inst = Persona::create($data);
-        $this->inst->save();
-
-        if ($ropo) {
-            $ropo_nro = $ropo["nro"];
-
-            if (DB::table("persona_ropo")->where("nro", $ropo_nro)->exists()) {
-                return Redirect::back()->withErrors([
-                    "ropo.nro" => "[Nro Ropo:$ropo_nro] ya existe está registrado.",
+        if (Persona::where("email", $uniques["email"])->exists()) {
+            $this->toastErrorConstructor(
+                campo: "email",
+                error: "Duplicado",
+                mensaje: implode(" ", [
+                    "Correo:",
+                    $uniques["email"],
+                    "ya se encuentra registrado",
+                ]),
+                variante: "warning"
+            );
+            return redirect()
+                ->back()
+                ->with([
+                    "message" => [
+                        "toast" => $this->toasts["error"]["email:duplicado"],
+                    ],
                 ]);
+        } elseif (Persona::where("id_nac", $uniques["id_nac"])->exists()) {
+            $this->toastErrorConstructor(
+                campo: "id_nac",
+                error: "Duplicado",
+                mensaje: implode(" ", [
+                    "NIF:",
+                    $uniques["id_nac"],
+                    "ya se encuentra registrado",
+                ]),
+                variante: "warning"
+            );
+            return redirect()
+                ->back()
+                ->with([
+                    "message" => [
+                        "toast" => $this->toasts["error"]["id_nac:duplicado"],
+                    ],
+                ]);
+        } else {
+            $r = $request->input("ropo");
+
+            if (isset($r)) {
+                if (
+                    DB::table("empresa_ropo")
+                        ->where("nro", $r["nro"])
+                        ->exists()
+                ) {
+                    $this->toastErrorConstructor(
+                        campo: "ropo.nro",
+                        error: "Duplicado",
+                        mensaje: implode(" ", [
+                            "Nº ROPO:",
+                            $r["nro"],
+                            "ya se encuentra registrado",
+                        ]),
+                        variante: "warning"
+                    );
+                    return redirect()
+                        ->back()
+                        ->with([
+                            "message" => [
+                                "toast" =>
+                                    $this->toasts["error"][
+                                        "ropo.nro:duplicado"
+                                    ],
+                            ],
+                        ]);
+                }
+                $this->inst = Persona::create($basic)->setRopoAttribute($r);
+            } else {
+                $this->inst = Persona::create($basic);
             }
-
-            $this->inst->setRopoAttribute($ropo);
+            $this->toastExitoConstructor(
+                accion: "store",
+                seccion: "description",
+                append: implode(" ", [
+                    $this->inst->nombres,
+                    $this->inst->apellidos,
+                    "(" . $this->inst->id_nac . ")",
+                ])
+            );
+            return redirect()
+                ->intended(route("personas.index"))
+                ->with([
+                    "from" => "personas.store",
+                    "message" => [
+                        "toast" => $this->toasts["exito"]["store"],
+                    ],
+                ]);
         }
-
-        $tipo_id_nac = $this->inst->tipo_id_nac;
-        $id_nac = $this->inst->id_nac;
-
-        $this->msg = "Persona con $tipo_id_nac $id_nac creada con éxito";
-
-        return Redirect::intended(route("personas.index"))->with([
-            "from" => "store.persona",
-            "message" => ["content" => $this->msg],
-        ]);
     }
 
     public function show(string $id)

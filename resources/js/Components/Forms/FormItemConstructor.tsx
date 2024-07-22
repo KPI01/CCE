@@ -50,7 +50,6 @@ export default function FormItemConstructor({
   const descripId = `descrip-${toId}`;
 
   const InputField = textarea ? Textarea : Input;
-  // console.debug({name, withLabel})
 
   const Label = (
     <FormLabel id={labelId} htmlFor={inputId} className="leading-0">

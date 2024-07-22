@@ -92,7 +92,7 @@ export const formSchema = z.object({
         .regex(
           /^([\d]{7,12}[SASTU]*([/][\d]{1,3})?|[\d]{1,3}[/][\d]{1,3})$/gm,
           {
-            message: "La identificación ROPO debe estar en el formato adecuado",
+            message: "La identificación ROPO debe estar en el formato adecuado.",
           },
         )
         .max(55, "El ID ROPO debe ser más corto.")

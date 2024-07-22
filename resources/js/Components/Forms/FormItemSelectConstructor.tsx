@@ -26,7 +26,7 @@ interface Props extends ConstructorProps {
 
 export function FormItemSelectConstructor({
   id,
-  label,
+  label = "(Label)",
   name,
   value,
   options,

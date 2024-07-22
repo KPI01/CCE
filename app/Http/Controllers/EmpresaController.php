@@ -126,7 +126,6 @@ class EmpresaController extends Controller
                 seccion: "description",
                 append: $this->inst->nombre . " (" . $this->inst->nif . ")"
             );
-            Log::debug($this->toasts["exito"]["store"]);
             return redirect()
                 ->intended(route("empresas.index"))
                 ->with([
