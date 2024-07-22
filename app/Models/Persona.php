@@ -5,9 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\DB;
 
-class Persona extends Recurso
+class Persona extends RecursoBase
 {
-    protected $guard = [];
+    protected $attributes =[
+        "perfil" => "Productor"
+    ];
+
     protected $appends = ["ropo"];
     protected $ropo = [
         "tipo" => null,
@@ -16,47 +19,27 @@ class Persona extends Recurso
         "tipo_aplicador" => null,
     ];
 
-    private function getParentAppends()
-    {
-        return (new parent())->getArrayableAppends();
-    }
-
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-        $this->appends = array_merge($this->appends, $this->getParentAppends());
-    }
+    protected $casts = [
+        "ropo" => "array",
+    ];
 
     public function getRopoAttribute()
     {
-        if (
-            empty($this->ropo["capacitacion"]) &&
-            empty($this->ropo["caducidad"]) &&
-            empty($this->ropo["nro"])
-        ) {
-            $this->retrieveRopoAttribute();
-        }
+        $this->retrieveRopoAttribute();
 
         return $this->ropo;
     }
 
-    public function setRopoAttribute(array $ropo)
+    public function setRopoAttribute(array $ropo): Persona
     {
-        // dd($ropo);
-        if (!is_null($ropo["capacitacion"]) && !is_null($ropo["nro"])) {
-            DB::table("persona_ropo")->updateOrInsert(
-                ["persona_id" => $this->id],
-                [
-                    "capacitacion" => $ropo["capacitacion"],
-                    "caducidad" => isset($ropo["caducidad"])
-                        ? date("Y-m-d", strtotime($ropo["caducidad"]))
-                        : null,
-                    "nro" => $ropo["nro"],
-                ]
-            );
+        if (!empty($ropo["caducidad"])) {
+            $ropo["caducidad"] = date("Y-m-d", strtotime($ropo["caducidad"]));
         }
 
+        $this->upsertRopoAttribute($ropo);
         $this->ropo = array_merge($this->ropo, $ropo);
+
+        return $this;
     }
 
     private function retrieveRopoAttribute()
@@ -67,17 +50,43 @@ class Persona extends Recurso
 
         if ($record) {
             $this->ropo = [
-                "capacitacion" => $record->capacitacion,
                 "caducidad" => $record->caducidad,
                 "nro" => $record->nro,
+                "capacitacion" => $record->capacitacion,
             ];
         } else {
             $this->ropo = [
-                "capacitacion" => null,
                 "caducidad" => null,
                 "nro" => null,
+                "capacitacion" => null,
             ];
         }
+    }
+
+    private function upsertRopoAttribute(array $ropo)
+    {
+        $cad = $ropo["caducidad"];
+        $nro = $ropo["nro"];
+
+        if (isset($cad)) {
+            $cad = strtotime($cad);
+        } elseif (isset($nro)) {
+            DB::table("empresa_ropo")->upsert(
+                values: [
+                    "empresa_id" => $this->id,
+                    "caducidad" => isset($ropo["caducidad"])
+                        ? date("Y-m-d", $cad)
+                        : null,
+                    "nro" => $ropo["nro"] ?? null,
+                    "capacitacion" => $ropo["capacitacion"] ?? null,
+                ],
+                uniqueBy: ["empresa_id", "nro"],
+                update: ["caducidad", "nro", "capacitacion"]
+            );
+        }
+
+        $this->setUpdatedAt(now());
+        $this->save();
     }
 
     public function empresas(): BelongsToMany
@@ -87,13 +96,4 @@ class Persona extends Recurso
             ->using(EmpresaPersona::class);
     }
 
-    public function update(array $attributes = [], array $options = [])
-    {
-        if (isset($attributes["ropo"])) {
-            $this->setRopoAttribute($attributes["ropo"]);
-            unset($attributes["ropo"]);
-        }
-
-        return parent::update($attributes, $options);
-    }
 }

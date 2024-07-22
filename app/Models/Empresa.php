@@ -7,14 +7,10 @@ use Illuminate\Support\Facades\DB;
 
 class Empresa extends RecursoBase
 {
-    protected $keyType = "string";
-    public $incrementing = false;
 
     protected $attributes = [
         "perfil" => "Aplicador",
     ];
-
-    protected $guarded = [];
 
     protected $appends = ["ropo"];
 
