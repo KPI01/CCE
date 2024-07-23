@@ -10,13 +10,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form, FormField, FormLabel } from "@/Components/ui/form";
-
-import { format } from "date-fns";
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
 import FormLayout from "@/Layouts/Recursos/FormLayout";
 import FormTitle from "@/Components/Forms/FormTitle";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
+import { formatDate } from "@/lib/dates";
 
 const schema = formSchema;
 
@@ -55,13 +54,13 @@ export default function Show({ data, urls }: Props) {
       id={data.id}
       pageTitle="Persona"
       mainTitle={`${data.nombres} ${data.apellidos}`}
-      created_at={data.created_at.toLocaleString()}
-      updated_at={data.updated_at.toLocaleString()}
+      created_at={formatDate(data.created_at)}
+      updated_at={formatDate(data.updated_at)}
       urls={urls}
       backUrl={urls.index}
     >
       <Form {...form}>
-        <form id={`show-form-${data.id}`} className={CONTAINER_CLASS}>
+        <form id={`show-${data.id}`} className={CONTAINER_CLASS}>
           <div className="space-y-4">
             <FormTitle id="h3-basicos" title="Datos básicos" />
             <div

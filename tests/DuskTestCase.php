@@ -13,7 +13,7 @@ use Laravel\Dusk\Browser;
 
 abstract class DuskTestCase extends BaseTestCase
 {
-    public $user;
+    protected $user;
 
     /**
      * Prepare for Dusk test execution.

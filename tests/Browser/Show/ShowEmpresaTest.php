@@ -5,7 +5,7 @@ namespace Tests\Browser\Show;
 use App\Models\Empresa;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Components\Navbar;
-use Tests\Browser\Pages\Recursos\Formulario;
+use Tests\Browser\Pages\Recursos\Form;
 use Tests\DuskTestCase;
 
 class ShowEmpresaTest extends DuskTestCase
@@ -22,10 +22,10 @@ class ShowEmpresaTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(
-                new Formulario(
+                new Form(
                     recurso: "empresas",
                     accion: "show",
-                    modelo: $this->e
+                    id: $this->e->id
                 )
             );
         });
@@ -36,10 +36,10 @@ class ShowEmpresaTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser
                 ->visit(
-                    new Formulario(
+                    new Form(
                         recurso: "empresas",
                         accion: "show",
-                        modelo: $this->e
+                        id: $this->e->id
                     )
                 )
                 ->within(new Navbar(), function ($browser) {
@@ -97,10 +97,10 @@ class ShowEmpresaTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser
                 ->visit(
-                    new Formulario(
+                    new Form(
                         recurso: "empresas",
                         accion: "show",
-                        modelo: $this->e
+                        id: $this->e->id
                     )
                 )
                 ->within(new Navbar(), function ($browser) {
@@ -157,10 +157,10 @@ class ShowEmpresaTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser
                 ->visit(
-                    new Formulario(
+                    new Form(
                         recurso: "empresas",
                         accion: "show",
-                        modelo: $this->e
+                        id: $this->e->id
                     )
                 )
                 ->assertInputValue("h1", $this->e->nombre)
@@ -195,10 +195,10 @@ class ShowEmpresaTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser
                 ->visit(
-                    new Formulario(
+                    new Form(
                         recurso: "empresas",
                         accion: "show",
-                        modelo: $this->e
+                        id: $this->e->id
                     )
                 )
                 ->assertDisabled("@input-nif")
@@ -220,13 +220,12 @@ class ShowEmpresaTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser
                 ->visit(
-                    new Formulario(
+                    new Form(
                         recurso: "empresas",
                         accion: "show",
-                        modelo: $this->e
+                        id: $this->e->id
                     )
                 )
-                ->storeSource("empresas/show/badges.html")
                 ->assertSeeIn(
                     selector: "@badge-created-" . $this->e->id,
                     text: date("d/m/Y, H:i:s", strtotime($this->e->created_at)),
@@ -248,10 +247,10 @@ class ShowEmpresaTest extends DuskTestCase
 
             $browser
                 ->visit(
-                    new Formulario(
+                    new Form(
                         recurso: "empresas",
                         accion: "show",
-                        modelo: $this->e
+                        id: $this->e->id
                     )
                 )
                 ->click("@badge-destroy-" . $this->e->id)
@@ -268,7 +267,7 @@ class ShowEmpresaTest extends DuskTestCase
                 ->pause(750)
                 ->click("#alert-confirm")
                 ->pause(750)
-                ->assertPathIs("/app/recurso/empresasa");
+                ->assertPathIs("/app/recurso/empresas");
         });
     }
 
@@ -277,13 +276,13 @@ class ShowEmpresaTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser
                 ->visit(
-                    new Formulario(
+                    new Form(
                         recurso: "empresas",
                         accion: "show",
-                        modelo: $this->e
+                        id: $this->e->id
                     )
                 )
-                ->click("button#back-btn")
+                ->click("@back-btn")
                 ->pause(750)
                 ->assertPathIs("/app/recurso/empresas");
         });

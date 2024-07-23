@@ -1,7 +1,7 @@
 interface ConstructorProps {
   id: string;
   withLabel?: boolean;
-  label: string;
+  label?: string;
   name: string;
   value: string | number | readonly string[] | undefined;
   onChange: (...events: any[]) => void;

@@ -87,6 +87,7 @@ class Form extends Page
             "@submit" => 'button[type="submit"]',
             "@reset" => 'button[type="reset"]',
             "@separator" => 'div[data-orientation][role="none"]',
+            "@back-btn" => "button#back-btn",
         ];
     }
 }
