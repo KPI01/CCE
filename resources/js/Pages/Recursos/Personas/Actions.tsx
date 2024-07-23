@@ -33,21 +33,25 @@ export default function Actions({ item }: Props) {
     return (
       <AlertDialog>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
+          <DropdownMenuTrigger asChild >
+            <Button
+              variant="ghost"
+              className="h-8 w-8 p-0"
+              id={`action-menu-${item.id}`}
+            >
               <span className="sr-only">Menú</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent forceMount align="end">
-            <DropdownMenuItem asChild className="w-full cursor-pointer">
+          <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild className="w-full cursor-pointer" id={`action-show-${item.id}`}>
               <Link href={item.urls?.show}>
                 <File className="mr-2 h-4 w-4" />
                 Ver detalles
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild className="w-full cursor-pointer">
-              <Link href={item.urls?.edit} method="get" as="button">
+              <DropdownMenuItem asChild className="w-full cursor-pointer" id={`action-edit-${item.id}`}>
+              <Link href={item.urls?.edit}>
                 <Pen className="mr-2 h-4 w-4" />
                 Editar
               </Link>
@@ -55,6 +59,7 @@ export default function Actions({ item }: Props) {
             <DropdownMenuItem
               asChild
               className="w-full cursor-pointer hover:!bg-destructive/25"
+              id={`action-delete-${item.id}`}
             >
               <AlertDialogTrigger>
                 <Trash className="mr-2 h-4 w-4" />

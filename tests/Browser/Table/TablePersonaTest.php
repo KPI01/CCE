@@ -178,4 +178,36 @@ class TablePersonaTest extends DuskTestCase
                 ->assertPresent("@radix-item:nth-child(n)");
         });
     }
+
+    public function testMenuFilas(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(new Table("personas"));
+
+            $browser
+                ->assertPresent("@r-menu")
+                ->assertEnabled("@r-menu")
+                ->click("@r-menu")
+                ->pause(750)
+                ->assertPresent("@radix-popper")
+                ->assertVisible("@radix-popper")
+                ->assertPresent("@acc-show")
+                ->assertPresent("@acc-edit")
+                ->assertPresent("@acc-delete")
+                ->assertVisible("@acc-show")
+                ->assertVisible("@acc-edit")
+                ->assertVisible("@acc-delete");
+        });
+    }
+
+    public function testGoToCreate(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser
+                ->visit(new Table("personas"))
+                ->click("@acc-create")
+                ->pause(750)
+                ->assertUrlIs(route("personas.create"));
+        });
+    }
 }

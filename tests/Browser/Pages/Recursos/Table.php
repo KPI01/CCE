@@ -51,6 +51,11 @@ class Table extends Page
             "@pag-" => "#pag-nav-",
             "@radix-popper" => "div[data-radix-popper-content-wrapper]",
             "@radix-item" => "div[data-radix-collection-item]",
+            "@r-menu" => 'table tbody tr:first-child td:last-child button',
+            "@acc-show" => "a[id^=action-show]",
+            "@acc-edit" => "a[id^=action-edit]",
+            "@acc-delete" => "button[id^=action-delete]",
+            "@acc-create" => "button#action-create",
         ];
     }
 }
