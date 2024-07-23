@@ -136,7 +136,10 @@ class TableEmpresaTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit(new Table("empresas"));
 
-            $browser->assertDontSeeIn("@tbody", "Sin registros.");
+            $browser
+                ->assertPresent("@dt")
+                ->assertVisible("@dt")
+                ->assertDontSeeIn("@tbody", "Sin registros.");
         });
     }
 

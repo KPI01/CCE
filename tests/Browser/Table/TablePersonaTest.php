@@ -2,135 +2,180 @@
 
 namespace Tests\Browser\Table;
 
+use App\Models\Persona;
+use Illuminate\Support\Facades\Schema;
 use Laravel\Dusk\Browser;
-use Tests\Browser\Pages\Recursos\Persona\Table;
+use Tests\Browser\Components\Navbar;
+use Tests\Browser\Pages\Recursos\Table;
 use Tests\DuskTestCase;
 
 class TablePersonaTest extends DuskTestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
     public function testAcceso(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser
-                ->visit(new Table())
-                ->responsiveScreenshots("Recursos/Persona/Table/acceso");
+            $browser->visit(new Table("personas"));
         });
     }
 
-    public function testAccesibilidadVisual(): void
+    public function testAccesibilidad(): void
     {
         $this->browse(function (Browser $browser) {
+            $browser->visit(new Table("personas"))->assertSee("Personas");
             $browser
-                ->visit(new Table())
-                ->assertPresent("@filtros-btn")
-                ->assertVisible("@filtros-btn")
-                ->assertPresent("@visibilidad-btn")
-                ->assertVisible("@visibilidad-btn")
-                ->assertPresent("@datatable")
-                ->assertVisible("@datatable")
-                ->assertPresent("@page-size")
-                ->assertVisible("@page-size")
-                ->assertPresent("@page-count")
-                ->assertVisible("@page-count")
-                ->assertPresent("@goTo-primera")
-                ->assertVisible("@goTo-primera")
-                ->assertPresent("@goTo-ultima")
-                ->assertVisible("@goTo-ultima")
-                ->assertPresent("@goTo-prev")
-                ->assertVisible("@goTo-prev")
-                ->assertPresent("@goTo-next")
-                ->assertVisible("@goTo-next");
-
-            $browser->screenshot("Recursos/Persona/Table/accesibilidad_visual");
-        });
-    }
-
-    public function testMostrarFiltros(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser
-                ->visit(new Table())
-                ->assertPresent("@filtros-btn")
-                ->click("@filtros-btn")
+                ->assertPresent("@container")
+                ->assertPresent("@dt")
+                ->assertPresent("@thead")
+                ->assertPresent("@tbody")
+                ->assertPresent("@v-btn")
+                ->assertEnabled("@v-btn")
+                ->click("@v-btn")
                 ->pause(500)
-                ->assertPresent("@filtros-content")
-                ->assertVisible("@filtros-content");
-
-            $browser->responsiveScreenshots(
-                "Recursos/Persona/Table/mostrar_filtros"
-            );
+                ->assertPresent("@v-content")
+                ->visit(new Table("personas"))
+                ->assertNotPresent("@v-content")
+                ->assertPresent("@f-btn")
+                ->assertEnabled("@f-btn")
+                ->click("@f-btn")
+                ->pause(500)
+                ->assertPresent("@f-content")
+                ->visit(new Table("personas"))
+                ->assertNotPresent("@f-content")
+                ->assertPresent("@p-container")
+                ->assertPresent("@p-size-btn")
+                ->assertEnabled("@p-size-btn")
+                ->click("@p-size-btn")
+                ->pause(500)
+                ->assertPresent("@radix-popper")
+                ->assertPresent("@p-indexing")
+                ->assertSeeIn("@p-indexing", "Página")
+                ->assertPresent("@pag-primera")
+                ->assertPresent("@pag-anterior")
+                ->assertPresent("@pag-siguiente")
+                ->assertPresent("@pag-ultima");
         });
     }
 
-    public function testDropdownVisibilidad(): void
+    public function testVisibilidad(): void
     {
         $this->browse(function (Browser $browser) {
             $browser
-                ->visit(new Table())
-                ->assertPresent("@visibilidad-btn")
-                ->assertButtonEnabled("@visibilidad-btn");
-
-            $browser->click("@visibilidad-btn");
+                ->visit(new Table("personas"))
+                ->within(new Navbar(), function (Browser $browser) {
+                    $browser
+                        ->assertVisible("@titulo")
+                        ->assertVisible("@nav")
+                        ->assertVisible("@list")
+                        ->assertVisible("@list")
+                        ->assertVisible("@rcs-btn")
+                        ->assertVisible("@conf-btn")
+                        ->assertVisible("@home-btn");
+                });
 
             $browser
-                ->assertPresent("@visibilidad-content")
-                ->assertVisible("@visibilidad-content")
-                ->assertPresent("@v-toggle-email")
-                ->assertPresent("@v-toggle-tel")
-                ->assertPresent("@v-toggle-perfil")
-                ->assertPresent("@v-toggle-ropo_tipo")
-                ->assertPresent("@v-toggle-ropo_nro")
-                ->assertPresent("@v-toggle-ropo_caducidad")
-                ->assertPresent("@v-toggle-ropo_tipo_aplicador")
-                ->assertVisible("@v-toggle-email")
-                ->assertVisible("@v-toggle-tel")
-                ->assertVisible("@v-toggle-perfil")
-                ->assertVisible("@v-toggle-ropo_tipo")
-                ->assertVisible("@v-toggle-ropo_nro")
-                ->assertVisible("@v-toggle-ropo_caducidad")
-                ->assertVisible("@v-toggle-ropo_tipo_aplicador");
+                ->assertVisible("@container")
+                ->assertVisible("@dt")
+                ->assertVisible("@thead")
+                ->assertVisible("@tbody")
+                ->assertVisible("@v-btn")
+                ->assertEnabled("@v-btn")
+                ->click("@v-btn")
+                ->pause(750)
+                ->assertVisible("@v-content")
+                ->visit(new Table("personas"))
+                ->assertVisible("@f-btn")
+                ->assertEnabled("@f-btn")
+                ->click("@f-btn")
+                ->pause(750)
+                ->assertVisible("@f-content")
+                ->visit(new Table("personas"))
+                ->assertVisible("@p-container")
+                ->assertVisible("@p-size-btn")
+                ->assertEnabled("@p-size-btn")
+                ->click("@p-size-btn")
+                ->pause(500)
+                ->assertVisible("@radix-popper")
+                ->assertVisible("@p-indexing")
+                ->assertSeeIn("@p-indexing", "Página")
+                ->assertVisible("@pag-primera")
+                ->assertVisible("@pag-anterior")
+                ->assertVisible("@pag-siguiente")
+                ->assertVisible("@pag-ultima");
+        });
+    }
 
-            // $browser->storeSource('Recursos/Persona/listado-dropdown_visibilidad.html');
+    public function testContenidoFilas(): void
+    {
+        Schema::disableForeignKeyConstraints();
+        Persona::truncate();
 
-            $browser->clickAtPoint(100, 100);
+        $this->assertDatabaseEmpty("personas");
 
-            $browser->responsiveScreenshots(
-                "Recursos/Persona/Table/dropdown_visibilidad"
-            );
+        $this->browse(function (Browser $browser) {
+            $browser->visit(new Table("personas"));
+            
+            $browser
+                ->assertPresent("@dt")
+                ->assertVisible("@dt")
+                ->assertSeeIn("@tbody", "Sin registros.");
+        });
+
+        Persona::factory(10)->create();
+
+        $this->browse(function (Browser $browser) {
+            $browser->visit(new Table("personas"));
+
+            $browser
+                ->assertPresent("@dt")
+                ->assertVisible("@dt")
+                ->assertDontSeeIn("@tbody", "Sin registros.");
+        });
+    }
+
+    public function testFiltros(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(new Table("personas"));
+
+            $browser
+                ->assertPresent("@f-btn")
+                ->assertEnabled("@f-btn")
+                ->click("@f-btn")
+                ->pause(750)
+                ->assertPresent("@f-content")
+                ->assertVisible("@f-content");
         });
     }
 
     public function testVisibilidadColumnas(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser
-                ->visit(new Table())
-                ->pause(500)
-                ->assertPresent("@header-nombres")
-                ->assertPresent("@header-apellidos")
-                ->assertPresent("@header-id_nac")
-                ->assertPresent("@header-email")
-                ->assertPresent("@header-tel")
-                ->assertPresent("@visibilidad-btn")
-                ->assertEnabled("@visibilidad-btn");
-
-            $browser->click("@visibilidad-btn");
+            $browser->visit(new Table("personas"));
 
             $browser
-                ->assertPresent("@visibilidad-content")
-                ->assertVisible("@v-toggle-email")
-                ->assertVisible("@v-toggle-tel")
-                ->assertVisible("@v-toggle-perfil")
-                ->assertVisible("@v-toggle-ropo_tipo")
-                ->assertVisible("@v-toggle-ropo_nro")
-                ->assertVisible("@v-toggle-ropo_caducidad")
-                ->click("@v-toggle-tel")
-                ->assertNotPresent("@header-tel");
+                ->assertPresent("@v-btn")
+                ->assertEnabled("@v-btn")
+                ->click("@v-btn")
+                ->pause(750)
+                ->assertPresent("@v-content")
+                ->assertVisible("@v-content");
+        });
+    }
+
+    public function testPaginacion(): void
+    {
+         $this->browse(function (Browser $browser) {
+            $browser->visit(new Table("personas"));
+
+            $browser
+                ->assertPresent("@p-container")
+                ->assertPresent("@p-size-btn")
+                ->assertEnabled("@p-size-btn")
+                ->click("@p-size-btn")
+                ->pause(750)
+                ->assertPresent("@radix-popper")
+                ->assertVisible("@radix-popper")
+                ->assertPresent("@radix-item:nth-child(n)");
         });
     }
 }
