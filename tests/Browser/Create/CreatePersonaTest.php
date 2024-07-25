@@ -15,19 +15,12 @@ class CreatePersonaTest extends DuskTestCase
     public function setUp(): void
     {
         parent::setUp();
-        echo 'setUp: CreatePersonaTest' . PHP_EOL;
     }
 
     public function testAcceso(): void
     {
-        echo 'Acceso' . PHP_EOL;
         $this->browse(function (Browser $browser) {
-            $browser->visit(
-                new Form(
-                    recurso: "personas",
-                    accion: "create"
-                )
-            );
+            $browser->visit(new Form(recurso: "personas", accion: "create"));
         });
     }
 
@@ -300,8 +293,14 @@ class CreatePersonaTest extends DuskTestCase
                     "@msg-nombres",
                     "El nombre debe tener al menos 3 caracteres."
                 )
-                ->assertSeeIn("@msg-apellidos", "El apellido debe tener al menos 3 caracteres.")
-                ->assertSeeIn("@msg-id_nac", "La identificación debe tener el formato adecuado.")
+                ->assertSeeIn(
+                    "@msg-apellidos",
+                    "El apellido debe tener al menos 3 caracteres."
+                )
+                ->assertSeeIn(
+                    "@msg-id_nac",
+                    "La identificación debe tener el formato adecuado."
+                )
                 ->assertSeeIn("@msg-email", "El correo debe ser válido.")
                 ->assertSeeIn(
                     "@msg-tel",
@@ -321,7 +320,10 @@ class CreatePersonaTest extends DuskTestCase
                     "@msg-nombres",
                     "El nombre solo puede contener letras."
                 )
-                ->assertSeeIn("@msg-id_nac", "La identificación debe tener el formato adecuado.")
+                ->assertSeeIn(
+                    "@msg-id_nac",
+                    "La identificación debe tener el formato adecuado."
+                )
                 ->assertSeeIn("@msg-email", "El correo debe ser válido.")
                 ->assertSeeIn(
                     "@msg-tel",
@@ -414,7 +416,9 @@ class CreatePersonaTest extends DuskTestCase
                 ->type("@input-ropo_nro", "579265481842S")
                 ->click("@trigger-ropo_caducidad")
                 ->pause(750)
-                ->click("@calendar table tbody tr:last-child td:last-child button")
+                ->click(
+                    "@calendar table tbody tr:last-child td:last-child button"
+                )
                 ->pause(750)
                 ->press("@submit");
 

@@ -113,7 +113,7 @@ class TablePersonaTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) {
             $browser->visit(new Table("personas"));
-            
+
             $browser
                 ->assertPresent("@dt")
                 ->assertVisible("@dt")
@@ -164,7 +164,7 @@ class TablePersonaTest extends DuskTestCase
 
     public function testPaginacion(): void
     {
-         $this->browse(function (Browser $browser) {
+        $this->browse(function (Browser $browser) {
             $browser->visit(new Table("personas"));
 
             $browser

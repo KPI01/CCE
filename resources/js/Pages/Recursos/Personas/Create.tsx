@@ -74,7 +74,7 @@ export default function Create({ urls }: Props) {
                   name={field.name}
                   placeholder="..."
                   onChange={field.onChange}
-                  value={field.value}
+                  value={field.value || undefined}
                 />
               )}
             />
@@ -88,7 +88,7 @@ export default function Create({ urls }: Props) {
                   name={field.name}
                   placeholder="..."
                   onChange={field.onChange}
-                  value={field.value}
+                  value={field.value || undefined}
                 />
               )}
             />
@@ -160,8 +160,7 @@ export default function Create({ urls }: Props) {
                   name={field.name}
                   placeholder="..."
                   onChange={field.onChange}
-                  value={field.value}
-                  descripcion="Formato: 123-45-67-89"
+                  value={field.value || ""}
                 />
               )}
             />
@@ -191,7 +190,7 @@ export default function Create({ urls }: Props) {
                   name={field.name}
                   placeholder="..."
                   onChange={field.onChange}
-                  value={field.value}
+                  value={field.value || ""}
                 />
               )}
             />

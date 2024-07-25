@@ -15,7 +15,8 @@
         "panel": "dedicated",
         "showReuseMessage": true,
         "clear": true
-      }
+      },
+      "problemMatcher": []
     },
     {
       "type": "shell",

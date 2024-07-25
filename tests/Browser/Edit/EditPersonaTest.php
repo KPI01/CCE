@@ -5,45 +5,71 @@ namespace Tests\Browser\Edit;
 use App\Models\Persona;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Components\Navbar;
-use Tests\Browser\Pages\Recursos\Persona\Edit;
+use Tests\Browser\Pages\Recursos\Form;
 use Tests\DuskTestCase;
+use Laravel\Dusk\Keyboard;
 
 class EditPersonaTest extends DuskTestCase
 {
-    public Persona $p;
+    public Persona $instFull;
+    public Persona $instParcial;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->p = Persona::factory(1)->withRopo()->create()->first();
+        $this->instParcial = Persona::factory(1)
+            ->state([
+                "tel" => "",
+                "observaciones" => "",
+            ])
+            ->create()
+            ->first();
+        $this->instFull = Persona::factory(1)->withRopo()->create()->first();
     }
 
     public function testAcceso(): void
     {
-        //
         $this->browse(function (Browser $browser) {
-            $browser
-                ->visit(new Edit($this->p))
-                ->responsiveScreenshots("persona/edit/acceso");
+            $browser->visit(
+                new Form(
+                    recurso: "personas",
+                    accion: "edit",
+                    id: $this->instFull->id
+                )
+            );
         });
     }
 
     public function testAccesibilidad(): void
     {
-        //
         $this->browse(function (Browser $browser) {
+            $browser->visit(
+                new Form(
+                    recurso: "personas",
+                    accion: "edit",
+                    id: $this->instFull->id
+                )
+            );
+
+            $browser->within(new Navbar(), function (Browser $browser) {
+                $browser
+                    ->assertPresent("@nav")
+                    ->assertPresent("@list")
+                    ->assertPresent("@rcs-btn")
+                    ->assertPresent("@conf-btn")
+                    ->assertPresent("@home-btn");
+            });
+
             $browser
-                ->visit(new Edit($this->p))
-                ->assertPresent("@form")
-                ->assertPresent("@separator")
-                ->assertPresent("@h3-datos_personales")
-                ->assertPresent("@h3-ropo")
+                ->assertPresent("@h3-basicos")
+                ->assertPresent("@form-edit-{$this->instFull->id}")
                 ->assertPresent("@label-nombres")
                 ->assertPresent("@input-nombres")
                 ->assertPresent("@label-apellidos")
                 ->assertPresent("@input-apellidos")
                 ->assertPresent("@label-id_nac")
                 ->assertPresent("@trigger-tipo_id_nac")
+                ->assertPresentByName("select", "tipo_id_nac")
                 ->assertPresent("@input-id_nac")
                 ->assertPresent("@label-email")
                 ->assertPresent("@input-email")
@@ -51,42 +77,55 @@ class EditPersonaTest extends DuskTestCase
                 ->assertPresent("@input-tel")
                 ->assertPresent("@label-perfil")
                 ->assertPresent("@trigger-perfil")
+                ->assertPresentByName("select", "perfil")
                 ->assertPresent("@label-observaciones")
-                ->assertPresent("@txt-observaciones")
-                ->assertPresent("@label-ropo_tipo")
-                ->assertPresent("@trigger-ropo_tipo")
+                ->assertPresent("@txt-observaciones");
+
+            $browser
+                ->assertPresent("@h3-ropo")
+                ->assertPresent("@label-ropo_capacitacion")
+                ->assertPresent("@trigger-ropo_capacitacion")
+                ->assertPresentByName("select", "ropo.capacitacion")
                 ->assertPresent("@label-ropo_nro")
                 ->assertPresent("@input-ropo_nro")
                 ->assertPresent("@label-ropo_caducidad")
                 ->assertPresent("@trigger-ropo_caducidad")
-                ->assertPresent("@input-ropo_caducidad")
-                ->assertPresent("@label-ropo_tipo_aplicador")
-                ->assertPresent("@trigger-ropo_tipo_aplicador")
-                ->assertPresentByName("select", "tipo_id_nac")
-                ->assertPresentByName("select", "perfil")
-                ->assertPresentByName("select", "ropo.tipo")
-                ->assertPresentByName("select", "ropo.tipo_aplicador")
-                ->within(new Navbar(), function (Browser $browser) {
-                    $browser
-                        ->assertPresent("@titulo")
-                        ->assertPresent("@home-btn")
-                        ->assertPresent("@conf-btn")
-                        ->assertPresent("@nav")
-                        ->assertPresent("@list")
-                        ->assertPresent("@rsrc-btn");
-                });
+                ->assertPresent("@input-ropo_caducidad");
+
+            $browser->assertPresent("@submit")->assertEnabled("@submit");
+        });
+    }
+
+    public function testVisibilidad(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(
+                new Form(
+                    recurso: "personas",
+                    accion: "edit",
+                    id: $this->instFull->id
+                )
+            );
+
+            $browser->within(new Navbar(), function (Browser $browser) {
+                $browser
+                    ->assertVisible("@nav")
+                    ->assertVisible("@list")
+                    ->assertVisible("@rcs-btn")
+                    ->assertVisible("@conf-btn")
+                    ->assertVisible("@home-btn");
+            });
 
             $browser
-                ->assertVisible("@form")
-                ->assertVisible("@separator")
-                ->assertVisible("@h3-datos_personales")
-                ->assertVisible("@h3-ropo")
+                ->assertVisible("@h3-basicos")
+                ->assertVisible("@form-edit-{$this->instFull->id}")
                 ->assertVisible("@label-nombres")
                 ->assertVisible("@input-nombres")
                 ->assertVisible("@label-apellidos")
                 ->assertVisible("@input-apellidos")
                 ->assertVisible("@label-id_nac")
                 ->assertVisible("@trigger-tipo_id_nac")
+                ->assertVisibleByName("select", "tipo_id_nac")
                 ->assertVisible("@input-id_nac")
                 ->assertVisible("@label-email")
                 ->assertVisible("@input-email")
@@ -94,282 +133,614 @@ class EditPersonaTest extends DuskTestCase
                 ->assertVisible("@input-tel")
                 ->assertVisible("@label-perfil")
                 ->assertVisible("@trigger-perfil")
+                ->assertVisibleByName("select", "perfil")
                 ->assertVisible("@label-observaciones")
-                ->assertVisible("@txt-observaciones")
-                ->assertVisible("@label-ropo_tipo")
-                ->assertVisible("@trigger-ropo_tipo")
+                ->assertVisible("@txt-observaciones");
+
+            $browser
+                ->assertVisible("@h3-ropo")
+                ->assertVisible("@label-ropo_capacitacion")
+                ->assertVisible("@trigger-ropo_capacitacion")
+                ->assertVisibleByName("select", "ropo.capacitacion")
                 ->assertVisible("@label-ropo_nro")
                 ->assertVisible("@input-ropo_nro")
                 ->assertVisible("@label-ropo_caducidad")
-                ->assertVisible("@trigger-ropo_caducidad")
-                ->assertVisible("@label-ropo_tipo_aplicador")
-                ->assertVisible("@trigger-ropo_tipo_aplicador")
-                ->assertVisibleByName("select", "tipo_id_nac")
-                ->assertVisibleByName("select", "perfil")
-                ->assertVisibleByName("select", "ropo.tipo")
-                ->assertVisibleByName("select", "ropo.tipo_aplicador")
-                ->within(new Navbar(), function (Browser $browser) {
-                    $userNombre = $this->user->nombres;
-                    $browser
-                        ->assertSeeIn("@titulo", "Bienvenido, $userNombre")
-                        ->assertVisible("@home-btn")
-                        ->assertVisible("@conf-btn")
-                        ->assertVisible("@nav")
-                        ->assertVisible("@list")
-                        ->assertVisible("@rsrc-btn");
-                });
+                ->assertVisible("@trigger-ropo_caducidad");
+
+            $browser->assertVisible("@submit");
+        });
+    }
+
+    public function testCamposHabilitados(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(
+                new Form(
+                    recurso: "personas",
+                    accion: "edit",
+                    id: $this->instFull->id
+                )
+            );
 
             $browser
                 ->assertEnabled("@input-nombres")
                 ->assertEnabled("@input-apellidos")
-                ->assertButtonEnabled("@trigger-tipo_id_nac")
+                ->assertEnabled("@label-id_nac")
+                ->assertEnabled("@trigger-tipo_id_nac")
                 ->assertEnabledByName("select", "tipo_id_nac")
                 ->assertEnabled("@input-id_nac")
+                ->assertEnabled("@label-email")
                 ->assertEnabled("@input-email")
+                ->assertEnabled("@label-tel")
                 ->assertEnabled("@input-tel")
-                ->assertButtonEnabled("@trigger-perfil")
+                ->assertEnabled("@label-perfil")
+                ->assertEnabled("@trigger-perfil")
                 ->assertEnabledByName("select", "perfil")
-                ->assertEnabled("@txt-observaciones")
-                ->assertButtonEnabled("@trigger-ropo_tipo")
-                ->assertEnabledByName("select", "ropo.tipo")
+                ->assertEnabled("@label-observaciones")
+                ->assertEnabled("@txt-observaciones");
+
+            $browser
+                ->assertEnabled("@h3-ropo")
+                ->assertEnabled("@label-ropo_capacitacion")
+                ->assertEnabled("@trigger-ropo_capacitacion")
+                ->assertEnabledByName("select", "ropo.capacitacion")
+                ->assertEnabled("@label-ropo_nro")
                 ->assertEnabled("@input-ropo_nro")
-                ->assertButtonEnabled("@trigger-ropo_caducidad")
-                ->assertButtonEnabled("@trigger-ropo_tipo_aplicador")
-                ->assertEnabledByName("select", "ropo.tipo_aplicador");
+                ->assertEnabled("@label-ropo_caducidad")
+                ->assertEnabled("@trigger-ropo_caducidad")
+                ->assertEnabled("@input-ropo_caducidad");
 
-            $browser->responsiveScreenshots("persona/edit/accesibilidad");
+            $browser->assertEnabled("@submit");
         });
     }
 
-    public function testValorDeCampos(): void
+    public function testValorCampos(): void
     {
-        //
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Edit($this->p));
+            $browser->visit(
+                new Form(
+                    recurso: "personas",
+                    accion: "edit",
+                    id: $this->instFull->id
+                )
+            );
 
             $browser
-                ->assertValue("@input-nombres", $this->p->nombres)
-                ->assertValue("@input-apellidos", $this->p->apellidos)
-                ->assertSelectedByName("tipo_id_nac", $this->p->tipo_id_nac)
-                ->assertValue("@input-id_nac", $this->p->id_nac)
-                ->assertValue("@input-email", $this->p->email)
-                ->assertValue("@input-tel", $this->p->tel)
-                ->assertSelectedByName("perfil", $this->p->perfil);
+                ->assertInputValue("@input-nombres", $this->instFull->nombres)
+                ->assertInputValue(
+                    "@input-apellidos",
+                    $this->instFull->apellidos
+                )
+                ->assertSelectedByName(
+                    "tipo_id_nac",
+                    $this->instFull->tipo_id_nac
+                )
+                ->assertInputValue("@input-id_nac", $this->instFull->id_nac)
+                ->assertInputValue("@input-email", $this->instFull->email)
+                ->assertInputValue("@input-tel", $this->instFull->tel)
+                ->assertSelectedByName("perfil", $this->instFull->perfil)
+                ->assertInputValue(
+                    "@txt-observaciones",
+                    $this->instFull->observaciones
+                );
 
-            if ($this->p->ropo) {
-                // dd($this->p->ropo);
-                $i = $this->p->ropo;
-                $browser
-                    ->assertValue("@input-ropo_nro", $i["nro"])
-                    ->assertValue("@input-ropo_caducidad", $i["caducidad"])
-                    ->assertSelectedByName("ropo.tipo", $i["tipo"])
-                    ->assertSelectedByName(
-                        "ropo.tipo_aplicador",
-                        $i["tipo_aplicador"]
-                    );
-            }
-
-            $browser->responsiveScreenshots("persona/edit/valor_de_campos");
+            $browser
+                ->assertSelectedByName(
+                    "ropo.capacitacion",
+                    $this->instFull->ropo["capacitacion"]
+                )
+                ->assertInputValue(
+                    "@input-ropo_nro",
+                    $this->instFull->ropo["nro"]
+                )
+                ->assertInputValue(
+                    "@input-ropo_caducidad",
+                    date("Y-m-d", strtotime($this->instFull->ropo["caducidad"]))
+                );
         });
     }
 
-    public function testEnvioVacio(): void
+    public function testEdicionCampos(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Edit($this->p));
+            $browser->visit(
+                new Form(
+                    recurso: "personas",
+                    accion: "edit",
+                    id: $this->instFull->id
+                )
+            );
+
+            $ropo_rgx1 = '^[0-9]{7,12}[S]?[ASTU]$';
+            $ropo_rgx2 = '^[0-9]{1,3}/[0-9]{1,3}$';
+            $fakeData = [
+                "nombres" => fake()->firstName(),
+                "apellidos" => fake()->lastName(),
+                "tipo_id_nac" => "DNI",
+                "id_nac" => fake()->dni(),
+                "email" => fake()->email(),
+                "tel" => str_replace(" ", "", fake()->tollFreeNumber()),
+                "perfil" => fake()->randomElement(Persona::PERFILES),
+                "observaciones" => fake()->text(),
+                "ropo" => [
+                    "capacitacion" => fake()->randomElement(
+                        Persona::CAPACITACIONES_ROPO
+                    ),
+                    "nro" => fake()->boolean()
+                        ? fake()->regexify($ropo_rgx1)
+                        : fake()->regexify($ropo_rgx2),
+                    "caducidad" => fake()->dateTimeBetween("now", "+4 year"),
+                ],
+            ];
 
             $browser
-                ->type("@input-nombres", " ")
-                ->type("@input-apellidos", " ")
-                ->type("@input-id_nac", " ")
-                ->type("@input-email", " ")
-                ->press("@submit");
+                ->type("@input-nombres", $fakeData["nombres"])
+                ->assertInputValue("@input-nombres", $fakeData["nombres"])
+                ->type("@input-apellidos", $fakeData["apellidos"])
+                ->assertInputValue("@input-apellidos", $fakeData["apellidos"])
+                ->assertSelectHasOptionByName(
+                    "tipo_id_nac",
+                    $fakeData["tipo_id_nac"]
+                )
+                ->selectByName("tipo_id_nac", $fakeData["tipo_id_nac"])
+                ->assertSelectedByName("tipo_id_nac", $fakeData["tipo_id_nac"])
+                ->type("@input-id_nac", $fakeData["id_nac"])
+                ->assertInputValue("@input-id_nac", $fakeData["id_nac"])
+                ->type("@input-email", $fakeData["email"])
+                ->assertInputValue("@input-email", $fakeData["email"])
+                ->type("@input-tel", $fakeData["tel"])
+                ->assertInputValue("@input-tel", $fakeData["tel"])
+                ->assertSelectHasOptionByName("perfil", $fakeData["perfil"])
+                ->selectByName("perfil", $fakeData["perfil"])
+                ->assertSelectedByName("perfil", $fakeData["perfil"])
+                ->type("@txt-observaciones", $fakeData["observaciones"])
+                ->assertInputValue(
+                    "@txt-observaciones",
+                    $fakeData["observaciones"]
+                );
 
             $browser
-                ->assertSeeIn(
-                    "@msg-nombres",
-                    "El nombre debe tener al menos 3 caracteres."
+                ->assertSelectHasOptionByName(
+                    "ropo.capacitacion",
+                    $fakeData["ropo"]["capacitacion"]
                 )
-                ->assertSeeIn(
-                    "@msg-apellidos",
-                    "Los apellidos deben tener al menos 3 caracteres."
+                ->selectByName(
+                    "ropo.capacitacion",
+                    $fakeData["ropo"]["capacitacion"]
                 )
-                ->assertSeeIn(
-                    "@msg-id_nac",
-                    "La identificación debe tener el formato adecuado."
+                ->assertSelectedByName(
+                    "ropo.capacitacion",
+                    $fakeData["ropo"]["capacitacion"]
                 )
-                ->assertSeeIn("@msg-email", "El correo debe ser válido.");
+                ->type("@input-ropo_nro", $fakeData["ropo"]["nro"])
+                ->assertInputValue("@input-ropo_nro", $fakeData["ropo"]["nro"]);
+            /**
+             * No he llegado a una forma de implementar el test de la caducidad
+             * utilizando el date picker
+             */
+        });
+    }
 
-            $browser->responsiveScreenshots("persona/edit/envio_vacio");
+    public function testEnvioRequeridoVacio(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(
+                new Form(
+                    recurso: "personas",
+                    accion: "edit",
+                    id: $this->instFull->id
+                )
+            );
+
+            $browser
+                ->assertInputValueIsNot("@input-nombres", "")
+                ->assertInputValueIsNot("@input-apellidos", "")
+                ->assertInputValueIsNot("@input-id_nac", "")
+                ->assertInputValueIsNot("@input-email", "");
+
+            $browser
+                ->doubleClick("@input-nombres")
+                ->withKeyboard(function (Keyboard $keyboard) {
+                    $nombresLength = strlen($this->instFull->nombres);
+                    for ($i = 0; $i < $nombresLength; $i++) {
+                        $keyboard->press(self::KEYS["backspace"]);
+                    }
+                })
+                ->assertInputValue("@input-nombres", "")
+                ->press("@submit")
+                ->assertPresent("@msg-nombres")
+                ->assertSeeIn("@msg-nombres", "Este campo es requerido")
+                ->type("@input-nombres", $this->instFull->nombres);
+            $browser
+                ->doubleClick("@input-apellidos")
+                ->withKeyboard(function (Keyboard $keyboard) {
+                    $apellidosLength = strlen($this->instFull->apellidos);
+                    for ($i = 0; $i < $apellidosLength; $i++) {
+                        $keyboard->press(self::KEYS["backspace"]);
+                    }
+                })
+                ->assertInputValue("@input-apellidos", "")
+                ->press("@submit")
+                ->assertPresent("@msg-apellidos")
+                ->assertSeeIn("@msg-apellidos", "Este campo es requerido")
+                ->type("@input-apellidos", $this->instFull->apellidos);
+            $browser
+                ->click("@input-id_nac")
+                ->withKeyboard(function (Keyboard $keyboard) {
+                    $idNacLength = strlen($this->instFull->id_nac);
+                    for ($i = 0; $i < $idNacLength; $i++) {
+                        $keyboard->press(self::KEYS["backspace"]);
+                    }
+                })
+                ->assertInputValue("@input-id_nac", "")
+                ->press("@submit")
+                ->assertPresent("@msg-id_nac")
+                ->assertSeeIn("@msg-id_nac", "Este campo es requerido")
+                ->type("@input-id_nac", $this->instFull->id_nac);
+            $browser
+                ->click("@input-email")
+                ->withKeyboard(function (Keyboard $keyboard) {
+                    $emailLength = strlen($this->instFull->email);
+                    for ($i = 0; $i < $emailLength; $i++) {
+                        $keyboard->press(self::KEYS["backspace"]);
+                    }
+                })
+                ->assertInputValue("@input-email", "")
+                ->press("@submit")
+                ->assertPresent("@msg-email")
+                ->assertSeeIn("@msg-email", "Este campo es requerido")
+                ->type("@input-email", $this->instFull->email);
         });
     }
 
     public function testEnvioInvalido(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Edit($this->p));
+            $browser->visit(
+                new Form(
+                    recurso: "personas",
+                    accion: "edit",
+                    id: $this->instFull->id
+                )
+            );
 
             $browser
-                ->type("@input-nombres", "Et")
-                ->type("@input-apellidos", "ex")
-                ->assertSelectMissingOptionByName("tipo_id_nac", ["NIF", "VAT"])
-                ->assertSelectHasOptionByName("tipo_id_nac", ["DNI", "NIE"])
-                ->type("@input-id_nac", "dolore")
-                ->type("@input-email", "minim")
-                ->type("@input-tel", "takimata")
-                ->press("@submit");
-
-            $browser
+                ->type("@input-nombres", "abc123")
+                ->assertInputValue("@input-nombres", "abc123")
+                ->press("@submit")
+                ->assertPresent("@msg-nombres")
                 ->assertSeeIn(
                     "@msg-nombres",
-                    "El nombre debe tener al menos 3 caracteres."
-                )
+                    "El nombre solo puede contener letras"
+                );
+            $browser
+                ->type("@input-apellidos", "zxy987")
+                ->assertInputValue("@input-apellidos", "zxy987")
+                ->press("@submit")
+                ->assertPresent("@msg-apellidos")
                 ->assertSeeIn(
                     "@msg-apellidos",
-                    "Los apellidos deben tener al menos 3 caracteres."
-                )
+                    "El apellido solo puede contener letras"
+                );
+            $browser
+                ->type("@input-id_nac", "12354s")
+                ->assertInputValue("@input-id_nac", "12354s")
+                ->press("@submit")
+                ->assertPresent("@msg-id_nac")
                 ->assertSeeIn(
                     "@msg-id_nac",
-                    "La identificación debe tener el formato adecuado."
-                )
-                ->assertSeeIn("@msg-email", "El correo debe ser válido.")
+                    "La identificación debe tener el formato adecuado"
+                );
+            $browser
+                ->type("@input-email", "ahsgda.com")
+                ->assertInputValue("@input-email", "ahsgda.com")
+                ->press("@submit")
+                ->assertPresent("@msg-email")
+                ->assertSeeIn("@msg-email", "El correo debe ser válido");
+            $browser
+                ->type("@input-tel", "12354")
+                ->assertInputValue("@input-tel", "12354")
+                ->press("@submit")
+                ->assertPresent("@msg-tel")
                 ->assertSeeIn(
                     "@msg-tel",
-                    "El número debe estar en el formato indicado."
+                    "El número de teléfono debe ser válido"
                 );
-
-            $browser->responsiveScreenshots(
-                "persona/edit/envio_requeridos_invalido"
-            );
-        });
-    }
-
-    public function testEnvioBasicosValidoRopoInvalido(): void
-    {
-        $data = [
-            "nombres" => "consequat",
-            "apellidos" => "adipiscing",
-            "tipo_id_nac" => "DNI",
-            "id_nac" => "52378265C",
-            "email" => "ghastly@dom.com",
-            "tel" => "123-45-67-89",
-            "perfil" => "Supervisor",
-            "observaciones" =>
-                "door aptly though sitting that fiend within longer raven sure",
-            "ropo" => [
-                "tipo" => "Técnico",
-                "nro" => "12346",
-            ],
-        ];
-
-        $this->browse(function (Browser $browser) use ($data) {
-            $browser->visit(new Edit($this->p));
             $browser
-                ->type("@input-nombres", $data["nombres"])
-                ->type("@input-apellidos", $data["apellidos"])
-                ->selectByName("tipo_id_nac", $data["tipo_id_nac"])
-                ->type("@input-id_nac", $data["id_nac"])
-                ->type("@input-email", $data["email"])
-                ->type("@input-tel", $data["tel"])
-                ->selectByName("perfil", $data["perfil"])
-                ->type("@txt-observaciones", $data["observaciones"])
-                ->selectByName("ropo.tipo", $data["ropo"]["tipo"])
-                ->type("@input-ropo_nro", $data["ropo"]["nro"])
-                ->press("@submit");
-
-            $browser
-                ->assertNotPresent("@msg-nombres")
-                ->assertNotPresent("@msg-apellidos")
-                ->assertNotPresent("@msg-id_nac")
-                ->assertNotPresent("@msg-email")
-                ->assertNotPresent("@msg-tel")
+                ->visit(
+                    new Form(
+                        recurso: "personas",
+                        accion: "edit",
+                        id: $this->instFull->id
+                    )
+                )
+                ->type("@input-ropo_nro", "12354")
+                ->assertInputValue("@input-ropo_nro", "12354")
+                ->press("@submit")
                 ->assertPresent("@msg-ropo_nro")
                 ->assertSeeIn(
                     "@msg-ropo_nro",
-                    "El Nº del carnet debe estar en el formato adecuado."
+                    "La identificación ROPO debe estar en el formato adecuado"
                 );
-
-            $browser->responsiveScreenshots(
-                "persona/edit/envio_requeridos_invalido"
-            );
         });
     }
 
-    public function testEnvioCorrecto(): void
+    public function testCorreccionInvalida(): void
     {
-        $data = [
-            "nombres" => "Omar",
-            "apellidos" => "Gutierrez",
-            "tipo_id_nac" => "NIE",
-            "id_nac" => "Z1564278X",
-            "email" => "nmenchaca@example.org",
-            "tel" => "296-72-88-22",
-            "perfil" => "Supervisor",
-            "observaciones" =>
-                "door aptly though sitting that fiend within longer raven sure",
+        $this->browse(function (Browser $browser) {
+            $browser->visit(
+                new Form(
+                    recurso: "personas",
+                    accion: "edit",
+                    id: $this->instFull->id
+                )
+            );
+
+            $browser
+                ->type("@input-nombres", "abc123")
+                ->assertInputValue("@input-nombres", "abc123")
+                ->press("@submit")
+                ->assertPresent("@msg-nombres")
+                ->assertSeeIn(
+                    "@msg-nombres",
+                    "El nombre solo puede contener letras"
+                )
+                ->type("@input-nombres", "ab")
+                ->assertInputValue("@input-nombres", "ab")
+                ->assertSeeIn(
+                    "@msg-nombres",
+                    "El nombre debe tener al menos 3 caracteres"
+                );
+            $browser
+                ->type("@input-apellidos", "zxy987")
+                ->assertInputValue("@input-apellidos", "zxy987")
+                ->press("@submit")
+                ->assertPresent("@msg-apellidos")
+                ->assertSeeIn(
+                    "@msg-apellidos",
+                    "El apellido solo puede contener letras"
+                )
+                ->type("@input-apellidos", "xz")
+                ->assertInputValue("@input-apellidos", "xz")
+                ->assertSeeIn(
+                    "@msg-apellidos",
+                    "El apellido debe tener al menos 3 caracteres"
+                );
+            $browser
+                ->type("@input-id_nac", "12354s")
+                ->assertInputValue("@input-id_nac", "12354s")
+                ->press("@submit")
+                ->assertPresent("@msg-id_nac")
+                ->assertSeeIn(
+                    "@msg-id_nac",
+                    "La identificación debe tener el formato adecuado"
+                )
+                ->type("@input-id_nac", "Z19845F")
+                ->assertInputValue("@input-id_nac", "Z19845F")
+                ->assertSeeIn(
+                    "@msg-id_nac",
+                    "La identificación debe tener el formato adecuado"
+                );
+            $browser
+                ->type("@input-email", "ahsgda.com")
+                ->assertInputValue("@input-email", "ahsgda.com")
+                ->press("@submit")
+                ->assertPresent("@msg-email")
+                ->assertSeeIn("@msg-email", "El correo debe ser válido")
+                ->type("@input-email", "zbc132@dominio")
+                ->assertInputValue("@input-email", "zbc132@dominio")
+                ->assertSeeIn("@msg-email", "El correo debe ser válido");
+            $browser
+                ->type("@input-tel", "12354")
+                ->assertInputValue("@input-tel", "12354")
+                ->press("@submit")
+                ->assertPresent("@msg-tel")
+                ->assertSeeIn(
+                    "@msg-tel",
+                    "El número de teléfono debe ser válido"
+                )
+                ->type("@input-tel", "6009015")
+                ->assertInputValue("@input-tel", "6009015")
+                ->assertSeeIn(
+                    "@msg-tel",
+                    "El número de teléfono debe ser válido"
+                );
+            $browser
+                ->visit(
+                    new Form(
+                        recurso: "personas",
+                        accion: "edit",
+                        id: $this->instFull->id
+                    )
+                )
+                ->type("@input-ropo_nro", "12354")
+                ->assertInputValue("@input-ropo_nro", "12354")
+                ->press("@submit")
+                ->assertPresent("@msg-ropo_nro")
+                ->assertSeeIn(
+                    "@msg-ropo_nro",
+                    "La identificación ROPO debe estar en el formato adecuado"
+                )
+                ->type("@input-ropo_nro", "SS/1")
+                ->assertInputValue("@input-ropo_nro", "SS/1")
+                ->assertSeeIn(
+                    "@msg-ropo_nro",
+                    "La identificación ROPO debe estar en el formato adecuado"
+                );
+        });
+    }
+
+    public function testLlenadoVacio(): void
+    {
+        $obsrv = fake()->text();
+        $nro = str_replace(" ", "", fake()->tollFreeNumber());
+
+        $this->browse(function (Browser $browser) use ($obsrv, $nro) {
+            $browser->visit(
+                new Form(
+                    recurso: "personas",
+                    accion: "edit",
+                    id: $this->instParcial->id
+                )
+            );
+
+            $browser
+                ->type("@input-tel", $nro)
+                ->type("@txt-observaciones", $obsrv)
+                ->press("@submit")
+                ->pause(750)
+                ->assertPathIs("/app/recurso/personas")
+                ->pause(250)
+                ->assertSee("se ha editado exitosamente");
+        });
+
+        $this->assertDatabaseHas("personas", [
+            "id" => $this->instParcial->id,
+            "tel" => $nro,
+            "observaciones" => $obsrv,
+        ]);
+    }
+
+    public function testCampoVaciado(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(
+                new Form(
+                    recurso: "personas",
+                    accion: "edit",
+                    id: $this->instFull->id
+                )
+            );
+
+            $browser
+                ->click("@input-tel")
+                ->withKeyboard(function (Keyboard $keyboard) {
+                    $telLength = strlen($this->instFull->tel);
+                    for ($i = 0; $i < $telLength; $i++) {
+                        $keyboard->press(self::KEYS["backspace"]);
+                    }
+                })
+                ->assertInputValue("@input-tel", "")
+                ->press("@submit")
+                ->pause(750)
+                ->assertPathIs("/app/recurso/personas")
+                ->pause(250)
+                ->assertSee("se ha editado exitosamente");
+        });
+
+        $this->assertDatabaseHas("personas", [
+            "id" => $this->instFull->id,
+            "tel" => null,
+        ]);
+    }
+
+    public function testEditExitoso(): void
+    {
+        $tipo_id_nac = fake()->randomElement(Persona::TIPO_ID_NAC);
+        $dataToUpdate = [
+            "nombres" => fake()->firstName(),
+            "apellidos" => fake()->lastName(),
+            "tipo_id_nac" => $tipo_id_nac,
+            "id_nac" =>
+                $tipo_id_nac === "DNI"
+                    ? fake()->unique()->regexify("[0-9]{8}[A-Z]")
+                    : fake()->unique()->regexify("[XYZ][0-9]{7}[XYZ]"),
+            "email" => fake()->unique()->safeEmail(),
+            "tel" => str_replace(" ", "", fake()->tollFreeNumber()),
+            "perfil" => fake()->randomElement(Persona::PERFILES),
+            "observaciones" => fake()->text(),
             "ropo" => [
-                "tipo" => "Aplicador",
-                "nro" => "296/4",
-                "caducidad" => "2027-05-29",
-                "tipo_aplicador" => "Básico",
+                "capacitacion" => fake()->randomElement(
+                    Persona::CAPACITACIONES_ROPO
+                ),
+                "nro" => fake()->boolean()
+                    ? fake()->regexify("[0-9]{7,12}[S]?[ASTU]")
+                    : fake()->regexify("[0-9]{1,3}/[0-9]{1,3}"),
+                "caducidad" => fake()->dateTimeBetween("now", "+4 year"),
             ],
         ];
 
-        $this->browse(function (Browser $browser) use ($data) {
-            $browser->visit(new Edit($this->p));
-
-            $browser
-                ->type("@input-nombres", $data["nombres"])
-                ->type("@input-apellidos", $data["apellidos"])
-                ->selectByName("tipo_id_nac", $data["tipo_id_nac"])
-                ->type("@input-id_nac", $data["id_nac"])
-                ->type("@input-email", $data["email"])
-                ->type("@input-tel", $data["tel"])
-                ->selectByName("perfil", $data["perfil"])
-                ->type("@txt-observaciones", $data["observaciones"])
-                ->selectByName("ropo.tipo", $data["ropo"]["tipo"])
-                ->type("@input-ropo_nro", $data["ropo"]["nro"])
-                ->click("@trigger-ropo_caducidad")
-                ->pause(500)
-                ->click("@calendar table tr:nth-child(3) td:nth-child(3)")
-                ->selectByName(
-                    "ropo.tipo_aplicador",
-                    $data["ropo"]["tipo_aplicador"]
+        $this->browse(function (Browser $browser) use ($dataToUpdate) {
+            $browser->visit(
+                new Form(
+                    recurso: "personas",
+                    accion: "edit",
+                    id: $this->instFull->id
                 )
+            );
+
+            $browser
+                ->type("@input-nombres", $dataToUpdate["nombres"])
+                ->assertInputValue("@input-nombres", $dataToUpdate["nombres"])
+                ->type("@input-apellidos", $dataToUpdate["apellidos"])
+                ->assertInputValue(
+                    "@input-apellidos",
+                    $dataToUpdate["apellidos"]
+                )
+                ->assertSelectHasOptionByName(
+                    "tipo_id_nac",
+                    $dataToUpdate["tipo_id_nac"]
+                )
+                ->selectByName("tipo_id_nac", $dataToUpdate["tipo_id_nac"])
+                ->assertSelectedByName(
+                    "tipo_id_nac",
+                    $dataToUpdate["tipo_id_nac"]
+                )
+                ->type("@input-id_nac", $dataToUpdate["id_nac"])
+                ->assertInputValue("@input-id_nac", $dataToUpdate["id_nac"])
+                ->type("@input-email", $dataToUpdate["email"])
+                ->assertInputValue("@input-email", $dataToUpdate["email"])
+                ->type("@input-tel", $dataToUpdate["tel"])
+                ->assertInputValue("@input-tel", $dataToUpdate["tel"])
+                ->selectByName("perfil", $dataToUpdate["perfil"])
+                ->assertSelectHasOptionByName("perfil", $dataToUpdate["perfil"])
+                ->assertSelectedByName("perfil", $dataToUpdate["perfil"])
+                ->type("@txt-observaciones", $dataToUpdate["observaciones"])
+                ->assertInputValue(
+                    "@txt-observaciones",
+                    $dataToUpdate["observaciones"]
+                )
+                ->assertSelectHasOptionByName(
+                    "ropo.capacitacion",
+                    $dataToUpdate["ropo"]["capacitacion"]
+                )
+                ->selectByName(
+                    "ropo.capacitacion",
+                    $dataToUpdate["ropo"]["capacitacion"]
+                )
+                ->assertSelectedByName(
+                    "ropo.capacitacion",
+                    $dataToUpdate["ropo"]["capacitacion"]
+                )
+                ->type("@input-ropo_nro", $dataToUpdate["ropo"]["nro"])
+                ->assertInputValue(
+                    "@input-ropo_nro",
+                    $dataToUpdate["ropo"]["nro"]
+                )
+                /** Implementar forma de ingresar caducidad */
                 ->press("@submit")
-                ->pause(1000);
-
-            $browser
-                ->assertNotPresent("@msg-nombres")
-                ->assertNotPresent("@msg-apellidos")
-                ->assertNotPresent("@msg-id_nac")
-                ->assertNotPresent("@msg-email")
-                ->assertNotPresent("@msg-tel")
-                ->assertNotPresent("@msg-ropo_nro")
-                ->assertNotPresent("@msg-ropo_caducidad");
-
-            $browser
-                ->responsiveScreenshots("persona/edit/envio_correcto")
-                ->assertRouteIs("personas.index");
+                ->pause(750)
+                ->assertPathIs("/app/recurso/personas")
+                ->pause(250)
+                ->assertSee("se ha editado exitosamente");
         });
-    }
 
-    public function testEnvioSinCambios(): void
-    {
-        $this->p->setRopoAttribute([
-            ...$this->p->getRopoAttribute(),
-            "nro" => "296/4",
+        $this->assertDatabaseHas("personas", [
+            "id" => $this->instFull->id,
+            "nombres" => $dataToUpdate["nombres"],
+            "apellidos" => $dataToUpdate["apellidos"],
+            "tipo_id_nac" => $dataToUpdate["tipo_id_nac"],
+            "id_nac" => $dataToUpdate["id_nac"],
+            "email" => $dataToUpdate["email"],
+            "tel" => $dataToUpdate["tel"],
+            "perfil" => $dataToUpdate["perfil"],
+            "observaciones" => $dataToUpdate["observaciones"],
         ]);
-        $this->p->save();
 
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Edit($this->p));
-
-            $browser->press("@submit")->pause(750);
-
-            $browser
-                ->assertPresent("ol li#edit-sin_cambios")
-                ->responsiveScreenshots("persona/edit/envio_sin_cambios");
-        });
+        $this->assertDatabaseHas("persona_ropo", [
+            "persona_id" => $this->instFull->id,
+            "capacitacion" => $dataToUpdate["ropo"]["capacitacion"],
+            "nro" => $dataToUpdate["ropo"]["nro"],
+        ]);
     }
 }

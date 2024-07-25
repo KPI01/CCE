@@ -18,7 +18,11 @@ export default function DataLayout({
       <div className="my-10 flex justify-between">
         <h1 className="text-4xl font-semibold">{title}</h1>
         <Button asChild size={"lg"} className="text-lg">
-          <Link href={route(`${recurso}.create`)} as="button" id="action-create">
+          <Link
+            href={route(`${recurso}.create`)}
+            as="button"
+            id="action-create"
+          >
             Crear
           </Link>
         </Button>

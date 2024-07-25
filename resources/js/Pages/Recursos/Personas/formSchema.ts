@@ -11,14 +11,8 @@ const TEXT_MSG = `${FIELD_MSG} debe ser solo texto.`;
 
 export const TIPOS_ID_NAC = ["DNI", "NIE"];
 const TIPOS_ID_NAC_READONLY = ["DNI", "NIE"] as const;
-export const PERFILES = ["", "Aplicador", "Técnico", "Supervisor", "Productor"];
-const PERFILES_READONLY = [
-  "",
-  "Aplicador",
-  "Técnico",
-  "Supervisor",
-  "Productor",
-] as const;
+export const PERFILES = ["Productor", "Aplicador", "Operario"];
+const PERFILES_READONLY = ["Productor", "Aplicador", "Operario"] as const;
 export const CAPACITACIONES = [
   "",
   "Básico",
@@ -34,6 +28,11 @@ const CAPACITACIONES_READONLY = [
   "Piloto Aplicador",
 ] as const;
 
+const NOMBRES_REGEX = /^[A-Za-záéíóúÁÉÍÓÚñÑ ]*$/gm;
+const ROPO_NRO_REGEX =
+  /^([\d]{7,12}[SASTU]*([/][\d]{1,3})?|[\d]{1,3}[/][\d]{1,3})$/gm;
+const TEL_REGEX = /^((\+34|0034|34)?[6|7|8|9]\d{8}|(800|900)\d{6,7}|(901|902|905|803|806|807)\d{6})$/
+
 export const formSchema = z
   .object({
     id: z.string().optional(),
@@ -42,19 +41,20 @@ export const formSchema = z
         required_error: REQUIRED_MSG,
         invalid_type_error: TEXT_MSG,
       })
+      .min(1, REQUIRED_MSG)
       .min(3, "El nombre debe tener al menos 3 caracteres.")
       .max(50, "El nombre debe tener menos de 50 caracteres.")
-      .regex(
-      /^[A-Za-záéíóúÁÉÍÓÚñÑ ,.-]*$/gm,
-        "El nombre solo puede contener letras.",
-      ),
+      .regex(NOMBRES_REGEX, "El nombre solo puede contener letras.")
+      .transform((val) => (val === "" ? undefined : val)),
     apellidos: z
       .string({
         required_error: REQUIRED_MSG,
         invalid_type_error: TEXT_MSG,
       })
+      .min(1, REQUIRED_MSG)
       .min(3, "El apellido debe tener al menos 3 caracteres.")
-      .max(50, "El apellido debe tener menos de 50 caracteres."),
+      .max(50, "El apellido debe tener menos de 50 caracteres.")
+      .regex(NOMBRES_REGEX, "El apellido solo puede contener letras."),
     tipo_id_nac: z.enum(TIPOS_ID_NAC_READONLY, {
       errorMap: (issue, _ctx) => {
         switch (issue.code) {
@@ -73,19 +73,19 @@ export const formSchema = z
       .string({
         required_error: REQUIRED_MSG,
       })
+      .min(1, REQUIRED_MSG)
       .max(12, "La identificación debe ser de 12 caracteres."),
     email: z
       .string({
         required_error: REQUIRED_MSG,
       })
+      .min(1, REQUIRED_MSG)
       .email("El correo debe ser válido."),
     tel: z
       .string()
-      .regex(
-        /^((\+34|0034|34)?[6|7|8|9]\d{8}|(800|900)\d{6,7}|(901|902|905|803|806|807)\d{6})$/,
-      "El número de teléfono debe ser válido."
-      )
-      .optional(),
+      .regex(TEL_REGEX, "El número de teléfono debe ser válido.")
+      .optional()
+      .or(z.literal('')),
     perfil: z
       .enum(PERFILES_READONLY, {
         errorMap: (issue, _ctx) => {
@@ -101,59 +101,39 @@ export const formSchema = z
           }
         },
       })
-      .optional(),
+      .nullish(),
     observaciones: z
       .string()
       .max(300, "Las observaciones deben tener menos de 300 caracteres.")
-      .optional(),
+      .optional()
+      .or(z.literal('')),
     ropo: z
       .object({
         capacitacion: z
-        .enum(CAPACITACIONES_READONLY, {
-          required_error: "Debes seleccionar el tipo de capacitación.",
-          invalid_type_error: SHOULD_BE_VALID_MSG,
-        })
-        .nullable(),
+          .enum(CAPACITACIONES_READONLY, {
+            required_error: "Debes seleccionar el tipo de capacitación.",
+            invalid_type_error: SHOULD_BE_VALID_MSG,
+          })
+          .nullish(),
         caducidad: z
           .date({
             required_error: REQUIRED_MSG,
             invalid_type_error: "Debes ingresar una fecha válida",
           })
           .optional()
-          .nullable(),
-        nro: z.string().nullable(),
+          .nullish(),
+        nro: z
+          .string()
+          .regex(
+            ROPO_NRO_REGEX,
+            "La identificación ROPO debe estar en el formato adecuado.",
+          )
+          .nullish(),
       })
-      .optional()
-      .superRefine((data, ctx) => {
-        if (data?.capacitacion && !data?.nro) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Debes ingresar el Nº del carné.",
-            path: ["nro"],
-          });
-        } else if (!data?.capacitacion && data?.nro) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Debes seleccionar el tipo de carné.",
-            path: ["tipo"],
-          });
-        } else if (data?.capacitacion && data?.nro) {
-          const regex =
-            /(^[\d]{7,12}([S]?[ASTU])(?:[/][\d]{1,3})?$)|([\d]{1,3}[/][\d]{1,3})/gm;
-
-          if (!regex.test(data.nro)) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: "La identificación ROPO debe estar en el formato adecuado.",
-              path: ["nro"],
-            });
-          }
-        } else if (!data?.capacitacion && !data?.nro) {
-          return true;
-        }
-      }),
+      .optional(),
   })
   .superRefine((data, ctx) => {
+    /** Comprobación ID nacional */
     let tipo_id = data.tipo_id_nac;
     let id = data.id_nac;
     let regex;

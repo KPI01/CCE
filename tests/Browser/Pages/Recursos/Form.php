@@ -2,7 +2,6 @@
 
 namespace Tests\Browser\Pages\Recursos;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\Page;
@@ -12,15 +11,13 @@ class Form extends Page
     private array $validAcc = ["show", "edit", "create"];
     private string $rcs;
     private string $acc;
-    private string | null $id;
+    private string|null $id;
 
     public function __construct(
         string $recurso,
         string $accion,
         string $id = null
     ) {
-        echo PHP_EOL . "__construct: Formulario" . PHP_EOL;
-        
         if (!in_array($accion, $this->validAcc)) {
             echo "Acción no válida" . PHP_EOL;
             $arr_str = implode(", ", $this->validAcc);
@@ -30,9 +27,6 @@ class Form extends Page
         $this->rcs = $recurso;
         $this->acc = $accion;
         $this->id = $id;
-
-        echo "Accion: $this->acc" . PHP_EOL;
-        echo "Id: " . ($this->id ? $this->id : "null") . PHP_EOL;
     }
     /**
      * Get the URL for the page.
@@ -42,16 +36,10 @@ class Form extends Page
         $rt = null;
         $accion = implode(".", [$this->rcs, $this->acc]);
         if (in_array($this->acc, ["edit", "show"]) && isset($this->id)) {
-            $rt = Request::create(
-                uri: route($accion, $this->id)
-            );
+            $rt = Request::create(uri: route($accion, $this->id));
         } else {
-            $rt = Request::create(
-                uri: route($accion)
-            );
+            $rt = Request::create(uri: route($accion));
         }
-
-        echo "path: " . $rt->path() . PHP_EOL;
 
         return "/" . $rt->path();
     }

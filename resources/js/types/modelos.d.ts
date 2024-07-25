@@ -6,7 +6,7 @@ interface Modelo {
   updated_at: Date;
 }
 
-type Perfiles = "" | "Aplicador" | "Técnico" | "Supervisor" | "Productor";
+type Perfiles = "Productor" | "Aplicador" | "Operario";
 
 type Capacitaciones =
   | ""

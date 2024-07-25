@@ -7,9 +7,20 @@ use Illuminate\Support\Facades\DB;
 
 class Empresa extends RecursoBase
 {
+    const PERFILES = [
+        "productor" => "Productor",
+        "aplicador" => "Aplicador",
+        "operario" => "Operario",
+    ];
+    const CAPACITACIONES_ROPO = [
+        "basico" => "Básico",
+        "cualificado" => "Cualificado",
+        "fumigador" => "Fumigador",
+        "piloto" => "Piloto Aplicador",
+    ];
 
     protected $attributes = [
-        "perfil" => "Aplicador",
+        "perfil" => self::PERFILES["productor"],
     ];
 
     protected $appends = ["ropo"];

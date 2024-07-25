@@ -15,19 +15,12 @@ class CreateEmpresaTest extends DuskTestCase
     public function setUp(): void
     {
         parent::setUp();
-        echo 'setUp: CreateEmpresaTest' . PHP_EOL;
     }
 
     public function testAcceso(): void
     {
-        echo 'Acceso' . PHP_EOL;
         $this->browse(function (Browser $browser) {
-            $browser->visit(
-                new Form(
-                    recurso: "empresas",
-                    accion: "create"
-                )
-            );
+            $browser->visit(new Form(recurso: "empresas", accion: "create"));
         });
     }
 
@@ -413,7 +406,9 @@ class CreateEmpresaTest extends DuskTestCase
                 ->type("@input-ropo_nro", "595731818842S")
                 ->click("@trigger-ropo_caducidad")
                 ->pause(750)
-                ->click("@calendar table tbody tr:last-child td:last-child button")
+                ->click(
+                    "@calendar table tbody tr:last-child td:last-child button"
+                )
                 ->pause(750)
                 ->press("@submit");
 

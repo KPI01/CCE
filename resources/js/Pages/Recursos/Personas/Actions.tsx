@@ -33,7 +33,7 @@ export default function Actions({ item }: Props) {
     return (
       <AlertDialog>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild >
+          <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
               className="h-8 w-8 p-0"
@@ -44,13 +44,21 @@ export default function Actions({ item }: Props) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-              <DropdownMenuItem asChild className="w-full cursor-pointer" id={`action-show-${item.id}`}>
+            <DropdownMenuItem
+              asChild
+              className="w-full cursor-pointer"
+              id={`action-show-${item.id}`}
+            >
               <Link href={item.urls?.show}>
                 <File className="mr-2 h-4 w-4" />
                 Ver detalles
               </Link>
             </DropdownMenuItem>
-              <DropdownMenuItem asChild className="w-full cursor-pointer" id={`action-edit-${item.id}`}>
+            <DropdownMenuItem
+              asChild
+              className="w-full cursor-pointer"
+              id={`action-edit-${item.id}`}
+            >
               <Link href={item.urls?.edit}>
                 <Pen className="mr-2 h-4 w-4" />
                 Editar
@@ -58,7 +66,7 @@ export default function Actions({ item }: Props) {
             </DropdownMenuItem>
             <DropdownMenuItem
               asChild
-              className="w-full cursor-pointer hover:!bg-destructive/25"
+              className="w-full cursor-pointer hover:!text-destructive"
               id={`action-delete-${item.id}`}
             >
               <AlertDialogTrigger>

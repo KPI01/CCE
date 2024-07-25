@@ -13,7 +13,6 @@ class ShowEmpresaTest extends DuskTestCase
     protected Empresa $e;
     public function setUp(): void
     {
-        echo "setUp: ShowEmpresa" . PHP_EOL;
         parent::setUp();
         $this->e = Empresa::factory(1)->withRopo()->create()->first();
     }
@@ -22,11 +21,7 @@ class ShowEmpresaTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(
-                new Form(
-                    recurso: "empresas",
-                    accion: "show",
-                    id: $this->e->id
-                )
+                new Form(recurso: "empresas", accion: "show", id: $this->e->id)
             );
         });
     }

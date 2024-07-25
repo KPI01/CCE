@@ -6,7 +6,6 @@ use App\Models\Empresa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class EmpresaController extends Controller
@@ -60,7 +59,7 @@ class EmpresaController extends Controller
                 mensaje: implode(" ", [
                     "Correo:",
                     $uniques["email"],
-                    "ya se encuentra registrado"
+                    "ya se encuentra registrado",
                 ]),
                 variante: "warning"
             );
@@ -78,7 +77,7 @@ class EmpresaController extends Controller
                 mensaje: implode(" ", [
                     "NIF:",
                     $uniques["nif"],
-                    "ya se encuentra registrado"
+                    "ya se encuentra registrado",
                 ]),
                 variante: "warning"
             );
@@ -104,7 +103,7 @@ class EmpresaController extends Controller
                         mensaje: implode(" ", [
                             "Nº ROPO:",
                             $r["nro"],
-                            "ya se encuentra registrado"
+                            "ya se encuentra registrado",
                         ]),
                         variante: "warning"
                     );
@@ -112,7 +111,10 @@ class EmpresaController extends Controller
                         ->back()
                         ->with([
                             "message" => [
-                                "toast" => $this->toasts["error"]["ropo.nro:duplicado"],
+                                "toast" =>
+                                    $this->toasts["error"][
+                                        "ropo.nro:duplicado"
+                                    ],
                             ],
                         ]);
                 }

@@ -10,7 +10,6 @@ import {
   CAPACITACIONES,
 } from "./formSchema";
 import { Form, FormField, FormLabel } from "@/Components/ui/form";
-import { Separator } from "@/Components/ui/separator";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import FormLayout from "@/Layouts/Recursos/FormLayout";
@@ -20,6 +19,7 @@ import FormButton from "@/Components/Forms/FormButton";
 import { CircleX, Save } from "lucide-react";
 import { router } from "@inertiajs/react";
 import { useToast } from "@/Components/ui/use-toast";
+import { convertNullToUndefined } from "@/lib/utils";
 
 const schema = formSchema;
 
@@ -37,6 +37,8 @@ export default function Edit({ data, urls }: Props) {
   data.updated_at = new Date(data.updated_at);
   if (data.ropo?.caducidad) data.ropo.caducidad = new Date(data.ropo.caducidad);
 
+  convertNullToUndefined(data);
+
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -45,9 +47,9 @@ export default function Edit({ data, urls }: Props) {
       tipo_id_nac: data.tipo_id_nac,
       id_nac: data.id_nac,
       email: data.email,
-      tel: data.tel || "",
-      perfil: data.perfil || "",
-      observaciones: data.observaciones || "",
+      tel: data.tel,
+      perfil: data.perfil,
+      observaciones: data.observaciones,
       ropo: {
         capacitacion: data.ropo?.capacitacion || null,
         caducidad: data.ropo?.caducidad || null,
@@ -56,9 +58,12 @@ export default function Edit({ data, urls }: Props) {
     },
   });
 
+  console.debug(form.getValues())
+
   function onSubmit(values: z.infer<typeof schema>) {
-    console.debug(values);
+    console.debug("onSubmit_values:", values);
     const dirty = form.formState.dirtyFields;
+    console.debug("onSubmit_dirty:", dirty);
     const validation = schema.parse(values);
 
     const toSend = Object.keys(dirty).reduce(
@@ -71,6 +76,8 @@ export default function Edit({ data, urls }: Props) {
       },
       {} as { [key: string]: any },
     );
+
+    console.debug("onSubmit_toSend:", toSend)
 
     if (Object.keys(toSend).length > 0) {
       router.put(urls.update, toSend);
@@ -93,12 +100,12 @@ export default function Edit({ data, urls }: Props) {
     >
       <Form {...form}>
         <form
-          id={`edit-form-${data.id}`}
+          id={`edit-${data.id}`}
           onSubmit={form.handleSubmit(onSubmit)}
           className={CONTAINER_CLASS}
         >
           <div className="space-y-4">
-            <FormTitle id="h3-datos_personales" title="Datos Personales" />
+            <FormTitle id="h3-basicos" title="Datos Personales" />
             <FormField
               control={form.control}
               name="nombres"
@@ -107,7 +114,7 @@ export default function Edit({ data, urls }: Props) {
                   id={field.name}
                   label="Nombres"
                   name={field.name}
-                  value={field.value}
+                  value={field.value || undefined}
                   autoComplete={"given-name"}
                   onChange={field.onChange}
                 />
@@ -122,7 +129,7 @@ export default function Edit({ data, urls }: Props) {
                   id={field.name}
                   label="Apellidos"
                   name={field.name}
-                  value={field.value}
+                  value={field.value || undefined}
                   autoComplete={"family-name"}
                   onChange={field.onChange}
                 />
@@ -199,10 +206,9 @@ export default function Edit({ data, urls }: Props) {
                   id={field.name}
                   label="Teléfono"
                   name={field.name}
-                  value={field.value}
+                  value={field.value || ""}
                   autoComplete={"tel"}
                   onChange={field.onChange}
-                  descripcion="Formato: 123-45-67-89"
                 />
               )}
             />
@@ -231,7 +237,7 @@ export default function Edit({ data, urls }: Props) {
                   id={field.name}
                   label="Observaciones"
                   name={field.name}
-                  value={field.value}
+                  value={field.value || ""}
                   onChange={field.onChange}
                 />
               )}

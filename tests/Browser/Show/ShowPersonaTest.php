@@ -148,13 +148,19 @@ class ShowPersonaTest extends DuskTestCase
                         id: $this->p->id
                     )
                 )
-                ->assertInputValue("h1", $this->p->nombres . " " . $this->p->apellidos)
+                ->assertInputValue(
+                    "h1",
+                    $this->p->nombres . " " . $this->p->apellidos
+                )
                 ->assertSelectedByName("tipo_id_nac", $this->p->tipo_id_nac)
                 ->assertInputValue("@input-id_nac", $this->p->id_nac)
                 ->assertInputValue("@input-email", $this->p->email)
                 ->assertInputValue("@input-tel", $this->p->tel)
                 ->assertSelectedByName("perfil", $this->p->perfil)
-                ->assertInputValue("@txt-observaciones", $this->p->observaciones)
+                ->assertInputValue(
+                    "@txt-observaciones",
+                    $this->p->observaciones
+                )
                 ->assertInputValue(
                     "@txt-observaciones",
                     $this->p->observaciones
@@ -225,7 +231,7 @@ class ShowPersonaTest extends DuskTestCase
                 ->click("@badge-edit-" . $this->p->id)
                 ->pause(1750)
                 ->assertPathIs(
-                        "/app/recurso/personas/" . $this->p->id . "/edit"
+                    "/app/recurso/personas/" . $this->p->id . "/edit"
                 );
 
             $browser
@@ -278,7 +284,10 @@ class ShowPersonaTest extends DuskTestCase
                     "@txt-observaciones",
                     $this->p->observaciones
                 )
-                ->assertSelectedByName("ropo.capacitacion", $this->p->ropo["capacitacion"])
+                ->assertSelectedByName(
+                    "ropo.capacitacion",
+                    $this->p->ropo["capacitacion"]
+                )
                 ->assertInputValue("@input-ropo_nro", $this->p->ropo["nro"])
                 ->assertInputValue(
                     "@input-ropo_caducidad",

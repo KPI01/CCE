@@ -7,8 +7,25 @@ use Illuminate\Support\Facades\DB;
 
 class Persona extends RecursoBase
 {
-    protected $attributes =[
-        "perfil" => "Productor"
+    const ROPO_TABLE = "persona_ropo";
+    const PERFILES = [
+        "productor" => "Productor",
+        "aplicador" => "Aplicador",
+        "operario" => "Operario",
+    ];
+    const CAPACITACIONES_ROPO = [
+        "basico" => "Básico",
+        "cualificado" => "Cualificado",
+        "fumigador" => "Fumigador",
+        "piloto" => "Piloto Aplicador",
+    ];
+    const TIPO_ID_NAC = [
+        "dni" => "DNI",
+        "nie" => "NIE",
+    ];
+
+    protected $attributes = [
+        "perfil" => self::PERFILES["productor"],
     ];
 
     protected $appends = ["ropo"];
@@ -44,7 +61,7 @@ class Persona extends RecursoBase
 
     private function retrieveRopoAttribute()
     {
-        $record = DB::table("persona_ropo")
+        $record = DB::table(self::ROPO_TABLE)
             ->where("persona_id", $this->id)
             ->first();
 
@@ -66,21 +83,19 @@ class Persona extends RecursoBase
     private function upsertRopoAttribute(array $ropo)
     {
         $cad = $ropo["caducidad"];
-        $nro = $ropo["nro"];
 
         if (isset($cad)) {
             $cad = strtotime($cad);
-        } elseif (isset($nro)) {
-            DB::table("empresa_ropo")->upsert(
+            DB::table(self::ROPO_TABLE)->upsert(
                 values: [
-                    "empresa_id" => $this->id,
+                    "persona_id" => $this->id,
                     "caducidad" => isset($ropo["caducidad"])
                         ? date("Y-m-d", $cad)
                         : null,
                     "nro" => $ropo["nro"] ?? null,
                     "capacitacion" => $ropo["capacitacion"] ?? null,
                 ],
-                uniqueBy: ["empresa_id", "nro"],
+                uniqueBy: ["persona_id"],
                 update: ["caducidad", "nro", "capacitacion"]
             );
         }

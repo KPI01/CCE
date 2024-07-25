@@ -14,6 +14,9 @@ use Laravel\Dusk\Browser;
 abstract class DuskTestCase extends BaseTestCase
 {
     protected $user;
+    const KEYS = [
+        "backspace" => "\xEE\x80\x83",
+    ];
 
     /**
      * Prepare for Dusk test execution.

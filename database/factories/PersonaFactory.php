@@ -26,6 +26,8 @@ class PersonaFactory extends Factory
             $id_nac = fake()->unique()->regexify("/[XYZ][0-9]{7}[XYZ]/");
         }
 
+        $tel = str_replace(" ", "", fake()->tollFreeNumber());
+
         return [
             //,
             "id" => fake()->unique()->uuid(),
@@ -34,15 +36,8 @@ class PersonaFactory extends Factory
             "tipo_id_nac" => $tipo_id_nac,
             "id_nac" => $id_nac,
             "email" => fake()->unique()->safeEmail(),
-            "tel" => fake()->regexify(
-                '/^[0-9]{3}-[0-9]{2}-[0-9]{2}-[0-9]{2}$/'
-            ),
-            "perfil" => fake()->randomElement([
-                "Aplicador",
-                "Técnico",
-                "Supervisor",
-                "Productor",
-            ]),
+            "tel" => $tel,
+            "perfil" => fake()->randomElement(Persona::PERFILES),
             "observaciones" => fake()->boolean()
                 ? fake()->realText(fake()->numberBetween(20, 100))
                 : null,
@@ -55,11 +50,11 @@ class PersonaFactory extends Factory
     public function withRopo(): Factory
     {
         return $this->afterCreating(function (Persona $persona) {
-            $regex1 = '^[0-9]{7,12}[S]?[ASTU]$';
-            $regex2 = '^[0-9]{1,3}/[0-9]{1,3}$';
+            $ropo_regex1 = '^[0-9]{7,12}[S]?[ASTU]$';
+            $ropo_regex2 = '^[0-9]{1,3}/[0-9]{1,3}$';
             $nro = fake()->boolean()
-                ? fake()->regexify($regex1)
-                : fake()->regexify($regex2);
+                ? fake()->unique()->regexify($ropo_regex1)
+                : fake()->unique()->regexify($ropo_regex2);
             $cad = fake()->dateTimeBetween("now", "+5 years")->format("Y-m-d");
             $cap = fake()->randomElement([
                 "Básico",
