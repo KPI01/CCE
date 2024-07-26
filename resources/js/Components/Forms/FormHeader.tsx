@@ -16,11 +16,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/Components/ui/alert-dialog";
+import { url } from "inspector";
 
 interface Props {
   title: string;
   className?: string;
-  backUrl?: string;
   deleteUrl?: string;
 }
 
@@ -32,16 +32,39 @@ export default function FormHeader({
   className,
   id,
 }: Omit<LayoutProps, "mainTitle" | "pageTitle"> & Props) {
-  const { flash, _previous, errors }: PageProps & { errors: Record<string, any> } = usePage<PageProps & { errors: Record<string, any> }>().props;
-  console.debug(flash, _previous, errors)
+  const { _previous }: PageProps & { errors: Record<string, any> } = usePage<PageProps & { errors: Record<string, any> }>().props;
+  let backUrl = _previous.url || route("home")
+  const current = route().current() as string
+  const currUrl = ["show", "edit"].includes(current.split('.')[1])
+                    ? route(current, id) 
+                    : route(current)
+
+  console.debug(
+    `id: ${id}`,
+    `current route: ${current}`,
+    `current url: ${currUrl}`,
+    `iguales?: ${_previous.url === currUrl}` 
+  )
+  if (_previous.url === currUrl) {
+    console.warn('Ruta actual igual que la anterior')
+    if (urls?.index) {
+      backUrl = urls.index
+    } else if (urls?.show) {
+      backUrl = urls.show
+    } else {
+      backUrl = route('home')
+    }
+  }
+
   function handleDelete() {
     if (urls?.destroy) router.delete(urls.destroy);
   }
 
+  console.debug(`backUrl: ${backUrl}`)
   return (
     <div className={cn("flex items-center gap-4", className)}>
       <Button variant={"outline"} size={"sm"} className="px-2 py-1" asChild>
-        <Link as="button" id="back-btn" href={_previous?.url}>
+        <Link as="button" id="back-btn" href={backUrl}>
           <ChevronLeft className="h-4" />
         </Link>
       </Button>
