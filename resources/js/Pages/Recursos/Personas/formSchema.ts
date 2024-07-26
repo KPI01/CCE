@@ -130,10 +130,24 @@ export const formSchema = z
           )
           .nullish(),
       })
-      .optional(),
+      .optional()
+      .superRefine((data, ctx) => {
+        if (data?.nro && !data?.capacitacion) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Debes ingresar una capacitación ROPO",
+            path: ["capacitacion"]
+          })
+        } else if (!data?.nro && data?.capacitacion) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Debes ingresar la identificación ROPO",
+            path: ["nro"]
+          })
+        }
+      }),
   })
   .superRefine((data, ctx) => {
-    /** Comprobación ID nacional */
     let tipo_id = data.tipo_id_nac;
     let id = data.id_nac;
     let regex;

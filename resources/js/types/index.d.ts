@@ -22,16 +22,13 @@ export interface Auth {
   user: User;
 }
 
-type Route = `${string}.${string}`;
-
 export type PageProps<
   T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {
   appName: string;
   flash?: Flash;
-  previous: {
+  _previous: {
     url: string;
-    route: Route;
   };
   auth: {
     user: {

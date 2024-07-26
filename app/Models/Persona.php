@@ -86,19 +86,19 @@ class Persona extends RecursoBase
 
         if (isset($cad)) {
             $cad = strtotime($cad);
-            DB::table(self::ROPO_TABLE)->upsert(
-                values: [
-                    "persona_id" => $this->id,
-                    "caducidad" => isset($ropo["caducidad"])
-                        ? date("Y-m-d", $cad)
-                        : null,
-                    "nro" => $ropo["nro"] ?? null,
-                    "capacitacion" => $ropo["capacitacion"] ?? null,
-                ],
-                uniqueBy: ["persona_id"],
-                update: ["caducidad", "nro", "capacitacion"]
-            );
         }
+        DB::table(self::ROPO_TABLE)->upsert(
+            values: [
+                "persona_id" => $this->id,
+                "caducidad" => isset($ropo["caducidad"])
+                    ? date("Y-m-d", $cad)
+                    : null,
+                "nro" => $ropo["nro"] ?? null,
+                "capacitacion" => $ropo["capacitacion"] ?? null,
+            ],
+            uniqueBy: ["persona_id"],
+            update: ["caducidad", "nro", "capacitacion"]
+        );
 
         $this->setUpdatedAt(now());
         $this->save();

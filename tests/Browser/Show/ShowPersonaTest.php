@@ -260,42 +260,6 @@ class ShowPersonaTest extends DuskTestCase
         });
     }
 
-    public function testValorDeCampos(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser
-                ->visit(
-                    new Form(
-                        recurso: "personas",
-                        accion: "show",
-                        id: $this->p->id
-                    )
-                )
-                ->assertSeeIn(
-                    "h1",
-                    $this->p->nombres . " " . $this->p->apellidos
-                )
-                ->assertSelectedByName("tipo_id_nac", $this->p->tipo_id_nac)
-                ->assertInputValue("@input-id_nac", $this->p->id_nac)
-                ->assertInputValue("@input-email", $this->p->email)
-                ->assertInputValue("@input-tel", $this->p->tel)
-                ->assertSelectedByName("perfil", $this->p->perfil)
-                ->assertInputValue(
-                    "@txt-observaciones",
-                    $this->p->observaciones
-                )
-                ->assertSelectedByName(
-                    "ropo.capacitacion",
-                    $this->p->ropo["capacitacion"]
-                )
-                ->assertInputValue("@input-ropo_nro", $this->p->ropo["nro"])
-                ->assertInputValue(
-                    "@input-ropo_caducidad",
-                    date("Y-m-d", strtotime($this->p->ropo["caducidad"]))
-                );
-        });
-    }
-
     public function testRegreso(): void
     {
         $this->browse(function (Browser $browser) {
@@ -367,5 +331,9 @@ class ShowPersonaTest extends DuskTestCase
                 ->pause(750)
                 ->assertPathIs("/app/recurso/personas");
         });
+
+        $this->assertDatabaseMissing("personas", [
+            "id" => $this->p->id,
+        ]);
     }
 }

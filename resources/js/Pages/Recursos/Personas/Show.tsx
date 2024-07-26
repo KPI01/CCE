@@ -31,21 +31,7 @@ export default function Show({ data, urls }: Props) {
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      nombres: data.nombres,
-      apellidos: data.apellidos,
-      tipo_id_nac: data.tipo_id_nac,
-      id_nac: data.id_nac,
-      email: data.email,
-      tel: data.tel || "",
-      perfil: data.perfil || "",
-      observaciones: data.observaciones || "",
-      ropo: {
-        capacitacion: data.ropo?.capacitacion || "",
-        caducidad: data.ropo?.caducidad
-          ? new Date(data.ropo.caducidad)
-          : undefined,
-        nro: data.ropo?.nro || "",
-      },
+      ...data
     },
   });
 

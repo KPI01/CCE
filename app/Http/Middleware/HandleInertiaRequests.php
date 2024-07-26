@@ -43,7 +43,7 @@ class HandleInertiaRequests extends Middleware
 
             $role = $request->user() ? $request->user()->role : null;
 
-            $user["role"] = $role->only("name");
+            $user["role"] = $role->only(["id", "name"]);
 
             $errors = $request->session()->get("errors");
 
@@ -52,8 +52,9 @@ class HandleInertiaRequests extends Middleware
                 "auth" => [
                     "user" => $user,
                 ],
+                "_previous" => $request->session()->get("_previous"),
                 "flash" => [
-                    "message" => $request->session()->get("message"),
+                    "message" => fn() => $request->session()->get("message"),
                 ],
             ];
 

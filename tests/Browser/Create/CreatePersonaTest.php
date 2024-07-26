@@ -12,10 +12,6 @@ use Tests\DuskTestCase;
 
 class CreatePersonaTest extends DuskTestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
 
     public function testAcceso(): void
     {
@@ -62,7 +58,7 @@ class CreatePersonaTest extends DuskTestCase
         });
     }
 
-    public function testAccesibilidadFormRopo(): void
+    public function testAccesibilidadRopo(): void
     {
         $this->browse(function (Browser $browser) {
             $browser
@@ -139,7 +135,7 @@ class CreatePersonaTest extends DuskTestCase
         });
     }
 
-    public function testVisibilidadFormRopo(): void
+    public function testVisibilidadRopo(): void
     {
         $this->browse(function (Browser $browser) {
             $browser
@@ -157,7 +153,7 @@ class CreatePersonaTest extends DuskTestCase
         });
     }
 
-    public function testCamposHabilitadosFormRopo(): void
+    public function testCamposHabilitadosRopo(): void
     {
         $this->browse(function (Browser $browser) {
             $browser

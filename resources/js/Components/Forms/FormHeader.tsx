@@ -2,8 +2,8 @@ import { Badge, badgeVariants } from "@/Components/ui/badge";
 import { Button, buttonVariants } from "@/Components/ui/button";
 import { Separator } from "@/Components/ui/separator";
 import { cn } from "@/lib/utils";
-import { LayoutProps } from "@/types";
-import { Link, router } from "@inertiajs/react";
+import { LayoutProps, PageProps } from "@/types";
+import { Link, router, usePage } from "@inertiajs/react";
 import { ChevronLeft, Pen, Trash } from "lucide-react";
 import {
   AlertDialog,
@@ -30,18 +30,18 @@ export default function FormHeader({
   updated_at,
   urls,
   className,
-  backUrl = "#",
   id,
 }: Omit<LayoutProps, "mainTitle" | "pageTitle"> & Props) {
+  const { flash, _previous, errors }: PageProps & { errors: Record<string, any> } = usePage<PageProps & { errors: Record<string, any> }>().props;
+  console.debug(flash, _previous, errors)
   function handleDelete() {
-    console.debug("Enviando petición de eliminación");
     if (urls?.destroy) router.delete(urls.destroy);
   }
 
   return (
     <div className={cn("flex items-center gap-4", className)}>
       <Button variant={"outline"} size={"sm"} className="px-2 py-1" asChild>
-        <Link as="button" id="back-btn" href={backUrl}>
+        <Link as="button" id="back-btn" href={_previous?.url}>
           <ChevronLeft className="h-4" />
         </Link>
       </Button>

@@ -11,6 +11,7 @@ use Tests\DuskTestCase;
 class ShowEmpresaTest extends DuskTestCase
 {
     protected Empresa $e;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -281,5 +282,65 @@ class ShowEmpresaTest extends DuskTestCase
                 ->pause(750)
                 ->assertPathIs("/app/recurso/empresas");
         });
+    }
+
+    public function testAcciones(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser
+                ->visit(
+                    new Form(
+                        recurso: "empresas",
+                        accion: "show",
+                        id: $this->e->id
+                    )
+                )
+                ->assertSeeIn(
+                    selector: "@badge-created-" . $this->e->id,
+                    text: date("d/m/Y, H:i:s", strtotime($this->e->created_at)),
+                    ignoreCase: true
+                )
+                ->assertSeeIn(
+                    selector: "@badge-updated-" . $this->e->id,
+                    text: date("d/m/Y, H:i:s", strtotime($this->e->updated_at)),
+                    ignoreCase: true
+                );
+
+            $browser
+                ->assertEnabled("@badge-edit-" . $this->e->id)
+                ->click("@badge-edit-" . $this->e->id)
+                ->pause(1750)
+                ->assertPathIs(
+                    "/app/recurso/empresas/" . $this->e->id . "/edit"
+                );
+
+            $browser
+                ->visit(
+                    new Form(
+                        recurso: "empresas",
+                        accion: "show",
+                        id: $this->e->id
+                    )
+                )
+                ->click("@badge-destroy-" . $this->e->id)
+                ->pause(750)
+                ->assertVisible("@alertdialog")
+                ->assertVisible("#alert-title")
+                ->assertVisible("#alert-footer")
+                ->assertVisible("#alert-cancel")
+                ->assertVisible("#alert-confirm")
+                ->click("#alert-cancel")
+                ->pause(750)
+                ->assertPathIs("/app/recurso/empresas/" . $this->e->id)
+                ->click("@badge-destroy-" . $this->e->id)
+                ->pause(750)
+                ->click("#alert-confirm")
+                ->pause(750)
+                ->assertPathIs("/app/recurso/empresas");
+        });
+
+        $this->assertDatabaseMissing("empresas", [
+            "id" => $this->e->id,
+        ]);
     }
 }

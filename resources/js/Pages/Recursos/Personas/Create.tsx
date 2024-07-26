@@ -101,7 +101,7 @@ export default function Create({ urls }: Props) {
                 className={
                   form.getFieldState("id_nac").invalid ? "text-destructive" : ""
                 }
-                htmlFor="id_nac"
+                htmlFor="input-id_nac"
               >
                 Identificación *
               </FormLabel>

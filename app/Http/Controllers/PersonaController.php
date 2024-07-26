@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Persona;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class PersonaController extends Controller
 {
-
     /**
      * Constructor
      */
@@ -147,7 +147,10 @@ class PersonaController extends Controller
 
         return Inertia::render("Recursos/Personas/Show", [
             "data" => [
-                ...$this->data->toArray(),
+                ...Arr::except($this->data->toArray(), [
+                    "created_at",
+                    "updated_at",
+                ]),
                 "created_at" => $this->data->created_at->format("Y-m-d H:i:s"),
                 "updated_at" => $this->data->updated_at->format("Y-m-d H:i:s"),
             ],
@@ -166,17 +169,9 @@ class PersonaController extends Controller
 
         return Inertia::render("Recursos/Personas/Edit", [
             "data" => [
-                ...$this->inst->only([
-                    "id",
-                    "nombres",
-                    "apellidos",
-                    "tipo_id_nac",
-                    "id_nac",
-                    "email",
-                    "tel",
-                    "perfil",
-                    "observaciones",
-                    "ropo",
+                ...Arr::except($this->inst->toArray(), [
+                    "created_at",
+                    "updated_at",
                 ]),
                 "created_at" => $this->inst->created_at->format("Y-m-d H:i:s"),
                 "updated_at" => $this->inst->updated_at->format("Y-m-d H:i:s"),
@@ -246,8 +241,10 @@ class PersonaController extends Controller
                 ]);
         } else {
             $r = $request->input("ropo");
+            // dd($r);
 
             if (isset($r)) {
+                // dd('La variable $r existe');
                 if (
                     DB::table(Persona::ROPO_TABLE)
                         ->where("nro", $r["nro"])
@@ -277,6 +274,7 @@ class PersonaController extends Controller
                         ]);
                 }
                 $this->inst->update($basic);
+                // dd('Antes de usar setRopoAttribute($r) -> $r:', $r);
                 $this->inst->setRopoAttribute($r);
             } else {
                 $this->inst->update($basic);

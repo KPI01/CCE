@@ -173,7 +173,7 @@ class TableEmpresaTest extends DuskTestCase
         });
     }
 
-    public function testPaginación(): void
+    public function testPaginacion(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new Table("empresas"));
