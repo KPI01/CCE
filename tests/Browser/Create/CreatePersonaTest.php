@@ -353,7 +353,7 @@ class CreatePersonaTest extends DuskTestCase
                 ->assertPresent("@msg-ropo_capacitacion")
                 ->assertSeeIn(
                     "@msg-ropo_capacitacion",
-                    "Debes seleccionar el tipo de capacitación."
+                    "Debes ingresar una capacitación ROPO."
                 );
 
             $browser
@@ -419,9 +419,7 @@ class CreatePersonaTest extends DuskTestCase
 
             $browser
                 ->pause(1000)
-                ->assertPathIs(
-                    "/" . Request::create(route("personas.index"))->path()
-                )
+                ->assertPathIs("/app/recurso/personas")
                 ->assertSee("se ha registrado exitosamente");
         });
 
@@ -430,5 +428,7 @@ class CreatePersonaTest extends DuskTestCase
             ["email" => "typ7kpw1cx@whoever.com"],
             "mysql"
         );
+
+        Persona::where("email", "typ7kpw1cx@whoever.com")->first()->delete();
     }
 }

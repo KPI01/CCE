@@ -80,16 +80,16 @@ export const formSchema = z.object({
       invalid_type_error: SHOULD_BE_VALID_MSG,
     })
     .default("Aplicador"),
-  direccion: z.string().max(300, "La dirección debe tener menos de 300 caracteres.").nullish(),
+  direccion: z.string().max(300, "La dirección debe tener como máximo 300 caracteres.").nullish(),
   observaciones: z
     .string()
-    .max(300, "Las observaciones deben tener menos de 300 caracteres.")
+    .max(1000, "Las observaciones deben tener como máximo 1000 caracteres.")
     .nullish(),
   ropo: z
       .object({
         capacitacion: z
           .enum(CAPACITACIONES_READONLY, {
-            required_error: "Debes seleccionar el tipo de capacitación.",
+            required_error: "Debes seleccionar el tipo de capacitación ROPO.",
             invalid_type_error: SHOULD_BE_VALID_MSG,
           })
           .nullish(),
@@ -112,13 +112,13 @@ export const formSchema = z.object({
         if (data?.nro && !data?.capacitacion) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: "Debes ingresar una capacitación ROPO",
+            message: "Debes ingresar una capacitación ROPO.",
             path: ["capacitacion"],
           });
         } else if (!data?.nro && data?.capacitacion) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: "Debes ingresar la identificación ROPO",
+            message: "Debes ingresar la identificación ROPO.",
             path: ["nro"],
           });
         }

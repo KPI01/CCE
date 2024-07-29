@@ -11,7 +11,6 @@ export default function FormLayout({
   created_at,
   updated_at,
   urls,
-  backUrl,
   id,
 }: LayoutProps & { backUrl?: string }) {
   return (
@@ -23,7 +22,6 @@ export default function FormLayout({
         created_at={created_at}
         updated_at={updated_at}
         urls={urls}
-        backUrl={backUrl}
         className="mb-6"
       />
       {children}

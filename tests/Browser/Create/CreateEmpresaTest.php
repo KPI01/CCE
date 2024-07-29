@@ -342,7 +342,7 @@ class CreateEmpresaTest extends DuskTestCase
                 ->assertPresent("@msg-ropo_capacitacion")
                 ->assertSeeIn(
                     "@msg-ropo_capacitacion",
-                    "Debes seleccionar el tipo de capacitación."
+                    "Debes seleccionar el tipo de capacitación ROPO."
                 );
 
             $browser
@@ -409,9 +409,7 @@ class CreateEmpresaTest extends DuskTestCase
 
             $browser
                 ->pause(1000)
-                ->assertPathIs(
-                    "/" . Request::create(route("empresas.index"))->path()
-                )
+                ->assertPathIs("/app/recurso/empresas")
                 ->assertSee("se ha registrado exitosamente");
         });
 
@@ -420,5 +418,7 @@ class CreateEmpresaTest extends DuskTestCase
             ["email" => "m4upn217rk@email.com"],
             "mysql"
         );
+
+        Empresa::where("email", "m4upn217rk@email.com")->first()->delete();
     }
 }

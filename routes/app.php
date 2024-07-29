@@ -22,11 +22,7 @@ Route::prefix("app")
             });
 
         Route::prefix("recurso")->group(function () {
-            Route::resource("personas", PersonaController::class)->missing(
-                function () {
-                    return redirect(route("personas.index"));
-                }
-            );
+            Route::resource("personas", PersonaController::class);
             Route::resource("empresas", EmpresaController::class);
         });
     });

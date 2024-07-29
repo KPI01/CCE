@@ -27,6 +27,13 @@ class EditPersonaTest extends DuskTestCase
         $this->instFull = Persona::factory(1)->withRopo()->create()->first();
     }
 
+    public function tearDown(): void
+    {
+        $this->instFull->delete();
+        $this->instParcial->delete();
+        parent::tearDown();
+    }
+
     public function testAcceso(): void
     {
         $this->browse(function (Browser $browser) {
@@ -442,6 +449,20 @@ class EditPersonaTest extends DuskTestCase
                     "@msg-tel",
                     "El número de teléfono debe ser válido"
                 );
+            $obsv = fake()->text(1000);
+            while (strlen($obsv) <= 1000) {
+                $obsv .= fake()->sentence(50);
+            }
+            $browser
+                ->type("@txt-observaciones", $obsv)
+                ->assertInputValue("@txt-observaciones", $obsv)
+                ->press("@submit")
+                ->assertPresent("@msg-observaciones")
+                ->assertSeeIn(
+                    "@msg-observaciones",
+                    "Las observaciones deben tener como máximo 1000 caracteres."
+                );
+
             $browser
                 ->visit(
                     new Form(
@@ -584,7 +605,7 @@ class EditPersonaTest extends DuskTestCase
                 ->type("@input-tel", $nro)
                 ->type("@txt-observaciones", $obsrv)
                 ->press("@submit")
-                ->pause(750)
+                ->pause(1750)
                 ->assertPathIs("/app/recurso/personas")
                 ->pause(250)
                 ->assertSee("se ha editado exitosamente");
@@ -618,7 +639,7 @@ class EditPersonaTest extends DuskTestCase
                 })
                 ->assertInputValue("@input-tel", "")
                 ->press("@submit")
-                ->pause(750)
+                ->pause(1250)
                 ->assertPathIs("/app/recurso/personas")
                 ->pause(250)
                 ->assertSee("se ha editado exitosamente");
@@ -715,7 +736,7 @@ class EditPersonaTest extends DuskTestCase
                 )
                 /** Implementar forma de ingresar caducidad */
                 ->press("@submit")
-                ->pause(750)
+                ->pause(1750)
                 ->assertPathIs("/app/recurso/personas")
                 ->pause(250)
                 ->assertSee("se ha editado exitosamente");

@@ -28,6 +28,8 @@ export default function Show({ data, urls }: Props) {
   data.created_at = new Date(data.created_at);
   data.updated_at = new Date(data.updated_at);
 
+  console.debug(urls)
+
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -43,7 +45,6 @@ export default function Show({ data, urls }: Props) {
       created_at={formatDate(data.created_at)}
       updated_at={formatDate(data.updated_at)}
       urls={urls}
-      backUrl={urls.index}
     >
       <Form {...form}>
         <form id={`show-${data.id}`} className={CONTAINER_CLASS}>
@@ -145,7 +146,7 @@ export default function Show({ data, urls }: Props) {
                   label="Observaciones"
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value}
+                  value={field.value || ""}
                   disabled
                   textarea
                 />

@@ -406,20 +406,31 @@ class EditEmpresaTest extends DuskTestCase
                     "@msg-codigo",
                     "Este campo debe ser válido."
                 );
-
-            $txtGreater = fake()->text(350);
-            do {
-                $txtGreater = fake()->text(350 + 5);
-            } while (strlen($txtGreater) <= 300);
-
+            $dir = fake()->text(350);
+            while (strlen($dir) <= 300) {
+                $dir .= fake()->sentence(25);
+            }
             $browser
-                ->type("@txt-direccion", $txtGreater)
-                ->assertInputValue("@txt-direccion", $txtGreater)
+                ->type("@txt-direccion", $dir)
+                ->assertInputValue("@txt-direccion", $dir)
                 ->press("@submit")
                 ->assertPresent("@msg-direccion")
                 ->assertSeeIn(
                     "@msg-direccion",
-                    "La dirección debe tener menos de 300 caracteres."
+                    "La dirección debe tener como máximo 300 caracteres."
+                );
+            $obsv = fake()->text(1000);
+            while (strlen($obsv) <= 1000) {
+                $obsv .= fake()->sentence(50);
+            }
+            $browser
+                ->type("@txt-observaciones", $obsv)
+                ->assertInputValue("@txt-observaciones", $obsv)
+                ->press("@submit")
+                ->assertPresent("@msg-observaciones")
+                ->assertSeeIn(
+                    "@msg-observaciones",
+                    "Las observaciones deben tener como máximo 1000 caracteres."
                 );
 
             $browser

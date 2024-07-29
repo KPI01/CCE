@@ -271,7 +271,7 @@ class ShowPersonaTest extends DuskTestCase
                         id: $this->p->id
                     )
                 )
-                ->click("@back-btn")
+                ->press("@back-btn")
                 ->pause(750)
                 ->assertPathIs("/app/recurso/personas");
         });
