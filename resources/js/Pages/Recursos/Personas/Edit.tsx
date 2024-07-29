@@ -20,6 +20,7 @@ import { CircleX, Save } from "lucide-react";
 import { router } from "@inertiajs/react";
 import { useToast } from "@/Components/ui/use-toast";
 import { convertNullToUndefined } from "@/lib/utils";
+import { formatDate } from "@/lib/dates";
 
 const schema = formSchema;
 
@@ -58,7 +59,7 @@ export default function Edit({ data, urls }: Props) {
     },
   });
 
-  console.debug(form.getValues())
+  console.debug(form.getValues());
 
   function onSubmit(values: z.infer<typeof schema>) {
     console.debug("onSubmit_values:", values);
@@ -77,8 +78,6 @@ export default function Edit({ data, urls }: Props) {
       {} as { [key: string]: any },
     );
 
-    console.debug("onSubmit_toSend:", toSend)
-
     if (Object.keys(toSend).length > 0) {
       router.put(urls.update, toSend);
     } else {
@@ -94,9 +93,10 @@ export default function Edit({ data, urls }: Props) {
     <FormLayout
       pageTitle="Persona"
       mainTitle="Editando..."
-      created_at={data.created_at.toLocaleString()}
-      updated_at={data.updated_at.toLocaleString()}
+      created_at={formatDate(data.created_at)}
+      updated_at={formatDate(data.updated_at)}
       backUrl={urls.show}
+      id={data.id}
     >
       <Form {...form}>
         <form

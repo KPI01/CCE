@@ -15,10 +15,10 @@ return new class extends Migration {
             $table->timestamps();
             $table->string("nombre", 100);
             $table->string("nif", 9)->unique();
-            $table->string("email", 254)->unique()->nullable();
+            $table->string("email", 254)->unique();
             $table->string("tel", 20)->nullable();
             $table->string("codigo", 10)->nullable();
-            $table->string("perfil", 20);
+            $table->string("perfil", 20)->nullable();
             $table->text("direccion")->nullable();
             $table->text("observaciones")->nullable();
         });

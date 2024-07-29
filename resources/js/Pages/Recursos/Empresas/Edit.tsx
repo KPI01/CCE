@@ -18,6 +18,7 @@ import { Save } from "lucide-react";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 import { router } from "@inertiajs/react";
 import { useToast } from "@/Components/ui/use-toast";
+import { formatDate } from "@/lib/dates";
 
 const schema = formSchema;
 
@@ -30,6 +31,7 @@ export default function Edit({ data, urls }: Props) {
   const { toast } = useToast();
 
   const valid = schema.safeParse(data);
+  console.debug(valid);
 
   data.created_at = new Date(data.created_at);
   data.updated_at = new Date(data.updated_at);
@@ -69,19 +71,21 @@ export default function Edit({ data, urls }: Props) {
 
   return (
     <FormLayout
+      id={data.id}
       mainTitle="Editando empresa..."
       pageTitle="Modo edición"
       backUrl={urls.show}
-      created_at={data.created_at.toLocaleString()}
-      updated_at={data.updated_at.toLocaleString()}
+      created_at={formatDate(data.updated_at)}
+      updated_at={formatDate(data.updated_at)}
     >
       <Form {...form}>
         <form
+          id={`edit-${data.id}`}
           onSubmit={form.handleSubmit(onSubmit)}
           className={CONTAINER_CLASS}
         >
           <div className="space-y-4">
-            <FormTitle id="h3-basica" title="Información Básica" />
+            <FormTitle id="h3-basicos" title="Información Básica" />
             <FormField
               control={form.control}
               name="nombre"

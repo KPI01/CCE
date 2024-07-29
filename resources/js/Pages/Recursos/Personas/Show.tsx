@@ -31,7 +31,7 @@ export default function Show({ data, urls }: Props) {
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      ...data
+      ...data,
     },
   });
 

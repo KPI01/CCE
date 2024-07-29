@@ -9,16 +9,16 @@ interface Modelo {
 type Perfiles = "Productor" | "Aplicador" | "Operario";
 
 type Capacitaciones =
-  | ""
   | "Básico"
   | "Cualificado"
   | "Fumigador"
-  | "Piloto Aplicador";
+  | "Piloto Aplicador"
+  | null;
 
 type ROPO = {
-  caducidad?: Date | null;
-  nro?: string;
-  capacitacion?: Capacitaciones;
+  caducidad: Date | null;
+  nro: string | null;
+  capacitacion: Capacitaciones;
 };
 
 export interface User extends Modelo {

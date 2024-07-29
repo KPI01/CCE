@@ -87,6 +87,7 @@ class Persona extends RecursoBase
         if (isset($cad)) {
             $cad = strtotime($cad);
         }
+
         DB::table(self::ROPO_TABLE)->upsert(
             values: [
                 "persona_id" => $this->id,
@@ -110,5 +111,4 @@ class Persona extends RecursoBase
             ->withTimestamps()
             ->using(EmpresaPersona::class);
     }
-
 }

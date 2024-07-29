@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Exceptions;
 
 abstract class Controller
 {
@@ -74,7 +73,7 @@ abstract class Controller
         $key = "$campo:$errNameAux";
 
         if (!in_array($variante, $variantes)) {
-            throw new Exceptions("Variante no válida");
+            report("Variante no válida");
         }
 
         $this->toasts["error"][$key] = [

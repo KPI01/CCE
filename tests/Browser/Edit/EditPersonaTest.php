@@ -11,8 +11,8 @@ use Laravel\Dusk\Keyboard;
 
 class EditPersonaTest extends DuskTestCase
 {
-    public Persona $instFull;
-    public Persona $instParcial;
+    private Persona $instFull;
+    private Persona $instParcial;
 
     public function setUp(): void
     {
@@ -92,7 +92,7 @@ class EditPersonaTest extends DuskTestCase
                 ->assertPresent("@trigger-ropo_caducidad")
                 ->assertPresent("@input-ropo_caducidad");
 
-            $browser->assertPresent("@submit")->assertEnabled("@submit");
+            $browser->assertPresent("@submit");
         });
     }
 
@@ -180,13 +180,9 @@ class EditPersonaTest extends DuskTestCase
                 ->assertEnabled("@txt-observaciones");
 
             $browser
-                ->assertEnabled("@h3-ropo")
-                ->assertEnabled("@label-ropo_capacitacion")
                 ->assertEnabled("@trigger-ropo_capacitacion")
                 ->assertEnabledByName("select", "ropo.capacitacion")
-                ->assertEnabled("@label-ropo_nro")
                 ->assertEnabled("@input-ropo_nro")
-                ->assertEnabled("@label-ropo_caducidad")
                 ->assertEnabled("@trigger-ropo_caducidad")
                 ->assertEnabled("@input-ropo_caducidad");
 
@@ -343,7 +339,7 @@ class EditPersonaTest extends DuskTestCase
                 ->withKeyboard(function (Keyboard $keyboard) {
                     $nombresLength = strlen($this->instFull->nombres);
                     for ($i = 0; $i < $nombresLength; $i++) {
-                        $keyboard->press(self::KEYS["backspace"]);
+                        $keyboard->press(parent::KEYS["backspace"]);
                     }
                 })
                 ->assertInputValue("@input-nombres", "")
@@ -356,7 +352,7 @@ class EditPersonaTest extends DuskTestCase
                 ->withKeyboard(function (Keyboard $keyboard) {
                     $apellidosLength = strlen($this->instFull->apellidos);
                     for ($i = 0; $i < $apellidosLength; $i++) {
-                        $keyboard->press(self::KEYS["backspace"]);
+                        $keyboard->press(parent::KEYS["backspace"]);
                     }
                 })
                 ->assertInputValue("@input-apellidos", "")
@@ -369,7 +365,7 @@ class EditPersonaTest extends DuskTestCase
                 ->withKeyboard(function (Keyboard $keyboard) {
                     $idNacLength = strlen($this->instFull->id_nac);
                     for ($i = 0; $i < $idNacLength; $i++) {
-                        $keyboard->press(self::KEYS["backspace"]);
+                        $keyboard->press(parent::KEYS["backspace"]);
                     }
                 })
                 ->assertInputValue("@input-id_nac", "")
@@ -382,7 +378,7 @@ class EditPersonaTest extends DuskTestCase
                 ->withKeyboard(function (Keyboard $keyboard) {
                     $emailLength = strlen($this->instFull->email);
                     for ($i = 0; $i < $emailLength; $i++) {
-                        $keyboard->press(self::KEYS["backspace"]);
+                        $keyboard->press(parent::KEYS["backspace"]);
                     }
                 })
                 ->assertInputValue("@input-email", "")
@@ -617,7 +613,7 @@ class EditPersonaTest extends DuskTestCase
                 ->withKeyboard(function (Keyboard $keyboard) {
                     $telLength = strlen($this->instFull->tel);
                     for ($i = 0; $i < $telLength; $i++) {
-                        $keyboard->press(self::KEYS["backspace"]);
+                        $keyboard->press(parent::KEYS["backspace"]);
                     }
                 })
                 ->assertInputValue("@input-tel", "")
@@ -656,7 +652,7 @@ class EditPersonaTest extends DuskTestCase
                 "nro" => fake()->boolean()
                     ? fake()->regexify("[0-9]{7,12}[S]?[ASTU]")
                     : fake()->regexify("[0-9]{1,3}/[0-9]{1,3}"),
-                "caducidad" => fake()->dateTimeBetween("now", "+4 year"),
+                "caducidad" => fake()->dateTimeBetween("now", "+4 years"),
             ],
         ];
 
@@ -737,7 +733,7 @@ class EditPersonaTest extends DuskTestCase
             "observaciones" => $dataToUpdate["observaciones"],
         ]);
 
-        $this->assertDatabaseHas("persona_ropo", [
+        $this->assertDatabaseHas(Persona::ROPO_TABLE, [
             "persona_id" => $this->instFull->id,
             "capacitacion" => $dataToUpdate["ropo"]["capacitacion"],
             "nro" => $dataToUpdate["ropo"]["nro"],

@@ -32,27 +32,29 @@ export default function FormHeader({
   className,
   id,
 }: Omit<LayoutProps, "mainTitle" | "pageTitle"> & Props) {
-  const { _previous }: PageProps & { errors: Record<string, any> } = usePage<PageProps & { errors: Record<string, any> }>().props;
-  let backUrl = _previous.url || route("home")
-  const current = route().current() as string
-  const currUrl = ["show", "edit"].includes(current.split('.')[1])
-                    ? route(current, id) 
-                    : route(current)
+  const { _previous }: PageProps & { errors: Record<string, any> } = usePage<
+    PageProps & { errors: Record<string, any> }
+  >().props;
+  let backUrl = _previous.url || route("home");
+  const current = route().current() as string;
+  const currUrl = ["show", "edit"].includes(current.split(".")[1])
+    ? route(current, id)
+    : route(current);
 
   console.debug(
     `id: ${id}`,
     `current route: ${current}`,
     `current url: ${currUrl}`,
-    `iguales?: ${_previous.url === currUrl}` 
-  )
+    `iguales?: ${_previous.url === currUrl}`,
+  );
   if (_previous.url === currUrl) {
-    console.warn('Ruta actual igual que la anterior')
+    console.warn("Ruta actual igual que la anterior");
     if (urls?.index) {
-      backUrl = urls.index
+      backUrl = urls.index;
     } else if (urls?.show) {
-      backUrl = urls.show
+      backUrl = urls.show;
     } else {
-      backUrl = route('home')
+      backUrl = route("home");
     }
   }
 
@@ -60,7 +62,7 @@ export default function FormHeader({
     if (urls?.destroy) router.delete(urls.destroy);
   }
 
-  console.debug(`backUrl: ${backUrl}`)
+  console.debug(`backUrl: ${backUrl}`);
   return (
     <div className={cn("flex items-center gap-4", className)}>
       <Button variant={"outline"} size={"sm"} className="px-2 py-1" asChild>

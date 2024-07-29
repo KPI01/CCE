@@ -12,7 +12,6 @@ use Tests\DuskTestCase;
 
 class CreatePersonaTest extends DuskTestCase
 {
-
     public function testAcceso(): void
     {
         $this->browse(function (Browser $browser) {

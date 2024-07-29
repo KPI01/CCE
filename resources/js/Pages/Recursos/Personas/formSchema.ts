@@ -14,14 +14,12 @@ const TIPOS_ID_NAC_READONLY = ["DNI", "NIE"] as const;
 export const PERFILES = ["Productor", "Aplicador", "Operario"];
 const PERFILES_READONLY = ["Productor", "Aplicador", "Operario"] as const;
 export const CAPACITACIONES = [
-  "",
   "Básico",
   "Cualificado",
   "Fumigador",
   "Piloto Aplicador",
 ];
 const CAPACITACIONES_READONLY = [
-  "",
   "Básico",
   "Cualificado",
   "Fumigador",
@@ -31,7 +29,8 @@ const CAPACITACIONES_READONLY = [
 const NOMBRES_REGEX = /^[A-Za-záéíóúÁÉÍÓÚñÑ ]*$/gm;
 const ROPO_NRO_REGEX =
   /^([\d]{7,12}[SASTU]*([/][\d]{1,3})?|[\d]{1,3}[/][\d]{1,3})$/gm;
-const TEL_REGEX = /^((\+34|0034|34)?[6|7|8|9]\d{8}|(800|900)\d{6,7}|(901|902|905|803|806|807)\d{6})$/
+const TEL_REGEX =
+  /^((\+34|0034|34)?[6|7|8|9]\d{8}|(800|900)\d{6,7}|(901|902|905|803|806|807)\d{6})$/;
 
 export const formSchema = z
   .object({
@@ -85,28 +84,16 @@ export const formSchema = z
       .string()
       .regex(TEL_REGEX, "El número de teléfono debe ser válido.")
       .optional()
-      .or(z.literal('')),
+      .or(z.literal("")),
     perfil: z
-      .enum(PERFILES_READONLY, {
-        errorMap: (issue, _ctx) => {
-          switch (issue.code) {
-            case "invalid_type":
-              return { message: `${FIELD_MSG} debe ser solo texto` };
-            case "invalid_enum_value":
-              return {
-                message: `${FIELD_MSG} debe ser uno de los siguientes: ${PERFILES.join(", ")}`,
-              };
-            default:
-              return { message: SHOULD_BE_VALID_MSG };
-          }
-        },
-      })
-      .nullish(),
+     .enum(PERFILES_READONLY, {
+      invalid_type_error: SHOULD_BE_VALID_MSG,
+    })
+    .default("Aplicador"),
     observaciones: z
       .string()
       .max(300, "Las observaciones deben tener menos de 300 caracteres.")
-      .optional()
-      .or(z.literal('')),
+      .nullish(),
     ropo: z
       .object({
         capacitacion: z
@@ -120,7 +107,6 @@ export const formSchema = z
             required_error: REQUIRED_MSG,
             invalid_type_error: "Debes ingresar una fecha válida",
           })
-          .optional()
           .nullish(),
         nro: z
           .string()
@@ -136,14 +122,14 @@ export const formSchema = z
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: "Debes ingresar una capacitación ROPO",
-            path: ["capacitacion"]
-          })
+            path: ["capacitacion"],
+          });
         } else if (!data?.nro && data?.capacitacion) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: "Debes ingresar la identificación ROPO",
-            path: ["nro"]
-          })
+            path: ["nro"],
+          });
         }
       }),
   })

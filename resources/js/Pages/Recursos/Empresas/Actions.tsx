@@ -54,7 +54,7 @@ export default function Actions({ item }: Props) {
             </DropdownMenuItem>
             <DropdownMenuItem
               asChild
-              className="w-full cursor-pointer hover:!bg-destructive/25"
+              className="w-full cursor-pointer hover:!text-destructive"
               id={`action-delete-${item.id}`}
             >
               <AlertDialogTrigger>

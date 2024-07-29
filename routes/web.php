@@ -7,11 +7,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get("/", [AppController::class, "redirect_home"])->name("root");
 
-// Rutas de la app
 Route::controller(AppController::class)->group(function () {
     Route::get("/", "redirect_home");
 });
 
+/**
+ * Rutas de autenticación
+ */
 Route::prefix("auth")->group(function () {
     Route::get("/", function () {
         return redirect(route("login"));

@@ -42,6 +42,8 @@ export default function Table({ data }: Props) {
     ropo_nro: false,
   };
 
+  console.debug(data);
+
   return (
     <DataLayout
       title="Empresas"

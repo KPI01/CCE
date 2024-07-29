@@ -93,7 +93,7 @@ class EmpresaController extends Controller
 
             if (isset($r)) {
                 if (
-                    DB::table("empresa_ropo")
+                    DB::table(Empresa::ROPO_TABLE)
                         ->where("nro", $r["nro"])
                         ->exists()
                 ) {
@@ -163,7 +163,7 @@ class EmpresaController extends Controller
     public function edit(string $id)
     {
         //
-        $this->inst = Empresa::findOrFail($id)->first();
+        $this->inst = Empresa::findOrFail($id);
 
         return Inertia::render("Recursos/Empresas/Edit", [
             "data" => [
@@ -181,41 +181,117 @@ class EmpresaController extends Controller
         ]);
     }
 
-    public function update(Request $req, string $id)
+    public function update(Request $request, string $id)
     {
         //
-        $values = $req->all();
-
-        $rValues = null;
-        if (array_key_exists("ropo", $values) && isset($values["ropo"])) {
-            $rValues = $values["ropo"];
-            if (isset($rValues["caducidad"])) {
-                $rValues["caducidad"] = date(
-                    "Y-m-d",
-                    strtotime($rValues["caducidad"])
-                );
-            }
-            unset($values["ropo"]);
-        }
-
         $this->inst = Empresa::findOrFail($id);
-        $this->inst->update($values);
-        if (isset($rValues)) {
-            $this->inst->setRopoAttribute($rValues);
-        }
+        $basic = $request->all();
+        unset($basic["ropo"]);
+        $uniques = $request->all(["email", "nif"]);
 
-        $this->toastExitoConstructor(
-            accion: "update",
-            seccion: "description",
-            append: $this->inst->nombre . " (" . $this->inst->nif . ")"
-        );
-        return redirect()
-            ->route("empresas.show", $this->inst->id)
-            ->with([
-                "message" => [
-                    "toast" => $this->toasts["exito"]["update"],
-                ],
-            ]);
+        if (
+            Empresa::where([
+                ["email", $uniques["email"]],
+                ["id", "<>", $this->inst->id],
+            ])->exists()
+        ) {
+            $this->toastErrorConstructor(
+                campo: "email",
+                error: "Duplicado",
+                mensaje: implode(" ", [
+                    "Correo:",
+                    $uniques["email"],
+                    "ya se encuentra registrado",
+                ]),
+                variante: "warning"
+            );
+            return redirect()
+                ->back()
+                ->with([
+                    "from" => "empresas.update",
+                    "message" => [
+                        "toast" => $this->toasts["error"]["email:duplicado"],
+                    ],
+                ]);
+        } elseif (
+            Empresa::where([
+                ["nif", $uniques["nif"]],
+                ["id", "<>", $this->inst->id],
+            ])->exists()
+        ) {
+            $this->toastErrorConstructor(
+                campo: "nif",
+                error: "Duplicado",
+                mensaje: implode(" ", [
+                    "NIF:",
+                    $uniques["nif"],
+                    "ya se encuentra registrado",
+                ]),
+                variante: "warning"
+            );
+            return redirect()
+                ->back()
+                ->with([
+                    "from" => "empresas.update",
+                    "message" => [
+                        "toast" => $this->toasts["error"]["id_nac:duplicado"],
+                    ],
+                ]);
+        } else {
+            $r = $request->input("ropo");
+
+            if (isset($r)) {
+                if (
+                    DB::table(Empresa::ROPO_TABLE)
+                        ->where("nro", $r["nro"])
+                        ->where("empresa_id", "<>", $this->inst->id)
+                        ->exists()
+                ) {
+                    $this->toastErrorConstructor(
+                        campo: "ropo.nro",
+                        error: "Duplicado",
+                        mensaje: implode(" ", [
+                            "Nº ROPO:",
+                            $r["nro"],
+                            "ya se encuentra registrado",
+                        ]),
+                        variante: "warning"
+                    );
+                    return redirect()
+                        ->back()
+                        ->with([
+                            "from" => "personas.update",
+                            "message" => [
+                                "toast" =>
+                                    $this->toasts["error"][
+                                        "ropo.nro:duplicado"
+                                    ],
+                            ],
+                        ]);
+                }
+                $this->inst->update($basic);
+                $this->inst->setRopoAttribute($r);
+            } else {
+                $this->inst->update($basic);
+            }
+
+            $this->toastExitoConstructor(
+                accion: "update",
+                seccion: "description",
+                append: implode(" ", [
+                    $this->inst->nombre,
+                    "(" . $this->inst->nif . ")",
+                ])
+            );
+            return redirect()
+                ->intended(route("empresas.index"))
+                ->with([
+                    "from" => "empresas.update",
+                    "message" => [
+                        "toast" => $this->toasts["exito"]["update"],
+                    ],
+                ]);
+        }
     }
 
     public function destroy(Request $req, string $id)

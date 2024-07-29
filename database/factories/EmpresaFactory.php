@@ -29,12 +29,7 @@ class EmpresaFactory extends Factory
             "email" => fake()->unique()->companyEmail(),
             "tel" => $tel,
             "codigo" => fake()->bothify("######"),
-            "perfil" => fake()->randomElement([
-                "Aplicador",
-                "Técnico",
-                "Supervisor",
-                "Productor",
-            ]),
+            "perfil" => fake()->randomElement(Empresa::PERFILES),
             "direccion" => fake()->address(),
             "observaciones" => $doObsrv ? fake()->sentence() : null,
         ];
@@ -49,12 +44,7 @@ class EmpresaFactory extends Factory
                 ? fake()->unique()->regexify($regex1)
                 : fake()->unique()->regexify($regex2);
             $cad = fake()->dateTimeBetween("now", "+5 years")->format("Y-m-d");
-            $cap = fake()->randomElement([
-                "Básico",
-                "Cualificado",
-                "Fumigador",
-                "Piloto Aplicador",
-            ]);
+            $cap = fake()->randomElement(Empresa::CAPACITACIONES_ROPO);
 
             DB::table("empresa_ropo")->insert([
                 "empresa_id" => $empresa->id,
