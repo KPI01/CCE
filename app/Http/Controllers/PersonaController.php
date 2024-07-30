@@ -19,7 +19,7 @@ class PersonaController extends Controller
         $this->data = Persona::all();
 
         return inertia("Recursos/Personas/Table", [
-            "data" => $this->appendUrls("personas", $this->data),
+            "data" => $this->data,
         ]);
     }
 

@@ -29,7 +29,7 @@ class EmpresaController extends Controller
         $this->data = Empresa::all();
 
         return Inertia::render("Recursos/Empresas/Table", [
-            "data" => $this->appendUrls(recurso: "empresas", data: $this->data),
+            "data" => $this->data,
         ]);
     }
 
