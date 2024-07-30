@@ -16,29 +16,19 @@ import FormLayout from "@/Layouts/Recursos/FormLayout";
 import FormTitle from "@/Components/Forms/FormTitle";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 import FormButton from "@/Components/Forms/FormButton";
-import { CircleX, Save } from "lucide-react";
+import { CircleX, Save, Trash } from "lucide-react";
 import { router } from "@inertiajs/react";
 import { useToast } from "@/Components/ui/use-toast";
-import { convertNullToUndefined } from "@/lib/utils";
-import { formatDate } from "@/lib/dates";
 
 const schema = formSchema;
 
 interface Props extends LayoutProps {
   data: Persona;
-  urls: {
-    update: string;
-    show: string;
-  };
 }
-export default function Edit({ data, urls }: Props) {
+export default function Edit({ data }: Props) {
   const { toast } = useToast();
 
-  data.created_at = new Date(data.created_at);
-  data.updated_at = new Date(data.updated_at);
   if (data.ropo?.caducidad) data.ropo.caducidad = new Date(data.ropo.caducidad);
-
-  convertNullToUndefined(data);
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -59,12 +49,8 @@ export default function Edit({ data, urls }: Props) {
     },
   });
 
-  console.debug(form.getValues());
-
   function onSubmit(values: z.infer<typeof schema>) {
-    console.debug("onSubmit_values:", values);
     const dirty = form.formState.dirtyFields;
-    console.debug("onSubmit_dirty:", dirty);
     const validation = schema.parse(values);
 
     const toSend = Object.keys(dirty).reduce(
@@ -79,7 +65,7 @@ export default function Edit({ data, urls }: Props) {
     );
 
     if (Object.keys(toSend).length > 0) {
-      router.put(urls.update, toSend);
+      router.put(data.urls.update, toSend);
     } else {
       toast({
         title: "No se han detectado cambios!",
@@ -93,9 +79,9 @@ export default function Edit({ data, urls }: Props) {
     <FormLayout
       pageTitle="Persona"
       mainTitle="Editando..."
-      created_at={formatDate(data.created_at)}
-      updated_at={formatDate(data.updated_at)}
-      backUrl={urls.show}
+      created_at={data.created_at}
+      updated_at={data.updated_at}
+      backUrl={data.urls.show}
       id={data.id}
     >
       <Form {...form}>
@@ -294,10 +280,10 @@ export default function Edit({ data, urls }: Props) {
             <FormButton
               type="reset"
               variant={"destructive"}
-              onClick={() => router.get(urls.show)}
+              onClick={() => router.delete(data.urls.destroy)}
             >
-              <CircleX className="mr-2 size-4" />
-              Cancelar
+              <Trash className="mr-2 size-4" />
+              Eliminar
             </FormButton>
             <FormButton type="submit">
               <Save className="mr-2 size-4" />

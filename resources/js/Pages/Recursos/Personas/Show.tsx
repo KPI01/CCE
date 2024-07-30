@@ -21,19 +21,22 @@ const schema = formSchema;
 
 interface Props extends LayoutProps {
   data: Persona;
-  urls: Urls;
 }
 
-export default function Show({ data, urls }: Props) {
-  data.created_at = new Date(data.created_at);
-  data.updated_at = new Date(data.updated_at);
-
-  console.debug(urls)
+export default function Show({ data }: Props) {
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      ...data,
+      nombres: data.nombres,
+      apellidos: data.apellidos,
+      tipo_id_nac: data.tipo_id_nac,
+      id_nac: data.tipo_id_nac,
+      email: data.email,
+      tel: data.tel,
+      perfil: data.perfil,
+      observaciones: data.observaciones,
+      ropo: data.ropo,
     },
   });
 
@@ -42,9 +45,10 @@ export default function Show({ data, urls }: Props) {
       id={data.id}
       pageTitle="Persona"
       mainTitle={`${data.nombres} ${data.apellidos}`}
-      created_at={formatDate(data.created_at)}
-      updated_at={formatDate(data.updated_at)}
-      urls={urls}
+      created_at={data.created_at}
+      updated_at={data.updated_at}
+      urls={data.urls}
+      backUrl={data.urls.index}
     >
       <Form {...form}>
         <form id={`show-${data.id}`} className={CONTAINER_CLASS}>

@@ -4,16 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Persona;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
-use Inertia\Inertia;
 
 class PersonaController extends Controller
 {
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();
@@ -24,7 +18,7 @@ class PersonaController extends Controller
         //
         $this->data = Persona::all();
 
-        return Inertia::render("Recursos/Personas/Table", [
+        return inertia("Recursos/Personas/Table", [
             "data" => $this->appendUrls("personas", $this->data),
         ]);
     }
@@ -32,7 +26,7 @@ class PersonaController extends Controller
     public function create()
     {
         //
-        return Inertia::render("Recursos/Personas/Create", [
+        return inertia("Recursos/Personas/Create", [
             "urls" => [
                 "store" => route("personas.store"),
                 "index" => route("personas.index"),
@@ -58,14 +52,12 @@ class PersonaController extends Controller
                 ]),
                 variante: "warning"
             );
-            return redirect()
-                ->back()
-                ->with([
-                    "from" => "personas.store",
-                    "message" => [
-                        "toast" => $this->toasts["error"]["email:duplicado"],
-                    ],
-                ]);
+            return to_route($request->route())->with([
+                "from" => "personas.store",
+                "message" => [
+                    "toast" => $this->toasts["error"]["email:duplicado"],
+                ],
+            ]);
         } elseif (Persona::where("id_nac", $uniques["id_nac"])->exists()) {
             $this->toastErrorConstructor(
                 campo: "id_nac",
@@ -77,14 +69,12 @@ class PersonaController extends Controller
                 ]),
                 variante: "warning"
             );
-            return redirect()
-                ->back()
-                ->with([
-                    "from" => "personas.store",
-                    "message" => [
-                        "toast" => $this->toasts["error"]["id_nac:duplicado"],
-                    ],
-                ]);
+            return to_route($request->route())->with([
+                "from" => "personas.store",
+                "message" => [
+                    "toast" => $this->toasts["error"]["id_nac:duplicado"],
+                ],
+            ]);
         } else {
             $r = $request->input("ropo");
 
@@ -104,17 +94,13 @@ class PersonaController extends Controller
                         ]),
                         variante: "warning"
                     );
-                    return redirect()
-                        ->back()
-                        ->with([
-                            "from" => "personas.store",
-                            "message" => [
-                                "toast" =>
-                                    $this->toasts["error"][
-                                        "ropo.nro:duplicado"
-                                    ],
-                            ],
-                        ]);
+                    return to_route($request->route)->with([
+                        "from" => "personas.store",
+                        "message" => [
+                            "toast" =>
+                                $this->toasts["error"]["ropo.nro:duplicado"],
+                        ],
+                    ]);
                 }
                 $this->inst = Persona::create($basic)->setRopoAttribute($r);
             } else {
@@ -129,14 +115,12 @@ class PersonaController extends Controller
                     "(" . $this->inst->id_nac . ")",
                 ])
             );
-            return redirect()
-                ->intended(route("personas.index"))
-                ->with([
-                    "from" => "personas.store",
-                    "message" => [
-                        "toast" => $this->toasts["exito"]["store"],
-                    ],
-                ]);
+            return to_route($request->route())->with([
+                "from" => "personas.store",
+                "message" => [
+                    "toast" => $this->toasts["exito"]["store"],
+                ],
+            ]);
         }
     }
 
@@ -145,48 +129,25 @@ class PersonaController extends Controller
         //
         $this->data = Persona::findOrFail($id);
 
-        return Inertia::render("Recursos/Personas/Show", [
-            "data" => [
-                ...Arr::except($this->data->toArray(), [
-                    "created_at",
-                    "updated_at",
-                ]),
-                "created_at" => $this->data->created_at->format("Y-m-d H:i:s"),
-                "updated_at" => $this->data->updated_at->format("Y-m-d H:i:s"),
-            ],
-            "urls" => [
-                "index" => route("personas.index"),
-                "edit" => route("personas.edit", $this->data->id),
-                "destroy" => route("personas.destroy", $this->data->id),
-            ],
+        return inertia("Recursos/Personas/Show", [
+            "data" => $this->data,
         ]);
     }
 
     public function edit(string $id)
     {
         //
-        $this->inst = Persona::findOrFail($id);
+        $this->data = Persona::findOrFail($id);
 
-        return Inertia::render("Recursos/Personas/Edit", [
-            "data" => [
-                ...Arr::except($this->inst->toArray(), [
-                    "created_at",
-                    "updated_at",
-                ]),
-                "created_at" => $this->inst->created_at->format("Y-m-d H:i:s"),
-                "updated_at" => $this->inst->updated_at->format("Y-m-d H:i:s"),
-            ],
-            "urls" => [
-                "update" => route("personas.update", $this->inst->id),
-                "show" => route("personas.show", $this->inst->id),
-            ],
+        return inertia("Recursos/Personas/Edit", [
+            "data" => $this->data,
         ]);
     }
 
     public function update(Request $request, string $id)
     {
         //
-        $this->inst = Persona::findOrFail($id);
+        $this->data = Persona::findOrFail($id);
         $basic = $request->all();
         unset($basic["ropo"]);
         $uniques = $request->all(["email", "id_nac"]);
@@ -194,7 +155,7 @@ class PersonaController extends Controller
         if (
             Persona::where([
                 ["email", $uniques["email"]],
-                ["id", "<>", $this->inst->id],
+                ["id", "<>", $this->data->id],
             ])->exists()
         ) {
             $this->toastErrorConstructor(
@@ -207,18 +168,16 @@ class PersonaController extends Controller
                 ]),
                 variante: "warning"
             );
-            return redirect()
-                ->back()
-                ->with([
-                    "from" => "personas.update",
-                    "message" => [
-                        "toast" => $this->toasts["error"]["email:duplicado"],
-                    ],
-                ]);
+            return to_route($request->route(), $this->data->id)->with([
+                "from" => "personas.update",
+                "message" => [
+                    "toast" => $this->toasts["error"]["email:duplicado"],
+                ],
+            ]);
         } elseif (
             Persona::where([
                 ["id_nac", $uniques["id_nac"]],
-                ["id", "<>", $this->inst->id],
+                ["id", "<>", $this->data->id],
             ])->exists()
         ) {
             $this->toastErrorConstructor(
@@ -231,24 +190,20 @@ class PersonaController extends Controller
                 ]),
                 variante: "warning"
             );
-            return redirect()
-                ->back()
-                ->with([
-                    "from" => "personas.update",
-                    "message" => [
-                        "toast" => $this->toasts["error"]["id_nac:duplicado"],
-                    ],
-                ]);
+            return to_route($request->route(), $this->data->id)->with([
+                "from" => "personas.update",
+                "message" => [
+                    "toast" => $this->toasts["error"]["id_nac:duplicado"],
+                ],
+            ]);
         } else {
             $r = $request->input("ropo");
-            // dd($r);
 
             if (isset($r)) {
-                // dd('La variable $r existe');
                 if (
                     DB::table(Persona::ROPO_TABLE)
                         ->where("nro", $r["nro"])
-                        ->where("persona_id", "<>", $this->inst->id)
+                        ->where("persona_id", "<>", $this->data->id)
                         ->exists()
                 ) {
                     $this->toastErrorConstructor(
@@ -261,44 +216,37 @@ class PersonaController extends Controller
                         ]),
                         variante: "warning"
                     );
-                    return redirect()
-                        ->back()
-                        ->with([
-                            "from" => "personas.update",
-                            "message" => [
-                                "toast" =>
-                                    $this->toasts["error"][
-                                        "ropo.nro:duplicado"
-                                    ],
-                            ],
-                        ]);
+                    return to_route($request->route(), $this->data->id)->with([
+                        "from" => "personas.update",
+                        "message" => [
+                            "toast" =>
+                                $this->toasts["error"]["ropo.nro:duplicado"],
+                        ],
+                    ]);
                 }
-                $this->inst->update($basic);
-                // dd('Antes de usar setRopoAttribute($r) -> $r:', $r);
-                $this->inst->setRopoAttribute($r);
+                $this->data->update($basic);
+                $this->data->setRopoAttribute($r);
             } else {
-                $this->inst->update($basic);
+                $this->data->update($basic);
             }
 
-            $this->inst->save();
+            $this->data->save();
 
             $this->toastExitoConstructor(
                 accion: "update",
                 seccion: "description",
                 append: implode(" ", [
-                    $this->inst->nombres,
-                    $this->inst->apellidos,
-                    "(" . $this->inst->id_nac . ")",
+                    $this->data->nombres,
+                    $this->data->apellidos,
+                    "(" . $this->data->id_nac . ")",
                 ])
             );
-            return redirect()
-                ->intended(route("personas.index"))
-                ->with([
-                    "from" => "personas.update",
-                    "message" => [
-                        "toast" => $this->toasts["exito"]["update"],
-                    ],
-                ]);
+            return to_route("personas.show", $this->data->id)->with([
+                "from" => "personas.update",
+                "message" => [
+                    "toast" => $this->toasts["exito"]["update"],
+                ],
+            ]);
         }
     }
 
@@ -308,7 +256,7 @@ class PersonaController extends Controller
         $this->data = Persona::findOrFail($id);
         $this->data->delete();
 
-        return Redirect::intended(route("personas.index"))->with([
+        return to_route("personas.index")->with([
             "from" => "destroy.persona",
             "message" => [
                 "action" => [

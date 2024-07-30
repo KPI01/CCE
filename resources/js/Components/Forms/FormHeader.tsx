@@ -16,11 +16,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/Components/ui/alert-dialog";
+import { formatDate } from "@/lib/dates";
 
-interface Props {
+interface Props extends Omit<LayoutProps, "mainTitle" | "pageTitle" | "created_at" | "updated_at" > {
   title: string;
   className?: string;
   deleteUrl?: string;
+  created_at: Date;
+  updated_at: Date;
+  backUrl: string
 }
 
 export default function FormHeader({
@@ -30,38 +34,12 @@ export default function FormHeader({
   urls,
   className,
   id,
+  backUrl
 }: Omit<LayoutProps, "mainTitle" | "pageTitle"> & Props) {
-  const { _previous }: PageProps & { errors: Record<string, any> } = usePage<
-    PageProps & { errors: Record<string, any> }
-  >().props;
-  let backUrl = _previous.url || route("home");
-  const current = route().current() as string;
-  const currUrl = ["show", "edit"].includes(current.split(".")[1])
-    ? route(current, id)
-    : route(current);
-
-  console.debug(
-    `id: ${id}`,
-    `current route: ${current}`,
-    `current url: ${currUrl}`,
-    `iguales?: ${_previous.url === currUrl}`,
-  );
-  if (_previous.url === currUrl) {
-    console.warn("Ruta actual igual que la anterior");
-    if (urls?.index) {
-      backUrl = urls.index;
-    } else if (urls?.show) {
-      backUrl = urls.show;
-    } else {
-      backUrl = route("home");
-    }
-  }
-
   function handleDelete() {
     if (urls?.destroy) router.delete(urls.destroy);
   }
 
-  console.debug(`backUrl: ${backUrl}`);
   return (
     <div className={cn("flex items-center gap-4", className)}>
       <Button variant={"outline"} size={"sm"} className="px-2 py-1" asChild>
@@ -122,13 +100,13 @@ export default function FormHeader({
             )}
             {created_at && (
               <Badge variant={"outline"} id={`badge-created-${id}`}>
-                Creación: <span className="ml-3 font-thin">{created_at}</span>
+                Creación: <span className="ml-3 font-thin">{formatDate(created_at)}</span>
               </Badge>
             )}
 
             {updated_at && (
               <Badge variant={"secondary"} id={`badge-updated-${id}`}>
-                Últ. Ed: <span className="ml-3 font-thin">{updated_at}</span>
+                Últ. Ed: <span className="ml-3 font-thin">{formatDate(updated_at)}</span>
               </Badge>
             )}
           </div>
