@@ -108,12 +108,15 @@ export default function FormDatePickerConstructor({
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
+            captionLayout="dropdown"
             id={calId}
             mode="single"
             locale={es}
             selected={value === null ? undefined : value}
             onSelect={onChange}
             disabled={(date) => date < new Date()}
+            month={value || undefined}
+            fromYear={(new Date().getFullYear())}
           />
         </PopoverContent>
       </Popover>
