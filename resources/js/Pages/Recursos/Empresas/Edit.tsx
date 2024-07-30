@@ -134,7 +134,7 @@ export default function Edit({ data, urls }: Props) {
                   label="Nº Teléfono"
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value}
+                  value={field.value || ""}
                 />
               )}
             />
@@ -148,7 +148,7 @@ export default function Edit({ data, urls }: Props) {
                   label="Dirección"
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value}
+                  value={field.value || ""}
                 />
               )}
             />

@@ -109,7 +109,7 @@ export default function Create({
                   id={field.name}
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value}
+                  value={field.value || ""}
                 />
               )}
             />
@@ -123,7 +123,7 @@ export default function Create({
                   id={field.name}
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value}
+                  value={field.value || ""}
                 />
               )}
             />
@@ -154,7 +154,7 @@ export default function Create({
                   id={field.name}
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value}
+                  value={field.value || ""}
                   textarea
                 />
               )}

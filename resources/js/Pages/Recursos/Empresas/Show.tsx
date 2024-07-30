@@ -98,7 +98,7 @@ export default function Show({ data, urls }: Props) {
                   id={field.name}
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value}
+                  value={field.value || ""}
                   disabled
                 />
               )}
@@ -112,7 +112,7 @@ export default function Show({ data, urls }: Props) {
                   id={field.name}
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value}
+                  value={field.value || ""}
                   disabled
                 />
               )}
@@ -143,7 +143,7 @@ export default function Show({ data, urls }: Props) {
                   id={field.name}
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value}
+                  value={field.value || ""}
                   disabled
                 />
               )}
