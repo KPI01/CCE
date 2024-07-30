@@ -10,7 +10,7 @@ Route::prefix("app")
     ->group(function () {
         Route::controller(AppController::class)->group(function () {
             Route::get("/", "redirect_home");
-            Route::get("home", "index")->name("home");
+            Route::get("/home", "index")->name("home");
         });
 
         Route::prefix("admin")

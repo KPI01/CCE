@@ -1,297 +1,155 @@
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
-  DropdownMenuPortal,
-} from "@/Components/ui/dropdown-menu";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/Components/ui/navigation-menu";
-import { Button } from "@/Components/ui/button";
-import { Separator } from "@/Components/ui/separator";
-import { cn } from "@/lib/utils";
-
-import { forwardRef } from "react";
-import { Link } from "@inertiajs/react";
-import { CircleHelp, Cog, LogOut, LucideHome, Menu, Pen } from "lucide-react";
 import { NavbarProps } from "@/types";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+} from "./ui/menubar";
+import { MenubarTrigger } from "@radix-ui/react-menubar";
+import {
+  AtSign,
+  Box,
+  Building,
+  Home,
+  LogOut,
+  User2,
+  UserRound,
+} from "lucide-react";
+import { router } from "@inertiajs/react";
+import { Button } from "./ui/button";
+import { ReactElement } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 const MENUCONTENT_CLASS =
   "p-4 h-fit grid gap-3 p-6 md:w-[35rem] lg:w-[45rem] lg:grid-cols-[.75fr_1fr]";
+const MENUTRIGGER_CLASS =
+  "w-max font-medium border-px flex items-center rounded border-accent px-2 py-1";
+const MENUBARITEM_CLASS = "cursor-pointer w-full justify-start";
+const BUTTON_CLASS = "w-full justify-Button";
+const ICON_CLASS = "size-4 mr-2";
 
-interface Resources {
-  title: string;
-  rsrc: string;
-  href?: string;
-  descrip?: string;
+interface MenuItemsProps {
+  Icon: ReactElement;
+  Texto: string;
+  Recurso: string;
+  Ref?: string;
 }
-
-const config: Resources[] = [
+const recursos: MenuItemsProps[] = [
   {
-    title: "Usuarios",
-    rsrc: "user",
-    href: "#",
-    descrip:
-      "Administrar los usuarios existentes en la app. Diferente de personas",
+    Icon: <UserRound className={ICON_CLASS} />,
+    Texto: "Personas",
+    Recurso: "personas",
+    Ref: route("personas.index"),
   },
   {
-    title: "Roles",
-    rsrc: "roles",
-    href: "#",
-    descrip:
-      "Administrar los roles de la app para garantizar/remover permisos.",
+    Icon: <Building className={ICON_CLASS} />,
+    Texto: "Empresas",
+    Recurso: "empresas",
+    Ref: route("empresas.index"),
   },
 ];
 
-const recursos: Resources[] = [
-  {
-    title: "Personas",
-    rsrc: "persona",
-    href: route("personas.index"),
-    descrip:
-      "Que se encuentren relacionadas con parcelas, empresas, tratamientos, etc...",
-  },
-  {
-    title: "Empresas",
-    rsrc: "empresa",
-    href: route("empresas.index"),
-    descrip:
-      "Que realiza tratamientos, se encarga de parcelas, posee máquinas, etc...",
-  },
-  {
-    title: "Productos",
-    rsrc: "producto",
-    href: "#",
-  },
-  {
-    title: "Cultivos",
-    rsrc: "cultivo",
-    href: "#",
-    descrip: "Diferentes cultivos que pueden asignarse a las parcelas.",
-  },
-];
+interface handleRecursoLinkParams {
+  recurso: string;
+  accion?: "index";
+}
 
 export default function NavBar({ username, email, isAdmin }: NavbarProps) {
-  const currentRoute = route().current()?.toString();
-  console.log(currentRoute);
+  const urlHome = route("home");
+  const routeCurrent = route().current();
+  let urlCurrent;
+  if (typeof routeCurrent !== "undefined") {
+    urlCurrent = route(routeCurrent);
+  }
+  const currentIsHome = urlHome === urlCurrent;
+  console.debug(`${urlHome} === ${urlCurrent} =>`, currentIsHome);
+
+  function goHome() {
+    console.warn("Dirigiendo al dashboard...");
+    router.get(route("home"));
+  }
+
+  function handleLogout() {
+    console.warn("Cerrando sesión...");
+    router.post(route("logout"));
+  }
+
+  function handleRecursoLink({
+    recurso,
+    accion = "index",
+  }: handleRecursoLinkParams) {
+    const url = route(`${recurso}.${accion}`);
+    console.debug("Redirigiendo a...", url);
+
+    router.get(url);
+  }
+
   return (
-    <nav
-      id="navbar"
-      role="navigation"
-      className="flex basis-auto flex-col gap-3 px-7 py-4 pb-0"
-    >
-      <div className="flex items-center justify-center gap-3">
-        {!currentRoute?.includes("home") && (
-          <>
-            <Button variant={"ghost"} size={"sm"} asChild>
-              <Link href={route("home")}>
-                <LucideHome className="h-4" />
-              </Link>
-            </Button>
-            <Separator orientation="vertical" className="h-[3ch]" />
-          </>
-        )}
-        <div className="flex basis-full items-center justify-between">
-          <h2 className="text-sm font-semibold md:text-lg lg:text-xl">
-            Bienvenido, <span className="font-bold">{username}</span>
-          </h2>
-          <NavigationMenu
-            id="navbar-nav"
-            orientation="vertical"
-            className="hidden rounded-md bg-primary px-4 py-2 font-medium text-accent xl:flex"
+    <nav className="w-full py-2">
+      <Menubar className="mx-auto flex w-fit justify-center gap-6 bg-primary px-6 text-accent">
+        {!currentIsHome && (
+          <Button
+            className="w-max hover:bg-accent/0 hover:text-accent/75"
+            size={"sm"}
+            variant={"ghost"}
+            onClick={() => goHome()}
           >
-            <NavigationMenuList id="navbar-nav-list" className="space-x-8">
-              <NoDropDownItem title="Visitas" />
-              <NoDropDownItem title="Campañas" />
-              <NoDropDownItem title="Tratamientos" />
-              <NavigationMenuItem id="navbar-rsrc" className="ms-12">
-                <NavigationMenuTrigger className="text-md font-medium">
-                  Recursos
-                </NavigationMenuTrigger>
-                <NavigationMenuContent id="rsrc-content">
-                  <ul id="rsrc-list" className={MENUCONTENT_CLASS}>
-                    {recursos.map((item) => (
-                      <ListItem
-                        key={item.rsrc}
-                        title={item.title}
-                        href={item.href}
-                        id={`rsrc-${item.rsrc}`}
-                      >
-                        {item.descrip}
-                      </ListItem>
-                    ))}
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              {isAdmin && (
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-md font-medium">
-                    Mantenimiento
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent className={MENUCONTENT_CLASS} asChild>
-                    <ul>
-                      {config.map((item) => (
-                        <ListItem key={item.rsrc} title={item.title}>
-                          {item.descrip}
-                        </ListItem>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              )}
-            </NavigationMenuList>
-          </NavigationMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              id="navbar-conf"
-              asChild
-              className="hidden lg:flex"
-            >
-              <Button variant={"outline"}>
-                <Cog className="mr-2 h-4 w-4" />
-                Configuración
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="me-5 hidden px-2 lg:block">
-              <DropdownMenuLabel className="text-sm font-semibold">
-                {email}
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="gap-1">
-                <Pen className="h-4 w-4" />
-                Editar Perfil
-              </DropdownMenuItem>
-              <DropdownMenuItem className="gap-1">
-                <CircleHelp className="h-4 w-4" />
-                Soporte
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="gap-2 font-semibold">
-                <Link
-                  href={route("logout")}
-                  method="post"
-                  as="button"
-                  className="flex items-center gap-3"
-                >
-                  <LogOut className="h-4 w-4" />
-                  Cerrar sesión
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild className="flex lg:hidden">
-            <Button variant={"outline"}>
-              <Menu className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="block: me-5 px-2 lg:hidden">
-            <DropdownMenuLabel>Secciones</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="" as="button">
-                Visitas
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>Campañas</DropdownMenuItem>
-            <DropdownMenuItem>Tratamientos</DropdownMenuItem>
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger>Recursos</DropdownMenuSubTrigger>
-              <DropdownMenuPortal>
-                <DropdownMenuSubContent>
-                  <DropdownMenuItem asChild>
-                    <Link href="#">Personas</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="#">Empresas</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="#">Parcelas</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="#">Cultivos</Link>
-                  </DropdownMenuItem>
-                </DropdownMenuSubContent>
-              </DropdownMenuPortal>
-            </DropdownMenuSub>
-            <DropdownMenuSeparator />
-            <DropdownMenuLabel>Configuración</DropdownMenuLabel>
-            <DropdownMenuLabel className="pt-0 text-xs font-light">
-              {email}
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="gap-1">
-              <Pen />
-              Editar Perfil
-            </DropdownMenuItem>
-            <DropdownMenuItem className="gap-1">
-              <CircleHelp />
-              Soporte
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="gap-2 font-semibold">
-              <LogOut className="h-4 w-4" />
-              Cerrar sesión
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-      <Separator />
-    </nav>
-  );
-}
-
-const ListItem = forwardRef<
-  React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a">
->(({ className, title, children, ...props }, ref) => {
-  return (
-    <li>
-      <NavigationMenuLink
-        className={cn(
-          "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-          className,
+            <Home className={ICON_CLASS} />
+            Dashboard
+          </Button>
         )}
-        asChild
-      >
-        <a ref={ref} {...props}>
-          <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-            {children}
-          </p>
-        </a>
-      </NavigationMenuLink>
-    </li>
-  );
-});
-ListItem.displayName = "ListItem";
-
-function NoDropDownItem({
-  title,
-  ref = "#",
-  currentRoute,
-}: {
-  title: string;
-  ref?: string;
-  currentRoute?: string;
-}) {
-  return (
-    <NavigationMenuItem className="cursor-pointer rounded-md px-3 py-2 transition hover:bg-accent hover:text-primary">
-      <NavigationMenuLink active={currentRoute?.includes(ref)} asChild>
-        <Link href={ref}>{title}</Link>
-      </NavigationMenuLink>
-    </NavigationMenuItem>
+        <MenubarMenu>
+          <MenubarTrigger className={MENUTRIGGER_CLASS}>
+            <Box className={ICON_CLASS} />
+            Recursos
+          </MenubarTrigger>
+          <MenubarContent>
+            {recursos.map((item) => {
+              return (
+                <MenubarItem
+                  key={uuidv4()}
+                  className={MENUBARITEM_CLASS}
+                  asChild
+                >
+                  <Button
+                    variant={"ghost"}
+                    onClick={() => handleRecursoLink({ recurso: item.Recurso })}
+                  >
+                    {item.Icon}
+                    {item.Texto}
+                  </Button>
+                </MenubarItem>
+              );
+            })}
+          </MenubarContent>
+        </MenubarMenu>
+        <MenubarMenu>
+          <MenubarTrigger className={MENUTRIGGER_CLASS}>
+            <User2 className="mr-2 size-4" />
+            {username}
+          </MenubarTrigger>
+          <MenubarContent>
+            <MenubarItem className={MENUBARITEM_CLASS} asChild>
+              <Button className={BUTTON_CLASS} variant={"ghost"}>
+                <AtSign className="mr-2 size-4" />
+                {email}
+              </Button>
+            </MenubarItem>
+            <MenubarSeparator />
+            <MenubarItem className={MENUBARITEM_CLASS} asChild>
+              <Button
+                className={BUTTON_CLASS}
+                variant={"ghost"}
+                onClick={handleLogout}
+              >
+                <LogOut className="mr-3 size-4" />
+                Cerrar sesión
+              </Button>
+            </MenubarItem>
+          </MenubarContent>
+        </MenubarMenu>
+      </Menubar>
+    </nav>
   );
 }

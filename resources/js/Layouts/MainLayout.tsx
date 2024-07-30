@@ -5,6 +5,7 @@ import { Flash, MainLayoutProps } from "@/types";
 import NavBar from "@/Components/NavBar";
 import { Toaster } from "@/Components/ui/toaster";
 import { useToast } from "@/Components/ui/use-toast";
+import { Separator } from "@/Components/ui/separator";
 
 export default function MainLayout({ children, className }: MainLayoutProps) {
   const { auth }: any = usePage().props;
@@ -34,6 +35,7 @@ export default function MainLayout({ children, className }: MainLayoutProps) {
         email={auth.user.email}
         isAdmin={isAdmin}
       />
+      <Separator />
       <main className={cn("container flex flex-col", className)}>
         {children}
       </main>

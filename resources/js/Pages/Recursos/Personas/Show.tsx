@@ -15,7 +15,6 @@ import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectCons
 import FormLayout from "@/Layouts/Recursos/FormLayout";
 import FormTitle from "@/Components/Forms/FormTitle";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
-import { formatDate } from "@/lib/dates";
 
 const schema = formSchema;
 
@@ -24,7 +23,6 @@ interface Props extends LayoutProps {
 }
 
 export default function Show({ data }: Props) {
-
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
