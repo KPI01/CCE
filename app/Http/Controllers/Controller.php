@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -81,21 +80,5 @@ abstract class Controller
             "title" => "Error: $error",
             "description" => $mensaje,
         ];
-    }
-
-    protected function appendUrls(
-        string $recurso,
-        Collection $data
-    ): SupportCollection {
-        return $data->map(function ($data) use ($recurso) {
-            return [
-                ...$data->toArray(),
-                "urls" => [
-                    "edit" => route("$recurso.edit", $data->id),
-                    "destroy" => route("$recurso.destroy", $data->id),
-                    "show" => route("$recurso.show", $data->id),
-                ],
-            ];
-        });
     }
 }

@@ -52,7 +52,7 @@ class PersonaController extends Controller
                 ]),
                 variante: "warning"
             );
-            return to_route($request->route())->with([
+            return to_route("personas.index")->with([
                 "from" => "personas.store",
                 "message" => [
                     "toast" => $this->toasts["error"]["email:duplicado"],
@@ -69,7 +69,7 @@ class PersonaController extends Controller
                 ]),
                 variante: "warning"
             );
-            return to_route($request->route())->with([
+            return to_route("personas.index")->with([
                 "from" => "personas.store",
                 "message" => [
                     "toast" => $this->toasts["error"]["id_nac:duplicado"],
@@ -94,7 +94,7 @@ class PersonaController extends Controller
                         ]),
                         variante: "warning"
                     );
-                    return to_route($request->route)->with([
+                    return to_route("personas.index")->with([
                         "from" => "personas.store",
                         "message" => [
                             "toast" =>
@@ -115,7 +115,7 @@ class PersonaController extends Controller
                     "(" . $this->inst->id_nac . ")",
                 ])
             );
-            return to_route($request->route())->with([
+            return to_route("personas.index")->with([
                 "from" => "personas.store",
                 "message" => [
                     "toast" => $this->toasts["exito"]["store"],
@@ -168,8 +168,7 @@ class PersonaController extends Controller
                 ]),
                 variante: "warning"
             );
-            return to_route($request->route(), $this->data->id)->with([
-                "from" => "personas.update",
+            return to_route("personas.edit", $this->data->id)->with([
                 "message" => [
                     "toast" => $this->toasts["error"]["email:duplicado"],
                 ],
@@ -190,8 +189,7 @@ class PersonaController extends Controller
                 ]),
                 variante: "warning"
             );
-            return to_route($request->route(), $this->data->id)->with([
-                "from" => "personas.update",
+            return to_route("personas.edit", $this->data->id)->with([
                 "message" => [
                     "toast" => $this->toasts["error"]["id_nac:duplicado"],
                 ],
@@ -216,8 +214,7 @@ class PersonaController extends Controller
                         ]),
                         variante: "warning"
                     );
-                    return to_route($request->route(), $this->data->id)->with([
-                        "from" => "personas.update",
+                    return to_route("personas.edit", $this->data->id)->with([
                         "message" => [
                             "toast" =>
                                 $this->toasts["error"]["ropo.nro:duplicado"],

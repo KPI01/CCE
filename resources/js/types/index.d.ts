@@ -1,5 +1,14 @@
 import { Empresa, Persona, User } from "./modelos";
 
+export type Urls = {
+  index: string;
+  show: string;
+  store?: string;
+  update: string;
+  edit: string;
+  destroy: string;
+};
+
 export interface Message {
   content?: string;
   action?: {

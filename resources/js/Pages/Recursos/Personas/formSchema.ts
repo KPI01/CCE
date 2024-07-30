@@ -86,10 +86,10 @@ export const formSchema = z
       .optional()
       .or(z.literal("")),
     perfil: z
-     .enum(PERFILES_READONLY, {
-      invalid_type_error: SHOULD_BE_VALID_MSG,
-    })
-    .default("Aplicador"),
+      .enum(PERFILES_READONLY, {
+        invalid_type_error: SHOULD_BE_VALID_MSG,
+      })
+      .default("Aplicador"),
     observaciones: z
       .string()
       .max(1000, "Las observaciones deben tener como máximo 1000 caracteres.")

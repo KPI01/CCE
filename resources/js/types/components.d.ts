@@ -1,5 +1,6 @@
 import { PropsWithChildren } from "react";
 import { UUID } from "./modelos";
+import { Urls } from ".";
 
 type Actions =
   | "index"
@@ -28,21 +29,12 @@ interface TableProps {
   initialVisibility: any;
 }
 
-type Urls = {
-  show?: string;
-  index?: string;
-  store?: string;
-  update?: string;
-  edit?: string;
-  destroy?: string;
-};
-
 export interface LayoutProps extends PropsWithChildren {
   id?: UUID;
   pageTitle: string;
   mainTitle: string;
-  created_at?: string;
-  updated_at?: string;
+  created_at?: Date | string;
+  updated_at?: Date | string;
   urls?: Urls;
 }
 

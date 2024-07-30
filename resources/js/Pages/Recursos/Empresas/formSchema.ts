@@ -30,8 +30,6 @@ const ROPO_NRO_REGEX =
 const TEL_REGEX =
   /^((\+34|0034|34)?[6|7|8|9]\d{8}|(800|900)\d{6,7}|(901|902|905|803|806|807)\d{6})$/;
 
-
-
 export const formSchema = z.object({
   id: z.string().optional(),
   nombre: z
@@ -64,10 +62,7 @@ export const formSchema = z.object({
     .max(254, "El correo debe ser más corto."),
   tel: z
     .string()
-    .regex(
-      TEL_REGEX,
-      "El número de teléfono debe ser válido.",
-    )
+    .regex(TEL_REGEX, "El número de teléfono debe ser válido.")
     .nullish()
     .or(z.literal("")),
   codigo: z
@@ -80,47 +75,50 @@ export const formSchema = z.object({
       invalid_type_error: SHOULD_BE_VALID_MSG,
     })
     .default("Aplicador"),
-  direccion: z.string().max(300, "La dirección debe tener como máximo 300 caracteres.").nullish(),
+  direccion: z
+    .string()
+    .max(300, "La dirección debe tener como máximo 300 caracteres.")
+    .nullish(),
   observaciones: z
     .string()
     .max(1000, "Las observaciones deben tener como máximo 1000 caracteres.")
     .nullish(),
   ropo: z
-      .object({
-        capacitacion: z
-          .enum(CAPACITACIONES_READONLY, {
-            required_error: "Debes seleccionar el tipo de capacitación ROPO.",
-            invalid_type_error: SHOULD_BE_VALID_MSG,
-          })
-          .nullish(),
-        caducidad: z
-          .date({
-            required_error: REQUIRED_MSG,
-            invalid_type_error: "Debes ingresar una fecha válida",
-          })
-          .nullish(),
-        nro: z
-          .string()
-          .regex(
-            ROPO_NRO_REGEX,
-            "La identificación ROPO debe estar en el formato adecuado.",
-          )
-          .nullish(),
-      })
-      .optional()
-      .superRefine((data, ctx) => {
-        if (data?.nro && !data?.capacitacion) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Debes ingresar una capacitación ROPO.",
-            path: ["capacitacion"],
-          });
-        } else if (!data?.nro && data?.capacitacion) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: "Debes ingresar la identificación ROPO.",
-            path: ["nro"],
-          });
-        }
-      }),
+    .object({
+      capacitacion: z
+        .enum(CAPACITACIONES_READONLY, {
+          required_error: "Debes seleccionar el tipo de capacitación ROPO.",
+          invalid_type_error: SHOULD_BE_VALID_MSG,
+        })
+        .nullish(),
+      caducidad: z
+        .date({
+          required_error: REQUIRED_MSG,
+          invalid_type_error: "Debes ingresar una fecha válida",
+        })
+        .nullish(),
+      nro: z
+        .string()
+        .regex(
+          ROPO_NRO_REGEX,
+          "La identificación ROPO debe estar en el formato adecuado.",
+        )
+        .nullish(),
+    })
+    .optional()
+    .superRefine((data, ctx) => {
+      if (data?.nro && !data?.capacitacion) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Debes ingresar una capacitación ROPO.",
+          path: ["capacitacion"],
+        });
+      } else if (!data?.nro && data?.capacitacion) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Debes ingresar la identificación ROPO.",
+          path: ["nro"],
+        });
+      }
+    }),
 });
