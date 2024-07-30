@@ -116,7 +116,7 @@ export default function FormDatePickerConstructor({
             onSelect={onChange}
             disabled={(date) => date < new Date()}
             month={value || undefined}
-            fromYear={(new Date().getFullYear())}
+            fromYear={new Date().getFullYear()}
           />
         </PopoverContent>
       </Popover>
