@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\DB;
 
@@ -24,11 +25,7 @@ class Persona extends RecursoBase
         "nie" => "NIE",
     ];
 
-    protected $attributes = [
-        "perfil" => self::PERFILES["productor"],
-    ];
-
-    protected $appends = ["ropo"];
+    protected $appends = ["ropo", "urls"];
     protected $ropo = [
         "tipo" => null,
         "caducidad" => null,
@@ -38,6 +35,10 @@ class Persona extends RecursoBase
 
     protected $casts = [
         "ropo" => "array",
+    ];
+
+    protected $attributes = [
+        "perfil" => self::PERFILES["productor"],
     ];
 
     public function getRopoAttribute()
@@ -65,19 +66,19 @@ class Persona extends RecursoBase
             ->where("persona_id", $this->id)
             ->first();
 
-        if ($record) {
-            $this->ropo = [
-                "caducidad" => $record->caducidad,
+        isset($record)
+            ? ($this->ropo = [
+                "caducidad" => Carbon::parse($record->caducidad)->format(
+                    "Y-m-d H:i:s"
+                ),
                 "nro" => $record->nro,
                 "capacitacion" => $record->capacitacion,
-            ];
-        } else {
-            $this->ropo = [
+            ])
+            : ($this->ropo = [
                 "caducidad" => null,
                 "nro" => null,
                 "capacitacion" => null,
-            ];
-        }
+            ]);
     }
 
     private function upsertRopoAttribute(array $ropo)
