@@ -18,13 +18,16 @@ import {
 } from "@/Components/ui/alert-dialog";
 import { formatDate } from "@/lib/dates";
 
-interface Props extends Omit<LayoutProps, "mainTitle" | "pageTitle" | "created_at" | "updated_at" > {
+interface Props
+  extends Omit<
+    LayoutProps,
+    "mainTitle" | "pageTitle" | "created_at" | "updated_at"
+  > {
   title: string;
   className?: string;
-  deleteUrl?: string;
-  created_at: Date;
-  updated_at: Date;
-  backUrl: string
+  created_at: Date | null;
+  updated_at: Date | null;
+  backUrl: string;
 }
 
 export default function FormHeader({
@@ -34,8 +37,8 @@ export default function FormHeader({
   urls,
   className,
   id,
-  backUrl
-}: Omit<LayoutProps, "mainTitle" | "pageTitle"> & Props) {
+  backUrl,
+}: Props) {
   function handleDelete() {
     if (urls?.destroy) router.delete(urls.destroy);
   }
@@ -100,13 +103,15 @@ export default function FormHeader({
             )}
             {created_at && (
               <Badge variant={"outline"} id={`badge-created-${id}`}>
-                Creación: <span className="ml-3 font-thin">{formatDate(created_at)}</span>
+                Creación:{" "}
+                <span className="ml-3 font-thin">{formatDate(created_at)}</span>
               </Badge>
             )}
 
             {updated_at && (
               <Badge variant={"secondary"} id={`badge-updated-${id}`}>
-                Últ. Ed: <span className="ml-3 font-thin">{formatDate(updated_at)}</span>
+                Últ. Ed:{" "}
+                <span className="ml-3 font-thin">{formatDate(updated_at)}</span>
               </Badge>
             )}
           </div>

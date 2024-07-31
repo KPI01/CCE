@@ -7,9 +7,12 @@ import { Toaster } from "@/Components/ui/toaster";
 import { useToast } from "@/Components/ui/use-toast";
 import { Separator } from "@/Components/ui/separator";
 
-export default function MainLayout({ children, className }: MainLayoutProps) {
+export default function MainLayout({
+  children,
+  className,
+  id,
+}: MainLayoutProps) {
   const { auth }: any = usePage().props;
-  const isAdmin: boolean = auth.user.role.name === "Admin";
 
   const { toast } = useToast();
   const pageProps = usePage().props;
@@ -30,11 +33,7 @@ export default function MainLayout({ children, className }: MainLayoutProps) {
 
   return (
     <StrictMode>
-      <NavBar
-        username={auth.user.name}
-        email={auth.user.email}
-        isAdmin={isAdmin}
-      />
+      <NavBar username={auth.user.name} email={auth.user.email} id={id} />
       <Separator />
       <main className={cn("container flex flex-col", className)}>
         {children}

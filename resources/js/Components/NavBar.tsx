@@ -55,12 +55,27 @@ interface handleRecursoLinkParams {
   accion?: "index";
 }
 
-export default function NavBar({ username, email, isAdmin }: NavbarProps) {
+export default function NavBar({ username, email, id }: NavbarProps) {
   const urlHome = route("home");
   const routeCurrent = route().current();
   let urlCurrent;
   if (typeof routeCurrent !== "undefined") {
-    urlCurrent = route(routeCurrent);
+    const accion = routeCurrent.includes(".")
+      ? routeCurrent.split(".")[1]
+      : null;
+
+    if (accion !== null) {
+      console.debug("La ruta lleva una accion");
+      if (["index", "store"].includes(accion)) {
+        console.debug("accion:", accion);
+        urlCurrent = route(routeCurrent);
+      } else {
+        console.debug("id:", id);
+        urlCurrent = route(routeCurrent, id);
+      }
+    } else {
+      urlCurrent = route(routeCurrent);
+    }
   }
   const currentIsHome = urlHome === urlCurrent;
   console.debug(`${urlHome} === ${urlCurrent} =>`, currentIsHome);
