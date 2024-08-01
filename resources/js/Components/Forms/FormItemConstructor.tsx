@@ -23,7 +23,9 @@ interface Props extends ConstructorProps {
     | "email"
     | "tel"
     | "off"
-    | "on";
+    | "on"
+    | "organization"
+    | "street-address";
 }
 
 export default function FormItemConstructor({

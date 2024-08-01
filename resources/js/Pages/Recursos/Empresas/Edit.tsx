@@ -18,29 +18,20 @@ import { Save } from "lucide-react";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 import { router } from "@inertiajs/react";
 import { useToast } from "@/Components/ui/use-toast";
-import { formatDate } from "@/lib/dates";
 
 const schema = formSchema;
 
-interface Props {
-  data: Empresa;
-  urls: Required<Pick<Urls, "show" | "update">>;
-}
-
-export default function Edit({ data, urls }: Props) {
+export default function Edit({ data }: { data: Empresa }) {
   const { toast } = useToast();
 
-  const valid = schema.safeParse(data);
-  console.debug(valid);
+  schema.safeParse(data);
 
-  data.created_at = new Date(data.created_at);
-  data.updated_at = new Date(data.updated_at);
   if (data.ropo?.caducidad)
     data.ropo.caducidad = new Date(data.ropo?.caducidad);
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues: { ...valid.data },
+    defaultValues: { ...data },
   });
 
   function onSubmit(values: z.infer<typeof schema>) {
@@ -59,7 +50,7 @@ export default function Edit({ data, urls }: Props) {
     );
 
     if (Object.keys(toSend).length > 0) {
-      router.put(urls.update, toSend);
+      router.put(data.urls.update, toSend);
     } else {
       toast({
         title: "No se han detectado cambios!",
@@ -71,12 +62,12 @@ export default function Edit({ data, urls }: Props) {
 
   return (
     <FormLayout
+      pageTitle="Empresa"
+      mainTitle="Editando..."
+      created_at={data.updated_at}
+      updated_at={data.updated_at}
+      backUrl={data.urls.show}
       id={data.id}
-      mainTitle="Editando empresa..."
-      pageTitle="Modo edición"
-      backUrl={urls.show}
-      created_at={formatDate(data.updated_at)}
-      updated_at={formatDate(data.updated_at)}
     >
       <Form {...form}>
         <form
@@ -85,7 +76,7 @@ export default function Edit({ data, urls }: Props) {
           className={CONTAINER_CLASS}
         >
           <div className="space-y-4">
-            <FormTitle id="h3-basicos" title="Información Básica" />
+            <FormTitle id="h3-generales" title="Información Básica" />
             <FormField
               control={form.control}
               name="nombre"
@@ -96,6 +87,7 @@ export default function Edit({ data, urls }: Props) {
                   name={field.name}
                   onChange={field.onChange}
                   value={field.value}
+                  autoComplete={"organization"}
                 />
               )}
             />
@@ -109,6 +101,7 @@ export default function Edit({ data, urls }: Props) {
                   name={field.name}
                   onChange={field.onChange}
                   value={field.value}
+                  autoComplete="off"
                 />
               )}
             />
@@ -122,6 +115,7 @@ export default function Edit({ data, urls }: Props) {
                   name={field.name}
                   onChange={field.onChange}
                   value={field.value}
+                  autoComplete="email"
                 />
               )}
             />
@@ -135,6 +129,7 @@ export default function Edit({ data, urls }: Props) {
                   name={field.name}
                   onChange={field.onChange}
                   value={field.value || ""}
+                  autoComplete="tel"
                 />
               )}
             />
@@ -149,6 +144,7 @@ export default function Edit({ data, urls }: Props) {
                   name={field.name}
                   onChange={field.onChange}
                   value={field.value || ""}
+                  autoComplete="street-address"
                 />
               )}
             />
@@ -176,6 +172,7 @@ export default function Edit({ data, urls }: Props) {
                   name={field.name}
                   onChange={field.onChange}
                   value={field.value || ""}
+                  autoComplete="off"
                 />
               )}
             />
@@ -190,7 +187,6 @@ export default function Edit({ data, urls }: Props) {
                   name={field.name}
                   onChange={field.onChange}
                   value={field.value || ""}
-                  {...(field.value === "" && { placeholder: "(Vacío)" })}
                 />
               )}
             />
@@ -207,9 +203,6 @@ export default function Edit({ data, urls }: Props) {
                   name={field.name}
                   onChange={field.onChange}
                   value={field.value || ""}
-                  {...(field.value === null && {
-                    placeholder: "Sin seleccionar.",
-                  })}
                   options={CAPACITACIONES}
                 />
               )}
@@ -224,6 +217,7 @@ export default function Edit({ data, urls }: Props) {
                   label="Identificación"
                   value={field.value || ""}
                   onChange={field.onChange}
+                  autoComplete="off"
                 />
               )}
             />
@@ -237,7 +231,6 @@ export default function Edit({ data, urls }: Props) {
                   label="Caducidad"
                   value={field.value || null}
                   onChange={field.onChange}
-                  {...(field.value === null && { placeholder: "dd/mm/aaaa" })}
                   resetBtn
                   resetFn={() =>
                     form.setValue(field.name, null, {

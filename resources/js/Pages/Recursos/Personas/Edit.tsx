@@ -16,37 +16,22 @@ import FormLayout from "@/Layouts/Recursos/FormLayout";
 import FormTitle from "@/Components/Forms/FormTitle";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 import FormButton from "@/Components/Forms/FormButton";
-import { CircleX, Save, Trash } from "lucide-react";
+import { Save, Trash } from "lucide-react";
 import { router } from "@inertiajs/react";
 import { useToast } from "@/Components/ui/use-toast";
 
 const schema = formSchema;
 
-interface Props extends LayoutProps {
-  data: Persona;
-}
-export default function Edit({ data }: Props) {
+export default function Edit({ data }: { data: Persona }) {
   const { toast } = useToast();
+
+  schema.safeParse(data);
 
   if (data.ropo?.caducidad) data.ropo.caducidad = new Date(data.ropo.caducidad);
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      nombres: data.nombres,
-      apellidos: data.apellidos,
-      tipo_id_nac: data.tipo_id_nac,
-      id_nac: data.id_nac,
-      email: data.email,
-      tel: data.tel,
-      perfil: data.perfil,
-      observaciones: data.observaciones,
-      ropo: {
-        capacitacion: data.ropo?.capacitacion || null,
-        caducidad: data.ropo?.caducidad || null,
-        nro: data.ropo?.nro || null,
-      },
-    },
+    defaultValues: { ...data },
   });
 
   function onSubmit(values: z.infer<typeof schema>) {
@@ -91,7 +76,7 @@ export default function Edit({ data }: Props) {
           className={CONTAINER_CLASS}
         >
           <div className="space-y-4">
-            <FormTitle id="h3-basicos" title="Datos Personales" />
+            <FormTitle id="h3-generales" title="Información Básica" />
             <FormField
               control={form.control}
               name="nombres"
@@ -164,6 +149,7 @@ export default function Edit({ data }: Props) {
                     value={field.value}
                     itemClass="ml-3"
                     inputClass="col-span-2"
+                    autoComplete="off"
                   />
                 )}
               />
@@ -225,6 +211,7 @@ export default function Edit({ data }: Props) {
                   name={field.name}
                   value={field.value || ""}
                   onChange={field.onChange}
+                  autoComplete="off"
                 />
               )}
             />
@@ -256,6 +243,7 @@ export default function Edit({ data }: Props) {
                   name={field.name}
                   value={field.value || ""}
                   onChange={field.onChange}
+                  autoComplete="off"
                 />
               )}
             />
