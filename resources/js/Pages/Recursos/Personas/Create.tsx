@@ -142,7 +142,7 @@ export default function Create({ urls }: Props) {
               render={({ field }) => (
                 <FormItemConstructor
                   id={field.name}
-                  label="Email"
+                  label="Correo *"
                   name={field.name}
                   placeholder="..."
                   onChange={field.onChange}
@@ -156,7 +156,7 @@ export default function Create({ urls }: Props) {
               render={({ field }) => (
                 <FormItemConstructor
                   id={field.name}
-                  label="Nro. de Teléfono"
+                  label="Teléfono"
                   name={field.name}
                   placeholder="..."
                   onChange={field.onChange}
@@ -213,11 +213,10 @@ export default function Create({ urls }: Props) {
                   name="ropo.capacitacion"
                   render={({ field }) => (
                     <FormItemSelectConstructor
-                      id={field.name.replace(".", "_")}
+                      id={field.name}
                       name={field.name}
                       label="Capacitación"
                       value={field.value || ""}
-                      placeholder="Seleccionar tipo..."
                       onChange={field.onChange}
                       options={CAPACITACIONES}
                     />
@@ -228,12 +227,11 @@ export default function Create({ urls }: Props) {
                   name="ropo.nro"
                   render={({ field }) => (
                     <FormItemConstructor
-                      id={field.name.replace(".", "_")}
+                      id={field.name}
                       label="Identificación"
                       name={field.name}
-                      placeholder="..."
                       onChange={field.onChange}
-                      value={field.value || undefined}
+                      value={field.value || ""}
                     />
                   )}
                 />
@@ -242,7 +240,7 @@ export default function Create({ urls }: Props) {
                   name="ropo.caducidad"
                   render={({ field }) => (
                     <FormDatePickerConstructor
-                      id={field.name.replace(".", "_")}
+                      id={field.name}
                       name={field.name}
                       label="Caducidad"
                       onChange={field.onChange}
@@ -257,14 +255,6 @@ export default function Create({ urls }: Props) {
           <div className="col-span-full flex items-center space-x-2 font-medium"></div>
 
           <div className="col-span-2 flex items-center justify-between">
-            <FormButton
-              variant={"destructive"}
-              className="col-span-2"
-              type="reset"
-            >
-              <Trash2 className="mr-2 h-4" />
-              Vaciar
-            </FormButton>
             <Button type="submit">
               <Save className="mr-2 h-4" />
               Crear

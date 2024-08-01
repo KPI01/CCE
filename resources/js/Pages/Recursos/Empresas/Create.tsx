@@ -31,13 +31,6 @@ export default function Create({
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      ropo: {
-        nro: null,
-        caducidad: null,
-        capacitacion: null,
-      },
-    },
   });
 
   function onSubmit(values: z.infer<typeof schema>) {
@@ -48,7 +41,7 @@ export default function Create({
     <FormLayout
       pageTitle="Empresas"
       mainTitle="Creando empresa..."
-      backUrl={route("empresas.index")}
+      backUrl={urls.index}
     >
       <Form {...form}>
         <form
@@ -90,7 +83,7 @@ export default function Create({
               name="email"
               render={({ field }) => (
                 <FormItemConstructor
-                  label="Email *"
+                  label="Correo *"
                   id={field.name}
                   name={field.name}
                   onChange={field.onChange}
