@@ -31,15 +31,10 @@ class Navbar extends BaseComponent
     public function elements(): array
     {
         return [
-            "@titulo" => "h2",
-            "@nav" => "#navbar-nav",
-            "@list" => "#navbar-nav-list",
-            "@rcs-btn" => "#navbar-rsrc button",
-            "@rcs-list" => "#rsrc-content #rsrc-list",
-            "@conf-btn" => "#navbar-conf",
-            "@conf-menu" => "#navbar-conf + div",
-            "@home-btn" => 'div a[href*="app/home"]',
-            "@logout" => "#navbar-conf + div a",
+            "@navbar" => "nav[role=nav]",
+            "@nav-comp" => "nav > #navbar-comp",
+            "@acc-" => "nav #action-",
+            "@mn-" => "nav #content-",
         ];
     }
 }

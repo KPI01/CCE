@@ -101,10 +101,14 @@ export default function NavBar({ username, email, id }: NavbarProps) {
   }
 
   return (
-    <nav className="w-full py-2">
-      <Menubar className="mx-auto flex w-fit justify-center gap-6 bg-primary px-6 text-accent">
+    <nav role="nav" className="w-full py-2">
+      <Menubar
+        id="navbar-comp"
+        className="mx-auto flex w-fit justify-center gap-6 bg-primary px-6 text-accent"
+      >
         {!currentIsHome && (
           <Button
+            id="action-home"
             className="w-max hover:bg-accent/0 hover:text-accent/75"
             size={"sm"}
             variant={"ghost"}
@@ -115,11 +119,11 @@ export default function NavBar({ username, email, id }: NavbarProps) {
           </Button>
         )}
         <MenubarMenu>
-          <MenubarTrigger className={MENUTRIGGER_CLASS}>
+          <MenubarTrigger id="action-recurso" className={MENUTRIGGER_CLASS}>
             <Box className={ICON_CLASS} />
             Recursos
           </MenubarTrigger>
-          <MenubarContent>
+          <MenubarContent id="content-recurso">
             {recursos.map((item) => {
               return (
                 <MenubarItem
@@ -140,11 +144,11 @@ export default function NavBar({ username, email, id }: NavbarProps) {
           </MenubarContent>
         </MenubarMenu>
         <MenubarMenu>
-          <MenubarTrigger className={MENUTRIGGER_CLASS}>
+          <MenubarTrigger id="action-config" className={MENUTRIGGER_CLASS}>
             <User2 className="mr-2 size-4" />
             {username}
           </MenubarTrigger>
-          <MenubarContent>
+          <MenubarContent id="content-config">
             <MenubarItem className={MENUBARITEM_CLASS} asChild>
               <Button className={BUTTON_CLASS} variant={"ghost"}>
                 <AtSign className="mr-2 size-4" />
