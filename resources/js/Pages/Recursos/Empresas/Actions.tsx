@@ -20,11 +20,7 @@ import {
   AlertDialogTrigger,
 } from "@/Components/ui/alert-dialog";
 
-interface Props {
-  item: Empresa & { urls: ActionUrls };
-}
-
-export default function Actions({ item }: Props) {
+export default function Actions({ item }: { item: Empresa }) {
   function handleDelete(url: string) {
     router.delete(url);
   }

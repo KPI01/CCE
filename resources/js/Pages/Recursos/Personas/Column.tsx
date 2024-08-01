@@ -68,7 +68,7 @@ export const columns: ColumnDef<Persona & { urls: ActionUrls }>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Tel." />
     ),
-    enableColumnFilter: false,
+    enableColumnFilter: true,
     enableSorting: false,
     enableHiding: true,
     minSize: 250,

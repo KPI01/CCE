@@ -83,7 +83,7 @@ export const columns: ColumnDef<Empresa & { urls: ActionUrls }>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Código" />
     ),
-    enableColumnFilter: false,
+    enableColumnFilter: true,
     enableSorting: false,
     enableHiding: true,
     minSize: 250,

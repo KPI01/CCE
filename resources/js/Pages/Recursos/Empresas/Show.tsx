@@ -17,12 +17,8 @@ import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectCons
 
 const schema = formSchema;
 
-interface Props extends LayoutProps {
-  data: Empresa;
-  urls: Urls;
-}
-
-export default function Show({ data, urls }: Props) {
+export default function Show({ data }: { data: Empresa }) {
+  schema.safeParse(data);
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -49,7 +45,7 @@ export default function Show({ data, urls }: Props) {
       mainTitle={data.nombre}
       created_at={data.created_at}
       updated_at={data.updated_at}
-      urls={urls}
+      urls={data.urls}
       backUrl={route("empresas.index")}
     >
       <Form {...form}>

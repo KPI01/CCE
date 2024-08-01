@@ -23,9 +23,7 @@ const schema = formSchema;
 
 export default function Edit({ data }: { data: Empresa }) {
   const { toast } = useToast();
-
   schema.safeParse(data);
-
   if (data.ropo?.caducidad)
     data.ropo.caducidad = new Date(data.ropo?.caducidad);
 

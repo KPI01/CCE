@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { LayoutProps, Persona } from "@/types";
+import { Persona } from "@/types";
 import {
   CONTAINER_CLASS,
   formSchema,
@@ -24,11 +24,8 @@ const schema = formSchema;
 
 export default function Edit({ data }: { data: Persona }) {
   const { toast } = useToast();
-
   schema.safeParse(data);
-
   if (data.ropo?.caducidad) data.ropo.caducidad = new Date(data.ropo.caducidad);
-
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: { ...data },

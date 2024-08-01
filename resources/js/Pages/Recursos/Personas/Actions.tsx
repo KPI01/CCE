@@ -20,11 +20,7 @@ import {
   AlertDialogTrigger,
 } from "@/Components/ui/alert-dialog";
 
-interface Props {
-  item: Persona & { urls: ActionUrls };
-}
-
-export default function Actions({ item }: Props) {
+export default function Actions({ item }: { item: Persona }) {
   function handleDelete(url: string) {
     router.delete(url);
   }
@@ -33,33 +29,21 @@ export default function Actions({ item }: Props) {
     return (
       <AlertDialog>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="h-8 w-8 p-0"
-              id={`action-menu-${item.id}`}
-            >
+          <DropdownMenuTrigger asChild id={`action-menu-${item.id}`}>
+            <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Menú</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              asChild
-              className="w-full cursor-pointer"
-              id={`action-show-${item.id}`}
-            >
-              <Link href={item.urls?.show}>
+            <DropdownMenuItem asChild className="w-full cursor-pointer">
+              <Link href={item.urls?.show} id={`action-show-${item.id}`}>
                 <File className="mr-2 h-4 w-4" />
                 Ver detalles
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem
-              asChild
-              className="w-full cursor-pointer"
-              id={`action-edit-${item.id}`}
-            >
-              <Link href={item.urls?.edit}>
+            <DropdownMenuItem asChild className="w-full cursor-pointer">
+              <Link href={item.urls?.edit} id={`action-edit-${item.id}`}>
                 <Pen className="mr-2 h-4 w-4" />
                 Editar
               </Link>

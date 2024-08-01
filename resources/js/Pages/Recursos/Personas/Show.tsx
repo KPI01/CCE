@@ -18,11 +18,8 @@ import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstruc
 
 const schema = formSchema;
 
-interface Props extends LayoutProps {
-  data: Persona;
-}
-
-export default function Show({ data }: Props) {
+export default function Show({ data }: { data: Persona }) {
+  schema.safeParse(data);
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
