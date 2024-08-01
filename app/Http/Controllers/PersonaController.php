@@ -11,6 +11,14 @@ class PersonaController extends Controller
     public function __construct()
     {
         parent::__construct();
+
+        foreach ($this->toasts["exito"] as $key => $value) {
+            $this->toastExitoConstructor(
+                accion: $key,
+                seccion: "title",
+                append: "Persona"
+            );
+        }
     }
 
     public function index()
@@ -169,6 +177,7 @@ class PersonaController extends Controller
                 variante: "warning"
             );
             return to_route("personas.edit", $this->data->id)->with([
+                "from" => "personas.update",
                 "message" => [
                     "toast" => $this->toasts["error"]["email:duplicado"],
                 ],
@@ -190,6 +199,7 @@ class PersonaController extends Controller
                 variante: "warning"
             );
             return to_route("personas.edit", $this->data->id)->with([
+                "from" => "personas.update",
                 "message" => [
                     "toast" => $this->toasts["error"]["id_nac:duplicado"],
                 ],
@@ -215,6 +225,7 @@ class PersonaController extends Controller
                         variante: "warning"
                     );
                     return to_route("personas.edit", $this->data->id)->with([
+                        "from" => "personas.update",
                         "message" => [
                             "toast" =>
                                 $this->toasts["error"]["ropo.nro:duplicado"],
@@ -254,12 +265,8 @@ class PersonaController extends Controller
         $this->data->delete();
 
         return to_route("personas.index")->with([
-            "from" => "destroy.persona",
+            "from" => "personas.destroy",
             "message" => [
-                "action" => [
-                    "type" => "destroy",
-                    "data" => $this->data,
-                ],
                 "toast" => [
                     "variant" => "destructive",
                     "title" => "Recurso: Persona",
