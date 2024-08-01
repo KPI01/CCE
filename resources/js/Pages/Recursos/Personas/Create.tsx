@@ -54,7 +54,7 @@ export default function Create({ urls }: Props) {
   return (
     <FormLayout
       pageTitle="Persona"
-      mainTitle={`Creando ${RECURSO.slice(0, -1)}...`}
+      mainTitle="Creando persona..."
       backUrl={urls.index}
     >
       <Form {...form}>
