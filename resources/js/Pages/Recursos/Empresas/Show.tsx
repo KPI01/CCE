@@ -14,7 +14,6 @@ import { Form, FormField } from "@/Components/ui/form";
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
-import { formatDate } from "@/lib/dates";
 
 const schema = formSchema;
 
@@ -24,10 +23,6 @@ interface Props extends LayoutProps {
 }
 
 export default function Show({ data, urls }: Props) {
-  console.debug(data);
-  data.created_at = new Date(data.created_at);
-  data.updated_at = new Date(data.updated_at);
-
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -52,8 +47,8 @@ export default function Show({ data, urls }: Props) {
       id={data.id}
       pageTitle="Empresa"
       mainTitle={data.nombre}
-      created_at={formatDate(data.created_at)}
-      updated_at={formatDate(data.updated_at)}
+      created_at={data.created_at}
+      updated_at={data.updated_at}
       urls={urls}
       backUrl={route("empresas.index")}
     >

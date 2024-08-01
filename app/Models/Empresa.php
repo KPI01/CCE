@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
 class Empresa extends RecursoBase
@@ -25,7 +25,7 @@ class Empresa extends RecursoBase
         "perfil" => self::PERFILES["productor"],
     ];
 
-    protected $appends = ["ropo"];
+    protected $appends = ["ropo", "urls"];
 
     protected $ropo = [
         "caducidad" => null,
@@ -101,9 +101,9 @@ class Empresa extends RecursoBase
         $this->save();
     }
 
-    public function personas(): BelongsToMany
+    public function personas(): HasMany
     {
-        return $this->belongsToMany(Persona::class)
+        return $this->HasMany(Persona::class)
             ->withTimestamps()
             ->using(EmpresaPersona::class);
     }
