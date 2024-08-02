@@ -40,12 +40,10 @@ class ShowEmpresaTest extends DuskTestCase
                 )
                 ->within(new Navbar(), function ($browser) {
                     $browser
-                        ->assertPresent("@titulo")
-                        ->assertPresent("@nav")
-                        ->assertPresent("@list")
-                        ->assertPresent("@rcs-btn")
-                        ->assertPresent("@conf-btn")
-                        ->assertPresent("@home-btn");
+                        ->assertPresent("@navbar")
+                        ->assertPresent("@acc-home")
+                        ->assertPresent("@acc-recursos")
+                        ->assertPresent("@acc-config");
                 });
             $id = $this->e->id;
             $browser
@@ -101,11 +99,10 @@ class ShowEmpresaTest extends DuskTestCase
                 )
                 ->within(new Navbar(), function ($browser) {
                     $browser
-                        ->assertVisible("@nav")
-                        ->assertVisible("@list")
-                        ->assertVisible("@rcs-btn")
-                        ->assertVisible("@conf-btn")
-                        ->assertVisible("@home-btn");
+                        ->assertVisible("@navbar")
+                        ->assertVisible("@acc-home")
+                        ->assertVisible("@acc-recursos")
+                        ->assertVisible("@acc-config");
                 });
 
             $browser
@@ -224,8 +221,7 @@ class ShowEmpresaTest extends DuskTestCase
                 )
                 ->assertSeeIn(
                     selector: "@badge-created-" . $this->e->id,
-                    text: date("d/m/Y, H:i:s", strtotime($this->e->created_at)),
-                    ignoreCase: true
+                    text: date("d/m/Y, H:i:s", strtotime($this->e->created_at))
                 )
                 ->assertSeeIn(
                     selector: "@badge-updated-" . $this->e->id,

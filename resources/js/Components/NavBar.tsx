@@ -101,7 +101,7 @@ export default function NavBar({ username, email, id }: NavbarProps) {
   }
 
   return (
-    <nav role="nav" className="w-full py-2">
+    <nav id="navbar" role="navigation" className="w-full py-2">
       <Menubar
         id="navbar-comp"
         className="mx-auto flex w-fit justify-center gap-6 bg-primary px-6 text-accent"
@@ -119,11 +119,11 @@ export default function NavBar({ username, email, id }: NavbarProps) {
           </Button>
         )}
         <MenubarMenu>
-          <MenubarTrigger id="action-recurso" className={MENUTRIGGER_CLASS}>
+          <MenubarTrigger id="action-recursos" className={MENUTRIGGER_CLASS}>
             <Box className={ICON_CLASS} />
             Recursos
           </MenubarTrigger>
-          <MenubarContent id="content-recurso">
+          <MenubarContent id="content-recursos">
             {recursos.map((item) => {
               return (
                 <MenubarItem

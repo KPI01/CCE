@@ -25,12 +25,10 @@ class TableEmpresaTest extends DuskTestCase
                 ->visit(new Table("empresas"))
                 ->within(new Navbar(), function (Browser $browser) {
                     $browser
-                        ->assertPresent("@titulo")
-                        ->assertPresent("@nav")
-                        ->assertPresent("@list")
-                        ->assertPresent("@rcs-btn")
-                        ->assertPresent("@conf-btn")
-                        ->assertPresent("@home-btn");
+                        ->assertPresent("@navbar")
+                        ->assertPresent("@acc-home")
+                        ->assertPresent("@acc-recursos")
+                        ->assertPresent("@acc-config");
                 });
 
             $browser
@@ -74,13 +72,10 @@ class TableEmpresaTest extends DuskTestCase
                 ->visit(new Table("empresas"))
                 ->within(new Navbar(), function (Browser $browser) {
                     $browser
-                        ->assertVisible("@titulo")
-                        ->assertVisible("@nav")
-                        ->assertVisible("@list")
-                        ->assertVisible("@list")
-                        ->assertVisible("@rcs-btn")
-                        ->assertVisible("@conf-btn")
-                        ->assertVisible("@home-btn");
+                        ->assertVisible("@navbar")
+                        ->assertVisible("@acc-home")
+                        ->assertVisible("@acc-recursos")
+                        ->assertVisible("@acc-config");
                 });
 
             $browser

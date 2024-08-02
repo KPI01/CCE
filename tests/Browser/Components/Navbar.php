@@ -31,10 +31,9 @@ class Navbar extends BaseComponent
     public function elements(): array
     {
         return [
-            "@navbar" => "nav[role=nav]",
-            "@nav-comp" => "nav > #navbar-comp",
-            "@acc-" => "nav #action-",
-            "@mn-" => "nav #content-",
+            "@navbar" => "#navbar-comp",
+            "@acc-" => "#action-",
+            "@mn-" => "#content-",
         ];
     }
 }

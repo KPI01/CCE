@@ -87,7 +87,7 @@ export const formSchema = z.object({
     .object({
       capacitacion: z
         .enum(CAPACITACIONES_READONLY, {
-          required_error: "Debes seleccionar el tipo de capacitación ROPO.",
+          required_error: "Debes seleccionar una capacitación ROPO.",
           invalid_type_error: SHOULD_BE_VALID_MSG,
         })
         .nullish(),
@@ -110,7 +110,7 @@ export const formSchema = z.object({
       if (data?.nro && !data?.capacitacion) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Debes ingresar una capacitación ROPO.",
+          message: "Debes seleccionar una capacitación ROPO.",
           path: ["capacitacion"],
         });
       } else if (!data?.nro && data?.capacitacion) {

@@ -3,7 +3,6 @@
 namespace Tests\Browser\Create;
 
 use App\Models\Empresa;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Components\Navbar;
@@ -26,12 +25,10 @@ class CreateEmpresaTest extends DuskTestCase
                 ->visit(new Form(recurso: "empresas", accion: "create"))
                 ->within(new Navbar(), function (Browser $browser) {
                     $browser
-                        ->assertPresent("@titulo")
-                        ->assertPresent("@nav")
-                        ->assertPresent("@list")
-                        ->assertPresent("@rcs-btn")
-                        ->assertPresent("@conf-btn")
-                        ->assertPresent("@home-btn");
+                        ->assertPresent("@navbar")
+                        ->assertPresent("@acc-home")
+                        ->assertPresent("@acc-recursos")
+                        ->assertPresent("@acc-config");
                 });
 
             $browser
@@ -84,11 +81,10 @@ class CreateEmpresaTest extends DuskTestCase
                 ->visit(new Form(recurso: "empresas", accion: "create"))
                 ->within(new Navbar(), function (Browser $browser) {
                     $browser
-                        ->assertVisible("@nav")
-                        ->assertVisible("@list")
-                        ->assertVisible("@rcs-btn")
-                        ->assertVisible("@conf-btn")
-                        ->assertVisible("@home-btn");
+                        ->assertVisible("@navbar")
+                        ->assertVisible("@acc-home")
+                        ->assertVisible("@acc-recursos")
+                        ->assertVisible("@acc-config");
                 });
 
             $browser
@@ -296,7 +292,7 @@ class CreateEmpresaTest extends DuskTestCase
                 );
 
             $browser
-                ->type("@input-nombre", "at123")
+                ->type("@input-nombre", "at=)(")
                 ->type("@input-nif", "fa123")
                 ->type("@input-email", "window.com123")
                 ->type("@input-tel", "123123")
@@ -305,7 +301,7 @@ class CreateEmpresaTest extends DuskTestCase
             $browser
                 ->assertSeeIn(
                     "@msg-nombre",
-                    "El nombre solo puede contener letras."
+                    "El nombre solo puede contener letras, números, o (, . - · &)."
                 )
                 ->assertSeeIn("@msg-nif", "El NIF debe ser válido.")
                 ->assertSeeIn("@msg-email", "El correo debe ser válido.")
@@ -342,7 +338,7 @@ class CreateEmpresaTest extends DuskTestCase
                 ->assertPresent("@msg-ropo_capacitacion")
                 ->assertSeeIn(
                     "@msg-ropo_capacitacion",
-                    "Debes seleccionar el tipo de capacitación ROPO."
+                    "Debes seleccionar una capacitación ROPO."
                 );
 
             $browser
