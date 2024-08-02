@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
@@ -82,13 +83,13 @@ class Empresa extends RecursoBase
         $cad = $ropo["caducidad"];
 
         if (isset($cad)) {
-            $cad = strtotime($cad);
+            $cad = Carbon::parse($cad);
         }
         DB::table(self::ROPO_TABLE)->upsert(
             values: [
                 "empresa_id" => $this->id,
                 "caducidad" => isset($ropo["caducidad"])
-                    ? date("Y-m-d", $cad)
+                    ? $cad->format("Y-m-d")
                     : null,
                 "nro" => $ropo["nro"] ?? null,
                 "capacitacion" => $ropo["capacitacion"] ?? null,
