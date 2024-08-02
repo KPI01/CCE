@@ -22,17 +22,7 @@ export default function Show({ data }: { data: Persona }) {
   schema.safeParse(data);
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      nombres: data.nombres,
-      apellidos: data.apellidos,
-      tipo_id_nac: data.tipo_id_nac,
-      id_nac: data.tipo_id_nac,
-      email: data.email,
-      tel: data.tel,
-      perfil: data.perfil,
-      observaciones: data.observaciones,
-      ropo: data.ropo,
-    },
+    defaultValues: { ...data },
   });
 
   return (
@@ -48,7 +38,7 @@ export default function Show({ data }: { data: Persona }) {
       <Form {...form}>
         <form id={`show-${data.id}`} className={CONTAINER_CLASS}>
           <div className="space-y-4">
-            <FormTitle id="h3-basicos" title="Datos básicos" />
+            <FormTitle id="h3-general" title="Datos básicos" />
             <div
               className="grid items-center"
               style={{ gridTemplateColumns: "15ch auto 1fr" }}

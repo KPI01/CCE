@@ -3,7 +3,6 @@
 namespace Tests\Browser;
 
 use App\Models\Persona;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Components\Navbar;
@@ -26,12 +25,10 @@ class CreatePersonaTest extends DuskTestCase
                 ->visit(new Form(recurso: "personas", accion: "create"))
                 ->within(new Navbar(), function (Browser $browser) {
                     $browser
-                        ->assertPresent("@titulo")
-                        ->assertPresent("@nav")
-                        ->assertPresent("@list")
-                        ->assertPresent("@rcs-btn")
-                        ->assertPresent("@conf-btn")
-                        ->assertPresent("@home-btn");
+                        ->assertPresent("@navbar")
+                        ->assertPresent("@acc-home")
+                        ->assertPresent("@acc-recursos")
+                        ->assertPresent("@acc-config");
                 });
 
             $browser
@@ -83,11 +80,10 @@ class CreatePersonaTest extends DuskTestCase
                 ->visit(new Form(recurso: "personas", accion: "create"))
                 ->within(new Navbar(), function (Browser $browser) {
                     $browser
-                        ->assertVisible("@nav")
-                        ->assertVisible("@list")
-                        ->assertVisible("@rcs-btn")
-                        ->assertVisible("@conf-btn")
-                        ->assertVisible("@home-btn");
+                        ->assertVisible("@navbar")
+                        ->assertVisible("@acc-home")
+                        ->assertVisible("@acc-recursos")
+                        ->assertVisible("@acc-config");
                 });
 
             $browser

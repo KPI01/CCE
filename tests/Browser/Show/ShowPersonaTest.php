@@ -36,11 +36,10 @@ class ShowPersonaTest extends DuskTestCase
 
             $browser->within(new Navbar(), function ($browser) {
                 $browser
-                    ->assertPresent("@nav")
-                    ->assertPresent("@list")
-                    ->assertPresent("@rcs-btn")
-                    ->assertPresent("@conf-btn")
-                    ->assertPresent("@home-btn");
+                    ->assertPresent("@navbar")
+                    ->assertPresent("@acc-home")
+                    ->assertPresent("@acc-recursos")
+                    ->assertPresent("@acc-config");
             });
 
             $id = $this->p->id;
@@ -51,7 +50,7 @@ class ShowPersonaTest extends DuskTestCase
                 ->assertPresent("@badge-updated-$id")
                 ->assertPresent("@form-show-$id")
                 ->assertPresent("h1")
-                ->assertPresent("@h3-basicos")
+                ->assertPresent("@h3-general")
                 ->assertPresent("@h3-ropo")
                 ->assertPresent("@separator")
                 ->assertPresentByName("select", "tipo_id_nac")
@@ -90,11 +89,10 @@ class ShowPersonaTest extends DuskTestCase
 
             $browser->within(new Navbar(), function ($browser) {
                 $browser
-                    ->assertVisible("@nav")
-                    ->assertVisible("@list")
-                    ->assertVisible("@rcs-btn")
-                    ->assertVisible("@conf-btn")
-                    ->assertVisible("@home-btn");
+                    ->assertVisible("@navbar")
+                    ->assertVisible("@acc-home")
+                    ->assertVisible("@acc-recursos")
+                    ->assertVisible("@acc-config");
             });
 
             $browser
@@ -108,7 +106,7 @@ class ShowPersonaTest extends DuskTestCase
                     "h1",
                     $this->p->nombres . " " . $this->p->apellidos
                 )
-                ->assertVisible("@h3-basicos")
+                ->assertVisible("@h3-general")
                 ->assertVisible("@h3-ropo")
                 ->assertVisible("@separator")
                 ->assertVisibleByName("select", "tipo_id_nac")

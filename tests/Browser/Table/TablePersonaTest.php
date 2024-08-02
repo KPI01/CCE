@@ -22,6 +22,15 @@ class TablePersonaTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new Table("personas"))->assertSee("Personas");
+
+            $browser->within(new Navbar(), function ($browser) {
+                $browser
+                    ->assertPresent("@navbar")
+                    ->assertPresent("@acc-home")
+                    ->assertPresent("@acc-recursos")
+                    ->assertPresent("@acc-config");
+            });
+
             $browser
                 ->assertPresent("@container")
                 ->assertPresent("@dt")
@@ -63,13 +72,10 @@ class TablePersonaTest extends DuskTestCase
                 ->visit(new Table("personas"))
                 ->within(new Navbar(), function (Browser $browser) {
                     $browser
-                        ->assertVisible("@titulo")
-                        ->assertVisible("@nav")
-                        ->assertVisible("@list")
-                        ->assertVisible("@list")
-                        ->assertVisible("@rcs-btn")
-                        ->assertVisible("@conf-btn")
-                        ->assertVisible("@home-btn");
+                        ->assertVisible("@navbar")
+                        ->assertVisible("@acc-home")
+                        ->assertVisible("@acc-recursos")
+                        ->assertVisible("@acc-config");
                 });
 
             $browser
