@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 abstract class Controller
 {
@@ -15,6 +17,7 @@ abstract class Controller
     protected Collection|Model $data;
     protected string $msg;
     protected array $toasts = ["exito" => [], "error" => []];
+    protected string $tableName;
 
     // Constructor
     public function __construct()
@@ -80,5 +83,36 @@ abstract class Controller
             "title" => "Error: $error",
             "description" => $mensaje,
         ];
+    }
+
+    protected function valueExists(
+        string $table,
+        string $column,
+        mixed $value,
+        string $operator = "="
+    ): bool {
+        $field = $column;
+        $fieldTitle = match ($column) {
+            "email" => "Correo",
+            "id_nac" => "DNI/NIE",
+            "nif" => "NIF",
+            default => ucfirst($column),
+        };
+
+        if (str_contains($table, "ropo")) {
+            $field = "ropo.$column";
+        }
+
+        if (DB::table($table)->where($column, $operator, $value)->exists()) {
+            $this->toastErrorConstructor(
+                variante: "warning",
+                campo: $field,
+                error: "Duplicado",
+                mensaje: "$fieldTitle [{$value}] ya existe en la base de datos"
+            );
+            return true;
+        }
+
+        return false;
     }
 }

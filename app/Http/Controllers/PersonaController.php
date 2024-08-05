@@ -11,6 +11,7 @@ class PersonaController extends Controller
     public function __construct()
     {
         parent::__construct();
+        $this->tableName = (new Persona())->getTable();
 
         foreach ($this->toasts["exito"] as $key => $value) {
             $this->toastExitoConstructor(
@@ -50,34 +51,26 @@ class PersonaController extends Controller
         unset($basic["ropo"]);
         $uniques = $request->all(["email", "id_nac"]);
 
-        if (Persona::where("email", $uniques["email"])->exists()) {
-            $this->toastErrorConstructor(
-                campo: "email",
-                error: "Duplicado",
-                mensaje: implode(" ", [
-                    "Correo:",
-                    $uniques["email"],
-                    "ya se encuentra registrado",
-                ]),
-                variante: "warning"
-            );
+        if (
+            $this->valueExists(
+                table: $this->tableName,
+                column: "email",
+                value: $uniques["email"]
+            )
+        ) {
             return to_route("personas.index")->with([
                 "from" => "personas.store",
                 "message" => [
                     "toast" => $this->toasts["error"]["email:duplicado"],
                 ],
             ]);
-        } elseif (Persona::where("id_nac", $uniques["id_nac"])->exists()) {
-            $this->toastErrorConstructor(
-                campo: "id_nac",
-                error: "Duplicado",
-                mensaje: implode(" ", [
-                    "NIF:",
-                    $uniques["id_nac"],
-                    "ya se encuentra registrado",
-                ]),
-                variante: "warning"
-            );
+        } elseif (
+            $this->valueExists(
+                table: $this->tableName,
+                column: "id_nac",
+                value: $uniques["id_nac"]
+            )
+        ) {
             return to_route("personas.index")->with([
                 "from" => "personas.store",
                 "message" => [
@@ -89,20 +82,12 @@ class PersonaController extends Controller
 
             if (isset($r)) {
                 if (
-                    DB::table(Persona::ROPO_TABLE)
-                        ->where("nro", $r["nro"])
-                        ->exists()
+                    $this->valueExists(
+                        table: Persona::ROPO_TABLE,
+                        column: "nro",
+                        value: $r["nro"]
+                    )
                 ) {
-                    $this->toastErrorConstructor(
-                        campo: "ropo.nro",
-                        error: "Duplicado",
-                        mensaje: implode(" ", [
-                            "Nº ROPO:",
-                            $r["nro"],
-                            "ya se encuentra registrado",
-                        ]),
-                        variante: "warning"
-                    );
                     return to_route("personas.index")->with([
                         "from" => "personas.store",
                         "message" => [

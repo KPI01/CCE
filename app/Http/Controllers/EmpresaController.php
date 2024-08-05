@@ -12,6 +12,8 @@ class EmpresaController extends Controller
     {
         parent::__construct();
 
+        $this->tableName = (new Empresa())->getTable();
+
         foreach ($this->toasts["exito"] as $key => $value) {
             $this->toastExitoConstructor(
                 accion: $key,
@@ -51,34 +53,26 @@ class EmpresaController extends Controller
         unset($basic["ropo"]);
         $uniques = $request->all(["email", "nif"]);
 
-        if (Empresa::where("email", $uniques["email"])->exists()) {
-            $this->toastErrorConstructor(
-                campo: "email",
-                error: "Duplicado",
-                mensaje: implode(" ", [
-                    "Correo:",
-                    $uniques["email"],
-                    "ya se encuentra registrado",
-                ]),
-                variante: "warning"
-            );
+        if (
+            $this->valueExists(
+                table: $this->tableName,
+                column: "email",
+                value: $uniques["email"]
+            )
+        ) {
             return to_route("empresas.index")->with([
                 "from" => "empresas.store",
                 "message" => [
                     "toast" => $this->toasts["error"]["email:duplicado"],
                 ],
             ]);
-        } elseif (Empresa::where("nif", $uniques["nif"])->exists()) {
-            $this->toastErrorConstructor(
-                campo: "nif",
-                error: "Duplicado",
-                mensaje: implode(" ", [
-                    "NIF:",
-                    $uniques["nif"],
-                    "ya se encuentra registrado",
-                ]),
-                variante: "warning"
-            );
+        } elseif (
+            $this->valueExists(
+                table: $this->tableName,
+                column: "nif",
+                value: $uniques["nif"]
+            )
+        ) {
             return to_route("empresas.index")->with([
                 "from" => "empresas.store",
                 "message" => [
@@ -90,20 +84,12 @@ class EmpresaController extends Controller
 
             if (isset($r)) {
                 if (
-                    DB::table(Empresa::ROPO_TABLE)
-                        ->where("nro", $r["nro"])
-                        ->exists()
+                    $this->valueExists(
+                        table: Empresa::ROPO_TABLE,
+                        column: "nro",
+                        value: $r["nro"]
+                    )
                 ) {
-                    $this->toastErrorConstructor(
-                        campo: "ropo.nro",
-                        error: "Duplicado",
-                        mensaje: implode(" ", [
-                            "Nº ROPO:",
-                            $r["nro"],
-                            "ya se encuentra registrado",
-                        ]),
-                        variante: "warning"
-                    );
                     return to_route("empresas.index")->with([
                         "from" => "empresas.store",
                         "message" => [
