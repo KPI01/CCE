@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Persona } from "@/types";
+import { Breadcrumbs, Persona } from "@/types";
 import {
   CONTAINER_CLASS,
   formSchema,
@@ -57,14 +57,31 @@ export default function Edit({ data }: { data: Persona }) {
     }
   }
 
+  const breadcrumb: Breadcrumbs[] = [
+    {
+      text: "Tabla",
+      url: data.urls.index,
+    },
+    {
+      text: "Persona",
+      url: data.urls.show,
+    },
+    {
+      text: "Editando...",
+      url: data.urls.edit,
+    },
+  ];
+
   return (
     <FormLayout
       pageTitle="Persona"
       mainTitle="Editando..."
       created_at={data.created_at}
       updated_at={data.updated_at}
-      backUrl={data.urls.show}
       id={data.id}
+      urls={data.urls}
+      showActions={false}
+      breadcrumbs={breadcrumb}
     >
       <Form {...form}>
         <form

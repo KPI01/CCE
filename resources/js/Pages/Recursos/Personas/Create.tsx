@@ -14,25 +14,17 @@ import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectCons
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import FormLayout from "@/Layouts/Recursos/FormLayout";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
-import FormButton from "@/Components/Forms/FormButton";
 import { useState } from "react";
 import { router } from "@inertiajs/react";
 import { Switch } from "@/Components/ui/switch";
 import { Label } from "@radix-ui/react-label";
+import { Breadcrumbs, Urls } from "@/types";
 
-const RECURSO = "personas";
 const CONTAINER_CLASS = "container grid grid-cols-2 gap-x-32 gap-y-8";
 
 const schema = formSchema;
 
-interface Props {
-  urls: {
-    store: string;
-    index: string;
-  };
-}
-
-export default function Create({ urls }: Props) {
+export default function Create({ urls }: { urls: Urls }) {
   const [showRopo, setFillRopo] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof schema>>({
@@ -51,11 +43,24 @@ export default function Create({ urls }: Props) {
     router.post(urls.store, values);
   }
 
+  const breadcrumb: Breadcrumbs[] = [
+    {
+      text: "Tabla",
+      url: urls.index,
+    },
+    {
+      text: "Creando...",
+      url: urls.create,
+    },
+  ];
+
   return (
     <FormLayout
       pageTitle="Persona"
       mainTitle="Creando persona..."
-      backUrl={urls.index}
+      urls={urls}
+      breadcrumbs={breadcrumb}
+      showActions={false}
     >
       <Form {...form}>
         <form

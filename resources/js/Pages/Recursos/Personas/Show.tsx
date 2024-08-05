@@ -1,4 +1,4 @@
-import { LayoutProps, Persona, Urls } from "@/types";
+import { Breadcrumbs, Persona } from "@/types";
 import {
   formSchema,
   PERFILES,
@@ -25,6 +25,17 @@ export default function Show({ data }: { data: Persona }) {
     defaultValues: { ...data },
   });
 
+  const breadcrumb: Breadcrumbs[] = [
+    {
+      text: "Tabla",
+      url: data.urls.index,
+    },
+    {
+      text: "Persona",
+      url: data.urls.show,
+    },
+  ];
+
   return (
     <FormLayout
       id={data.id}
@@ -33,7 +44,7 @@ export default function Show({ data }: { data: Persona }) {
       created_at={data.created_at}
       updated_at={data.updated_at}
       urls={data.urls}
-      backUrl={data.urls.index}
+      breadcrumbs={breadcrumb}
     >
       <Form {...form}>
         <form id={`show-${data.id}`} className={CONTAINER_CLASS}>
