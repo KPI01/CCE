@@ -15,7 +15,6 @@ export const columns: ColumnDef<Persona & { urls: ActionUrls }>[] = [
     enableColumnFilter: true,
     enableSorting: true,
     enableHiding: false,
-
     size: 150,
     meta: {
       header: "Nombres",

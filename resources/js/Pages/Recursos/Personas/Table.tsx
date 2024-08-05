@@ -7,11 +7,7 @@ import { columns } from "./Column";
 import { Persona } from "@/types";
 import { RECURSO } from "./formSchema";
 
-interface Props {
-  data: Persona[];
-}
-
-export default function Page({ data }: Props) {
+export default function Table({ data }: { data: Persona[] }) {
   const initVisibility = {
     nombres: true,
     apellidos: true,
