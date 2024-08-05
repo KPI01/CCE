@@ -38,6 +38,7 @@ class PersonaController extends Controller
             "urls" => [
                 "store" => route("personas.store"),
                 "index" => route("personas.index"),
+                "create" => route("personas.create"),
             ],
         ]);
     }

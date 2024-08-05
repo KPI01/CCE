@@ -16,7 +16,7 @@ import {
   User2,
   UserRound,
 } from "lucide-react";
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { Button } from "./ui/button";
 import { ReactElement } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -53,7 +53,10 @@ interface handleRecursoLinkParams {
   accion?: "index";
 }
 
-export default function NavBar({ username, email }: NavbarProps) {
+export default function NavBar() {
+  const { auth }: any = usePage().props;
+  const username = auth?.user?.name;
+  const email = auth?.user?.email;
   const routeCurrent = route().current();
   const currentIsHome = routeCurrent === "home";
   console.debug(`${routeCurrent} === "home" =>`, currentIsHome);
