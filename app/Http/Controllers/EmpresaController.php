@@ -39,6 +39,7 @@ class EmpresaController extends Controller
             "urls" => [
                 "store" => route("empresas.store"),
                 "index" => route("empresas.index"),
+                "create" => route("empresas.create"),
             ],
         ]);
     }

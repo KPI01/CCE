@@ -19,11 +19,10 @@ import { Save } from "lucide-react";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
 import { router } from "@inertiajs/react";
 import { Breadcrumbs, Urls } from "@/types";
-import { BreadcrumbItem } from "@/Components/ui/breadcrumb";
 
 const schema = formSchema;
 
-export default function Create({ urls }: { urls: Partial<Urls> }) {
+export default function Create({ urls }: { urls: Urls }) {
   const [showRopo, setShowRopo] = useState(false);
 
   const form = useForm<z.infer<typeof schema>>({
@@ -37,11 +36,11 @@ export default function Create({ urls }: { urls: Partial<Urls> }) {
   const breadcrumb: Breadcrumbs[] = [
     {
       text: "Tabla",
-      url: route("empresas.index"),
+      url: urls.index,
     },
     {
       text: "Creando...",
-      url: route("empresas.create"),
+      url: urls.create,
     },
   ];
 
