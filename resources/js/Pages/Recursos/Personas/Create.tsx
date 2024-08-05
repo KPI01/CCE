@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/Components/ui/button";
 import { Form, FormField, FormLabel } from "@/Components/ui/form";
-import { Save, Trash2 } from "lucide-react";
+import { Save } from "lucide-react";
 import {
   CAPACITACIONES,
   formSchema,
@@ -56,8 +56,8 @@ export default function Create({ urls }: { urls: Urls }) {
 
   return (
     <FormLayout
-      pageTitle="Persona"
-      mainTitle="Creando persona..."
+      pageTitle="Creando: Persona"
+      mainTitle="Persona"
       urls={urls}
       breadcrumbs={breadcrumb}
       showActions={false}
