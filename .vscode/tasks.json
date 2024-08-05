@@ -266,6 +266,46 @@
     },
     {
       "type": "shell",
+      "command": "php artisan make:model ${input:model_name} -crsfm",
+      "problemMatcher": [],
+      "label": "art make: model",
+      "detail": "laravel",
+      "group": {
+        "kind": "none",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true,
+        "group": "database"
+      }
+    },
+    {
+      "type": "shell",
+      "command": "php artisan make:model ${input:model_name} -p",
+      "problemMatcher": [],
+      "label": "art make: pivot model",
+      "detail": "laravel",
+      "group": {
+        "kind": "none",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true,
+        "group": "database"
+      }
+    },
+    {
+      "type": "shell",
       "command": "php artisan make:migration ${input:migration_name}",
       "problemMatcher": [],
       "label": "art make: migration",
@@ -326,6 +366,12 @@
       "type": "promptString",
       "id": "migration_name",
       "description": "Nombre de la migración"
-    }
+    },
+    {
+      "type": "promptString",
+      "id": "model_name",
+      "description": "Nombre para el modelo"
+    },
+    
   ]
 }

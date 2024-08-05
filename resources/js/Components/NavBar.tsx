@@ -13,10 +13,11 @@ import {
   Building,
   Home,
   LogOut,
+  Table2,
   User2,
   UserRound,
 } from "lucide-react";
-import { router, usePage } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import { Button } from "./ui/button";
 import { ReactElement } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -134,6 +135,15 @@ export default function NavBar() {
               <Button className={BUTTON_CLASS} variant={"ghost"}>
                 <AtSign className="mr-2 size-4" />
                 {email}
+              </Button>
+            </MenubarItem>
+            <MenubarSeparator />
+            <MenubarItem className={MENUBARITEM_CLASS} asChild>
+              <Button className={BUTTON_CLASS} variant={"ghost"} asChild>
+                <Link href="#">
+                  <Table2 className={ICON_CLASS} />
+                  Tablas auxiliares
+                </Link>
               </Button>
             </MenubarItem>
             <MenubarSeparator />

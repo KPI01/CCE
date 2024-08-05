@@ -108,4 +108,11 @@ class Empresa extends RecursoBase
             ->withTimestamps()
             ->using(EmpresaPersona::class);
     }
+
+    public function maquinas(): HasMany
+    {
+        return $this->hasMany(Maquina::class)
+            ->withTimestamps()
+            ->using(EmpresaMaquina::class);
+    }
 }
