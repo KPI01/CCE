@@ -3,10 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\DB;
 
 class Maquina extends RecursoBase
 {
+    const TIPOS_TABLE = "tipos_maquina";
     protected $appends = ["urls"];
+
+    public function getTipoIdAttribute($value)
+    {
+        $data = DB::table(self::TIPOS_TABLE)
+            ->where("id", $value)
+            ->first();
+
+        return $data->tipo;
+    }
 
     public function empresa(): BelongsTo
     {

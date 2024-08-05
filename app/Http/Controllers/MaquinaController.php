@@ -7,12 +7,28 @@ use Illuminate\Http\Request;
 
 class MaquinaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->tableName = (new Maquina())->getTable();
+
+        foreach ($this->toasts["exito"] as $key => $value) {
+            $this->toastExitoConstructor(
+                accion: $key,
+                seccion: "title",
+                append: "Máquina"
+            );
+        }
+    }
+
     public function index()
     {
         //
+        $this->data = Maquina::all();
+        return inertia("Recursos/Maquinas/Table", [
+            "data" => $this->data,
+        ]);
     }
 
     /**
@@ -58,8 +74,26 @@ class MaquinaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Maquina $maquina)
+    public function destroy(string $id)
     {
         //
+        $this->data = Maquina::findOrFail($id);
+        $this->data->delete();
+        return to_route("maquina.index")->with([
+            "from" => "maquina.destroy",
+            "message" => [
+                "toast" => [
+                    "variant" => "destructive",
+                    "title" => "Recurso: Máquina",
+                    "description" => implode([
+                        $this->data->nombre,
+                        " ",
+                        "({$this->data->matricula})",
+                        " ",
+                        "se ha eliminado de los registros.",
+                    ]),
+                ],
+            ],
+        ]);
     }
 }

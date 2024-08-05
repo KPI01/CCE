@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create("maquina_tipo", function (Blueprint $table) {
+        Schema::create("tipos_maquina", function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string("tipo", 50)->index();
         });
@@ -24,10 +24,7 @@ return new class extends Migration {
             $table->string("marca", 50)->nullable();
             $table->string("roma")->unique()->nullable();
             $table->string("nro_serie", 50)->unique()->nullable();
-            $table
-                ->foreignId("maquina_tipo_id")
-                ->references("id")
-                ->on("maquina_tipo");
+            $table->foreignId("tipo_id")->references("id")->on("tipos_maquina");
             $table->string("fabricante", 100)->nullable();
             $table->date("cad_iteaf")->nullable();
             $table->text("observaciones")->nullable();
@@ -40,7 +37,7 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists("maquina_tipo");
+        Schema::dropIfExists("tipos_maquina");
         Schema::dropIfExists("maquinas");
     }
 };
