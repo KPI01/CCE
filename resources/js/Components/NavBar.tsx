@@ -1,4 +1,3 @@
-import { NavbarProps } from "@/types";
 import {
   Menubar,
   MenubarContent,
@@ -14,6 +13,7 @@ import {
   Home,
   LogOut,
   Table2,
+  Tractor,
   User2,
   UserRound,
 } from "lucide-react";
@@ -46,6 +46,12 @@ const recursos: MenuItemsProps[] = [
     Texto: "Empresas",
     Recurso: "empresa",
     Ref: route("empresa.index"),
+  },
+  {
+    Icon: <Tractor className={ICON_CLASS} />,
+    Texto: "Máquinas",
+    Recurso: "maquina",
+    Ref: route("maquina.index"),
   },
 ];
 

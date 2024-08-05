@@ -126,26 +126,6 @@
     },
     {
       "type": "shell",
-      "command": "New-Item Item-Type File -Name ${workspaceFolder}\\resources\\js\\${input:name}.tsx -Value \"\" -Force",
-      "problemMatcher": [],
-      "label": "ps: make tsx",
-      "detail": "laravel",
-      "group": {
-        "kind": "test",
-        "isDefault": true
-      },
-      "presentation": {
-        "echo": false,
-        "reveal": "silent",
-        "focus": false,
-        "panel": "dedicated",
-        "showReuseMessage": false,
-        "clear": true,
-        "group": "make"
-      }
-    },
-    {
-      "type": "shell",
       "command": "php artisan dusk --without-tty",
       "problemMatcher": [],
       "label": "art dusk: test",
