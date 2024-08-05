@@ -7,7 +7,7 @@ import {
 import { Button } from "@/Components/ui/button";
 import { Link, router } from "@inertiajs/react";
 import { File, MoreHorizontal, Pen, Trash } from "lucide-react";
-import { ActionUrls, Persona } from "@/types";
+import { Persona } from "@/types";
 import {
   AlertDialog,
   AlertDialogAction,

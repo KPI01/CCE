@@ -156,9 +156,6 @@ export const columns: ColumnDef<Empresa & { urls: ActionUrls }>[] = [
   },
   {
     id: "actions",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Acciones" />
-    ),
     cell: ({ row }) => {
       const empresa = row.original;
 
