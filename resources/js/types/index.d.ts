@@ -2,10 +2,11 @@ import { Empresa, Persona, User } from "./modelos";
 
 export type Urls = {
   index: string;
+  create: string;
+  store: string;
   show: string;
-  store?: string;
-  update: string;
   edit: string;
+  update: string;
   destroy: string;
 };
 

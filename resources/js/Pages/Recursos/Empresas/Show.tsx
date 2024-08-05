@@ -1,4 +1,4 @@
-import { Empresa, LayoutProps, Urls } from "@/types";
+import { Breadcrumbs, Empresa } from "@/types";
 import {
   CONTAINER_CLASS,
   formSchema,
@@ -38,15 +38,26 @@ export default function Show({ data }: { data: Empresa }) {
     },
   });
 
+  const breadcrumbs: Breadcrumbs[] = [
+    {
+      text: "Tabla",
+      url: data.urls.index,
+    },
+    {
+      text: "Empresa",
+      url: data.urls.show,
+    },
+  ];
+
   return (
     <FormLayout
       id={data.id}
-      pageTitle="Empresa"
+      pageTitle={`Empresa: ${data.nombre}`}
       mainTitle={data.nombre}
       created_at={data.created_at}
       updated_at={data.updated_at}
       urls={data.urls}
-      backUrl={route("empresas.index")}
+      breadcrumbs={breadcrumbs}
     >
       <Form {...form}>
         <form id={`show-${data.id}`} className={CONTAINER_CLASS}>

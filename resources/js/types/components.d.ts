@@ -2,6 +2,11 @@ import { PropsWithChildren } from "react";
 import { UUID } from "./modelos";
 import { Urls } from ".";
 
+type Breadcrumbs = {
+  text: string;
+  url: string;
+};
+
 type Actions =
   | "index"
   | "create"
@@ -36,7 +41,7 @@ export interface LayoutProps extends PropsWithChildren {
   mainTitle: string;
   created_at?: Date | string;
   updated_at?: Date | string;
-  urls?: Urls;
+  urls: Urls | Partial<Urls>;
 }
 
 export type ActionUrls = Required<Pick<Urls, "show" | "edit" | "destroy">>;

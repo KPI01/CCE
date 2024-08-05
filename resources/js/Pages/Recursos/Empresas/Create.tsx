@@ -18,15 +18,12 @@ import FormButton from "@/Components/Forms/FormButton";
 import { Save } from "lucide-react";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
 import { router } from "@inertiajs/react";
-import { Urls } from "@/types";
+import { Breadcrumbs, Urls } from "@/types";
+import { BreadcrumbItem } from "@/Components/ui/breadcrumb";
 
 const schema = formSchema;
 
-export default function Create({
-  urls,
-}: {
-  urls: Required<Pick<Urls, "store" | "index">>;
-}) {
+export default function Create({ urls }: { urls: Partial<Urls> }) {
   const [showRopo, setShowRopo] = useState(false);
 
   const form = useForm<z.infer<typeof schema>>({
@@ -34,14 +31,26 @@ export default function Create({
   });
 
   function onSubmit(values: z.infer<typeof schema>) {
-    router.post(urls.store, values);
+    if (urls.store) router.post(urls.store, values);
   }
+
+  const breadcrumb: Breadcrumbs[] = [
+    {
+      text: "Tabla",
+      url: route("empresas.index"),
+    },
+    {
+      text: "Creando...",
+      url: route("empresas.create"),
+    },
+  ];
 
   return (
     <FormLayout
-      pageTitle="Empresas"
-      mainTitle="Creando empresa..."
-      backUrl={urls.index}
+      pageTitle="Creando: Empresas"
+      mainTitle="Empresa"
+      urls={urls}
+      breadcrumbs={breadcrumb}
     >
       <Form {...form}>
         <form

@@ -7,7 +7,7 @@ import {
 } from "./formSchema";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Empresa, Urls } from "@/types";
+import { Breadcrumbs, Empresa, Urls } from "@/types";
 import FormLayout from "@/Layouts/Recursos/FormLayout";
 import { Form, FormField } from "@/Components/ui/form";
 import FormTitle from "@/Components/Forms/FormTitle";
@@ -58,14 +58,31 @@ export default function Edit({ data }: { data: Empresa }) {
     }
   }
 
+  const breadcrumb: Breadcrumbs[] = [
+    {
+      text: "Tabla",
+      url: data.urls.index,
+    },
+    {
+      text: "Empresa",
+      url: data.urls.show,
+    },
+    {
+      text: "Editando...",
+      url: data.urls.edit,
+    },
+  ];
+
   return (
     <FormLayout
       pageTitle="Empresa"
       mainTitle="Editando..."
       created_at={data.updated_at}
       updated_at={data.updated_at}
-      backUrl={data.urls.show}
       id={data.id}
+      urls={data.urls}
+      breadcrumbs={breadcrumb}
+      showActions={false}
     >
       <Form {...form}>
         <form

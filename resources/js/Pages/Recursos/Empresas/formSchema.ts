@@ -1,8 +1,7 @@
 import { z } from "zod";
 
 export const RECURSO = "empresas";
-export const CONTAINER_CLASS =
-  "container grid grid-cols-2 gap-x-12 gap-y-4 px-32";
+export const CONTAINER_CLASS = "container grid grid-cols-2 gap-x-12 gap-y-4";
 
 const FIELD_MSG = "Este campo";
 const REQUIRED_MSG = `${FIELD_MSG} es requerido.`;

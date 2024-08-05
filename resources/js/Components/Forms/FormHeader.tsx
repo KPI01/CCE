@@ -17,6 +17,7 @@ import {
   AlertDialogTrigger,
 } from "@/Components/ui/alert-dialog";
 import { formatDate } from "@/lib/dates";
+import { BreadcrumbItem, BreadcrumbSeparator } from "../ui/breadcrumb";
 
 interface Props
   extends Omit<
@@ -27,7 +28,7 @@ interface Props
   className?: string;
   created_at: Date | null;
   updated_at: Date | null;
-  backUrl: string;
+  showActions?: boolean;
 }
 
 export default function FormHeader({
@@ -37,7 +38,7 @@ export default function FormHeader({
   urls,
   className,
   id,
-  backUrl,
+  showActions = true,
 }: Props) {
   function handleDelete() {
     if (urls?.destroy) router.delete(urls.destroy);
@@ -45,17 +46,11 @@ export default function FormHeader({
 
   return (
     <div className={cn("flex items-center gap-4", className)}>
-      <Button variant={"outline"} size={"sm"} className="px-2 py-1" asChild>
-        <Link as="button" id="back-btn" href={backUrl}>
-          <ChevronLeft className="h-4" />
-        </Link>
-      </Button>
-      <Separator orientation="vertical" className="h-10" />
       <div className="flex gap-4">
         <div className="flex flex-col">
           <h1 className="my-3 text-5xl font-extrabold">{title}</h1>
           <div className="flex select-none gap-x-4">
-            {urls && (
+            {showActions && urls && (
               <>
                 <AlertDialog>
                   <AlertDialogTrigger
@@ -107,7 +102,6 @@ export default function FormHeader({
                 <span className="ml-3 font-thin">{formatDate(created_at)}</span>
               </Badge>
             )}
-
             {updated_at && (
               <Badge variant={"secondary"} id={`badge-updated-${id}`}>
                 Últ. Ed:{" "}
