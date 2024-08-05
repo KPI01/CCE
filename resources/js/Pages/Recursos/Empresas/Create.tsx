@@ -50,6 +50,7 @@ export default function Create({ urls }: { urls: Urls }) {
       mainTitle="Empresa"
       urls={urls}
       breadcrumbs={breadcrumb}
+      showActions={false}
     >
       <Form {...form}>
         <form
