@@ -105,7 +105,7 @@ export const columns: ColumnDef<Persona & { urls: ActionUrls }>[] = [
     enableHiding: true,
     size: 250,
     meta: {
-      header: "Tipo de Carnet ROPO",
+      header: "Capacitación ROPO",
       key: "ropo_capacitacion",
     },
   },

@@ -19,10 +19,9 @@ export default function Page({ data }: Props) {
     email: true,
     tel: true,
     perfil: true,
-    ropo_tipo: false,
+    ropo_capacitacion: false,
     ropo_caducidad: false,
     ropo_nro: false,
-    ropo_tipo_aplicador: false,
   };
 
   return (
