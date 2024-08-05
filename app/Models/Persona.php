@@ -27,10 +27,9 @@ class Persona extends RecursoBase
 
     protected $appends = ["ropo", "urls"];
     protected $ropo = [
-        "tipo" => null,
+        "capacitacion" => null,
         "caducidad" => null,
         "nro" => null,
-        "tipo_aplicador" => null,
     ];
 
     protected $casts = [
