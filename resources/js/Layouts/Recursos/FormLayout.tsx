@@ -46,7 +46,7 @@ export default function FormLayout({
   }
 
   return (
-    <MainLayout id={id}>
+    <MainLayout>
       <Head title={pageTitle} />
       <Breadcrumb className="mt-4">
         <BreadcrumbList>

@@ -21,8 +21,6 @@ import { Button } from "./ui/button";
 import { ReactElement } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-const MENUCONTENT_CLASS =
-  "p-4 h-fit grid gap-3 p-6 md:w-[35rem] lg:w-[45rem] lg:grid-cols-[.75fr_1fr]";
 const MENUTRIGGER_CLASS =
   "w-max font-medium border-px flex items-center rounded border-accent px-2 py-1";
 const MENUBARITEM_CLASS = "cursor-pointer w-full justify-start";
@@ -55,30 +53,10 @@ interface handleRecursoLinkParams {
   accion?: "index";
 }
 
-export default function NavBar({ username, email, id }: NavbarProps) {
-  const urlHome = route("home");
+export default function NavBar({ username, email }: NavbarProps) {
   const routeCurrent = route().current();
-  let urlCurrent;
-  if (typeof routeCurrent !== "undefined") {
-    const accion = routeCurrent.includes(".")
-      ? routeCurrent.split(".")[1]
-      : null;
-
-    if (accion !== null) {
-      console.debug("La ruta lleva una accion");
-      if (["index", "store"].includes(accion)) {
-        console.debug("accion:", accion);
-        urlCurrent = route(routeCurrent);
-      } else {
-        console.debug("id:", id);
-        urlCurrent = route(routeCurrent, id);
-      }
-    } else {
-      urlCurrent = route(routeCurrent);
-    }
-  }
-  const currentIsHome = urlHome === urlCurrent;
-  console.debug(`${urlHome} === ${urlCurrent} =>`, currentIsHome);
+  const currentIsHome = routeCurrent === "home";
+  console.debug(`${routeCurrent} === "home" =>`, currentIsHome);
 
   function goHome() {
     console.warn("Dirigiendo al dashboard...");

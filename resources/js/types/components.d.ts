@@ -19,12 +19,10 @@ type Actions =
 interface NavbarProps extends PropsWithChildren {
   username: string;
   email: string;
-  id?: UUID;
 }
 
 interface MainLayoutProps extends PropsWithChildren {
   className?: string;
-  id?: UUID;
 }
 
 interface TableProps {
