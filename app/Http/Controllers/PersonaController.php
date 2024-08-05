@@ -37,9 +37,9 @@ class PersonaController extends Controller
         //
         return inertia("Recursos/Personas/Create", [
             "urls" => [
-                "store" => route("personas.store"),
-                "index" => route("personas.index"),
-                "create" => route("personas.create"),
+                "store" => route("persona.store"),
+                "index" => route("persona.index"),
+                "create" => route("persona.create"),
             ],
         ]);
     }
@@ -59,7 +59,7 @@ class PersonaController extends Controller
             )
         ) {
             return to_route("personas.index")->with([
-                "from" => "personas.store",
+                "from" => "persona.store",
                 "message" => [
                     "toast" => $this->toasts["error"]["email:duplicado"],
                 ],
@@ -72,7 +72,7 @@ class PersonaController extends Controller
             )
         ) {
             return to_route("personas.index")->with([
-                "from" => "personas.store",
+                "from" => "persona.store",
                 "message" => [
                     "toast" => $this->toasts["error"]["id_nac:duplicado"],
                 ],
@@ -89,7 +89,7 @@ class PersonaController extends Controller
                     )
                 ) {
                     return to_route("personas.index")->with([
-                        "from" => "personas.store",
+                        "from" => "persona.store",
                         "message" => [
                             "toast" =>
                                 $this->toasts["error"]["ropo.nro:duplicado"],
@@ -109,8 +109,8 @@ class PersonaController extends Controller
                     "(" . $this->inst->id_nac . ")",
                 ])
             );
-            return to_route("personas.index")->with([
-                "from" => "personas.store",
+            return to_route("persona.index")->with([
+                "from" => "persona.store",
                 "message" => [
                     "toast" => $this->toasts["exito"]["store"],
                 ],
@@ -162,8 +162,8 @@ class PersonaController extends Controller
                 ]),
                 variante: "warning"
             );
-            return to_route("personas.edit", $this->data->id)->with([
-                "from" => "personas.update",
+            return to_route("persona.edit", $this->data->id)->with([
+                "from" => "persona.update",
                 "message" => [
                     "toast" => $this->toasts["error"]["email:duplicado"],
                 ],
@@ -184,8 +184,8 @@ class PersonaController extends Controller
                 ]),
                 variante: "warning"
             );
-            return to_route("personas.edit", $this->data->id)->with([
-                "from" => "personas.update",
+            return to_route("persona.edit", $this->data->id)->with([
+                "from" => "persona.update",
                 "message" => [
                     "toast" => $this->toasts["error"]["id_nac:duplicado"],
                 ],
@@ -210,8 +210,8 @@ class PersonaController extends Controller
                         ]),
                         variante: "warning"
                     );
-                    return to_route("personas.edit", $this->data->id)->with([
-                        "from" => "personas.update",
+                    return to_route("persona.edit", $this->data->id)->with([
+                        "from" => "persona.update",
                         "message" => [
                             "toast" =>
                                 $this->toasts["error"]["ropo.nro:duplicado"],
@@ -235,8 +235,8 @@ class PersonaController extends Controller
                     "(" . $this->data->id_nac . ")",
                 ])
             );
-            return to_route("personas.show", $this->data->id)->with([
-                "from" => "personas.update",
+            return to_route("persona.show", $this->data->id)->with([
+                "from" => "persona.update",
                 "message" => [
                     "toast" => $this->toasts["exito"]["update"],
                 ],
@@ -250,8 +250,8 @@ class PersonaController extends Controller
         $this->data = Persona::findOrFail($id);
         $this->data->delete();
 
-        return to_route("personas.index")->with([
-            "from" => "personas.destroy",
+        return to_route("persona.index")->with([
+            "from" => "persona.destroy",
             "message" => [
                 "toast" => [
                     "variant" => "destructive",

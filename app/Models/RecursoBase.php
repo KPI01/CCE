@@ -17,7 +17,7 @@ class RecursoBase extends Model
 
     public function getUrlsAttribute()
     {
-        $name = strtolower(class_basename($this) . "s");
+        $name = strtolower(class_basename($this));
         return [
             "index" => route("{$name}.index"),
             "show" => route("{$name}.show", $this->id),

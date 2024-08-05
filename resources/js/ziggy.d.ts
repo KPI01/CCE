@@ -60,58 +60,89 @@ declare module 'ziggy-js' {
     "password.update": [],
     "logout": [],
     "home": [],
-    "personas.index": [],
-    "personas.create": [],
-    "personas.store": [],
-    "personas.show": [
+    "persona.index": [],
+    "persona.create": [],
+    "persona.store": [],
+    "persona.show": [
         {
             "name": "persona",
             "required": true
         }
     ],
-    "personas.edit": [
+    "persona.edit": [
         {
             "name": "persona",
             "required": true
         }
     ],
-    "personas.update": [
+    "persona.update": [
         {
             "name": "persona",
             "required": true
         }
     ],
-    "personas.destroy": [
+    "persona.destroy": [
         {
             "name": "persona",
             "required": true
         }
     ],
-    "empresas.index": [],
-    "empresas.create": [],
-    "empresas.store": [],
-    "empresas.show": [
+    "empresa.index": [],
+    "empresa.create": [],
+    "empresa.store": [],
+    "empresa.show": [
         {
             "name": "empresa",
             "required": true
         }
     ],
-    "empresas.edit": [
+    "empresa.edit": [
         {
             "name": "empresa",
             "required": true
         }
     ],
-    "empresas.update": [
+    "empresa.update": [
         {
             "name": "empresa",
             "required": true
         }
     ],
-    "empresas.destroy": [
+    "empresa.destroy": [
         {
             "name": "empresa",
             "required": true
+        }
+    ],
+    "maquina.index": [],
+    "maquina.create": [],
+    "maquina.store": [],
+    "maquina.show": [
+        {
+            "name": "maquina",
+            "required": true,
+            "binding": "id"
+        }
+    ],
+    "maquina.edit": [
+        {
+            "name": "maquina",
+            "required": true,
+            "binding": "id"
+        }
+    ],
+    "maquina.update": [
+        {
+            "name": "maquina",
+            "required": true,
+            "binding": "id"
+        }
+    ],
+    "maquina.destroy": [
+        {
+            "name": "maquina",
+            "required": true,
+            "binding": "id"
         }
     ]
 }

@@ -38,14 +38,14 @@ const recursos: MenuItemsProps[] = [
   {
     Icon: <UserRound className={ICON_CLASS} />,
     Texto: "Personas",
-    Recurso: "personas",
-    Ref: route("personas.index"),
+    Recurso: "persona",
+    Ref: route("persona.index"),
   },
   {
     Icon: <Building className={ICON_CLASS} />,
     Texto: "Empresas",
-    Recurso: "empresas",
-    Ref: route("empresas.index"),
+    Recurso: "empresa",
+    Ref: route("empresa.index"),
   },
 ];
 

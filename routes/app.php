@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MaquinaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\EmpresaController;
@@ -22,7 +23,8 @@ Route::prefix("app")
             });
 
         Route::prefix("recurso")->group(function () {
-            Route::resource("personas", PersonaController::class);
-            Route::resource("empresas", EmpresaController::class);
+            Route::resource("persona", PersonaController::class);
+            Route::resource("empresa", EmpresaController::class);
+            Route::resource("maquina", MaquinaController::class);
         });
     });

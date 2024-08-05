@@ -39,9 +39,9 @@ class EmpresaController extends Controller
 
         return inertia("Recursos/Empresas/Create", [
             "urls" => [
-                "store" => route("empresas.store"),
-                "index" => route("empresas.index"),
-                "create" => route("empresas.create"),
+                "store" => route("empresa.store"),
+                "index" => route("empresa.index"),
+                "create" => route("empresa.create"),
             ],
         ]);
     }
@@ -60,8 +60,8 @@ class EmpresaController extends Controller
                 value: $uniques["email"]
             )
         ) {
-            return to_route("empresas.index")->with([
-                "from" => "empresas.store",
+            return to_route("empresa.index")->with([
+                "from" => "empresa.store",
                 "message" => [
                     "toast" => $this->toasts["error"]["email:duplicado"],
                 ],
@@ -73,8 +73,8 @@ class EmpresaController extends Controller
                 value: $uniques["nif"]
             )
         ) {
-            return to_route("empresas.index")->with([
-                "from" => "empresas.store",
+            return to_route("empresa.index")->with([
+                "from" => "empresa.store",
                 "message" => [
                     "toast" => $this->toasts["error"]["nif:duplicado"],
                 ],
@@ -90,8 +90,8 @@ class EmpresaController extends Controller
                         value: $r["nro"]
                     )
                 ) {
-                    return to_route("empresas.index")->with([
-                        "from" => "empresas.store",
+                    return to_route("empresa.index")->with([
+                        "from" => "empresa.store",
                         "message" => [
                             "toast" =>
                                 $this->toasts["error"]["ropo.nro:duplicado"],
@@ -108,8 +108,8 @@ class EmpresaController extends Controller
                 seccion: "description",
                 append: $this->inst->nombre . " (" . $this->inst->nif . ")"
             );
-            return to_route("empresas.index")->with([
-                "from" => "empresas.store",
+            return to_route("empresa.index")->with([
+                "from" => "empresa.store",
                 "message" => [
                     "toast" => $this->toasts["exito"]["store"],
                 ],
@@ -161,8 +161,8 @@ class EmpresaController extends Controller
                 ]),
                 variante: "warning"
             );
-            return to_route("empresas.edit", $this->data->id)->with([
-                "from" => "empresas.update",
+            return to_route("empresa.edit", $this->data->id)->with([
+                "from" => "empresa.update",
                 "message" => [
                     "toast" => $this->toasts["error"]["email:duplicado"],
                 ],
@@ -183,8 +183,8 @@ class EmpresaController extends Controller
                 ]),
                 variante: "warning"
             );
-            return to_route("empresas.edit", $this->data->id)->with([
-                "from" => "empresas.update",
+            return to_route("empresa.edit", $this->data->id)->with([
+                "from" => "empresa.update",
                 "message" => [
                     "toast" => $this->toasts["error"]["id_nac:duplicado"],
                 ],
@@ -209,8 +209,8 @@ class EmpresaController extends Controller
                         ]),
                         variante: "warning"
                     );
-                    return to_route("empresas.edit", $this->data->id)->with([
-                        "from" => "empresas.update",
+                    return to_route("empresa.edit", $this->data->id)->with([
+                        "from" => "empresa.update",
                         "message" => [
                             "toast" =>
                                 $this->toasts["error"]["ropo.nro:duplicado"],
@@ -231,8 +231,8 @@ class EmpresaController extends Controller
                     "(" . $this->data->nif . ")",
                 ])
             );
-            return to_route("empresas.index")->with([
-                "from" => "empresas.update",
+            return to_route("empresa.index")->with([
+                "from" => "empresa.update",
                 "message" => [
                     "toast" => $this->toasts["exito"]["update"],
                 ],
@@ -251,8 +251,8 @@ class EmpresaController extends Controller
             seccion: "description",
             append: $this->data->nombre . " (" . $this->data->nif . ")"
         );
-        return to_route("empresas.index")->with([
-            "from" => "empresas.destroy",
+        return to_route("empresa.index")->with([
+            "from" => "empresa.destroy",
             "message" => [
                 "toast" => $this->toasts["exito"]["destroy"],
             ],
