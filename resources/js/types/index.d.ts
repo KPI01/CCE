@@ -1,5 +1,9 @@
 import { Empresa, Persona, User } from "./modelos";
 
+export type Aux = {
+  tipos?: Array<string>;
+};
+
 export type Urls = {
   index: string;
   create: string;

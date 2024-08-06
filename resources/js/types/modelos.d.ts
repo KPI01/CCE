@@ -9,7 +9,7 @@ type Capacitaciones =
   | "Cualificado"
   | "Fumigador"
   | "Piloto Aplicador"
-  | null;
+  | undefined;
 
 interface Modelo {
   id: UUID;
@@ -25,9 +25,9 @@ export interface User extends Modelo {
 }
 
 type ROPO = {
-  caducidad: Date | null;
-  nro: string | null;
-  capacitacion: Capacitaciones;
+  caducidad?: Date;
+  nro?: string;
+  capacitacion?: Capacitaciones;
 };
 
 export interface Persona extends Modelo {
@@ -62,7 +62,7 @@ export interface Maquina extends Modelo {
   modelo: string;
   marca: string;
   nro_serie: string;
-  cad_iteaf: string;
+  cad_iteaf: Date;
   roma: string;
   observaciones: string;
 }

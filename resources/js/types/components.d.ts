@@ -1,8 +1,9 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, ReactElement } from "react";
 import { UUID } from "./modelos";
 import { Urls } from ".";
 
 type Breadcrumbs = {
+  icon?: ReactElement;
   text: string;
   url: string;
 };
