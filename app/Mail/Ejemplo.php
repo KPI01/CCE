@@ -19,7 +19,7 @@ class Ejemplo extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(string $content = 'Sin mensaje')
+    public function __construct(string $content = "Sin mensaje")
     {
         //
         $this->content = $content;
@@ -30,9 +30,7 @@ class Ejemplo extends Mailable
      */
     public function envelope(): Envelope
     {
-        return new Envelope(
-            subject: 'Ejemplo',
-        );
+        return new Envelope(subject: "Ejemplo");
     }
 
     /**
@@ -41,8 +39,8 @@ class Ejemplo extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.ejemplo',
-            with: ['content' => $this->content]
+            view: "mail.ejemplo",
+            with: ["content" => $this->content]
         );
     }
 

@@ -5,7 +5,7 @@ module.exports = {
     "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
     "./storage/framework/views/*.php",
     "./resources/views/**/*.blade.php",
-    "./resources/js/**/*.tsx",
+    "./resources/js/**/*.{tsx,ts,js,jsx}",
   ],
   prefix: "",
   theme: {
@@ -34,6 +34,14 @@ module.exports = {
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
+        },
+        "warning-muted": {
+          DEFAULT: "hsl(var(--warning-muted))",
+          foreground: "hsl(var(--warning-foreground))",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
@@ -73,5 +81,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-}
+  plugins: [require("tailwindcss-animate"), require("postcss-import")],
+};

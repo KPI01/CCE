@@ -22,21 +22,23 @@ class LoginTest extends DuskTestCase
     public function testAccesibilidad(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Login)
-                ->within(new NavBar, function (Browser $browser) {
-                    $browser->assertSeeIn('@title', 'Cuaderno de Campo Electrónico')
-                        ->assertSeeIn('@button', 'Regístrate');
-
+            $browser
+                ->visit(new Login())
+                ->within(new NavBar(), function (Browser $browser) {
+                    $browser
+                        ->assertSeeIn("@title", "Cuaderno de Campo Electrónico")
+                        ->assertSeeIn("@button", "Regístrate");
                 });
 
-            $browser->assertVisible('@form')
-                ->assertVisible('@email')
-                ->assertVisible('@pass')
-                ->assertVisible('@toggle-visibility')
-                ->assertVisible('@reset-link')
-                ->assertVisible('@submit');
+            $browser
+                ->assertVisible("@form")
+                ->assertVisible("@email")
+                ->assertVisible("@pass")
+                ->assertVisible("@toggle-visibility")
+                ->assertVisible("@reset-link")
+                ->assertVisible("@submit");
 
-            $browser->screenshot('login/accesibilidad');
+            $browser->screenshot("login/accesibilidad");
         });
     }
 
@@ -46,18 +48,19 @@ class LoginTest extends DuskTestCase
     public function testIrRegistro(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Login)
-                ->within(new NavBar, function (Browser $browser) {
-                    $browser->assertVisible('@button')
-                        ->assertSeeLink('Regístrate');
+            $browser
+                ->visit(new Login())
+                ->within(new NavBar(), function (Browser $browser) {
+                    $browser
+                        ->assertVisible("@button")
+                        ->assertSeeLink("Regístrate");
 
-                    $browser->visit(
-                        $browser->attribute('@button', 'href')
-                    )
-                        ->assertPathIs('/cce/auth/registro');
+                    $browser
+                        ->visit($browser->attribute("@button", "href"))
+                        ->assertPathIs("/cce/auth/registro");
                 });
 
-            $browser->screenshot('login/ir_registro');
+            $browser->screenshot("login/ir_registro");
         });
     }
 
@@ -67,14 +70,15 @@ class LoginTest extends DuskTestCase
     public function testEnviarCamposVacios(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Login);
+            $browser->visit(new Login());
 
-            $browser->press('@submit');
+            $browser->press("@submit");
 
-            $browser->assertSee('Debes ingresar tu correo.')
-                ->assertSee('Debes ingresar tu clave.');
+            $browser
+                ->assertSee("Debes ingresar tu correo.")
+                ->assertSee("Debes ingresar tu clave.");
 
-            $browser->screenshot('login/campos_vacíos');
+            $browser->screenshot("login/campos_vacíos");
         });
     }
 
@@ -84,16 +88,18 @@ class LoginTest extends DuskTestCase
     public function testEnviarCamposIncorrectos(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Login);
+            $browser->visit(new Login());
 
-            $browser->type('@email', 'informatica@')
-                ->type('@pass', '123456')
-                ->press('@submit');
+            $browser
+                ->type("@email", "informatica@")
+                ->type("@pass", "123456")
+                ->press("@submit");
 
-            $browser->assertSee('Debes ingresar tu correo.')
-                ->assertSee('La clave debe tener al menos 8 caracteres.');
+            $browser
+                ->assertSee("Debes ingresar tu correo.")
+                ->assertSee("La clave debe tener al menos 8 caracteres.");
 
-            $browser->screenshot('login/campos_incorrectos');
+            $browser->screenshot("login/campos_incorrectos");
         });
     }
 
@@ -103,16 +109,15 @@ class LoginTest extends DuskTestCase
     public function testVisibilidadClave(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Login);
+            $browser->visit(new Login());
 
-            $browser->assertAttribute('@pass', 'type', 'password');
+            $browser->assertAttribute("@pass", "type", "password");
 
-            $browser->type('@pass', '123456')
-                ->click('@toggle-visibility');
+            $browser->type("@pass", "123456")->click("@toggle-visibility");
 
-            $browser->assertAttribute('@pass', 'type', 'text');
+            $browser->assertAttribute("@pass", "type", "text");
 
-            $browser->screenshot('login/visibilidad_clave');
+            $browser->screenshot("login/visibilidad_clave");
         });
     }
 
@@ -122,20 +127,20 @@ class LoginTest extends DuskTestCase
     public function testUsuarioValidado(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Login);
+            $browser->visit(new Login());
 
+            $browser
+                ->type("@email", "informatica@fruveco.com")
+                ->type("@pass", "Fruveco@2024")
+                ->press("@submit");
 
-            $browser->type('@email', 'informatica@fruveco.com')
-                ->type('@pass', 'Fruveco@2024')
-                ->press('@submit');
+            $browser
+                ->assertDontSee("Debes ingresar tu correo.")
+                ->assertDontSee("Debes ingresar tu clave.");
 
-            $browser->assertDontSee('Debes ingresar tu correo.')
-                ->assertDontSee('Debes ingresar tu clave.');
+            $browser->pause(3000)->assertPathIs("/cce/app/dashboard");
 
-            $browser->pause(3000)
-                ->assertPathIs('/cce/app/dashboard');
-
-            $browser->screenshot('login/usuario_informatica');
+            $browser->screenshot("login/usuario_informatica");
         });
     }
 
@@ -145,24 +150,25 @@ class LoginTest extends DuskTestCase
     public function testUsuarioSinValidar(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Login);
+            $browser->visit(new Login());
 
             // El email se estará extrayendo de la BD que está creando el factory
-            $email = 'caban.iker@example.net';
+            $email = "caban.iker@example.net";
 
-            $browser->loginAs(User::firstWhere('email', $email));
+            $browser->loginAs(User::firstWhere("email", $email));
 
-            $browser->type('@email', $email)
-                ->type('@pass', '0dEwSl-!$*')
-                ->press('@submit');
+            $browser
+                ->type("@email", $email)
+                ->type("@pass", '0dEwSl-!$*')
+                ->press("@submit");
 
-            $browser->assertDontSee('Debes ingresar tu correo.')
-                ->assertDontSee('Debes ingresar tu clave.');
+            $browser
+                ->assertDontSee("Debes ingresar tu correo.")
+                ->assertDontSee("Debes ingresar tu clave.");
 
-            $browser->pause(3000)
-                ->assertPathIs('/cce/auth/correo/validar');
+            $browser->pause(3000)->assertPathIs("/cce/auth/correo/validar");
 
-            $browser->screenshot('login/usuario_informatica');
+            $browser->screenshot("login/usuario_informatica");
         });
     }
 
@@ -172,11 +178,9 @@ class LoginTest extends DuskTestCase
     public function testReenvio(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Login);
+            $browser->visit(new Login());
 
-            $email = 'caban.iker@example.net';
-
-
+            $email = "caban.iker@example.net";
         });
     }
 }

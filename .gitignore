@@ -1,7 +1,10 @@
+<<<<<<< HEAD
 # Lock files
 *-lock.*
 *.lock
 
+=======
+>>>>>>> v1
 # Node
 /node_modules
 /npm-debug.log

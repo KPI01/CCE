@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class AppController extends Controller
@@ -10,10 +11,34 @@ class AppController extends Controller
     //
 
     /**
-     * Muestra de dashboard para el usuario común
+     * Función constructor
      */
-    public function dashboard()
+    public function __construct()
     {
-        return Inertia::render('User/Dashboard');
+        parent::__construct();
+    }
+
+    /**
+     * Muestra de dashboard para el usuario
+     */
+    public function index()
+    {
+        return Inertia::render("Dashboard");
+    }
+
+    /**
+     * Redirige al dashboard
+     *
+     * @param Request $req
+     */
+    public function redirect_home(Request $req)
+    {
+        $source = $req->path();
+
+        if (Auth::check()) {
+            return redirect()->route("home")->with("from", $source);
+        }
+
+        return redirect()->route("login")->with("", $source);
     }
 }

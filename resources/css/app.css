@@ -4,7 +4,6 @@
 
 @layer base {
   :root {
-
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
@@ -28,6 +27,10 @@
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
+
+    --warning: 38 94% 55%;
+    --warning-muted: 38 94% 65%;
+    --warning-foreground: 222.2 47.4% 11.2%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
@@ -64,6 +67,9 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    --warning: 38 94% 45%;
+    --warning-foreground: 210 40% 98%;
   }
 }
 
@@ -75,4 +81,10 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
 }

@@ -17,7 +17,7 @@ class CorreoTest extends TestCase
     {
         Mail::fake();
 
-        Mail::to('betiga1211@bsomek.com')->send(new Ejemplo('Hola Mundo!'));
+        Mail::to("betiga1211@bsomek.com")->send(new Ejemplo("Hola Mundo!"));
 
         Mail::assertSent(Ejemplo::class);
     }
