@@ -1,10 +1,5 @@
 import { z } from "zod";
-
-export const RECURSO = "empresa";
-
-const REQUIRED_MSG = `Este campo es requerido.`;
-const SHOULD_BE_VALID_MSG = `Este campo debe ser válido.`;
-const TEXT_MSG = `Este campo debe ser solo texto.`;
+import { BE_VALID_MSG, MAX_MESSAGE, MIN_MESSAGE, REQUIRED_MSG } from "../utils";
 
 export const PERFILES = ["Productor", "Aplicador", "Operario"];
 const PERFILES_READONLY = ["Productor", "Aplicador", "Operario"] as const;
@@ -31,72 +26,65 @@ export const formSchema = z.object({
   id: z.string().optional(),
   nombre: z
     .string({
-      required_error: REQUIRED_MSG,
-      invalid_type_error: TEXT_MSG,
+      required_error: REQUIRED_MSG("El nombre"),
+      invalid_type_error: BE_VALID_MSG("El nombre"),
     })
-    .min(1, REQUIRED_MSG)
-    .min(3, "El nombre debe tener al menos 3 caracteres.")
-    .max(100, "El nombre debe tener menos de 50 caracteres.")
+    .min(1, REQUIRED_MSG("El nombre"))
+    .min(3, MIN_MESSAGE(3))
+    .max(100, MAX_MESSAGE(100))
     .regex(
       NOMBRE_REGEX,
       "El nombre solo puede contener letras, números, o (, . - · &).",
     ),
   nif: z
     .string({
-      required_error: REQUIRED_MSG,
-      invalid_type_error: TEXT_MSG,
+      required_error: REQUIRED_MSG("El NIF"),
+      invalid_type_error: BE_VALID_MSG("El NIF"),
     })
-    .min(1, REQUIRED_MSG)
+    .min(1, REQUIRED_MSG("El NIF"))
     .regex(/^[A-HJ-NP-SUVW][0-9]{7}[0-9A-J]$/gm, {
       message: "El NIF debe ser válido.",
     }),
   email: z
     .string({
-      required_error: REQUIRED_MSG,
+      required_error: REQUIRED_MSG("El correo"),
+      invalid_type_error: BE_VALID_MSG("El correo"),
     })
-    .min(1, REQUIRED_MSG)
-    .email("El correo debe ser válido.")
-    .max(254, "El correo debe ser más corto."),
+    .min(1, REQUIRED_MSG("El correo"))
+    .email(BE_VALID_MSG("El correo"))
+    .max(254, MAX_MESSAGE(254)),
   tel: z
-    .string()
+    .string({
+      invalid_type_error: BE_VALID_MSG("El teléfono"),
+    })
     .regex(TEL_REGEX, "El número de teléfono debe ser válido.")
     .optional(),
   codigo: z
     .string()
-    .regex(/^\d+$/, { message: SHOULD_BE_VALID_MSG })
+    .regex(/^\d+$/, "El código solo puede contener números.")
     .optional(),
   perfil: z
     .enum(PERFILES_READONLY, {
-      invalid_type_error: SHOULD_BE_VALID_MSG,
+      invalid_type_error: BE_VALID_MSG("El perfil"),
     })
     .default("Aplicador"),
-  direccion: z
-    .string()
-    .max(300, "La dirección debe tener como máximo 300 caracteres.")
-    .optional(),
-  observaciones: z
-    .string()
-    .max(1000, "Las observaciones deben tener como máximo 1000 caracteres.")
-    .optional(),
+  direccion: z.string().max(300, MAX_MESSAGE(300)).optional(),
+  observaciones: z.string().max(1000, MAX_MESSAGE(1000)).optional(),
   ropo: z
     .object({
       capacitacion: z
         .enum(CAPACITACIONES_READONLY, {
-          invalid_type_error: SHOULD_BE_VALID_MSG,
+          invalid_type_error: BE_VALID_MSG("La capacitación ROPO"),
         })
-        .optional()
-        .or(z.literal(null)),
+        .optional(),
       caducidad: z
         .date({
-          invalid_type_error: "Debes ingresar una fecha válida",
+          invalid_type_error: BE_VALID_MSG("La caducidad del carné ROPO"),
         })
         .optional(),
       nro: z
         .string()
-        .regex(
-          ROPO_NRO_REGEX,
-          "La identificación ROPO debe estar en el formato adecuado.",
-        )
+        .regex(ROPO_NRO_REGEX, BE_VALID_MSG("El número del carné ROPO"))
         .optional(),
     })
     .optional()

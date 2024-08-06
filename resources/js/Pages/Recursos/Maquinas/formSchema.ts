@@ -1,8 +1,6 @@
 import { z } from "zod";
 import { BE_VALID_MSG, MAX_MESSAGE, MIN_MESSAGE, REQUIRED_MSG } from "../utils";
 
-export const RECURSO = "maquina";
-
 export const formSchema = z.object({
   id: z.string().nullish(),
   nombre: z
@@ -39,5 +37,5 @@ export const formSchema = z.object({
       invalid_type_error: BE_VALID_MSG("Este campo"),
     })
     .optional(),
-  observaciones: z.string().max(300, MAX_MESSAGE(300)).optional(),
+  observaciones: z.string().max(1000, MAX_MESSAGE(1000)).optional(),
 });

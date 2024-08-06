@@ -1,11 +1,5 @@
 import { z } from "zod";
-
-export const RECURSO = "persona";
-
-const FIELD_MSG = "Este campo";
-const REQUIRED_MSG = `${FIELD_MSG} es requerido.`;
-const SHOULD_BE_VALID_MSG = `${FIELD_MSG} debe ser válido.`;
-const TEXT_MSG = `${FIELD_MSG} debe ser solo texto.`;
+import { BE_VALID_MSG, MAX_MESSAGE, MIN_MESSAGE, REQUIRED_MSG } from "../utils";
 
 export const TIPOS_ID_NAC = ["DNI", "NIE"];
 const TIPOS_ID_NAC_READONLY = ["DNI", "NIE"] as const;
@@ -35,78 +29,64 @@ export const formSchema = z
     id: z.string().optional(),
     nombres: z
       .string({
-        required_error: REQUIRED_MSG,
-        invalid_type_error: TEXT_MSG,
+        required_error: REQUIRED_MSG("El nombre"),
+        invalid_type_error: REQUIRED_MSG("El nombre"),
       })
-      .min(1, REQUIRED_MSG)
-      .min(3, "El nombre debe tener al menos 3 caracteres.")
-      .max(50, "El nombre debe tener menos de 50 caracteres.")
-      .regex(NOMBRES_REGEX, "El nombre solo puede contener letras.")
-      .transform((val) => (val === "" ? undefined : val)),
+      .min(1, REQUIRED_MSG("El nombre"))
+      .min(3, MIN_MESSAGE(3))
+      .max(50, MAX_MESSAGE(50))
+      .regex(NOMBRES_REGEX, "El nombre solo puede contener letras."),
     apellidos: z
       .string({
-        required_error: REQUIRED_MSG,
-        invalid_type_error: TEXT_MSG,
+        required_error: REQUIRED_MSG("El apellido"),
+        invalid_type_error: BE_VALID_MSG("El apellido"),
       })
-      .min(1, REQUIRED_MSG)
-      .min(3, "El apellido debe tener al menos 3 caracteres.")
-      .max(50, "El apellido debe tener menos de 50 caracteres.")
+      .min(1, REQUIRED_MSG("El apellido"))
+      .min(3, MIN_MESSAGE(3))
+      .max(50, MAX_MESSAGE(50))
       .regex(NOMBRES_REGEX, "El apellido solo puede contener letras."),
     tipo_id_nac: z.enum(TIPOS_ID_NAC_READONLY, {
-      errorMap: (issue, _ctx) => {
-        switch (issue.code) {
-          case "invalid_type":
-            return { message: `${FIELD_MSG} debe ser solo texto` };
-          case "invalid_enum_value":
-            return {
-              message: `${FIELD_MSG} debe ser uno de los siguientes: ${TIPOS_ID_NAC.join(", ")}`,
-            };
-          default:
-            return { message: REQUIRED_MSG };
-        }
-      },
+      invalid_type_error: BE_VALID_MSG("El tipo de identificación"),
     }),
     id_nac: z
       .string({
-        required_error: REQUIRED_MSG,
+        required_error: REQUIRED_MSG("La identificación"),
       })
-      .min(1, REQUIRED_MSG)
-      .max(12, "La identificación debe ser de 12 caracteres."),
+      .min(1, REQUIRED_MSG("La identificación"))
+      .max(12, MAX_MESSAGE(12)),
     email: z
       .string({
-        required_error: REQUIRED_MSG,
+        required_error: REQUIRED_MSG("El correo"),
       })
-      .min(1, REQUIRED_MSG)
-      .email("El correo debe ser válido."),
-    tel: z
-      .string()
-      .regex(TEL_REGEX, "El número de teléfono debe ser válido.")
-      .optional(),
+      .min(1, REQUIRED_MSG("El correo"))
+      .email(BE_VALID_MSG("El correo")),
+    tel: z.string().regex(TEL_REGEX, BE_VALID_MSG("El teléfono")).optional(),
     perfil: z
       .enum(PERFILES_READONLY, {
-        invalid_type_error: SHOULD_BE_VALID_MSG,
+        invalid_type_error: BE_VALID_MSG("El perfil"),
       })
       .default("Aplicador"),
-    observaciones: z
-      .string()
-      .max(1000, "Las observaciones deben tener como máximo 1000 caracteres.")
-      .optional(),
+    observaciones: z.string().max(1000, MAX_MESSAGE(1000)).optional(),
     ropo: z
       .object({
         capacitacion: z
           .enum(CAPACITACIONES_READONLY, {
-            required_error: "Debes seleccionar el tipo de capacitación ROPO.",
-            invalid_type_error: SHOULD_BE_VALID_MSG,
+            invalid_type_error: BE_VALID_MSG("La capacitación ROPO"),
           })
           .optional(),
         caducidad: z
           .date({
-            required_error: REQUIRED_MSG,
-            invalid_type_error: "Debes ingresar una fecha válida",
+            invalid_type_error: BE_VALID_MSG(
+              "La fecha de caducidad del carné ROPO",
+            ),
           })
           .optional(),
         nro: z
-          .string()
+          .string({
+            invalid_type_error: BE_VALID_MSG(
+              "El número de identificación del carné ROPO",
+            ),
+          })
           .regex(
             ROPO_NRO_REGEX,
             "La identificación ROPO debe estar en el formato adecuado.",
@@ -118,13 +98,13 @@ export const formSchema = z
         if (data?.nro && !data?.capacitacion) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: "Debes ingresar una capacitación ROPO.",
+            message: REQUIRED_MSG("La capacitación ROPO"),
             path: ["capacitacion"],
           });
         } else if (!data?.nro && data?.capacitacion) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: "Debes ingresar la identificación ROPO.",
+            message: REQUIRED_MSG("El número de identificación del carné ROPO"),
             path: ["nro"],
           });
         }
