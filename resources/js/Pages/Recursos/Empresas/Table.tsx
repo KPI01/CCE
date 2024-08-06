@@ -12,25 +12,8 @@ interface Props {
   data: Empresa[];
 }
 
-interface ropoVisibility {
-  ropo_capacitacion: boolean;
-  ropo_caducidad: boolean;
-  ropo_nro: boolean;
-}
 export default function Table({ data }: Props) {
-  const initVisibility: Record<
-    keyof Omit<
-      Empresa,
-      | "ropo"
-      | "observaciones"
-      | "direccion"
-      | "id"
-      | "created_at"
-      | "updated_at"
-    >,
-    Boolean
-  > &
-    ropoVisibility = {
+  const initVisibility = {
     nombre: true,
     nif: true,
     email: true,
@@ -41,8 +24,6 @@ export default function Table({ data }: Props) {
     ropo_caducidad: false,
     ropo_nro: false,
   };
-
-  console.debug(data);
 
   return (
     <DataLayout

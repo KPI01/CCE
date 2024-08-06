@@ -1,31 +1,38 @@
 import { useForm } from "react-hook-form";
-import {
-  CAPACITACIONES,
-  formSchema,
-  PERFILES,
-} from "./formSchema";
+import { CAPACITACIONES, formSchema, PERFILES } from "./formSchema";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Breadcrumbs, Empresa, Urls } from "@/types";
+import { Breadcrumbs, Empresa } from "@/types";
 import FormLayout from "@/Layouts/Recursos/FormLayout";
 import { Form, FormField } from "@/Components/ui/form";
 import FormTitle from "@/Components/Forms/FormTitle";
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
 import FormButton from "@/Components/Forms/FormButton";
-import { Save } from "lucide-react";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 import { router } from "@inertiajs/react";
 import { useToast } from "@/Components/ui/use-toast";
-import { CONTAINER_CLASS } from "../utils";
+import {
+  CONTAINER_CLASS,
+  EditIcon,
+  EmpresaIcon,
+  nullToUndefined,
+  SendIcon,
+  TablaIcon,
+  toSend,
+} from "../utils";
 
 const schema = formSchema;
 
 export default function Edit({ data }: { data: Empresa }) {
+  data = nullToUndefined(data);
   const { toast } = useToast();
-  schema.safeParse(data);
+
   if (data.ropo?.caducidad)
     data.ropo.caducidad = new Date(data.ropo?.caducidad);
+
+  const parsed = schema.safeParse(data);
+  console.log(parsed);
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -34,21 +41,14 @@ export default function Edit({ data }: { data: Empresa }) {
 
   function onSubmit(values: z.infer<typeof schema>) {
     const dirty = form.formState.dirtyFields;
-    const valid = schema.parse(values);
+    const parsed = schema.parse(values);
+    console.log("Enviando formulario...");
+    console.log(parsed);
 
-    const toSend = Object.keys(dirty).reduce(
-      (acc, key) => {
-        const aux: { [key: string]: any } = valid;
-        if (key in aux) {
-          acc[key] = aux[key];
-        }
-        return acc;
-      },
-      {} as { [key: string]: any },
-    );
+    const justDirty = toSend(dirty, parsed);
 
-    if (Object.keys(toSend).length > 0) {
-      router.put(data.urls.update, toSend);
+    if (Object.keys(justDirty).length > 0) {
+      router.put(data.urls.update, justDirty);
     } else {
       toast({
         title: "No se han detectado cambios!",
@@ -60,14 +60,17 @@ export default function Edit({ data }: { data: Empresa }) {
 
   const breadcrumb: Breadcrumbs[] = [
     {
+      icon: TablaIcon,
       text: "Tabla",
       url: data.urls.index,
     },
     {
+      icon: EmpresaIcon,
       text: "Empresa",
       url: data.urls.show,
     },
     {
+      icon: EditIcon,
       text: "Editando...",
       url: data.urls.edit,
     },
@@ -230,7 +233,7 @@ export default function Edit({ data }: { data: Empresa }) {
                   id={field.name}
                   name={field.name}
                   label="Identificación"
-                  value={field.value || ""}
+                  value={field.value}
                   onChange={field.onChange}
                   autoComplete="off"
                 />
@@ -244,11 +247,11 @@ export default function Edit({ data }: { data: Empresa }) {
                   id={field.name}
                   name={field.name}
                   label="Caducidad"
-                  value={field.value || null}
+                  value={field.value}
                   onChange={field.onChange}
                   resetBtn
                   resetFn={() =>
-                    form.setValue(field.name, null, {
+                    form.setValue(field.name, undefined, {
                       shouldValidate: true,
                       shouldDirty: true,
                       shouldTouch: true,
@@ -260,7 +263,7 @@ export default function Edit({ data }: { data: Empresa }) {
           </div>
           <div className="col-span-full flex w-full">
             <FormButton type="submit" variant={"default"} className="ml-auto">
-              <Save className="mr-3 size-4" />
+              {SendIcon}
               Guardar
             </FormButton>
           </div>

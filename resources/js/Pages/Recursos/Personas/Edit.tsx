@@ -15,14 +15,23 @@ import FormLayout from "@/Layouts/Recursos/FormLayout";
 import FormTitle from "@/Components/Forms/FormTitle";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 import FormButton from "@/Components/Forms/FormButton";
-import { Save, Trash } from "lucide-react";
 import { router } from "@inertiajs/react";
 import { useToast } from "@/Components/ui/use-toast";
-import { CONTAINER_CLASS } from "../utils";
+import {
+  CONTAINER_CLASS,
+  DeleteIcon,
+  EditIcon,
+  PersonaIcon,
+  SaveUpdateIcon,
+  TablaIcon,
+  nullToUndefined,
+  toSend,
+} from "../utils";
 
 const schema = formSchema;
 
 export default function Edit({ data }: { data: Persona }) {
+  data = nullToUndefined(data);
   const { toast } = useToast();
   schema.safeParse(data);
   if (data.ropo?.caducidad) data.ropo.caducidad = new Date(data.ropo.caducidad);
@@ -33,21 +42,14 @@ export default function Edit({ data }: { data: Persona }) {
 
   function onSubmit(values: z.infer<typeof schema>) {
     const dirty = form.formState.dirtyFields;
-    const validation = schema.parse(values);
+    const parsed = schema.parse(values);
+    console.log("Enviando formulario...");
+    console.log(parsed);
 
-    const toSend = Object.keys(dirty).reduce(
-      (acc, key) => {
-        const aux: { [key: string]: any } = validation;
-        if (key in aux) {
-          acc[key] = aux[key];
-        }
-        return acc;
-      },
-      {} as { [key: string]: any },
-    );
+    const justDirty = toSend(dirty, parsed);
 
-    if (Object.keys(toSend).length > 0) {
-      router.put(data.urls.update, toSend);
+    if (Object.keys(justDirty).length > 0) {
+      router.put(data.urls.update, justDirty);
     } else {
       toast({
         title: "No se han detectado cambios!",
@@ -59,14 +61,17 @@ export default function Edit({ data }: { data: Persona }) {
 
   const breadcrumb: Breadcrumbs[] = [
     {
+      icon: TablaIcon,
       text: "Tabla",
       url: data.urls.index,
     },
     {
+      icon: PersonaIcon,
       text: "Persona",
       url: data.urls.show,
     },
     {
+      icon: EditIcon,
       text: "Editando...",
       url: data.urls.edit,
     },
@@ -74,8 +79,8 @@ export default function Edit({ data }: { data: Persona }) {
 
   return (
     <FormLayout
-      pageTitle="Persona"
-      mainTitle="Editando..."
+      pageTitle="Editando: Persona"
+      mainTitle="Persona"
       created_at={data.created_at}
       updated_at={data.updated_at}
       id={data.id}
@@ -99,7 +104,7 @@ export default function Edit({ data }: { data: Persona }) {
                   id={field.name}
                   label="Nombres"
                   name={field.name}
-                  value={field.value || undefined}
+                  value={field.value}
                   autoComplete={"given-name"}
                   onChange={field.onChange}
                 />
@@ -114,7 +119,7 @@ export default function Edit({ data }: { data: Persona }) {
                   id={field.name}
                   label="Apellidos"
                   name={field.name}
-                  value={field.value || undefined}
+                  value={field.value}
                   autoComplete={"family-name"}
                   onChange={field.onChange}
                 />
@@ -271,8 +276,9 @@ export default function Edit({ data }: { data: Persona }) {
                   id={field.name}
                   label="Fecha de caducidad"
                   name={field.name}
-                  value={field.value || null}
+                  value={field.value}
                   onChange={field.onChange}
+                  resetBtn
                 />
               )}
             />
@@ -284,12 +290,12 @@ export default function Edit({ data }: { data: Persona }) {
               variant={"destructive"}
               onClick={() => router.delete(data.urls.destroy)}
             >
-              <Trash className="mr-2 size-4" />
+              {DeleteIcon}
               Eliminar
             </FormButton>
             <FormButton type="submit">
-              <Save className="mr-2 size-4" />
-              Guardar
+              {SaveUpdateIcon}
+              Actualizar
             </FormButton>
           </div>
         </form>

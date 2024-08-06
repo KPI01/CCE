@@ -14,7 +14,7 @@ import { Save } from "lucide-react";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
 import { router } from "@inertiajs/react";
 import { Breadcrumbs, Urls } from "@/types";
-import { CONTAINER_CLASS } from "../utils";
+import { CONTAINER_CLASS, CreateIcon, TablaIcon } from "../utils";
 
 const schema = formSchema;
 
@@ -31,10 +31,12 @@ export default function Create({ urls }: { urls: Urls }) {
 
   const breadcrumb: Breadcrumbs[] = [
     {
+      icon: TablaIcon,
       text: "Tabla",
       url: urls.index,
     },
     {
+      icon: CreateIcon,
       text: "Creando...",
       url: urls.create,
     },

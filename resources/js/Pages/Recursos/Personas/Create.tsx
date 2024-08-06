@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/Components/ui/button";
 import { Form, FormField, FormLabel } from "@/Components/ui/form";
-import { Save } from "lucide-react";
 import {
   CAPACITACIONES,
   formSchema,
@@ -19,7 +18,7 @@ import { router } from "@inertiajs/react";
 import { Switch } from "@/Components/ui/switch";
 import { Label } from "@radix-ui/react-label";
 import { Breadcrumbs, Urls } from "@/types";
-import { CONTAINER_CLASS } from "../utils";
+import { CONTAINER_CLASS, CreateIcon, SendIcon, TablaIcon } from "../utils";
 
 const schema = formSchema;
 
@@ -44,10 +43,12 @@ export default function Create({ urls }: { urls: Urls }) {
 
   const breadcrumb: Breadcrumbs[] = [
     {
+      icon: TablaIcon,
       text: "Tabla",
       url: urls.index,
     },
     {
+      icon: CreateIcon,
       text: "Creando...",
       url: urls.create,
     },
@@ -259,7 +260,7 @@ export default function Create({ urls }: { urls: Urls }) {
 
           <div className="col-span-2 flex items-center justify-between">
             <Button type="submit">
-              <Save className="mr-2 h-4" />
+              {SendIcon}
               Crear
             </Button>
           </div>

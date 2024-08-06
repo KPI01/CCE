@@ -82,13 +82,12 @@ export const formSchema = z.object({
     .object({
       capacitacion: z
         .enum(CAPACITACIONES_READONLY, {
-          required_error: "Debes seleccionar una capacitación ROPO.",
           invalid_type_error: SHOULD_BE_VALID_MSG,
         })
-        .optional(),
+        .optional()
+        .or(z.literal(null)),
       caducidad: z
         .date({
-          required_error: REQUIRED_MSG,
           invalid_type_error: "Debes ingresar una fecha válida",
         })
         .optional(),

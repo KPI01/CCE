@@ -9,37 +9,31 @@ import { Form, FormField } from "@/Components/ui/form";
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
-import { CONTAINER_CLASS } from "../utils";
+import {
+  CONTAINER_CLASS,
+  EmpresaIcon,
+  TablaIcon,
+  nullToUndefined,
+} from "../utils";
 
 const schema = formSchema;
 
 export default function Show({ data }: { data: Empresa }) {
+  data = nullToUndefined(data);
   schema.safeParse(data);
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      nombre: data.nombre,
-      nif: data.nif,
-      email: data.email,
-      tel: data.tel || undefined,
-      codigo: data.codigo || undefined,
-      perfil: data.perfil || undefined,
-      direccion: data.direccion || undefined,
-      observaciones: data.observaciones || undefined,
-      ropo: {
-        nro: data.ropo?.nro || null,
-        caducidad: data.ropo?.caducidad ? new Date(data.ropo.caducidad) : null,
-        capacitacion: data.ropo?.capacitacion || null,
-      },
-    },
+    defaultValues: { ...data },
   });
 
   const breadcrumbs: Breadcrumbs[] = [
     {
+      icon: TablaIcon,
       text: "Tabla",
       url: data.urls.index,
     },
     {
+      icon: EmpresaIcon,
       text: "Empresa",
       url: data.urls.show,
     },
@@ -204,7 +198,7 @@ export default function Show({ data }: { data: Empresa }) {
                   id={field.name}
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value || null}
+                  value={field.value}
                   disabled
                 />
               )}

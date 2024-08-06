@@ -6,7 +6,6 @@ import {
   TIPOS_ID_NAC,
 } from "./formSchema";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form, FormField, FormLabel } from "@/Components/ui/form";
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
@@ -14,23 +13,24 @@ import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectCons
 import FormLayout from "@/Layouts/Recursos/FormLayout";
 import FormTitle from "@/Components/Forms/FormTitle";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
-import { CONTAINER_CLASS } from "../utils";
+import { CONTAINER_CLASS, PersonaIcon, TablaIcon } from "../utils";
 
 const schema = formSchema;
 
 export default function Show({ data }: { data: Persona }) {
   schema.safeParse(data);
   const form = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
     defaultValues: { ...data },
   });
 
   const breadcrumb: Breadcrumbs[] = [
     {
+      icon: TablaIcon,
       text: "Tabla",
       url: data.urls.index,
     },
     {
+      icon: PersonaIcon,
       text: "Persona",
       url: data.urls.show,
     },
@@ -196,7 +196,7 @@ export default function Show({ data }: { data: Persona }) {
                 <FormDatePickerConstructor
                   id={field.name}
                   name={field.name}
-                  value={field.value || null}
+                  value={field.value}
                   onChange={field.onChange}
                   label="Caducidad"
                   disabled
