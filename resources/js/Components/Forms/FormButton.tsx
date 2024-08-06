@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { Button, ButtonProps, buttonVariants } from "../ui/button";
+import { Button, ButtonProps } from "../ui/button";
 import { cn } from "@/lib/utils";
 
 interface BaseProps extends PropsWithChildren {

@@ -6,22 +6,20 @@ import {
   MenubarSeparator,
 } from "./ui/menubar";
 import { MenubarTrigger } from "@radix-ui/react-menubar";
-import {
-  AtSign,
-  Box,
-  Building,
-  Home,
-  LogOut,
-  Table2,
-  Tractor,
-  User2,
-  UserRound,
-} from "lucide-react";
+import { AtSign, Box, Home, LogOut, Table2, User2 } from "lucide-react";
 import { Link, router, usePage } from "@inertiajs/react";
 import { Button } from "./ui/button";
 import { ReactElement } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { ICON_CLASS } from "@/Pages/Recursos/utils";
+import {
+  EmailIcon,
+  EmpresaIcon,
+  HomeIcon,
+  MaquinaIcon,
+  PersonaIcon,
+  RecursosIcon,
+  TablasAuxiliaresIcon,
+} from "@/Pages/Recursos/utils";
 
 const MENUTRIGGER_CLASS =
   "w-max font-medium border-px flex items-center rounded border-accent px-2 py-1";
@@ -32,32 +30,27 @@ interface MenuItemsProps {
   Icon: ReactElement;
   Texto: string;
   Recurso: string;
-  Ref?: string;
 }
 const recursos: MenuItemsProps[] = [
   {
-    Icon: <UserRound className={ICON_CLASS} />,
+    Icon: PersonaIcon,
     Texto: "Personas",
     Recurso: "persona",
-    Ref: route("persona.index"),
   },
   {
-    Icon: <Building className={ICON_CLASS} />,
+    Icon: EmpresaIcon,
     Texto: "Empresas",
     Recurso: "empresa",
-    Ref: route("empresa.index"),
   },
   {
-    Icon: <Tractor className={ICON_CLASS} />,
+    Icon: MaquinaIcon,
     Texto: "Máquinas",
     Recurso: "maquina",
-    Ref: route("maquina.index"),
   },
 ];
 
 interface handleRecursoLinkParams {
   recurso: string;
-  accion?: "index";
 }
 
 export default function NavBar() {
@@ -66,25 +59,18 @@ export default function NavBar() {
   const email = auth?.user?.email;
   const routeCurrent = route().current();
   const currentIsHome = routeCurrent === "home";
-  console.debug(`${routeCurrent} === "home" =>`, currentIsHome);
 
   function goHome() {
-    console.warn("Dirigiendo al dashboard...");
     router.get(route("home"));
   }
 
   function handleLogout() {
-    console.warn("Cerrando sesión...");
     router.post(route("logout"));
   }
 
-  function handleRecursoLink({
-    recurso,
-    accion = "index",
-  }: handleRecursoLinkParams) {
-    const url = route(`${recurso}.${accion}`);
-    console.debug("Redirigiendo a...", url);
-
+  function handleRecursoLink({ recurso }: handleRecursoLinkParams) {
+    const url = route(`${recurso}.index`);
+    console.info("Redirigiendo a...", url);
     router.get(url);
   }
 
@@ -102,13 +88,13 @@ export default function NavBar() {
             variant={"ghost"}
             onClick={() => goHome()}
           >
-            <Home className={ICON_CLASS} />
+            {HomeIcon}
             Dashboard
           </Button>
         )}
         <MenubarMenu>
           <MenubarTrigger id="action-recursos" className={MENUTRIGGER_CLASS}>
-            <Box className={ICON_CLASS} />
+            {RecursosIcon}
             Recursos
           </MenubarTrigger>
           <MenubarContent id="content-recursos">
@@ -139,7 +125,7 @@ export default function NavBar() {
           <MenubarContent id="content-config">
             <MenubarItem className={MENUBARITEM_CLASS} asChild>
               <Button className={BUTTON_CLASS} variant={"ghost"}>
-                <AtSign className="mr-2 size-4" />
+                {EmailIcon}
                 {email}
               </Button>
             </MenubarItem>
@@ -147,7 +133,7 @@ export default function NavBar() {
             <MenubarItem className={MENUBARITEM_CLASS} asChild>
               <Button className={BUTTON_CLASS} variant={"ghost"} asChild>
                 <Link href="#">
-                  <Table2 className={ICON_CLASS} />
+                  {TablasAuxiliaresIcon}
                   Tablas auxiliares
                 </Link>
               </Button>

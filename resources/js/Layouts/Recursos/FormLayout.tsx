@@ -12,7 +12,6 @@ import {
   BreadcrumbSeparator,
 } from "@/Components/ui/breadcrumb";
 import { v4 as uuidv4 } from "uuid";
-import { Slash } from "lucide-react";
 
 interface Props {
   created_at?: string;
@@ -68,19 +67,19 @@ export default function FormLayout({
               const itemIsCurrent = item.url === currentUrl;
 
               const itemComponent = itemIsCurrent ? (
-                <BreadcrumbPage>{item.text}</BreadcrumbPage>
+                <BreadcrumbPage className="flex items-center">
+                  {item.icon && item.icon}
+                  {item.text}
+                </BreadcrumbPage>
               ) : (
                 <BreadcrumbLink asChild>
-                  <Link href={item.url}>{item.text}</Link>
+                  <Link href={item.url} className="flex items-center">
+                    {item.icon && item.icon}
+                    {item.text}
+                  </Link>
                 </BreadcrumbLink>
               );
-              const separator = itemIsCurrent ? (
-                " "
-              ) : (
-                <BreadcrumbSeparator>
-                  <Slash />
-                </BreadcrumbSeparator>
-              );
+              const separator = itemIsCurrent ? " " : <BreadcrumbSeparator />;
 
               return (
                 <span className="flex items-center gap-3" key={uuidv4()}>
