@@ -24,8 +24,8 @@ import {
 } from "@/Components/ui/table";
 import { Separator } from "@/Components/ui/separator";
 import { Pagination } from "./Pagination";
-import ColumnFilters from "@/Components/Data/ColumnFilters";
-import { ColumnToggle } from "@/Components/Data/ColumnToggle";
+import ColumnFilters from "@/Components/Table/ColumnFilters";
+import { ColumnToggle } from "@/Components/Table/ColumnToggle";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
