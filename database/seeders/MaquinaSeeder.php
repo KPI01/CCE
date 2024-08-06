@@ -6,6 +6,7 @@ use App\Models\Maquina;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Schema;
 
 class MaquinaSeeder extends Seeder
 {
@@ -15,6 +16,8 @@ class MaquinaSeeder extends Seeder
     public function run(): void
     {
         //
+        Schema::disableForeignKeyConstraints();
+        DB::table(Maquina::TIPOS_TABLE)->truncate();
         DB::table(Maquina::TIPOS_TABLE)->insert([
             ["tipo" => "Pulverizador"],
             ["tipo" => "Atomizador"],

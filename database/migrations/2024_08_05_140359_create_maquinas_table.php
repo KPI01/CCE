@@ -19,12 +19,12 @@ return new class extends Migration {
             $table->uuid("id")->primary();
             $table->timestamps();
             $table->string("nombre", 100);
+            $table->foreignId("tipo")->references("id")->on("tipos_maquina");
             $table->string("matricula", 25)->unique();
             $table->string("modelo", 50)->nullable();
             $table->string("marca", 50)->nullable();
             $table->string("roma")->unique()->nullable();
             $table->string("nro_serie", 50)->unique()->nullable();
-            $table->foreignId("tipo_id")->references("id")->on("tipos_maquina");
             $table->string("fabricante", 100)->nullable();
             $table->date("cad_iteaf")->nullable();
             $table->text("observaciones")->nullable();

@@ -4,10 +4,9 @@ import { columns } from "./Column";
 import { RECURSO } from "./formSchema";
 
 export default function Table({ data }: { data: Maquina[] }) {
-  console.debug(data);
   const initVisibility = {
     nombre: true,
-    tipo_id: true,
+    tipo: true,
     matricula: true,
     fabricante: true,
     nro_serie: false,

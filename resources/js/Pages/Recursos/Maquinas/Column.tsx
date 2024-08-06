@@ -21,7 +21,7 @@ export const columns: ColumnDef<Maquina>[] = [
     },
   },
   {
-    accessorKey: "tipo_id",
+    accessorKey: "tipo",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Tipo" />
     ),
@@ -31,7 +31,7 @@ export const columns: ColumnDef<Maquina>[] = [
     size: 200,
     meta: {
       header: "Tipo",
-      key: "tipo_id",
+      key: "tipo",
     },
   },
   {

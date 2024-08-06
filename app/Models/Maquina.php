@@ -10,7 +10,7 @@ class Maquina extends RecursoBase
     const TIPOS_TABLE = "tipos_maquina";
     protected $appends = ["urls"];
 
-    public function getTipoIdAttribute($value)
+    public function getTipoAttribute($value)
     {
         $data = DB::table(self::TIPOS_TABLE)
             ->where("id", $value)
