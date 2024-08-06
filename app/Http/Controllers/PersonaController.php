@@ -58,7 +58,7 @@ class PersonaController extends Controller
                 value: $uniques["email"]
             )
         ) {
-            return to_route("personas.index")->with([
+            return to_route("persona.index")->with([
                 "from" => "persona.store",
                 "message" => [
                     "toast" => $this->toasts["error"]["email:duplicado"],
@@ -71,7 +71,7 @@ class PersonaController extends Controller
                 value: $uniques["id_nac"]
             )
         ) {
-            return to_route("personas.index")->with([
+            return to_route("persona.index")->with([
                 "from" => "persona.store",
                 "message" => [
                     "toast" => $this->toasts["error"]["id_nac:duplicado"],
@@ -88,7 +88,7 @@ class PersonaController extends Controller
                         value: $r["nro"]
                     )
                 ) {
-                    return to_route("personas.index")->with([
+                    return to_route("persona.index")->with([
                         "from" => "persona.store",
                         "message" => [
                             "toast" =>
