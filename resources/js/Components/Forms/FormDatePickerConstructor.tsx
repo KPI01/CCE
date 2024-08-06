@@ -24,7 +24,7 @@ interface Props extends Omit<ConstructorProps, "value"> {
   itemStyle?: React.CSSProperties;
   triggerClass?: string;
   triggerStyle?: React.CSSProperties;
-  value: Date | null;
+  value: Date | undefined;
   resetBtn?: boolean;
   resetFn?: (...events: any[]) => void;
 }

@@ -26,7 +26,7 @@ export default function Create({ urls }: { urls: Urls }) {
   });
 
   function onSubmit(values: z.infer<typeof schema>) {
-    if (urls.store) router.post(urls.store, values);
+    router.post(urls.store, values);
   }
 
   const breadcrumb: Breadcrumbs[] = [
@@ -223,7 +223,7 @@ export default function Create({ urls }: { urls: Urls }) {
                       id={field.name}
                       name={field.name}
                       onChange={field.onChange}
-                      value={field.value || null}
+                      value={field.value}
                     />
                   )}
                 />

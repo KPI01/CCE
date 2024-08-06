@@ -21,12 +21,12 @@ import { Link, router, usePage } from "@inertiajs/react";
 import { Button } from "./ui/button";
 import { ReactElement } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { ICON_CLASS } from "@/Pages/Recursos/utils";
 
 const MENUTRIGGER_CLASS =
   "w-max font-medium border-px flex items-center rounded border-accent px-2 py-1";
 const MENUBARITEM_CLASS = "cursor-pointer w-full justify-start";
 const BUTTON_CLASS = "w-full justify-Button";
-const ICON_CLASS = "size-4 mr-2";
 
 interface MenuItemsProps {
   Icon: ReactElement;

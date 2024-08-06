@@ -76,7 +76,6 @@ export default function Create({ urls }: { urls: Urls }) {
                   id={field.name}
                   label="Nombre(s) *"
                   name={field.name}
-                  placeholder="..."
                   onChange={field.onChange}
                   value={field.value || undefined}
                 />
@@ -248,7 +247,7 @@ export default function Create({ urls }: { urls: Urls }) {
                       name={field.name}
                       label="Caducidad"
                       onChange={field.onChange}
-                      value={field.value || null}
+                      value={field.value}
                     />
                   )}
                 />

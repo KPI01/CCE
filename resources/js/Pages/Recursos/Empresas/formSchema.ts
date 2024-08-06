@@ -60,13 +60,11 @@ export const formSchema = z.object({
   tel: z
     .string()
     .regex(TEL_REGEX, "El número de teléfono debe ser válido.")
-    .nullish()
-    .or(z.literal("")),
+    .optional(),
   codigo: z
     .string()
     .regex(/^\d+$/, { message: SHOULD_BE_VALID_MSG })
-    .nullish()
-    .or(z.literal("")),
+    .optional(),
   perfil: z
     .enum(PERFILES_READONLY, {
       invalid_type_error: SHOULD_BE_VALID_MSG,
@@ -75,11 +73,11 @@ export const formSchema = z.object({
   direccion: z
     .string()
     .max(300, "La dirección debe tener como máximo 300 caracteres.")
-    .nullish(),
+    .optional(),
   observaciones: z
     .string()
     .max(1000, "Las observaciones deben tener como máximo 1000 caracteres.")
-    .nullish(),
+    .optional(),
   ropo: z
     .object({
       capacitacion: z
@@ -87,20 +85,20 @@ export const formSchema = z.object({
           required_error: "Debes seleccionar una capacitación ROPO.",
           invalid_type_error: SHOULD_BE_VALID_MSG,
         })
-        .nullish(),
+        .optional(),
       caducidad: z
         .date({
           required_error: REQUIRED_MSG,
           invalid_type_error: "Debes ingresar una fecha válida",
         })
-        .nullish(),
+        .optional(),
       nro: z
         .string()
         .regex(
           ROPO_NRO_REGEX,
           "La identificación ROPO debe estar en el formato adecuado.",
         )
-        .nullish(),
+        .optional(),
     })
     .optional()
     .superRefine((data, ctx) => {
