@@ -1,10 +1,5 @@
 import { Breadcrumbs, Empresa } from "@/types";
-import {
-  CONTAINER_CLASS,
-  formSchema,
-  PERFILES,
-  CAPACITACIONES,
-} from "./formSchema";
+import { formSchema, PERFILES, CAPACITACIONES } from "./formSchema";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,6 +9,7 @@ import { Form, FormField } from "@/Components/ui/form";
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
+import { CONTAINER_CLASS } from "../utils";
 
 const schema = formSchema;
 

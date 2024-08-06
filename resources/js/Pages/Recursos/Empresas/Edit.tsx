@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import {
   CAPACITACIONES,
-  CONTAINER_CLASS,
   formSchema,
   PERFILES,
 } from "./formSchema";
@@ -18,6 +17,7 @@ import { Save } from "lucide-react";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 import { router } from "@inertiajs/react";
 import { useToast } from "@/Components/ui/use-toast";
+import { CONTAINER_CLASS } from "../utils";
 
 const schema = formSchema;
 

@@ -1,10 +1,5 @@
 import FormLayout from "@/Layouts/Recursos/FormLayout";
-import {
-  CAPACITACIONES,
-  CONTAINER_CLASS,
-  formSchema,
-  PERFILES,
-} from "./formSchema";
+import { CAPACITACIONES, formSchema, PERFILES } from "./formSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -19,6 +14,7 @@ import { Save } from "lucide-react";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
 import { router } from "@inertiajs/react";
 import { Breadcrumbs, Urls } from "@/types";
+import { CONTAINER_CLASS } from "../utils";
 
 const schema = formSchema;
 

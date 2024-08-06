@@ -1,3 +1,5 @@
+export const CONTAINER_CLASS = "container grid grid-cols-2 gap-x-12 gap-y-4";
+
 export const REQUIRED_MSG = (start: string) => `${start} es requerido.`;
 export const MIN_MESSAGE = (size: number) =>
   `Este campo debe tener al menos ${size} caracteres.`;

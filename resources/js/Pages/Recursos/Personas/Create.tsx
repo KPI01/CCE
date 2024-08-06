@@ -19,8 +19,7 @@ import { router } from "@inertiajs/react";
 import { Switch } from "@/Components/ui/switch";
 import { Label } from "@radix-ui/react-label";
 import { Breadcrumbs, Urls } from "@/types";
-
-const CONTAINER_CLASS = "container grid grid-cols-2 gap-x-32 gap-y-8";
+import { CONTAINER_CLASS } from "../utils";
 
 const schema = formSchema;
 

@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Breadcrumbs, Persona } from "@/types";
 import {
-  CONTAINER_CLASS,
   formSchema,
   PERFILES,
   TIPOS_ID_NAC,
@@ -19,6 +18,7 @@ import FormButton from "@/Components/Forms/FormButton";
 import { Save, Trash } from "lucide-react";
 import { router } from "@inertiajs/react";
 import { useToast } from "@/Components/ui/use-toast";
+import { CONTAINER_CLASS } from "../utils";
 
 const schema = formSchema;
 

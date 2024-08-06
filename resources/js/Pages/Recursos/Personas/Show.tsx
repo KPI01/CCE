@@ -4,7 +4,6 @@ import {
   PERFILES,
   CAPACITACIONES,
   TIPOS_ID_NAC,
-  CONTAINER_CLASS,
 } from "./formSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,6 +14,7 @@ import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectCons
 import FormLayout from "@/Layouts/Recursos/FormLayout";
 import FormTitle from "@/Components/Forms/FormTitle";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
+import { CONTAINER_CLASS } from "../utils";
 
 const schema = formSchema;
 

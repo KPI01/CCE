@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 export const RECURSO = "empresa";
-export const CONTAINER_CLASS = "container grid grid-cols-2 gap-x-12 gap-y-4";
 
 const REQUIRED_MSG = `Este campo es requerido.`;
 const SHOULD_BE_VALID_MSG = `Este campo debe ser válido.`;
