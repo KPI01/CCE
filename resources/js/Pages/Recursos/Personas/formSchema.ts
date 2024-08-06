@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { BE_VALID_MSG, MAX_MESSAGE, MIN_MESSAGE, REQUIRED_MSG } from "../utils";
 
+export const RECURSO = "persona";
+
 export const TIPOS_ID_NAC = ["DNI", "NIE"];
 const TIPOS_ID_NAC_READONLY = ["DNI", "NIE"] as const;
 export const PERFILES = ["Productor", "Aplicador", "Operario"];

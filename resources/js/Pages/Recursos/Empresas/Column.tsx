@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { ActionUrls, Empresa } from "@/types";
 import Actions from "./Actions";
-import { DataTableColumnHeader } from "@/Components/Data/ColumnHeader";
+import { DataTableColumnHeader } from "@/Components/Table/ColumnHeader";
 
 export const columns: ColumnDef<Empresa & { urls: ActionUrls }>[] = [
   {
@@ -159,7 +159,7 @@ export const columns: ColumnDef<Empresa & { urls: ActionUrls }>[] = [
     cell: ({ row }) => {
       const empresa = row.original;
 
-      return <Actions item={empresa} />;
+      return <Actions data={empresa} />;
     },
     enableHiding: false,
     enablePinning: true,

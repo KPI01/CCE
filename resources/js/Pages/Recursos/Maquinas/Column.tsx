@@ -1,6 +1,6 @@
 "use client";
 
-import { DataTableColumnHeader } from "@/Components/Data/ColumnHeader";
+import { DataTableColumnHeader } from "@/Components/Table/ColumnHeader";
 import { Maquina } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import Actions from "./Actions";
@@ -126,7 +126,6 @@ export const columns: ColumnDef<Maquina>[] = [
     enableColumnFilter: true,
     enableSorting: true,
     enableHiding: true,
-    size: 100,
     meta: {
       header: "Caducidad ITEAF",
       key: "cad_iteaf",
@@ -141,7 +140,7 @@ export const columns: ColumnDef<Maquina>[] = [
     id: "actions",
     cell: ({ row }) => {
       const maquina = row.original;
-      return <Actions item={maquina} />;
+      return <Actions data={maquina} />;
     },
   },
 ];
