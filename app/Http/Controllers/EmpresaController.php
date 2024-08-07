@@ -30,7 +30,7 @@ class EmpresaController extends Controller
 
         return inertia("Recursos/Empresas/Table", [
             "data" => $this->data,
-            "url" => route("persona.index"),
+            "url" => route("empresa.index"),
         ]);
     }
 

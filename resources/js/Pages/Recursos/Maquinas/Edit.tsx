@@ -11,6 +11,7 @@ import {
   TablaIcon,
   nullToUndefined,
   toSend,
+  urlWithoutId,
 } from "../utils";
 import FormLayout from "@/Layouts/Recursos/FormLayout";
 import { z } from "zod";
@@ -34,19 +35,19 @@ export default function Edit({ data, aux }: Props) {
   const { toast } = useToast();
   const breadcrumb: Breadcrumbs[] = [
     {
-      icon: TablaIcon,
+      icon: <TablaIcon />,
       text: "Tabla",
-      url: data.urls.index,
+      url: urlWithoutId(data.url),
     },
     {
-      icon: MaquinaIcon,
+      icon: <MaquinaIcon />,
       text: "Máquina",
-      url: data.urls.show,
+      url: data.url,
     },
     {
-      icon: EditIcon,
+      icon: <EditIcon />,
       text: "Editando...",
-      url: data.urls.edit,
+      url: `${data.url}/edit`,
     },
   ];
 
@@ -68,7 +69,7 @@ export default function Edit({ data, aux }: Props) {
 
     if (Object.keys(justDirty).length > 0) {
       console.debug("Enviando solo los campos modificados...");
-      router.patch(data.urls.update, justDirty);
+      router.patch(data.url, justDirty);
     } else {
       toast({
         title: "No se han detectado cambios!",
@@ -85,7 +86,7 @@ export default function Edit({ data, aux }: Props) {
       created_at={data.created_at}
       updated_at={data.updated_at}
       id={data.id}
-      urls={data.urls}
+      url={data.url}
       showActions={false}
       breadcrumbs={breadcrumb}
     >
@@ -237,11 +238,11 @@ export default function Edit({ data, aux }: Props) {
           />
           <div className="col-span-full flex items-center gap-16">
             <FormButton variant={"destructive"} className="ms-auto">
-              {DeleteIcon}
+              <DeleteIcon />
               Eliminar
             </FormButton>
             <FormButton type="submit">
-              {SaveUpdateIcon}
+              <SaveUpdateIcon />
               Actualizar
             </FormButton>
           </div>
