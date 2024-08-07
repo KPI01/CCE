@@ -1,6 +1,10 @@
 import { PropsWithChildren, ReactElement } from "react";
 import { UUID } from "./modelos";
 
+interface IconProps {
+  className?: string;
+}
+
 type Breadcrumbs = {
   icon?: ReactElement;
   text: string;
@@ -29,7 +33,7 @@ interface TableProps {
   title: string;
   data: any;
   columns: any;
-  recurso: string;
+  url: string;
   initialVisibility: any;
 }
 

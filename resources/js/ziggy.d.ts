@@ -24,12 +24,6 @@ declare module 'ziggy-js' {
         }
     ],
     "sanctum.csrf-cookie": [],
-    "telescope": [
-        {
-            "name": "view",
-            "required": false
-        }
-    ],
     "ignition.healthCheck": [],
     "ignition.executeSolution": [],
     "ignition.updateConfig": [],
@@ -138,6 +132,27 @@ declare module 'ziggy-js' {
     "maquina.destroy": [
         {
             "name": "maquina",
+            "required": true
+        }
+    ],
+    "maquina.tipos.index": [],
+    "tipos_maquina.index": [],
+    "tipos_maquina.store": [],
+    "tipos_maquina.show": [
+        {
+            "name": "tipos_maquina",
+            "required": true
+        }
+    ],
+    "tipos_maquina.update": [
+        {
+            "name": "tipos_maquina",
+            "required": true
+        }
+    ],
+    "tipos_maquina.destroy": [
+        {
+            "name": "tipos_maquina",
             "required": true
         }
     ]
