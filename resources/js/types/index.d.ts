@@ -51,3 +51,4 @@ export type PageProps<
 export * from "./modelos";
 export * from "./components";
 export * from "./data-table";
+export * from "./auxiliares";

@@ -4,15 +4,14 @@ import DataLayout from "@/Layouts/DataLayout";
 
 import { columns } from "./Column";
 
-import { RECURSO } from "./formSchema";
-
 import { Empresa } from "@/types";
 
 interface Props {
   data: Empresa[];
+  url: string;
 }
 
-export default function Table({ data }: Props) {
+export default function Table({ data, url }: Props) {
   const initVisibility = {
     nombre: true,
     nif: true,
@@ -30,7 +29,7 @@ export default function Table({ data }: Props) {
       title="Empresas"
       data={data}
       columns={columns}
-      url={RECURSO}
+      url={url}
       initialVisibility={initVisibility}
     />
   );
