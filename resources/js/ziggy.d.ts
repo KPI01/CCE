@@ -120,29 +120,25 @@ declare module 'ziggy-js' {
     "maquina.show": [
         {
             "name": "maquina",
-            "required": true,
-            "binding": "id"
+            "required": true
         }
     ],
     "maquina.edit": [
         {
             "name": "maquina",
-            "required": true,
-            "binding": "id"
+            "required": true
         }
     ],
     "maquina.update": [
         {
             "name": "maquina",
-            "required": true,
-            "binding": "id"
+            "required": true
         }
     ],
     "maquina.destroy": [
         {
             "name": "maquina",
-            "required": true,
-            "binding": "id"
+            "required": true
         }
     ]
 }

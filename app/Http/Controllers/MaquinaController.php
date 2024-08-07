@@ -196,4 +196,15 @@ class MaquinaController extends Controller
             ],
         ]);
     }
+
+    public function auxTipos_index()
+    {
+        $data = DB::table(Maquina::TIPOS_TABLE)
+            ->get()
+            ->toArray();
+
+        return inertia("Config/Auxiliares/Maquina", [
+            "data" => $data,
+        ]);
+    }
 }

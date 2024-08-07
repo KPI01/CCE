@@ -4,22 +4,23 @@ import {
   MenubarItem,
   MenubarMenu,
   MenubarSeparator,
+  MenubarSub,
+  MenubarSubContent,
+  MenubarSubTrigger,
 } from "./ui/menubar";
 import { MenubarTrigger } from "@radix-ui/react-menubar";
-import { AtSign, Box, Home, LogOut, Table2, User2 } from "lucide-react";
+import { LogOut, User2 } from "lucide-react";
 import { Link, router, usePage } from "@inertiajs/react";
 import { Button } from "./ui/button";
 import { ReactElement } from "react";
 import { v4 as uuidv4 } from "uuid";
 import {
-  EmailIcon,
   EmpresaIcon,
-  HomeIcon,
   MaquinaIcon,
   PersonaIcon,
   RecursosIcon,
-  TablasAuxiliaresIcon,
 } from "@/Pages/Recursos/utils";
+import { EmailIcon, HomeIcon, TablasAuxiliaresIcon } from "@/icons";
 
 const MENUTRIGGER_CLASS =
   "w-max font-medium border-px flex items-center rounded border-accent px-2 py-1";
@@ -130,14 +131,19 @@ export default function NavBar() {
               </Button>
             </MenubarItem>
             <MenubarSeparator />
-            <MenubarItem className={MENUBARITEM_CLASS} asChild>
-              <Button className={BUTTON_CLASS} variant={"ghost"} asChild>
-                <Link href="#">
-                  {TablasAuxiliaresIcon}
-                  Tablas auxiliares
-                </Link>
-              </Button>
-            </MenubarItem>
+            <MenubarSub>
+              <MenubarSubTrigger className={MENUBARITEM_CLASS}>
+                {TablasAuxiliaresIcon}
+                Tablas auxiliares
+              </MenubarSubTrigger>
+              <MenubarSubContent className="ml-2">
+                <MenubarItem className={MENUBARITEM_CLASS} asChild>
+                  <Link href={route("maquina.tipos.index")}>
+                    {MaquinaIcon}Máquinas
+                  </Link>
+                </MenubarItem>
+              </MenubarSubContent>
+            </MenubarSub>
             <MenubarSeparator />
             <MenubarItem className={MENUBARITEM_CLASS} asChild>
               <Button

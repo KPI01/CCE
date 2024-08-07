@@ -2,7 +2,7 @@ import { Head, Link } from "@inertiajs/react";
 import { TableProps } from "@/types";
 
 import MainLayout from "./MainLayout";
-import { DataTable } from "@/Components/Data/DataTable";
+import { DataTable } from "@/Components/DataTable/DataTable";
 import { Button } from "@/Components/ui/button";
 
 export default function DataLayout({
