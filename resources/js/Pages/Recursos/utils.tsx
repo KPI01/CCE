@@ -24,11 +24,8 @@ export const MAX_MESSAGE = (size: number) =>
   `Este campo debe tener como máximo ${size} caracteres`;
 export const BE_VALID_MSG = (start: string) => `${start} debe ser válido.`;
 
-export const HomeIcon = <Home className={ICON_CLASS} />;
 export const RecursosIcon = <Box className={ICON_CLASS} />;
 export const PersonaIcon = <UserRound className={ICON_CLASS} />;
-export const EmailIcon = <AtSign className={ICON_CLASS} />;
-export const TablasAuxiliaresIcon = <Table className={ICON_CLASS} />;
 export const EmpresaIcon = <Building className={ICON_CLASS} />;
 export const MaquinaIcon = <Tractor className={ICON_CLASS} />;
 
