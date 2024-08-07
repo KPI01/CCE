@@ -9,7 +9,7 @@ class AuxiliaresController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(string $tableName)
+    public function index()
     {
         //
     }
