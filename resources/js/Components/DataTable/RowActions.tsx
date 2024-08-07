@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button, buttonVariants } from "../ui/button";
-import { EllipsisVertical, FileText, PenLine, Trash } from "lucide-react";
+import { Ellipsis, FileText, PenLine, Trash } from "lucide-react";
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { UUID } from "@/types";
 
@@ -30,16 +30,12 @@ interface Props {
     nombre: string | string[];
     id: string;
   };
-  urls: {
-    show: string;
-    edit: string;
-    destroy: string;
-  };
+  url: string;
 }
 
-export default function RowActions({ id, info, urls }: Props) {
+export default function RowActions({ id, info, url }: Props) {
   function handleDelete() {
-    router.delete(urls.destroy);
+    router.delete(url);
   }
   return (
     <AlertDialog>
@@ -47,18 +43,18 @@ export default function RowActions({ id, info, urls }: Props) {
         <DropdownMenuTrigger id={`actions-${id}`} asChild>
           <Button variant={"ghost"} className="h-8 w-8 p-0">
             <span className="sr-only">Menú</span>
-            <EllipsisVertical className="size-4" />
+            <Ellipsis className="size-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
           <DropdownMenuItem id={`action-show-${id}`} asChild>
-            <Link href={urls.show} className={LINK_CLASS}>
+            <Link href={url} method="get" className={LINK_CLASS}>
               <FileText className={ICON_CLASS} />
               Ver detalles
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem id={`action-edit-${id}`} asChild>
-            <Link href={urls.edit} className={LINK_CLASS}>
+            <Link href={`${url}/edit`} method="get" className={LINK_CLASS}>
               <PenLine className={ICON_CLASS} />
               Editar
             </Link>

@@ -2,11 +2,11 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-import { ActionUrls, Persona } from "@/types";
+import { Persona } from "@/types";
 import { DataTableColumnHeader } from "@/Components/DataTable/ColumnHeader";
 import Actions from "@/Pages/Recursos/Personas/Actions";
 
-export const columns: ColumnDef<Persona & { urls: ActionUrls }>[] = [
+export const columns: ColumnDef<Persona>[] = [
   {
     accessorKey: "nombres",
     header: ({ column }) => (

@@ -5,9 +5,13 @@ import DataLayout from "@/Layouts/DataLayout";
 import { columns } from "./Column";
 
 import { Persona } from "@/types";
-import { RECURSO } from "./formSchema";
 
-export default function Table({ data }: { data: Persona[] }) {
+interface Props {
+  data: Persona[];
+  url: string;
+}
+
+export default function Table({ data, url }: Props) {
   const initVisibility = {
     nombres: true,
     apellidos: true,
@@ -25,7 +29,7 @@ export default function Table({ data }: { data: Persona[] }) {
       title="Personas"
       data={data}
       columns={columns}
-      recurso={RECURSO}
+      url={url}
       initialVisibility={initVisibility}
     />
   );

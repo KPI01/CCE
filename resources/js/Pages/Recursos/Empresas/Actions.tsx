@@ -5,7 +5,7 @@ export default function Actions({ data }: { data: Empresa }) {
   return (
     <RowActions
       id={data.id}
-      urls={data.urls}
+      url={data.url}
       info={{
         id: data.nif,
         nombre: data.nombre,

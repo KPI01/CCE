@@ -13,7 +13,12 @@ import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectCons
 import FormLayout from "@/Layouts/Recursos/FormLayout";
 import FormTitle from "@/Components/Forms/FormTitle";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
-import { CONTAINER_CLASS, PersonaIcon, TablaIcon } from "../utils";
+import {
+  CONTAINER_CLASS,
+  PersonaIcon,
+  TablaIcon,
+  urlWithoutId,
+} from "../utils";
 
 const schema = formSchema;
 
@@ -25,16 +30,17 @@ export default function Show({ data }: { data: Persona }) {
 
   const breadcrumb: Breadcrumbs[] = [
     {
-      icon: TablaIcon,
+      icon: <TablaIcon />,
       text: "Tabla",
-      url: data.urls.index,
+      url: urlWithoutId(data.url),
     },
     {
-      icon: PersonaIcon,
+      icon: <PersonaIcon />,
       text: "Persona",
-      url: data.urls.show,
+      url: data.url,
     },
   ];
+  console.log(breadcrumb);
 
   return (
     <FormLayout
@@ -43,7 +49,7 @@ export default function Show({ data }: { data: Persona }) {
       mainTitle={`${data.nombres} ${data.apellidos}`}
       created_at={data.created_at}
       updated_at={data.updated_at}
-      urls={data.urls}
+      url={data.url}
       breadcrumbs={breadcrumb}
     >
       <Form {...form}>
