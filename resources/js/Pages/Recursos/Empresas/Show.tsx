@@ -14,6 +14,7 @@ import {
   EmpresaIcon,
   TablaIcon,
   nullToUndefined,
+  urlWithoutId,
 } from "../utils";
 
 const schema = formSchema;
@@ -28,14 +29,14 @@ export default function Show({ data }: { data: Empresa }) {
 
   const breadcrumbs: Breadcrumbs[] = [
     {
-      icon: TablaIcon,
+      icon: <TablaIcon />,
       text: "Tabla",
-      url: data.urls.index,
+      url: urlWithoutId(data.url),
     },
     {
-      icon: EmpresaIcon,
+      icon: <EmpresaIcon />,
       text: "Empresa",
-      url: data.urls.show,
+      url: data.url,
     },
   ];
 
@@ -46,7 +47,7 @@ export default function Show({ data }: { data: Empresa }) {
       mainTitle={data.nombre}
       created_at={data.created_at}
       updated_at={data.updated_at}
-      urls={data.urls}
+      url={data.url}
       breadcrumbs={breadcrumbs}
     >
       <Form {...form}>
