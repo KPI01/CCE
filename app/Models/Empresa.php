@@ -26,7 +26,7 @@ class Empresa extends RecursoBase
         "perfil" => self::PERFILES["productor"],
     ];
 
-    protected $appends = ["ropo", "urls"];
+    protected $appends = ["ropo", "url"];
 
     protected $ropo = [
         "caducidad" => null,

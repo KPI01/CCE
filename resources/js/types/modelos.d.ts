@@ -1,5 +1,3 @@
-import { Urls } from ".";
-
 type UUID = `${string}-${string}-${string}-${string}-${string}`;
 
 type Perfiles = "Productor" | "Aplicador" | "Operario";
@@ -15,7 +13,7 @@ interface Modelo {
   id: UUID;
   created_at: string;
   updated_at: string;
-  urls: Urls;
+  url: string;
 }
 
 export interface User extends Modelo {

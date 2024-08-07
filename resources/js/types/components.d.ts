@@ -1,6 +1,5 @@
 import { PropsWithChildren, ReactElement } from "react";
 import { UUID } from "./modelos";
-import { Urls } from ".";
 
 type Breadcrumbs = {
   icon?: ReactElement;
@@ -40,7 +39,5 @@ export interface LayoutProps extends PropsWithChildren {
   mainTitle: string;
   created_at?: Date | string;
   updated_at?: Date | string;
-  urls: Urls | Partial<Urls>;
+  url: string;
 }
-
-export type ActionUrls = Required<Pick<Urls, "show" | "edit" | "destroy">>;
