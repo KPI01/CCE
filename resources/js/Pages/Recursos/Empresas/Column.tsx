@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { ActionUrls, Empresa } from "@/types";
 import Actions from "./Actions";
-import { DataTableColumnHeader } from "@/Components/Table/ColumnHeader";
+import { DataTableColumnHeader } from "@/Components/DataTable/ColumnHeader";
 
 export const columns: ColumnDef<Empresa & { urls: ActionUrls }>[] = [
   {

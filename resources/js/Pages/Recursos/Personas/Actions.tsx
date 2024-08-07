@@ -19,7 +19,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/Components/ui/alert-dialog";
-import RowActions from "@/Components/Table/RowActions";
+import RowActions from "@/Components/DataTable/RowActions";
 
 export default function Actions({ data }: { data: Persona }) {
   return (
