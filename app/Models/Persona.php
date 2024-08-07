@@ -25,7 +25,7 @@ class Persona extends RecursoBase
         "nie" => "NIE",
     ];
 
-    protected $appends = ["ropo", "urls"];
+    protected $appends = ["ropo", "url"];
     protected $ropo = [
         "capacitacion" => null,
         "caducidad" => null,

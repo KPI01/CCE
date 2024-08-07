@@ -30,7 +30,7 @@ export default function Table({ data }: Props) {
       title="Empresas"
       data={data}
       columns={columns}
-      recurso={RECURSO}
+      url={RECURSO}
       initialVisibility={initVisibility}
     />
   );

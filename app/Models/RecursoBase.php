@@ -6,29 +6,28 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Request;
 
 class RecursoBase extends Model
 {
     use HasFactory, HasUuids;
 
+    protected $controller;
     protected $keyType = "string";
     public $incrementing = false;
     protected $guarded = [];
 
-    public function getUrlsAttribute()
+    public function getUrlAttribute()
     {
         $name = strtolower(class_basename($this));
-        return [
-            "index" => route("{$name}.index"),
-            "show" => route("{$name}.show", $this->id),
-            "edit" => route("{$name}.edit", $this->id),
-            "update" => route("{$name}.update", $this->id),
-            "destroy" => route("{$name}.destroy", $this->id),
-        ];
+        $base = route("{$name}.index");
+        $path = Request::create($base)->path();
+        $url = url("/{$path}/{$this->id}");
+        return $url;
     }
-    protected $appends = ["urls"];
+    protected $appends = ["url"];
     protected $casts = [
-        "urls" => "array",
+        "url" => "string",
     ];
 
     public function getCreatedAtAttribute($value): string

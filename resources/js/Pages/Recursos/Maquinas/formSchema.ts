@@ -1,8 +1,6 @@
 import { z } from "zod";
 import { BE_VALID_MSG, MAX_MESSAGE, MIN_MESSAGE, REQUIRED_MSG } from "../utils";
 
-export const RECURSO = "maquina";
-
 export const formSchema = z.object({
   id: z.string().nullish(),
   nombre: z

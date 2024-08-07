@@ -4,7 +4,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import FormLayout from "@/Layouts/Recursos/FormLayout";
 import { Form, FormField } from "@/Components/ui/form";
-import { CONTAINER_CLASS, MaquinaIcon, TablaIcon } from "../utils";
+import {
+  CONTAINER_CLASS,
+  MaquinaIcon,
+  TablaIcon,
+  urlWithoutId,
+} from "../utils";
 import FormTitle from "@/Components/Forms/FormTitle";
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
@@ -15,14 +20,14 @@ const schema = formSchema;
 export default function Show({ data, aux }: { data: Maquina; aux: Aux }) {
   const breadcrumb: Breadcrumbs[] = [
     {
-      icon: TablaIcon,
+      icon: <TablaIcon />,
       text: "Tabla",
-      url: data.urls.index,
+      url: urlWithoutId(data.url),
     },
     {
-      icon: MaquinaIcon,
+      icon: <MaquinaIcon />,
       text: "Máquina",
-      url: data.urls.show,
+      url: data.url,
     },
   ];
 
@@ -40,7 +45,7 @@ export default function Show({ data, aux }: { data: Maquina; aux: Aux }) {
       mainTitle={data.nombre}
       created_at={data.created_at}
       updated_at={data.updated_at}
-      urls={data.urls}
+      url={data.url}
       breadcrumbs={breadcrumb}
     >
       <Form {...form}>

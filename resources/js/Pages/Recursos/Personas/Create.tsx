@@ -17,12 +17,12 @@ import { useState } from "react";
 import { router } from "@inertiajs/react";
 import { Switch } from "@/Components/ui/switch";
 import { Label } from "@radix-ui/react-label";
-import { Breadcrumbs, Urls } from "@/types";
+import { Breadcrumbs } from "@/types";
 import { CONTAINER_CLASS, CreateIcon, SendIcon, TablaIcon } from "../utils";
 
 const schema = formSchema;
 
-export default function Create({ urls }: { urls: Urls }) {
+export default function Create({ url }: { url: string }) {
   const [showRopo, setFillRopo] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof schema>>({
@@ -38,19 +38,19 @@ export default function Create({ urls }: { urls: Urls }) {
   }
 
   function onSubmit(values: z.infer<typeof schema>) {
-    router.post(urls.store, values);
+    router.post(url, values);
   }
 
   const breadcrumb: Breadcrumbs[] = [
     {
-      icon: TablaIcon,
+      icon: <TablaIcon />,
       text: "Tabla",
-      url: urls.index,
+      url: url,
     },
     {
-      icon: CreateIcon,
+      icon: <CreateIcon />,
       text: "Creando...",
-      url: urls.create,
+      url: `${url}/create`,
     },
   ];
 
@@ -58,7 +58,7 @@ export default function Create({ urls }: { urls: Urls }) {
     <FormLayout
       pageTitle="Creando: Persona"
       mainTitle="Persona"
-      urls={urls}
+      url={url}
       breadcrumbs={breadcrumb}
       showActions={false}
     >
@@ -258,9 +258,9 @@ export default function Create({ urls }: { urls: Urls }) {
 
           <div className="col-span-full flex items-center space-x-2 font-medium"></div>
 
-          <div className="col-span-2 flex items-center justify-between">
-            <Button type="submit">
-              {SendIcon}
+          <div className="col-span-full flex items-center justify-between">
+            <Button type="submit" size={"lg"} className="ms-auto text-lg">
+              <SendIcon />
               Crear
             </Button>
           </div>

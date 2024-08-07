@@ -35,13 +35,13 @@ export default function FormHeader({
   title,
   created_at,
   updated_at,
-  urls,
+  url,
   className,
   id,
   showActions = true,
 }: Props) {
   function handleDelete() {
-    if (urls?.destroy) router.delete(urls.destroy);
+    router.delete(url);
   }
 
   return (
@@ -50,7 +50,7 @@ export default function FormHeader({
         <div className="flex flex-col">
           <h1 className="my-3 text-5xl font-extrabold">{title}</h1>
           <div className="flex select-none gap-x-4">
-            {showActions && urls && (
+            {showActions && (
               <>
                 <AlertDialog>
                   <AlertDialogTrigger
@@ -87,7 +87,7 @@ export default function FormHeader({
                   </AlertDialogContent>
                 </AlertDialog>
                 <Link
-                  href={urls.edit || "#"}
+                  href={`${url}/edit` || "#"}
                   id={`badge-edit-${id}`}
                   className={badgeVariants({ variant: "default" })}
                   as="button"

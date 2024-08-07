@@ -30,19 +30,15 @@ class EmpresaController extends Controller
 
         return inertia("Recursos/Empresas/Table", [
             "data" => $this->data,
+            "url" => route("empresa.index"),
         ]);
     }
 
     public function create()
     {
         //
-
         return inertia("Recursos/Empresas/Create", [
-            "urls" => [
-                "store" => route("empresa.store"),
-                "index" => route("empresa.index"),
-                "create" => route("empresa.create"),
-            ],
+            "url" => route("empresa.index"),
         ]);
     }
 

@@ -29,6 +29,7 @@ class PersonaController extends Controller
 
         return inertia("Recursos/Personas/Table", [
             "data" => $this->data,
+            "url" => route("persona.index")
         ]);
     }
 
@@ -36,11 +37,7 @@ class PersonaController extends Controller
     {
         //
         return inertia("Recursos/Personas/Create", [
-            "urls" => [
-                "store" => route("persona.store"),
-                "index" => route("persona.index"),
-                "create" => route("persona.create"),
-            ],
+            "url" => route("persona.index"),
         ]);
     }
 

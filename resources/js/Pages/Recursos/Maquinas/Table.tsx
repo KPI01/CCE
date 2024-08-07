@@ -1,9 +1,13 @@
 import DataLayout from "@/Layouts/DataLayout";
 import { Maquina } from "@/types";
 import { columns } from "./Column";
-import { RECURSO } from "./formSchema";
 
-export default function Table({ data }: { data: Maquina[] }) {
+interface Props {
+  data: Maquina[];
+  url: string;
+}
+
+export default function Table({ data, url }: Props) {
   const initVisibility = {
     nombre: true,
     tipo: true,
@@ -19,7 +23,7 @@ export default function Table({ data }: { data: Maquina[] }) {
       title="Máquina"
       data={data}
       columns={columns}
-      recurso={RECURSO}
+      url={url}
       initialVisibility={initVisibility}
     />
   );

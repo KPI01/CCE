@@ -29,6 +29,7 @@ class MaquinaController extends Controller
         $this->data = Maquina::all();
         return inertia("Recursos/Maquinas/Table", [
             "data" => $this->data,
+            "url" => route("maquina.index"),
         ]);
     }
 
@@ -36,16 +37,13 @@ class MaquinaController extends Controller
     {
         //
         $aux = DB::table(Maquina::TIPOS_TABLE)
+            ->orderBy("id")
             ->get()
             ->pluck("tipo")
             ->toArray();
         return inertia("Recursos/Maquinas/Create", [
             "aux" => ["tipos" => $aux],
-            "urls" => [
-                "index" => route("maquina.index"),
-                "store" => route("maquina.store"),
-                "create" => route("maquina.create"),
-            ],
+            "url" => route("maquina.index"),
         ]);
     }
 
