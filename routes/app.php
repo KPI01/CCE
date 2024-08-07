@@ -1,21 +1,10 @@
 <?php
 
-use App\Http\Controllers\AuxiliaresController;
 use App\Http\Controllers\MaquinaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\PersonaController;
-
-$resourceEnpoints = [
-    "index",
-    "create",
-    "store",
-    "edit",
-    "update",
-    "show",
-    "destroy",
-];
 
 Route::prefix("app")
     ->middleware(["auth", "verified"])
@@ -39,15 +28,4 @@ Route::prefix("app")
             Route::resource("empresa", EmpresaController::class);
             Route::resource("maquina", MaquinaController::class);
         });
-
-        Route::prefix("config")
-            ->middleware(["auth"])
-            ->group(function () {
-                Route::prefix("tablas_auxiliares")->group(function () {
-                    Route::get("/maquinas/tipos", [
-                        MaquinaController::class,
-                        "auxTipos_index",
-                    ])->name("maquina.tipos.index");
-                });
-            });
     });
