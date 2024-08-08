@@ -19,11 +19,11 @@ class MaquinaSeeder extends Seeder
         Schema::disableForeignKeyConstraints();
         DB::table(Maquina::TIPOS_TABLE)->truncate();
         DB::table(Maquina::TIPOS_TABLE)->insert([
-            ["tipo" => "Pulverizador"],
-            ["tipo" => "Atomizador"],
-            ["tipo" => "Bomba irrigación"],
-            ["tipo" => "Cuba"],
-            ["tipo" => "Aplicador de aceite"],
+            ["nombre" => "Pulverizador"],
+            ["nombre" => "Atomizador"],
+            ["nombre" => "Bomba irrigación"],
+            ["nombre" => "Cuba"],
+            ["nombre" => "Aplicador de aceite"],
         ]);
 
         $cant = 25;
