@@ -8,7 +8,10 @@ use Illuminate\Support\Facades\DB;
 class Maquina extends RecursoBase
 {
     const TIPOS_TABLE = "tipos_maquina";
-    protected $appends = ["url"];
+    protected $appends = ["url", "tipo"];
+    protected $casts = [
+        "tipo" => "string",
+    ];
 
     public function getTipoAttribute($value)
     {
