@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Modelos;
 
 use App\Models\Empresa;
 use Database\Seeders\EmpresaSeeder;
