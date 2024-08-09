@@ -19,24 +19,39 @@ import { Button, buttonVariants } from "../ui/button";
 import { Ellipsis, FileText, PenLine, Trash } from "lucide-react";
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { UUID } from "@/types";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { DeleteIcon, SaveUpdateIcon } from "@/Pages/Recursos/utils";
+import { useToast } from "../ui/use-toast";
 
 const LINK_CLASS =
   "transition flex items-center justify-start py-2 px-3 hover:bg-muted active:!border-0";
 const ICON_CLASS = "mr-2 size-5";
 
 interface Props {
-  id: UUID;
+  id: UUID | number;
   info: {
     nombre: string | string[];
-    id: string;
+    id?: string;
+    value?: unknown;
   };
   url: string;
 }
 
-export default function RowActions({ id, info, url }: Props) {
+export function RowActions({ id, info = { nombre: "recurso" }, url }: Props) {
   function handleDelete() {
     router.delete(url);
   }
+
   return (
     <AlertDialog>
       <DropdownMenu>
@@ -93,5 +108,67 @@ export default function RowActions({ id, info, url }: Props) {
         </AlertDialogContent>
       </DropdownMenu>
     </AlertDialog>
+  );
+}
+
+export function RowActionsLiveEdit({ id, info, url }: Props) {
+  const { toast } = useToast();
+  const current = info.nombre as string;
+  const [value, setValue] = useState(current);
+
+  console.log("url:", url);
+
+  function handleDelete() {
+    router.delete(url);
+  }
+  function handleUpdate() {
+    if (current === value) {
+      toast({
+        title: "No se ha realizado ningún cambio",
+        description: `El nombre del recurso es igual al actual`,
+        variant: "warning",
+      });
+      return;
+    }
+    router.put(url, { nombre: value });
+  }
+  return (
+    <Dialog>
+      <DropdownMenu>
+        <DialogTrigger asChild>
+          <DropdownMenuTrigger id={`actions-${id}`} asChild>
+            <Button variant={"ghost"} className="h-8 w-8 p-0">
+              <span className="sr-only">Menú</span>
+              <Ellipsis className="size-4" />
+            </Button>
+          </DropdownMenuTrigger>
+        </DialogTrigger>
+      </DropdownMenu>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{info.nombre ?? "Opciones"}</DialogTitle>
+          <DialogDescription>
+            Aquí podrás editar o eliminar el registro.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex items-center">
+          <Label className="w-[15ch]">Nuevo valor:</Label>
+          <Input
+            placeholder={current}
+            onChange={(e) => setValue(e.target.value)}
+          />
+        </div>
+        <div className="align-center mt-4 flex justify-end gap-4">
+          <Button variant={"destructive"} size={"sm"} onClick={handleDelete}>
+            <DeleteIcon />
+            Eliminar
+          </Button>
+          <Button size={"sm"} onClick={handleUpdate}>
+            <SaveUpdateIcon />
+            Actualizar
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

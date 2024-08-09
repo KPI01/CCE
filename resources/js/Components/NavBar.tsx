@@ -138,7 +138,7 @@ export default function NavBar() {
               </MenubarSubTrigger>
               <MenubarSubContent className="ml-2">
                 <MenubarItem className={MENUBARITEM_CLASS} asChild>
-                  <Link href={route("tipos_maquina.index")}>
+                  <Link href={route("aux_maquina.index")}>
                     <MaquinaIcon />
                     Máquinas
                   </Link>

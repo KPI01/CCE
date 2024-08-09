@@ -1,5 +1,6 @@
 import { PropsWithChildren, ReactElement } from "react";
 import { UUID } from "./modelos";
+import { ColumnDef } from "@tanstack/react-table";
 
 interface IconProps {
   className?: string;
@@ -32,9 +33,10 @@ interface MainLayoutProps extends PropsWithChildren {
 interface TableProps {
   title: string;
   data: any;
-  columns: any;
+  columns: ColumnDef<Record<string, unknown>, any>[];
   url: string;
-  initialVisibility: any;
+  initialVisibility?: Record<string, boolean>;
+  withPrompt?: boolean;
 }
 
 export interface LayoutProps extends PropsWithChildren {
