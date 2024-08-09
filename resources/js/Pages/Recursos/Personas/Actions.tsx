@@ -1,4 +1,4 @@
-import RowActions from "@/Components/DataTable/RowActions";
+import { RowActions } from "@/Components/DataTable/RowActions";
 import { Persona } from "@/types";
 
 export default function Actions({ data }: { data: Persona }) {

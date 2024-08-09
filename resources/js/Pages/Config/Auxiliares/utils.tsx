@@ -12,7 +12,7 @@ export function createColumn(
   let column: ColumnDef<typeof data>[] = [];
 
   if (!data) {
-    return [];
+    return null;
   }
 
   const keys: string[] = Object.keys(data);
