@@ -29,6 +29,7 @@ class MaquinaController extends Controller
         $this->data = Maquina::all();
         return inertia("Recursos/Maquinas/Table", [
             "data" => $this->data,
+            "url" => route("maquina.index"),
         ]);
     }
 
@@ -36,16 +37,13 @@ class MaquinaController extends Controller
     {
         //
         $aux = DB::table(Maquina::TIPOS_TABLE)
+            ->orderBy("id")
             ->get()
-            ->pluck("tipo")
+            ->pluck("nombre")
             ->toArray();
         return inertia("Recursos/Maquinas/Create", [
             "aux" => ["tipos" => $aux],
-            "urls" => [
-                "index" => route("maquina.index"),
-                "store" => route("maquina.store"),
-                "create" => route("maquina.create"),
-            ],
+            "url" => route("maquina.index"),
         ]);
     }
 
@@ -93,7 +91,7 @@ class MaquinaController extends Controller
         $aux = [
             "tipos" => DB::table(Maquina::TIPOS_TABLE)
                 ->get()
-                ->pluck("tipo")
+                ->pluck("nombre")
                 ->toArray(),
         ];
         return inertia("Recursos/Maquinas/Show", [
@@ -109,7 +107,7 @@ class MaquinaController extends Controller
         $aux = [
             "tipos" => DB::table(Maquina::TIPOS_TABLE)
                 ->get()
-                ->pluck("tipo")
+                ->pluck("nombre")
                 ->toArray(),
         ];
 
@@ -194,6 +192,17 @@ class MaquinaController extends Controller
                     ]),
                 ],
             ],
+        ]);
+    }
+
+    public function auxTipos_index()
+    {
+        $data = DB::table(Maquina::TIPOS_TABLE)
+            ->get()
+            ->toArray();
+
+        return inertia("Config/Auxiliares/Maquina", [
+            "data" => $data,
         ]);
     }
 }

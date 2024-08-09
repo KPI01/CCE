@@ -20,6 +20,7 @@ import {
   SendIcon,
   TablaIcon,
   toSend,
+  urlWithoutId,
 } from "../utils";
 
 const schema = formSchema;
@@ -48,7 +49,7 @@ export default function Edit({ data }: { data: Empresa }) {
     const justDirty = toSend(dirty, parsed);
 
     if (Object.keys(justDirty).length > 0) {
-      router.put(data.urls.update, justDirty);
+      router.patch(data.url, justDirty);
     } else {
       toast({
         title: "No se han detectado cambios!",
@@ -60,19 +61,19 @@ export default function Edit({ data }: { data: Empresa }) {
 
   const breadcrumb: Breadcrumbs[] = [
     {
-      icon: TablaIcon,
+      icon: <TablaIcon />,
       text: "Tabla",
-      url: data.urls.index,
+      url: urlWithoutId(data.url),
     },
     {
-      icon: EmpresaIcon,
+      icon: <EmpresaIcon />,
       text: "Empresa",
-      url: data.urls.show,
+      url: data.url,
     },
     {
-      icon: EditIcon,
+      icon: <EditIcon />,
       text: "Editando...",
-      url: data.urls.edit,
+      url: `${data.url}/edit`,
     },
   ];
 
@@ -83,7 +84,7 @@ export default function Edit({ data }: { data: Empresa }) {
       created_at={data.updated_at}
       updated_at={data.updated_at}
       id={data.id}
-      urls={data.urls}
+      url={data.url}
       breadcrumbs={breadcrumb}
       showActions={false}
     >
@@ -263,7 +264,7 @@ export default function Edit({ data }: { data: Empresa }) {
           </div>
           <div className="col-span-full flex w-full">
             <FormButton type="submit" variant={"default"} className="ml-auto">
-              {SendIcon}
+              <SendIcon />
               Guardar
             </FormButton>
           </div>

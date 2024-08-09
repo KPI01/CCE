@@ -30,7 +30,7 @@ class MaquinaFactory extends Factory
             "marca" => fake()->word(),
             "roma" => fake()->bothify("??##??##??##??##"),
             "nro_serie" => fake()->bothify("??##??##??##??##"),
-            "tipo" => fake()->randomElement($tipos),
+            "tipo_id" => fake()->randomElement($tipos),
             "fabricante" => fake()->company(),
             "cad_iteaf" => fake()->dateTimeBetween("now", "+7years"),
             "observaciones" => fake()->sentence(3),

@@ -1,15 +1,10 @@
 import FormLayout from "@/Layouts/Recursos/FormLayout";
-import { Aux, Breadcrumbs, Urls } from "@/types";
+import { Aux, Breadcrumbs } from "@/types";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "./formSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  CONTAINER_CLASS,
-  CreateIcon,
-  SendIcon,
-  TablaIcon,
-} from "../utils";
+import { CONTAINER_CLASS, CreateIcon, SendIcon, TablaIcon } from "../utils";
 import { Form, FormField } from "@/Components/ui/form";
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
@@ -18,23 +13,23 @@ import FormButton from "@/Components/Forms/FormButton";
 import { router } from "@inertiajs/react";
 
 interface Props {
-  urls: Urls;
+  url: string;
   aux: Aux;
 }
 
 const schema = formSchema;
 
-export default function Create({ aux, urls }: Props) {
+export default function Create({ aux, url }: Props) {
   const breadcrumb: Breadcrumbs[] = [
     {
-      icon: TablaIcon,
+      icon: <TablaIcon />,
       text: "Tabla",
-      url: urls.index,
+      url: url,
     },
     {
-      icon: CreateIcon,
+      icon: <CreateIcon />,
       text: "Creando...",
-      url: urls.create,
+      url: `${url}/create`,
     },
   ];
 
@@ -44,14 +39,14 @@ export default function Create({ aux, urls }: Props) {
 
   function onSubmit(values: z.infer<typeof schema>) {
     const parsed = schema.parse(values);
-    router.post(urls.store, parsed);
+    router.post(url, parsed);
   }
 
   return (
     <FormLayout
       pageTitle="Creando: Máquina"
       mainTitle="Máquina"
-      urls={urls}
+      url={url}
       breadcrumbs={breadcrumb}
       showActions={false}
     >
@@ -204,7 +199,7 @@ export default function Create({ aux, urls }: Props) {
             )}
           />
           <FormButton type="submit" className="col-span-full ms-auto">
-            {SendIcon}
+            <SendIcon />
             Enviar
           </FormButton>
         </form>

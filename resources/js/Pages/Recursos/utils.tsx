@@ -1,14 +1,13 @@
+import { cn } from "@/lib/utils";
+import { IconProps } from "@/types";
 import {
-  AtSign,
   Box,
   Building,
   CircleArrowOutUpRight,
   FilePen,
   FilePlus,
-  Home,
   Send,
   Sheet,
-  Table,
   Tractor,
   Trash,
   UserRound,
@@ -24,20 +23,45 @@ export const MAX_MESSAGE = (size: number) =>
   `Este campo debe tener como máximo ${size} caracteres`;
 export const BE_VALID_MSG = (start: string) => `${start} debe ser válido.`;
 
-export const HomeIcon = <Home className={ICON_CLASS} />;
-export const RecursosIcon = <Box className={ICON_CLASS} />;
-export const PersonaIcon = <UserRound className={ICON_CLASS} />;
-export const EmailIcon = <AtSign className={ICON_CLASS} />;
-export const TablasAuxiliaresIcon = <Table className={ICON_CLASS} />;
-export const EmpresaIcon = <Building className={ICON_CLASS} />;
-export const MaquinaIcon = <Tractor className={ICON_CLASS} />;
+export const RecursosIcon = ({ className }: IconProps) => (
+  <Box className={cn(ICON_CLASS, className)} />
+);
+export const PersonaIcon = ({ className }: IconProps) => (
+  <UserRound className={cn(ICON_CLASS, className)} />
+);
+export const EmpresaIcon = ({ className }: IconProps) => (
+  <Building className={cn(ICON_CLASS, className)} />
+);
+export const MaquinaIcon = ({ className }: IconProps) => (
+  <Tractor className={cn(ICON_CLASS, className)} />
+);
 
-export const TablaIcon = <Sheet className={ICON_CLASS} />;
-export const EditIcon = <FilePen className={ICON_CLASS} />;
-export const SaveUpdateIcon = <CircleArrowOutUpRight className={ICON_CLASS} />;
-export const DeleteIcon = <Trash className={ICON_CLASS} />;
-export const SendIcon = <Send className={ICON_CLASS} />;
-export const CreateIcon = <FilePlus className={ICON_CLASS} />;
+export const TablaIcon = ({ className }: IconProps) => (
+  <Sheet className={cn(ICON_CLASS, className)} />
+);
+export const EditIcon = ({ className }: IconProps) => (
+  <FilePen className={cn(ICON_CLASS, className)} />
+);
+export const SaveUpdateIcon = ({ className }: IconProps) => (
+  <CircleArrowOutUpRight className={cn(ICON_CLASS, className)} />
+);
+export const DeleteIcon = ({ className }: IconProps) => (
+  <Trash className={cn(ICON_CLASS, className)} />
+);
+export const SendIcon = ({ className }: IconProps) => (
+  <Send className={cn(ICON_CLASS, className)} />
+);
+export const CreateIcon = ({ className }: IconProps) => (
+  <FilePlus className={cn(ICON_CLASS, className)} />
+);
+
+export function urlWithoutId(url: string) {
+  if (!url.lastIndexOf("/")) {
+    console.error("La url debe tener /");
+    return url;
+  }
+  return url.slice(0, url.lastIndexOf("/"));
+}
 
 export function toSend(
   dirty: typeof Object | any,

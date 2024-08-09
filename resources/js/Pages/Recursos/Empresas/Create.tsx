@@ -13,12 +13,12 @@ import FormButton from "@/Components/Forms/FormButton";
 import { Save } from "lucide-react";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
 import { router } from "@inertiajs/react";
-import { Breadcrumbs, Urls } from "@/types";
+import { Breadcrumbs } from "@/types";
 import { CONTAINER_CLASS, CreateIcon, TablaIcon } from "../utils";
 
 const schema = formSchema;
 
-export default function Create({ urls }: { urls: Urls }) {
+export default function Create({ url }: { url: string }) {
   const [showRopo, setShowRopo] = useState(false);
 
   const form = useForm<z.infer<typeof schema>>({
@@ -26,19 +26,19 @@ export default function Create({ urls }: { urls: Urls }) {
   });
 
   function onSubmit(values: z.infer<typeof schema>) {
-    router.post(urls.store, values);
+    router.post(url, values);
   }
 
   const breadcrumb: Breadcrumbs[] = [
     {
-      icon: TablaIcon,
+      icon: <TablaIcon />,
       text: "Tabla",
-      url: urls.index,
+      url: url,
     },
     {
-      icon: CreateIcon,
+      icon: <CreateIcon />,
       text: "Creando...",
-      url: urls.create,
+      url: `${url}/create`,
     },
   ];
 
@@ -46,7 +46,7 @@ export default function Create({ urls }: { urls: Urls }) {
     <FormLayout
       pageTitle="Creando: Empresas"
       mainTitle="Empresa"
-      urls={urls}
+      url={url}
       breadcrumbs={breadcrumb}
       showActions={false}
     >

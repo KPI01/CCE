@@ -4,16 +4,6 @@ export type Aux = {
   tipos?: Array<string>;
 };
 
-export type Urls = {
-  index: string;
-  create: string;
-  store: string;
-  show: string;
-  edit: string;
-  update: string;
-  destroy: string;
-};
-
 export interface Message {
   content?: string;
   action?: {
@@ -61,3 +51,4 @@ export type PageProps<
 export * from "./modelos";
 export * from "./components";
 export * from "./data-table";
+export * from "./auxiliares";

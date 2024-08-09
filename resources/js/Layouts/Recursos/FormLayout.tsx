@@ -26,7 +26,7 @@ export default function FormLayout({
   mainTitle,
   created_at,
   updated_at,
-  urls,
+  url,
   id,
   breadcrumbs,
   showActions = true,
@@ -97,7 +97,7 @@ export default function FormLayout({
         created_at={auxCreatedAt}
         updated_at={auxUpdatedAt}
         className="mb-6"
-        urls={urls}
+        url={url}
         showActions={showActions}
       />
       {children}

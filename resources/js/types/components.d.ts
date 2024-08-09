@@ -1,6 +1,10 @@
 import { PropsWithChildren, ReactElement } from "react";
 import { UUID } from "./modelos";
-import { Urls } from ".";
+import { ColumnDef } from "@tanstack/react-table";
+
+interface IconProps {
+  className?: string;
+}
 
 type Breadcrumbs = {
   icon?: ReactElement;
@@ -29,9 +33,10 @@ interface MainLayoutProps extends PropsWithChildren {
 interface TableProps {
   title: string;
   data: any;
-  columns: any;
-  recurso: string;
-  initialVisibility: any;
+  columns: ColumnDef<Record<string, unknown>, any>[];
+  url: string;
+  initialVisibility?: Record<string, boolean>;
+  withPrompt?: boolean;
 }
 
 export interface LayoutProps extends PropsWithChildren {
@@ -40,7 +45,5 @@ export interface LayoutProps extends PropsWithChildren {
   mainTitle: string;
   created_at?: Date | string;
   updated_at?: Date | string;
-  urls: Urls | Partial<Urls>;
+  url: string;
 }
-
-export type ActionUrls = Required<Pick<Urls, "show" | "edit" | "destroy">>;

@@ -7,11 +7,11 @@ import {
   MenubarSub,
   MenubarSubContent,
   MenubarSubTrigger,
-} from "./ui/menubar";
+} from "../ui/menubar";
 import { MenubarTrigger } from "@radix-ui/react-menubar";
 import { LogOut, User2 } from "lucide-react";
 import { Link, router, usePage } from "@inertiajs/react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { ReactElement } from "react";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -34,17 +34,17 @@ interface MenuItemsProps {
 }
 const recursos: MenuItemsProps[] = [
   {
-    Icon: <PersonaIcon />,
+    Icon: PersonaIcon,
     Texto: "Personas",
     Recurso: "persona",
   },
   {
-    Icon: <EmpresaIcon />,
+    Icon: EmpresaIcon,
     Texto: "Empresas",
     Recurso: "empresa",
   },
   {
-    Icon: <MaquinaIcon />,
+    Icon: MaquinaIcon,
     Texto: "Máquinas",
     Recurso: "maquina",
   },
@@ -89,13 +89,13 @@ export default function NavBar() {
             variant={"ghost"}
             onClick={() => goHome()}
           >
-            <HomeIcon />
+            {HomeIcon}
             Dashboard
           </Button>
         )}
         <MenubarMenu>
           <MenubarTrigger id="action-recursos" className={MENUTRIGGER_CLASS}>
-            <RecursosIcon />
+            {RecursosIcon}
             Recursos
           </MenubarTrigger>
           <MenubarContent id="content-recursos">
@@ -126,21 +126,20 @@ export default function NavBar() {
           <MenubarContent id="content-config">
             <MenubarItem className={MENUBARITEM_CLASS} asChild>
               <Button className={BUTTON_CLASS} variant={"ghost"}>
-                <EmailIcon />
+                {EmailIcon}
                 {email}
               </Button>
             </MenubarItem>
             <MenubarSeparator />
             <MenubarSub>
               <MenubarSubTrigger className={MENUBARITEM_CLASS}>
-                <TablasAuxiliaresIcon />
+                {TablasAuxiliaresIcon}
                 Tablas auxiliares
               </MenubarSubTrigger>
               <MenubarSubContent className="ml-2">
                 <MenubarItem className={MENUBARITEM_CLASS} asChild>
-                  <Link href={route("aux_maquina.index")}>
-                    <MaquinaIcon />
-                    Máquinas
+                  <Link href={route("tipos_maquina.index")}>
+                    {MaquinaIcon}Máquinas
                   </Link>
                 </MenubarItem>
               </MenubarSubContent>

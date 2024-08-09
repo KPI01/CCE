@@ -23,6 +23,7 @@ Route::prefix("app")
             });
 
         Route::prefix("recurso")->group(function () {
+            global $resourceEnpoints;
             Route::resource("persona", PersonaController::class);
             Route::resource("empresa", EmpresaController::class);
             Route::resource("maquina", MaquinaController::class);
