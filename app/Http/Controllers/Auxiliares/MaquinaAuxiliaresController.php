@@ -10,6 +10,18 @@ use Illuminate\Support\Facades\Schema;
 
 class MaquinaAuxiliaresController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        foreach ($this->toasts["exito"] as $key => $value) {
+            $this->toastExitoConstructor(
+                accion: $key,
+                seccion: "title",
+                append: "Tipos Máquina (Auxiliares)"
+            );
+        }
+    }
+
     public function index(Request $request, string $tabla = "tipos_maquina")
     {
         //
@@ -46,26 +58,71 @@ class MaquinaAuxiliaresController extends Controller
     public function store(Request $request, string $tabla)
     {
         //
+        $data = $request->all();
+
+        DB::table($tabla)->insert($data);
+
+        $this->toastExitoConstructor(
+            accion: "store",
+            seccion: "description",
+            append: $data["nombre"]
+        );
+
+        return to_route("aux_maquina.index", $tabla)->with([
+            "from" => "aux_maquina.store",
+            "message" => [
+                "toast" => $this->toasts["exito"]["store"],
+            ],
+        ]);
     }
 
     public function update(Request $request, string $tabla, int $id)
     {
         //
         $data = $request->all();
-        $keys = array_keys($data);
-        foreach ($keys as $key) {
-            DB::table($tabla)
-                ->where("id", $id)
-                ->update([$key => $data[$key]]);
-        }
 
-        return to_route("aux_maquina.index", [$tabla, $id]);
+        $old = DB::table($tabla)->where("id", $id)->first();
+
+        DB::table($tabla)
+            ->where("id", $old->id)
+            ->update($data);
+
+        $new = DB::table($tabla)
+            ->where("id", $old->id)
+            ->first();
+
+        $this->toastExitoConstructor(
+            accion: "update",
+            seccion: "description",
+            append: "{$new->nombre} (Anteriormente: {$old->nombre})"
+        );
+
+        return to_route("aux_maquina.index", [$tabla, $id])->with([
+            "from" => "aux_maquina.update",
+            "message" => [
+                "toast" => $this->toasts["exito"]["update"],
+            ],
+        ]);
     }
 
     public function destroy(string $tabla, int $id)
     {
         //
-        DB::table($tabla)->where("id", $id)->delete();
-        return to_route("aux_maquina.index", $tabla);
+        $row = DB::table($tabla)->where("id", $id)->first();
+
+        DB::table($tabla)
+            ->where("id", $row->id)
+            ->delete();
+
+        $this->toastExitoConstructor(
+            accion: "destroy",
+            seccion: "description",
+            append: $row->nombre
+        );
+
+        return to_route("aux_maquina.index", $tabla)->with([
+            "from" => "aux_maquina.destroy",
+            "message" => ["toast" => $this->toasts["exito"]["destroy"]],
+        ]);
     }
 }

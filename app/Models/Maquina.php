@@ -9,17 +9,19 @@ class Maquina extends RecursoBase
 {
     const TIPOS_TABLE = "tipos_maquina";
     protected $appends = ["url", "tipo"];
+    protected $tipo;
     protected $casts = [
         "tipo" => "string",
     ];
 
-    public function getTipoAttribute($value)
+    public function getTipoAttribute()
     {
         $data = DB::table(self::TIPOS_TABLE)
-            ->where("id", $value)
+            ->where("id", $this->tipo_id)
             ->first();
 
-        return $data->tipo;
+        $this->tipo = $data->nombre;
+        return $this->tipo;
     }
 
     public function empresa(): BelongsTo

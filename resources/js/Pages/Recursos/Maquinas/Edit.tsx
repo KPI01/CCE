@@ -59,6 +59,10 @@ export default function Edit({ data, aux }: Props) {
     defaultValues: { ...data },
   });
 
+  function handleDelete() {
+    router.delete(data.url);
+  }
+
   function onSubmit(values: z.infer<typeof schema>) {
     const dirty = form.formState.dirtyFields;
     const parsed = schema.parse(values);
@@ -237,7 +241,11 @@ export default function Edit({ data, aux }: Props) {
             )}
           />
           <div className="col-span-full flex items-center gap-16">
-            <FormButton variant={"destructive"} className="ms-auto">
+            <FormButton
+              variant={"destructive"}
+              className="ms-auto"
+              onClick={handleDelete}
+            >
               <DeleteIcon />
               Eliminar
             </FormButton>

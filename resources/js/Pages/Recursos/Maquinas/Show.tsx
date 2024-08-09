@@ -18,6 +18,7 @@ import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstruc
 const schema = formSchema;
 
 export default function Show({ data, aux }: { data: Maquina; aux: Aux }) {
+  console.log("data:", data, "aux:", aux);
   const breadcrumb: Breadcrumbs[] = [
     {
       icon: <TablaIcon />,

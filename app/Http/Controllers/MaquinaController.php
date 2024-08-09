@@ -39,7 +39,7 @@ class MaquinaController extends Controller
         $aux = DB::table(Maquina::TIPOS_TABLE)
             ->orderBy("id")
             ->get()
-            ->pluck("tipo")
+            ->pluck("nombre")
             ->toArray();
         return inertia("Recursos/Maquinas/Create", [
             "aux" => ["tipos" => $aux],
@@ -91,7 +91,7 @@ class MaquinaController extends Controller
         $aux = [
             "tipos" => DB::table(Maquina::TIPOS_TABLE)
                 ->get()
-                ->pluck("tipo")
+                ->pluck("nombre")
                 ->toArray(),
         ];
         return inertia("Recursos/Maquinas/Show", [
@@ -107,7 +107,7 @@ class MaquinaController extends Controller
         $aux = [
             "tipos" => DB::table(Maquina::TIPOS_TABLE)
                 ->get()
-                ->pluck("tipo")
+                ->pluck("nombre")
                 ->toArray(),
         ];
 
