@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Maquina;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -32,7 +33,9 @@ class MaquinaFactory extends Factory
             "nro_serie" => fake()->bothify("??##??##??##??##"),
             "tipo_id" => fake()->randomElement($tipos),
             "fabricante" => fake()->company(),
-            "cad_iteaf" => fake()->dateTimeBetween("now", "+7years"),
+            "cad_iteaf" => Carbon::parse(
+                fake()->dateTimeBetween("now", "+7years")
+            )->format("Y-m-d"),
             "observaciones" => fake()->sentence(3),
         ];
     }
