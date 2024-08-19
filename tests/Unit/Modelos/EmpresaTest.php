@@ -17,102 +17,81 @@ class EmpresaTest extends ModeloTestCase
         $this->table = (new Empresa())->getTable();
     }
 
-    public function test_factory(): void
+    public function testFactory(): void
     {
         /** con make() */
-        $this->inst = Empresa::factory()->make();
-        $this->assertNotNull(
-            $this->inst,
-            "No se funcionó el factory()->make()"
-        );
-        $this->inst->save();
-        $this->assertDatabaseHas($this->table, $this->inst->getRawOriginal());
-        $this->reg = Empresa::findOrFail($this->inst->id);
-        $this->assertNotNull($this->reg, "No se pudo extraer el registro");
+        $inst = Empresa::factory()->make();
+        $this->assertNotNull($inst, "No funcionó el factory()->make()");
+        $inst->save();
+        $this->assertDatabaseHas($this->table, $inst->getAttributes());
+        $reg = Empresa::findOrFail($inst->id);
+        $this->assertNotNull($reg, "No se pudo extraer el registro");
         $this->assertDatabaseCount($this->table, 1);
 
         /** con create() */
-        $this->inst = Empresa::factory()->create();
-        $this->assertNotNull(
-            $this->inst,
-            "No se funcionó el factory()->create()"
-        );
-        $this->assertDatabaseHas($this->table, $this->inst->getRawOriginal());
-        $this->reg = Empresa::findOrFail($this->inst->id);
-        $this->assertNotNull($this->reg, "No se pudo extraer el registro");
+        $inst = Empresa::factory()->create();
+        $this->assertNotNull($inst, "No funcionó el factory()->create()");
+        $this->assertDatabaseHas($this->table, $inst->getAttributes());
+        $reg = Empresa::findOrFail($inst->id);
+        $this->assertNotNull($reg, "No se pudo extraer el registro");
         $this->assertDatabaseCount($this->table, 2);
     }
 
-    public function test_create(): void
+    public function testCreate(): void
     {
-        $this->inst = Empresa::factory()->make();
-        $this->assertNotNull(
-            $this->inst,
-            "No se funcionó el factory()->create()"
-        );
-        Empresa::create($this->inst->toArray());
+        $inst = Empresa::factory()->make();
+        $this->assertNotNull($inst, "No se funcionó el factory()->create()");
+        Empresa::create($inst->toArray());
 
-        $this->assertDatabaseHas($this->table, $this->inst->getRawOriginal());
+        $this->assertDatabaseHas($this->table, $inst->getAttributes());
         $this->assertDatabaseCount($this->table, 1);
     }
-    public function test_read(): void
+    public function testRead(): void
     {
-        $this->inst = Empresa::factory()->make();
-        $this->assertNotNull(
-            $this->inst,
-            "No se funcionó el factory()->make()"
-        );
-        Empresa::create($this->inst->toArray());
+        $inst = Empresa::factory()->make();
+        $this->assertNotNull($inst, "No se funcionó el factory()->make()");
+        Empresa::create($inst->toArray());
 
-        $this->reg = Empresa::findOrFail($this->inst->id);
-        $this->assertNotNull($this->reg, "No se pudo leer el registro");
+        $reg = Empresa::findOrFail($inst->id);
+        $this->assertNotNull($reg, "No se pudo leer el registro");
         $this->assertDatabaseCount($this->table, 1);
-        $this->assertDatabaseHas($this->table, $this->inst->getRawOriginal());
+        $this->assertDatabaseHas($this->table, $inst->getAttributes());
     }
-    public function test_update(): void
+    public function testUpdate(): void
     {
         /** Actualización solo de la columna 'nombres' */
         $random = fake()->firstName();
 
-        $this->inst = Empresa::factory()->make();
-        $this->assertNotNull(
-            $this->inst,
-            "No se funcionó el factory()->create()"
-        );
-        Empresa::create($this->inst->toArray());
+        $inst = Empresa::factory()->make();
+        $this->assertNotNull($inst, "No se funcionó el factory()->create()");
+        Empresa::create($inst->toArray());
 
         $this->assertDatabaseCount($this->table, 1);
-        $this->assertDatabaseHas($this->table, $this->inst->getRawOriginal());
+        $this->assertDatabaseHas($this->table, $inst->getAttributes());
 
-        $this->inst->nombre = $random;
-        $this->assertEquals($random, $this->inst->nombre);
-        Empresa::where("id", $this->inst->id)->update([
-            "nombre" => $this->inst->nombre,
+        $inst->nombre = $random;
+        $this->assertEquals($random, $inst->nombre);
+        Empresa::where("id", $inst->id)->update([
+            "nombre" => $inst->nombre,
         ]);
-        $this->assertDatabaseHas($this->table, $this->inst->getRawOriginal());
+        $this->assertDatabaseHas($this->table, $inst->getAttributes());
         $this->assertDatabaseCount($this->table, 1);
     }
-    public function test_delete(): void
+    public function testDelete(): void
     {
-        $this->inst = Empresa::factory()->make();
-        $this->assertNotNull(
-            $this->inst,
-            "No se funcionó el factory()->create()"
-        );
-        Empresa::create($this->inst->toArray());
+        $inst = Empresa::factory()->make();
+        $this->assertNotNull($inst, "No se funcionó el factory()->create()");
+        Empresa::create($inst->toArray());
 
         $this->assertDatabaseCount($this->table, 1);
-        $this->assertDatabaseHas($this->table, $this->inst->getRawOriginal());
+        $this->assertDatabaseHas($this->table, $inst->getAttributes());
 
-        Empresa::where("id", $this->inst->id)->delete();
-        $this->assertDatabaseMissing(
-            $this->table,
-            $this->inst->getRawOriginal()
-        );
+        Empresa::where("id", $inst->id)->delete();
+        $this->assertDatabaseMissing($this->table, $inst->getAttributes());
         $this->assertDatabaseEmpty($this->table);
     }
 
-    public function test_seeder(): void
+    public function testSeeder(): void
     {
         $this->seed(EmpresaSeeder::class);
         $this->assertDatabaseCount($this->table, 50);

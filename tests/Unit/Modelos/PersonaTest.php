@@ -17,102 +17,79 @@ class PersonaTest extends ModeloTestCase
         $this->table = (new Persona())->getTable();
     }
 
-    public function test_factory(): void
+    public function testFactory(): void
     {
         /** con make() */
-        $this->inst = Persona::factory()->make();
-        $this->assertNotNull(
-            $this->inst,
-            "No se funcionó el factory()->make()"
-        );
-        $this->inst->save();
-        $this->assertDatabaseHas($this->table, $this->inst->getRawOriginal());
-        $this->reg = Persona::findOrFail($this->inst->id);
-        $this->assertNotNull($this->reg, "No se pudo extraer el registro");
+        $inst = Persona::factory()->make();
+        $this->assertNotNull($inst, "No funcionó el factory()->make()");
+        $inst->save();
+        $this->assertDatabaseHas($this->table, $inst->getAttributes());
+        $reg = Persona::findOrFail($inst->id);
+        $this->assertNotNull($reg, "No se pudo extraer el registro");
         $this->assertDatabaseCount($this->table, 1);
 
         /** con create() */
-        $this->inst = Persona::factory()->create();
-        $this->assertNotNull(
-            $this->inst,
-            "No se funcionó el factory()->create()"
-        );
-        $this->assertDatabaseHas($this->table, $this->inst->getRawOriginal());
-        $this->reg = Persona::findOrFail($this->inst->id);
-        $this->assertNotNull($this->reg, "No se pudo extraer el registro");
+        $inst = Persona::factory()->create();
+        $this->assertNotNull($inst, "No funcionó el factory()->create()");
+        $this->assertDatabaseHas($this->table, $inst->getAttributes());
+        $reg = Persona::findOrFail($inst->id);
+        $this->assertNotNull($reg, "No se pudo extraer el registro");
         $this->assertDatabaseCount($this->table, 2);
     }
 
-    public function test_create(): void
+    public function testCreate(): void
     {
-        $this->inst = Persona::factory()->make();
-        $this->assertNotNull(
-            $this->inst,
-            "No se funcionó el factory()->create()"
-        );
-        Persona::create($this->inst->toArray());
-
-        $this->assertDatabaseHas($this->table, $this->inst->getRawOriginal());
+        $inst = Persona::factory()->make();
+        $this->assertNotNull($inst, "No se funcionó el factory()->create()");
+        $inst->save();
+        $this->assertDatabaseHas($this->table, $inst->getAttributes());
         $this->assertDatabaseCount($this->table, 1);
     }
-    public function test_read(): void
+    public function testRead(): void
     {
-        $this->inst = Persona::factory()->make();
-        $this->assertNotNull(
-            $this->inst,
-            "No se funcionó el factory()->make()"
-        );
-        Persona::create($this->inst->toArray());
-
-        $this->reg = Persona::findOrFail($this->inst->id);
-        $this->assertNotNull($this->reg, "No se pudo leer el registro");
+        $inst = Persona::factory()->make();
+        $this->assertNotNull($inst, "No se funcionó el factory()->make()");
+        $inst->save();
+        $reg = Persona::findOrFail($inst->id);
+        $this->assertNotNull($reg, "No se pudo leer el registro");
         $this->assertDatabaseCount($this->table, 1);
-        $this->assertDatabaseHas($this->table, $this->inst->getRawOriginal());
+        $this->assertDatabaseHas($this->table, $inst->getAttributes());
     }
-    public function test_update(): void
+    public function testUpdate(): void
     {
         /** Actualización solo de la columna 'nombres' */
         $random = fake()->firstName();
 
-        $this->inst = Persona::factory()->make();
-        $this->assertNotNull(
-            $this->inst,
-            "No se funcionó el factory()->create()"
-        );
-        Persona::create($this->inst->toArray());
+        $inst = Persona::factory()->make();
+        $this->assertNotNull($inst, "No se funcionó el factory()->create()");
+        Persona::create($inst->toArray());
 
         $this->assertDatabaseCount($this->table, 1);
-        $this->assertDatabaseHas($this->table, $this->inst->getRawOriginal());
+        $this->assertDatabaseHas($this->table, $inst->getAttributes());
 
-        $this->inst->nombres = $random;
-        $this->assertEquals($random, $this->inst->nombres);
-        Persona::where("id", $this->inst->id)->update([
-            "nombres" => $this->inst->nombres,
+        $inst->nombres = $random;
+        $this->assertEquals($random, $inst->nombres);
+        Persona::where("id", $inst->id)->update([
+            "nombres" => $inst->nombres,
         ]);
-        $this->assertDatabaseHas($this->table, $this->inst->getRawOriginal());
+        $this->assertDatabaseHas($this->table, $inst->getAttributes());
         $this->assertDatabaseCount($this->table, 1);
     }
-    public function test_delete(): void
+    public function testDelete(): void
     {
-        $this->inst = Persona::factory()->make();
-        $this->assertNotNull(
-            $this->inst,
-            "No se funcionó el factory()->create()"
-        );
-        Persona::create($this->inst->toArray());
+        $inst = Persona::factory()->make();
+        $this->assertNotNull($inst, "No se funcionó el factory()->create()");
+        Persona::create($inst->toArray());
 
         $this->assertDatabaseCount($this->table, 1);
-        $this->assertDatabaseHas($this->table, $this->inst->getRawOriginal());
+        $this->assertDatabaseHas($this->table, $inst->getAttributes());
 
-        Persona::where("id", $this->inst->id)->delete();
-        $this->assertDatabaseMissing(
-            $this->table,
-            $this->inst->getRawOriginal()
-        );
+        Persona::where("id", $inst->id)->delete();
+        $this->assertDatabaseMissing($this->table, $inst->getAttributes());
         $this->assertDatabaseEmpty($this->table);
     }
 
-    public function test_seeder(): void
+    public function testSeeder(): void
     {
         $this->seed(PersonaSeeder::class);
         $this->assertDatabaseCount($this->table, 50);
