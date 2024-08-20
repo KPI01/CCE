@@ -8,20 +8,19 @@ use Illuminate\Support\Facades\Schema;
 
 class MaquinaSeeder extends Seeder
 {
-    public static int $count;
+    public int $c;
 
     public function __construct(int $count = 25)
     {
-        self::$count = $count;
+        $this->c = $count;
     }
     public function run(): void
     {
         //
-        $count = self::$count;
-        Schema::disableForeignKeyConstraints();
+        $c = $this->c;
         echo "Llenando la auxiliar: tipos_maquina ..." . PHP_EOL;
         $this->call(AuxTiposMaquinaSeeder::class);
-        echo "Creando maquinas ({$count}) ..." . PHP_EOL;
-        Maquina::factory($count)->create();
+        echo "Creando maquinas ({$c}) ..." . PHP_EOL;
+        Maquina::factory($c)->create();
     }
 }
