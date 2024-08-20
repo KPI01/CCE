@@ -20,7 +20,7 @@ export default function Table({ data, url }: Props) {
 
   return (
     <DataLayout
-      title="Máquina"
+      title="Máquinas"
       data={data}
       columns={columns}
       url={url}
