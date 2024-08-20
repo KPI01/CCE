@@ -3,22 +3,27 @@
 namespace Database\Seeders;
 
 use App\Models\Persona;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class PersonaSeeder extends Seeder
 {
+    public int $count;
+
+    public function __construct(int $count = 25)
+    {
+        $this->count = $count;
+    }
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
         //
-        $num = 25;
-        echo "Creando personas ($num) ..." . PHP_EOL;
-        Persona::factory()->count($num)->create();
+        $c = $this->count;
+        echo "Creando personas ({$c}) ..." . PHP_EOL;
+        Persona::factory()->count($c)->create();
 
-        echo "Creando personas con ROPO ($num) ..." . PHP_EOL;
-        Persona::factory()->count($num)->withRopo()->create();
+        echo "Creando personas con ROPO ({$c}) ..." . PHP_EOL;
+        Persona::factory()->count($c)->withRopo()->create();
     }
 }

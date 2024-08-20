@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class Maquina extends RecursoBase
 {
-    protected $table = "maquinas";
     protected $primaryKey = "id";
     const TIPOS_TABLE = "tipos_maquina";
     protected $appends = ["url", "tipo"];
