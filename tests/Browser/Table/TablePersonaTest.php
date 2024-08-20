@@ -3,6 +3,7 @@
 namespace Tests\Browser\Table;
 
 use App\Models\Persona;
+use Database\Seeders\PersonaSeeder;
 use Illuminate\Support\Facades\Schema;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Components\Navbar;
@@ -11,17 +12,23 @@ use Tests\DuskTestCase;
 
 class TablePersonaTest extends DuskTestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->table = (new Persona())->getTable();
+    }
+
     public function testAcceso(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Table("personas"));
+            $browser->visit(new Table("persona"));
         });
     }
 
     public function testAccesibilidad(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Table("personas"))->assertSee("Personas");
+            $browser->visit(new Table("persona"));
 
             $browser->within(new Navbar(), function ($browser) {
                 $browser
@@ -36,26 +43,6 @@ class TablePersonaTest extends DuskTestCase
                 ->assertPresent("@dt")
                 ->assertPresent("@thead")
                 ->assertPresent("@tbody")
-                ->assertPresent("@v-btn")
-                ->assertEnabled("@v-btn")
-                ->click("@v-btn")
-                ->pause(500)
-                ->assertPresent("@v-content")
-                ->visit(new Table("personas"))
-                ->assertNotPresent("@v-content")
-                ->assertPresent("@f-btn")
-                ->assertEnabled("@f-btn")
-                ->click("@f-btn")
-                ->pause(500)
-                ->assertPresent("@f-content")
-                ->visit(new Table("personas"))
-                ->assertNotPresent("@f-content")
-                ->assertPresent("@p-container")
-                ->assertPresent("@p-size-btn")
-                ->assertEnabled("@p-size-btn")
-                ->click("@p-size-btn")
-                ->pause(500)
-                ->assertPresent("@radix-popper")
                 ->assertPresent("@p-indexing")
                 ->assertSeeIn("@p-indexing", "Página")
                 ->assertPresent("@pag-primera")
@@ -68,39 +55,21 @@ class TablePersonaTest extends DuskTestCase
     public function testVisibilidad(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser
-                ->visit(new Table("personas"))
-                ->within(new Navbar(), function (Browser $browser) {
-                    $browser
-                        ->assertVisible("@navbar")
-                        ->assertVisible("@acc-home")
-                        ->assertVisible("@acc-recursos")
-                        ->assertVisible("@acc-config");
-                });
+            $browser->visit(new Table("persona"));
+
+            $browser->within(new Navbar(), function (Browser $browser) {
+                $browser
+                    ->assertVisible("@navbar")
+                    ->assertVisible("@acc-home")
+                    ->assertVisible("@acc-recursos")
+                    ->assertVisible("@acc-config");
+            });
 
             $browser
                 ->assertVisible("@container")
                 ->assertVisible("@dt")
                 ->assertVisible("@thead")
                 ->assertVisible("@tbody")
-                ->assertVisible("@v-btn")
-                ->assertEnabled("@v-btn")
-                ->click("@v-btn")
-                ->pause(750)
-                ->assertVisible("@v-content")
-                ->visit(new Table("personas"))
-                ->assertVisible("@f-btn")
-                ->assertEnabled("@f-btn")
-                ->click("@f-btn")
-                ->pause(750)
-                ->assertVisible("@f-content")
-                ->visit(new Table("personas"))
-                ->assertVisible("@p-container")
-                ->assertVisible("@p-size-btn")
-                ->assertEnabled("@p-size-btn")
-                ->click("@p-size-btn")
-                ->pause(500)
-                ->assertVisible("@radix-popper")
                 ->assertVisible("@p-indexing")
                 ->assertSeeIn("@p-indexing", "Página")
                 ->assertVisible("@pag-primera")
@@ -110,68 +79,51 @@ class TablePersonaTest extends DuskTestCase
         });
     }
 
-    public function testContenidoFilas(): void
-    {
-        Schema::disableForeignKeyConstraints();
-        Persona::truncate();
-
-        $this->assertDatabaseEmpty("personas");
-
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Table("personas"));
-
-            $browser
-                ->assertPresent("@dt")
-                ->assertVisible("@dt")
-                ->assertSeeIn("@tbody", "Sin registros.");
-        });
-
-        Persona::factory(10)->create();
-
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Table("personas"));
-
-            $browser
-                ->assertPresent("@dt")
-                ->assertVisible("@dt")
-                ->assertDontSeeIn("@tbody", "Sin registros.");
-        });
-    }
-
-    public function testFiltros(): void
+    public function testMenuVisibilidadColumnas(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Table("personas"));
-
-            $browser
-                ->assertPresent("@f-btn")
-                ->assertEnabled("@f-btn")
-                ->click("@f-btn")
-                ->pause(750)
-                ->assertPresent("@f-content")
-                ->assertVisible("@f-content");
-        });
-    }
-
-    public function testVisibilidadColumnas(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Table("personas"));
+            $browser->visit(new Table("persona"));
 
             $browser
                 ->assertPresent("@v-btn")
+                ->assertVisible("@v-btn")
                 ->assertEnabled("@v-btn")
                 ->click("@v-btn")
-                ->pause(750)
-                ->assertPresent("@v-content")
-                ->assertVisible("@v-content");
+                ->pause(1000)
+                ->assertPresent("@radix-popper")
+                ->assertVisible("@radix-popper")
+                ->assertPresent("@radix-menu-item-checkbox");
         });
     }
 
-    public function testPaginacion(): void
+    public function testMenuFiltros(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Table("personas"));
+            $browser->visit(new Table("persona"));
+
+            $browser
+                ->assertPresent("@f-btn")
+                ->assertVisible("@f-btn")
+                ->assertEnabled("@f-btn")
+                ->click("@f-btn")
+                ->pause(1000)
+                ->assertPresent("@f-content")
+                ->assertVisible("@f-content")
+                ->assertPresent("@f-title")
+                ->assertVisible("@f-title")
+                ->assertPresent("@f-descrip")
+                ->assertVisible("@f-descrip")
+                ->assertPresent("@f-close")
+                ->assertVisible("@f-close")
+                ->assertPresent("@f-reset")
+                ->assertVisible("@f-reset");
+        });
+    }
+
+    public function testMenuPaginacion(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit(new Table("persona"));
 
             $browser
                 ->assertPresent("@p-container")
@@ -187,8 +139,10 @@ class TablePersonaTest extends DuskTestCase
 
     public function testMenuFilas(): void
     {
+        $this->seed(PersonaSeeder::class);
+
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Table("personas"));
+            $browser->visit(new Table("persona"));
 
             $browser
                 ->assertPresent("@r-menu")
@@ -199,10 +153,38 @@ class TablePersonaTest extends DuskTestCase
                 ->assertVisible("@radix-popper")
                 ->assertPresent("@acc-show")
                 ->assertPresent("@acc-edit")
-                ->assertPresent("@acc-delete")
+                ->assertPresent("@acc-destroy")
                 ->assertVisible("@acc-show")
                 ->assertVisible("@acc-edit")
-                ->assertVisible("@acc-delete");
+                ->assertVisible("@acc-destroy");
+        });
+    }
+
+    public function testContenidoFilas(): void
+    {
+        Schema::disableForeignKeyConstraints();
+        Persona::truncate();
+
+        $this->assertDatabaseEmpty($this->table);
+
+        $this->browse(function (Browser $browser) {
+            $browser->visit(new Table("persona"));
+
+            $browser
+                ->assertPresent("@dt")
+                ->assertVisible("@dt")
+                ->assertSeeIn("@tbody", "Sin registros.");
+        });
+
+        $this->seed(PersonaSeeder::class);
+
+        $this->browse(function (Browser $browser) {
+            $browser->visit(new Table("persona"));
+
+            $browser
+                ->assertPresent("@dt")
+                ->assertVisible("@dt")
+                ->assertDontSeeIn("@tbody", "Sin registros.");
         });
     }
 
@@ -210,10 +192,10 @@ class TablePersonaTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser
-                ->visit(new Table("personas"))
+                ->visit(new Table("persona"))
                 ->click("@acc-create")
                 ->pause(750)
-                ->assertUrlIs(route("personas.create"));
+                ->assertUrlIs(route("persona.create"));
         });
     }
 }

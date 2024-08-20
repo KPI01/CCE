@@ -12,13 +12,11 @@ use Tests\DuskTestCase;
 
 class TableMaquinaTest extends DuskTestCase
 {
-    public $table;
     public function setUp(): void
     {
         parent::setUp();
         $this->table = (new Maquina())->getTable();
     }
-
     public function testAcceso(): void
     {
         $this->browse(function (Browser $browser) {
@@ -186,6 +184,17 @@ class TableMaquinaTest extends DuskTestCase
                 ->assertPresent("@dt")
                 ->assertVisible("@dt")
                 ->assertDontSeeIn("@tbody", "Sin registros.");
+        });
+    }
+
+    public function testGoToCreate(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser
+                ->visit(new Table("maquina"))
+                ->click("@acc-create")
+                ->pause(750)
+                ->assertUrlIs(route("maquina.create"));
         });
     }
 }

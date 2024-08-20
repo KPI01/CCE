@@ -10,10 +10,12 @@ use Illuminate\Support\Collection;
 use Laravel\Dusk\TestCase as BaseTestCase;
 use PHPUnit\Framework\Attributes\BeforeClass;
 use Laravel\Dusk\Browser;
+use Tests\Browser\Components\Navbar;
 
 abstract class DuskTestCase extends BaseTestCase
 {
     protected $user;
+    public string $table;
     const KEYS = [
         "backspace" => "\xEE\x80\x83",
     ];
