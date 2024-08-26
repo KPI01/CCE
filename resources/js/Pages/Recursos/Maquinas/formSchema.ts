@@ -15,7 +15,7 @@ export const formSchema = z.object({
     .max(100, MAX_MESSAGE(100)),
   matricula: z
     .string({
-      required_error: REQUIRED_MSG("La matrícula"),
+      required_error: REQUIRED_MSG("La matrícula", "a"),
       invalid_type_error: BE_VALID_MSG("La matrícula"),
     })
     .min(1, REQUIRED_MSG("La matrícula"))
