@@ -48,7 +48,9 @@ export default function FormHeader({
     <div className={cn("flex items-center gap-4", className)}>
       <div className="flex gap-4">
         <div className="flex flex-col">
-          <h1 className="my-3 text-5xl font-extrabold">{title}</h1>
+          <h1 id="main-title" className="my-3 text-5xl font-extrabold">
+            {title}
+          </h1>
           <div className="flex select-none gap-x-4">
             {showActions && (
               <>
