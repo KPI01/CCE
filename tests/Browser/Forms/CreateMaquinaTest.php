@@ -210,7 +210,6 @@ class CreateMaquinaTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit(new Form(...self::PARAMS));
 
-            /** Longitudes de campos */
             $browser
                 ->type("@input-nombre", "ab")
                 ->type("@input-matricula", "abc")
