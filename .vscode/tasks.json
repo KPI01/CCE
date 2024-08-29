@@ -159,8 +159,8 @@
         "reveal": "always",
         "focus": true,
         "panel": "dedicated",
-        "showReuseMessage": false,
-        "clear": true,
+        "showReuseMessage": true,
+        "clear": false,
         "group": "testing"
       }
     },

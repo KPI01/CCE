@@ -1,9 +1,5 @@
 import { Empresa, Persona, User } from "./modelos";
 
-export type Aux = {
-  tipos?: Array<string>;
-};
-
 export interface Message {
   content?: string;
   action?: {

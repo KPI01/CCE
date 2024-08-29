@@ -244,6 +244,8 @@ class CreateMaquinaTest extends DuskTestCase
                     "La matrícula sólo debe contener: letras mayúsculas, números."
                 );
 
+            /** Opcionales */
+
             $browser
                 ->type("@input-nro_serie", "abd()$%")
                 ->assertPresent("@msg-nro_serie")
@@ -296,9 +298,10 @@ class CreateMaquinaTest extends DuskTestCase
                 ->pause(5000)
                 ->assertRouteIs("maquina.index");
         });
+
         $attr = $data->getAttributes();
         unset($attr["id"]);
 
-        $this->assertDatabaseHas((new Maquina())->getTable(), $attr);
+        $this->assertDatabaseHas(Maquina::class, $attr);
     }
 }
