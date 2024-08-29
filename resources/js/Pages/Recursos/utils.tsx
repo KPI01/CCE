@@ -22,7 +22,12 @@ export const MIN_MESSAGE = (size: number) =>
   `Este campo debe tener al menos ${size} caracteres.`;
 export const MAX_MESSAGE = (size: number) =>
   `Este campo debe tener como máximo ${size} caracteres`;
-export const BE_VALID_MSG = (start: string) => `${start} debe ser válido.`;
+export const BE_VALID_MSG = (start: string, end: "a" | "o" = "o") =>
+  `${start} debe ser válid${end}.`;
+export const NOT_CONTAIN_MSG = (start: string, prohibited: string[]) =>
+  `${start} no debe contener: ${prohibited.join(", ")}.`;
+export const ONLY_CONTAIN_MSG = (start: string, allowed: string[]) =>
+  `${start} sólo debe contener: ${allowed.join(", ")}.`;
 
 export const RecursosIcon = ({ className }: IconProps) => (
   <Box className={cn(ICON_CLASS, className)} />
