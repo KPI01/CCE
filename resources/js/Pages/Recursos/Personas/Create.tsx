@@ -19,6 +19,7 @@ import { Switch } from "@/Components/ui/switch";
 import { Label } from "@radix-ui/react-label";
 import { Breadcrumbs } from "@/types";
 import { CONTAINER_CLASS, CreateIcon, SendIcon, TablaIcon } from "../utils";
+import FormButton from "@/Components/Forms/FormButton";
 
 const schema = formSchema;
 
@@ -78,7 +79,7 @@ export default function Create({ url }: { url: string }) {
                   label="Nombre(s) *"
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value || undefined}
+                  value={field.value}
                 />
               )}
             />
@@ -90,9 +91,8 @@ export default function Create({ url }: { url: string }) {
                   id={field.name}
                   label="Apellido(s) *"
                   name={field.name}
-                  placeholder="..."
                   onChange={field.onChange}
-                  value={field.value || undefined}
+                  value={field.value}
                 />
               )}
             />
@@ -114,7 +114,7 @@ export default function Create({ url }: { url: string }) {
                 name="tipo_id_nac"
                 render={({ field }) => (
                   <FormItemSelectConstructor
-                    id={field.name.replace(".", "-")}
+                    id={field.name}
                     name={field.name}
                     withLabel={false}
                     value={field.value}
@@ -148,7 +148,6 @@ export default function Create({ url }: { url: string }) {
                   id={field.name}
                   label="Correo *"
                   name={field.name}
-                  placeholder="..."
                   onChange={field.onChange}
                   value={field.value}
                 />
@@ -162,9 +161,8 @@ export default function Create({ url }: { url: string }) {
                   id={field.name}
                   label="Teléfono"
                   name={field.name}
-                  placeholder="..."
                   onChange={field.onChange}
-                  value={field.value || ""}
+                  value={field.value}
                 />
               )}
             />
@@ -176,7 +174,7 @@ export default function Create({ url }: { url: string }) {
                   id={field.name}
                   name={field.name}
                   label="Perfil"
-                  value={field.value as string}
+                  value={field.value || PERFILES[0]}
                   placeholder="Seleccionar perfil..."
                   onChange={field.onChange}
                   options={PERFILES}
@@ -188,13 +186,12 @@ export default function Create({ url }: { url: string }) {
               name="observaciones"
               render={({ field }) => (
                 <FormItemConstructor
+                  textarea
                   id={field.name}
                   label="Observaciones"
-                  textarea
                   name={field.name}
-                  placeholder="..."
                   onChange={field.onChange}
-                  value={field.value || ""}
+                  value={field.value}
                 />
               )}
             />
@@ -207,7 +204,7 @@ export default function Create({ url }: { url: string }) {
                 onClick={() => handleRopoShow(showRopo)}
               />
               <Label className="font-medium" htmlFor="show-ropo">
-                ¿Datos ROPO?
+                ¿Con ROPO?
               </Label>
             </div>
             {showRopo && (
@@ -235,7 +232,7 @@ export default function Create({ url }: { url: string }) {
                       label="Identificación"
                       name={field.name}
                       onChange={field.onChange}
-                      value={field.value || ""}
+                      value={field.value}
                     />
                   )}
                 />
@@ -255,14 +252,14 @@ export default function Create({ url }: { url: string }) {
               </div>
             )}
           </div>
-
-          <div className="col-span-full flex items-center space-x-2 font-medium"></div>
-
-          <div className="col-span-full flex items-center justify-between">
-            <Button type="submit" size={"lg"} className="ms-auto text-lg">
+          <div className="col-span-full w-full">
+            <p className="mb-3 ml-auto w-fit text-sm">
+              Los campos marcados con (*) son obligatorios
+            </p>
+            <FormButton type="submit" className="ms-auto">
               <SendIcon />
-              Crear
-            </Button>
+              Enviar
+            </FormButton>
           </div>
         </form>
       </Form>

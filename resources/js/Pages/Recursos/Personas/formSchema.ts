@@ -20,7 +20,7 @@ const CAPACITACIONES_READONLY = [
   "Piloto Aplicador",
 ] as const;
 
-const NOMBRES_REGEX = /^[A-Za-záéíóúÁÉÍÓÚñÑ ]*$/gm;
+const LETRAS_REGEX = /^[A-Za-záéíóúÁÉÍÓÚñÑ ]*$/gm;
 const ROPO_NRO_REGEX =
   /^([\d]{7,12}[SASTU]*([/][\d]{1,3})?|[\d]{1,3}[/][\d]{1,3})$/gm;
 const TEL_REGEX =
@@ -37,7 +37,7 @@ export const formSchema = z
       .min(1, REQUIRED_MSG("El nombre"))
       .min(3, MIN_MESSAGE(3))
       .max(50, MAX_MESSAGE(50))
-      .regex(NOMBRES_REGEX, "El nombre solo puede contener letras."),
+      .regex(LETRAS_REGEX, "El nombre solo puede contener letras."),
     apellidos: z
       .string({
         required_error: REQUIRED_MSG("El apellido"),
@@ -46,13 +46,13 @@ export const formSchema = z
       .min(1, REQUIRED_MSG("El apellido"))
       .min(3, MIN_MESSAGE(3))
       .max(50, MAX_MESSAGE(50))
-      .regex(NOMBRES_REGEX, "El apellido solo puede contener letras."),
+      .regex(LETRAS_REGEX, "El apellido solo puede contener letras."),
     tipo_id_nac: z.enum(TIPOS_ID_NAC_READONLY, {
       invalid_type_error: BE_VALID_MSG("El tipo de identificación"),
     }),
     id_nac: z
       .string({
-        required_error: REQUIRED_MSG("La identificación"),
+        required_error: REQUIRED_MSG("La identificación", "a"),
       })
       .min(1, REQUIRED_MSG("La identificación"))
       .max(12, MAX_MESSAGE(12)),
@@ -67,19 +67,20 @@ export const formSchema = z
       .enum(PERFILES_READONLY, {
         invalid_type_error: BE_VALID_MSG("El perfil"),
       })
-      .default("Aplicador"),
+      .default("Productor"),
     observaciones: z.string().max(1000, MAX_MESSAGE(1000)).optional(),
     ropo: z
       .object({
         capacitacion: z
           .enum(CAPACITACIONES_READONLY, {
-            invalid_type_error: BE_VALID_MSG("La capacitación ROPO"),
+            invalid_type_error: BE_VALID_MSG("La capacitación ROPO", "a"),
           })
           .optional(),
         caducidad: z
           .date({
             invalid_type_error: BE_VALID_MSG(
               "La fecha de caducidad del carné ROPO",
+              "a",
             ),
           })
           .optional(),
@@ -100,7 +101,7 @@ export const formSchema = z
         if (data?.nro && !data?.capacitacion) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: REQUIRED_MSG("La capacitación ROPO"),
+            message: REQUIRED_MSG("La capacitación ROPO", "a"),
             path: ["capacitacion"],
           });
         } else if (!data?.nro && data?.capacitacion) {
