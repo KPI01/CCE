@@ -22,7 +22,6 @@ interface Props extends ConstructorProps {
   itemStyle?: React.CSSProperties;
   TriggerClass?: string;
   TriggerStyle?: React.CSSProperties;
-  open?: boolean;
 }
 
 export function FormItemSelectConstructor({
@@ -40,7 +39,6 @@ export function FormItemSelectConstructor({
   TriggerClass = "",
   TriggerStyle,
   descripcion = undefined,
-  open = false,
 }: Props) {
   const toId = id.includes(".") ? id.replace(".", "_") : id;
   const triggerId = `trigger-${toId}`;
@@ -73,7 +71,6 @@ export function FormItemSelectConstructor({
           onValueChange={onChange}
           value={value}
           disabled={disabled}
-          open={open}
         >
           <FormControl>
             <SelectTrigger
@@ -88,7 +85,7 @@ export function FormItemSelectConstructor({
             {options.map((val) => {
               if (val === "") return;
               return (
-                <SelectItem key={val} value={val}>
+                <SelectItem key={val} value={val} textValue={val}>
                   {val}
                 </SelectItem>
               );

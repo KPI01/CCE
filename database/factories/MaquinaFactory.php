@@ -26,11 +26,11 @@ class MaquinaFactory extends Factory
             //
             "id" => fake()->unique()->uuid(),
             "nombre" => fake()->sentence(2),
-            "matricula" => fake()->bothify("??##??##??##??##"),
+            "matricula" => fake()->regexify("[A-Z0-9]{10}"),
             "modelo" => fake()->word(),
             "marca" => fake()->word(),
             "roma" => fake()->bothify("??##??##??##??##"),
-            "nro_serie" => fake()->bothify("??##??##??##??##"),
+            "nro_serie" => fake()->regexify("[A-Z0-9]{15}"),
             "tipo_id" => fake()->randomElement($tipos),
             "fabricante" => fake()->company(),
             "cad_iteaf" => Carbon::parse(

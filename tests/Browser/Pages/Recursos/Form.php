@@ -8,7 +8,7 @@ use Laravel\Dusk\Page;
 
 class Form extends Page
 {
-    private array $validAcc = ["show", "edit", "create"];
+    const VALID_ACTIONS = ["show", "edit", "create"];
     private string $rcs;
     private string $acc;
     private string|null $id;
@@ -16,11 +16,11 @@ class Form extends Page
     public function __construct(
         string $recurso,
         string $accion,
-        string $id = null
+        string|null $id = null
     ) {
-        if (!in_array($accion, $this->validAcc)) {
+        if (!in_array($accion, self::VALID_ACTIONS)) {
             echo "Acción no válida" . PHP_EOL;
-            $arr_str = implode(", ", $this->validAcc);
+            $arr_str = implode(", ", $this::VALID_ACTIONS);
             report("La acción debe ser alguna de las siguientes: $arr_str");
         }
 
@@ -76,6 +76,11 @@ class Form extends Page
             "@reset" => 'button[type="reset"]',
             "@separator" => 'div[data-orientation][role="none"]',
             "@back-btn" => "button#back-btn",
+            "@breadcrumb" => "nav[aria-label=breadcrumb]",
+            "@title" => "h1#main-title",
+            "@sel-options" => "div[data-radix-popper-content-wrapper]",
+            "@sel-option" =>
+                "div[data-radix-popper-content-wrapper] div[role=option]",
         ];
     }
 }

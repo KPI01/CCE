@@ -7,10 +7,9 @@ use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Illuminate\Support\Collection;
+use Laravel\Dusk\Browser;
 use Laravel\Dusk\TestCase as BaseTestCase;
 use PHPUnit\Framework\Attributes\BeforeClass;
-use Laravel\Dusk\Browser;
-use Tests\Browser\Components\Navbar;
 
 abstract class DuskTestCase extends BaseTestCase
 {
@@ -27,7 +26,7 @@ abstract class DuskTestCase extends BaseTestCase
     public static function prepare(): void
     {
         if (!static::runningInSail()) {
-            static::startChromeDriver();
+            static::startChromeDriver(["--port=9515"]);
         }
     }
 
@@ -41,6 +40,7 @@ abstract class DuskTestCase extends BaseTestCase
                 $this->shouldStartMaximized()
                     ? "--start-maximized"
                     : "--window-size=1920,1080",
+                "--disable-search-engine-choice-screen",
             ])
                 ->unless($this->hasHeadlessDisabled(), function (
                     Collection $items
@@ -51,18 +51,17 @@ abstract class DuskTestCase extends BaseTestCase
         );
 
         return RemoteWebDriver::create(
-            $_ENV["DUSK_DRIVER_URL"] ?? "http://127.0.0.1:9515",
+            $_ENV["DUSK_DRIVER_URL"] ??
+                (env("DUSK_DRIVER_URL") ?? "http://localhost:9515"),
             DesiredCapabilities::chrome()->setCapability(
                 ChromeOptions::CAPABILITY,
                 $options
             )
         );
     }
-
     public function setUp(): void
     {
         parent::setUp();
-
         // Login como informatica
         $this->user = User::where("email", "informatica@fruveco.com")->first();
         $this->browse(function (Browser $browser) {

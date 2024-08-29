@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Maquina;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -54,10 +55,16 @@ class MaquinaController extends Controller
         $uniques = $request->all(["matricula"]);
 
         $tipo_id = DB::table(Maquina::TIPOS_TABLE)
-            ->where("tipo", $data["tipo"])
+            ->where("nombre", $data["tipo"])
+            ->pluck("id")
             ->first();
 
-        $data["tipo"] = $tipo_id->id;
+        if (isset($data["cad_iteaf"])) {
+            $data["cad_iteaf"] =
+                Carbon::parse($data["cad_iteaf"])->format("Y-m-d") ?? null;
+        }
+        $data["tipo_id"] = $tipo_id;
+        unset($data["tipo"]);
 
         if (
             $this->valueExists(
@@ -76,7 +83,7 @@ class MaquinaController extends Controller
         $this->toastExitoConstructor(
             accion: "store",
             seccion: "description",
-            append: $inst->nombre . " (" . $inst->matricula . ")"
+            append: "{$inst->nombre} ({$inst->matricula})"
         );
         return to_route("maquina.index")->with([
             "from" => "maquina.store",
