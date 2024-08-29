@@ -1,5 +1,11 @@
 import { z } from "zod";
-import { BE_VALID_MSG, MAX_MESSAGE, MIN_MESSAGE, REQUIRED_MSG } from "../utils";
+import {
+  BE_VALID_MSG,
+  MAX_MESSAGE,
+  MIN_MESSAGE,
+  ONLY_CONTAIN_MSG,
+  REQUIRED_MSG,
+} from "../utils";
 
 export const RECURSO = "persona";
 
@@ -37,7 +43,7 @@ export const formSchema = z
       .min(1, REQUIRED_MSG("El nombre"))
       .min(3, MIN_MESSAGE(3))
       .max(50, MAX_MESSAGE(50))
-      .regex(LETRAS_REGEX, "El nombre solo puede contener letras."),
+      .regex(LETRAS_REGEX, ONLY_CONTAIN_MSG("El nombre", ["letras"])),
     apellidos: z
       .string({
         required_error: REQUIRED_MSG("El apellido"),
@@ -46,7 +52,7 @@ export const formSchema = z
       .min(1, REQUIRED_MSG("El apellido"))
       .min(3, MIN_MESSAGE(3))
       .max(50, MAX_MESSAGE(50))
-      .regex(LETRAS_REGEX, "El apellido solo puede contener letras."),
+      .regex(LETRAS_REGEX, ONLY_CONTAIN_MSG("El apellido", ["letras"])),
     tipo_id_nac: z.enum(TIPOS_ID_NAC_READONLY, {
       invalid_type_error: BE_VALID_MSG("El tipo de identificación"),
     }),
@@ -90,10 +96,7 @@ export const formSchema = z
               "El número de identificación del carné ROPO",
             ),
           })
-          .regex(
-            ROPO_NRO_REGEX,
-            "La identificación ROPO debe estar en el formato adecuado.",
-          )
+          .regex(ROPO_NRO_REGEX, BE_VALID_MSG("La identificación ROPO", "a"))
           .optional(),
       })
       .optional()
@@ -127,7 +130,7 @@ export const formSchema = z
     if (!regex?.test(id)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "La identificación debe tener el formato adecuado.",
+        message: BE_VALID_MSG("La identificación", "a"),
         path: ["id_nac"],
       });
     }

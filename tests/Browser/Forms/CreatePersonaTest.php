@@ -305,7 +305,7 @@ class CreatePersonaTest extends DuskTestCase
                 )
                 ->assertSeeIn(
                     "@msg-id_nac",
-                    "La identificación debe tener el formato adecuado."
+                    "La identificación debe ser válida."
                 )
                 ->assertSeeIn("@msg-email", "El correo debe ser válido");
 
@@ -313,21 +313,21 @@ class CreatePersonaTest extends DuskTestCase
                 ->type("@input-nombres", "nombre&%12")
                 ->assertSeeIn(
                     "@msg-nombres",
-                    "El nombre solo puede contener letras"
+                    "El nombre sólo debe contener: letras."
                 );
 
             $browser
                 ->type("@input-apellidos", "apellido&%12")
                 ->assertSeeIn(
                     "@msg-apellidos",
-                    "El apellido solo puede contener letras"
+                    "El apellido sólo debe contener: letras."
                 );
 
             $browser
                 ->type("@input-id_nac", "267&%")
                 ->assertSeeIn(
                     "@msg-id_nac",
-                    "La identificación debe tener el formato adecuado."
+                    "La identificación debe ser válida."
                 );
 
             $browser
@@ -369,7 +369,7 @@ class CreatePersonaTest extends DuskTestCase
                 ->assertPresent("@msg-ropo_nro")
                 ->assertSeeIn(
                     "@msg-ropo_nro",
-                    "La identificación ROPO debe estar en el formato adecuado."
+                    "La identificación ROPO debe ser válida."
                 );
         });
     }
