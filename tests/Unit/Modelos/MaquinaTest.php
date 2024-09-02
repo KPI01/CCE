@@ -5,7 +5,6 @@ namespace Tests\Unit\Modelos;
 use App\Models\Maquina;
 use Database\Seeders\MaquinaSeeder;
 use Illuminate\Support\Facades\Schema;
-use PHPUnit\Framework\TestCase;
 use Tests\ModeloTestCase;
 
 class MaquinaTest extends ModeloTestCase

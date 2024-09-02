@@ -9,10 +9,12 @@ use Illuminate\Support\Facades\Schema;
 class MaquinaSeeder extends Seeder
 {
     public int $c;
+    public static int $count = 0;
 
     public function __construct(int $count = 25)
     {
         $this->c = $count;
+        $this::$count = $count;
     }
     public function run(): void
     {
