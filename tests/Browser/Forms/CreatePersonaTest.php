@@ -396,17 +396,19 @@ class CreatePersonaTest extends DuskTestCase
                 ->type("@input-tel", $data->tel)
                 ->type("@txt-observaciones", $data->observaciones);
 
-            $browser->screenshot("envio-valido");
             $browser
                 ->press("@submit")
                 ->pause(5000)
                 ->assertRouteIs("persona.index");
-            $browser->screenshot("envio-valido-1");
         });
 
         $attr = $data->getAttributes();
         unset($attr["id"]);
 
         $this->assertDatabaseHas(Persona::class, $attr);
+    }
+
+    public function testEnvioValidoConRopo(): void
+    {
     }
 }
