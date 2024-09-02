@@ -5,7 +5,6 @@ namespace Tests\Browser\Show;
 use App\Models\Maquina;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Components\Navbar;
 use Tests\Browser\Pages\Recursos\Form;
@@ -174,7 +173,12 @@ class ShowMaquinaTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit(new Form(...$this->PARAMS));
 
-            $browser->click("@badge-edit")->pause(1000);
+            $browser
+                ->assertPresent("@badge-edit")
+                ->assertVisible("@badge-edit")
+                ->assertEnabled("@badge-edit")
+                ->click("@badge-edit")
+                ->pause(1000);
 
             $browser->assertRouteIs("maquina.edit", [
                 "maquina" => $this->row->id,
