@@ -1,4 +1,4 @@
-import { Aux, Breadcrumbs, Maquina } from "@/types";
+import { Breadcrumbs, Maquina } from "@/types";
 import { formSchema } from "./formSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,6 +24,10 @@ import { router } from "@inertiajs/react";
 import { useToast } from "@/Components/ui/use-toast";
 
 const schema = formSchema;
+
+type Aux = {
+  tipos: string[];
+};
 
 interface Props {
   data: Maquina;
