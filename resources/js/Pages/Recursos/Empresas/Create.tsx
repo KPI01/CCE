@@ -14,7 +14,7 @@ import { Save } from "lucide-react";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
 import { router } from "@inertiajs/react";
 import { Breadcrumbs } from "@/types";
-import { CONTAINER_CLASS, CreateIcon, TablaIcon } from "../utils";
+import { CONTAINER_CLASS, CreateIcon, SendIcon, TablaIcon } from "../utils";
 
 const schema = formSchema;
 
@@ -137,10 +137,9 @@ export default function Create({ url }: { url: string }) {
                   id={field.name}
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value || ""}
+                  value={field.value || PERFILES[0]}
                   placeholder="Selecciona el perfil para la empresa"
                   options={PERFILES}
-                  descripcion='Por defecto, se asignará "Aplicador"'
                 />
               )}
             />
@@ -183,7 +182,7 @@ export default function Create({ url }: { url: string }) {
                 id="show-ropo"
                 onClick={() => setShowRopo(!showRopo)}
               />
-              <Label htmlFor="show-ropo">¿Datos ROPO?</Label>
+              <Label htmlFor="show-ropo">¿Con ROPO?</Label>
             </div>
             {showRopo && (
               <div id="ropo-form" className="space-y-4">
@@ -236,11 +235,11 @@ export default function Create({ url }: { url: string }) {
             <p className="ml-auto w-fit text-sm">
               Los campos marcados con (*) son obligatorios
             </p>
+            <FormButton type="submit" className="ms-auto">
+              <SendIcon />
+              Enviar
+            </FormButton>
           </div>
-          <FormButton type="submit" className="col-span-full ml-auto">
-            <Save className="mr-2 size-4" />
-            Guardar
-          </FormButton>
         </form>
       </Form>
     </FormLayout>
