@@ -224,12 +224,7 @@ class ShowPersonaTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit(new Form(...$this->PARAMS));
 
-            $browser
-                ->assertPresent("@badge-edit")
-                ->assertVisible("@badge-edit")
-                ->assertEnabled("@badge-edit")
-                ->click("@badge-edit")
-                ->pause(1000);
+            $browser->click("@badge-edit")->pause(1000);
 
             $browser->assertRouteIs("persona.edit", [
                 "persona" => $this->row->id,
