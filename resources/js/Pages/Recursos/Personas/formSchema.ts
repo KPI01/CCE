@@ -110,7 +110,7 @@ export const formSchema = z
         } else if (!data?.nro && data?.capacitacion) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: REQUIRED_MSG("El número de identificación del carné ROPO"),
+            message: REQUIRED_MSG("La identificación ROPO"),
             path: ["nro"],
           });
         }
