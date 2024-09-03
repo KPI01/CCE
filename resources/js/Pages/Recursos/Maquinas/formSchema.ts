@@ -10,10 +10,10 @@ import {
 
 export const RECURSO = "maquina";
 
-const JUST_NUMBERS_UPPERLETTERS_REGEX = /^[A-Z0-9]+$/gm;
+const JUST_NUMBERS_UPPERLETTERS_REGEX = /^[A-Z0-9]+|^(?!.*\S)$/gm;
 
 const NOT_NUMBERS_NOR_SYMBOLS_REGEX =
-  /^[^(0-9!"·$%&/()=?¿¡'\-._,{}\[\]\(\)\^|@#\\)\n]+$/gm;
+  /^[^(0-9!"·$%&/()=?¿¡'\-._,{}\[\]\(\)\^|@#\\)\n]+$|^(?!.*\S)$/gm;
 
 export const formSchema = z.object({
   id: z.string().nullish(),

@@ -132,19 +132,6 @@ export default function Edit({ data, aux }: Props) {
           />
           <FormField
             control={form.control}
-            name="nro_serie"
-            render={({ field }) => (
-              <FormItemConstructor
-                id={field.name}
-                label="Nro. de Serie"
-                name={field.name}
-                value={field.value}
-                onChange={field.onChange}
-              />
-            )}
-          />
-          <FormField
-            control={form.control}
             name="tipo"
             render={({ field }) => (
               <FormItemSelectConstructor
@@ -154,6 +141,19 @@ export default function Edit({ data, aux }: Props) {
                 value={field.value}
                 onChange={field.onChange}
                 options={aux.tipos || []}
+              />
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="nro_serie"
+            render={({ field }) => (
+              <FormItemConstructor
+                id={field.name}
+                label="Nro. de Serie"
+                name={field.name}
+                value={field.value}
+                onChange={field.onChange}
               />
             )}
           />
@@ -246,6 +246,7 @@ export default function Edit({ data, aux }: Props) {
           />
           <div className="col-span-full flex items-center gap-16">
             <FormButton
+              id="destroy"
               variant={"destructive"}
               className="ms-auto"
               onClick={handleDelete}

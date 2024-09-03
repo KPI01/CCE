@@ -92,6 +92,7 @@ class ShowMaquinaTest extends DuskTestCase
             $browser
                 ->assertVisible("@breadcrumb")
                 ->assertVisible("@title")
+                ->assertVisible("@form-show-{$this->PARAMS[2]}")
                 ->assertVisible("@badge-destroy")
                 ->assertEnabled("@badge-destroy")
                 ->assertVisible("@badge-edit")
