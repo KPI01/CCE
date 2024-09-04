@@ -32,22 +32,23 @@ export default function Edit({ data }: { data: Empresa }) {
     data.ropo.caducidad = new Date(data.ropo?.caducidad);
 
   const parsed = schema.safeParse(data);
-  console.log(parsed);
+  console.debug(parsed);
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: { ...data },
   });
 
-  function handleDelete() {
+  function handleDelete(): void {
+    console.debug(`Eliminando ${data.id}...`);
     router.delete(data.url);
   }
 
-  function onSubmit(values: z.infer<typeof schema>) {
+  function onSubmit(values: z.infer<typeof schema>): void {
     const dirty = form.formState.dirtyFields;
     const parsed = schema.parse(values);
-    console.log("Enviando formulario...");
-    console.log(parsed);
+    console.debug("Enviando formulario...");
+    console.debug(parsed);
 
     const justDirty = toSend(dirty, parsed);
 
@@ -150,7 +151,7 @@ export default function Edit({ data }: { data: Empresa }) {
                   label="Perfil"
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value || ""}
+                  value={field.value || PERFILES[0]}
                   options={PERFILES}
                 />
               )}
@@ -164,7 +165,7 @@ export default function Edit({ data }: { data: Empresa }) {
                   label="Teléfono"
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value || ""}
+                  value={field.value}
                   autoComplete="tel"
                 />
               )}
@@ -179,7 +180,7 @@ export default function Edit({ data }: { data: Empresa }) {
                   label="Dirección"
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value || ""}
+                  value={field.value}
                   autoComplete="street-address"
                 />
               )}
@@ -194,7 +195,7 @@ export default function Edit({ data }: { data: Empresa }) {
                   label="Código"
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value || ""}
+                  value={field.value}
                   autoComplete="off"
                 />
               )}
@@ -209,7 +210,7 @@ export default function Edit({ data }: { data: Empresa }) {
                   label="Observaciones"
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value || ""}
+                  value={field.value}
                 />
               )}
             />
@@ -225,7 +226,7 @@ export default function Edit({ data }: { data: Empresa }) {
                   label="Capacitación"
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value || ""}
+                  value={field.value || CAPACITACIONES[0]}
                   options={CAPACITACIONES}
                 />
               )}
@@ -254,14 +255,6 @@ export default function Edit({ data }: { data: Empresa }) {
                   label="Caducidad"
                   value={field.value}
                   onChange={field.onChange}
-                  resetBtn
-                  resetFn={() =>
-                    form.setValue(field.name, undefined, {
-                      shouldValidate: true,
-                      shouldDirty: true,
-                      shouldTouch: true,
-                    })
-                  }
                 />
               )}
             />

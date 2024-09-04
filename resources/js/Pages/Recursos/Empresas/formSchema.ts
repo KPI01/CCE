@@ -26,7 +26,7 @@ const CAPACITACIONES_READONLY = [
 
 const NOMBRE_REGEX = /^[A-Za-z0-9áéíóúÁÉÍÓÚñÑ ,.&-]*$/gm;
 const ROPO_NRO_REGEX =
-  /^([\d]{7,12}[SASTU]*([/][\d]{1,3})?|[\d]{1,3}[/][\d]{1,3})$/gm;
+  /^([\d]{7,12}[SASTU]*([/][\d]{1,3})?|[\d]{1,3}[/][\d]{1,3})$|^(?!.*\S)/gm;
 const TEL_REGEX =
   /^(\+34|0034|34)?[6-9]\d{8}|(800|900)\d{6,7}|(901|902|905|803|806|807)\d{6}$|^(?!.*\S)/gm;
 
@@ -103,9 +103,7 @@ export const formSchema = z.object({
         .optional(),
       nro: z
         .string({
-          invalid_type_error: BE_VALID_MSG(
-            "El número de identificación del carné ROPO",
-          ),
+          invalid_type_error: BE_VALID_MSG("La identificación ROPO", "a"),
         })
         .regex(ROPO_NRO_REGEX, BE_VALID_MSG("La identificación ROPO", "a"))
         .optional(),
