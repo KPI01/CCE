@@ -138,6 +138,7 @@ class TableMaquinaTest extends DuskTestCase
 
     public function testMenuFilas(): void
     {
+        Maquina::truncate();
         $this->seed(MaquinaSeeder::class);
 
         $this->browse(function (Browser $browser) {

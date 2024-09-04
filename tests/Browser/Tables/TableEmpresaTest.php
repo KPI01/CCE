@@ -138,6 +138,7 @@ class TableEmpresaTest extends DuskTestCase
 
     public function testMenuFilas(): void
     {
+        Empresa::truncate();
         $this->seed(EmpresaSeeder::class);
 
         $this->browse(function (Browser $browser) {

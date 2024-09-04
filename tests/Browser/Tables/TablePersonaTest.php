@@ -139,6 +139,7 @@ class TablePersonaTest extends DuskTestCase
 
     public function testMenuFilas(): void
     {
+        Persona::truncate();
         $this->seed(PersonaSeeder::class);
 
         $this->browse(function (Browser $browser) {
