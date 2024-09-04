@@ -4,7 +4,6 @@ namespace Tests\Browser\Forms;
 
 use App\Models\Maquina;
 use Laravel\Dusk\Browser;
-use Tests\Browser\Components\Navbar;
 use Tests\Browser\Pages\Recursos\Form;
 use Tests\RecursoDuskTestCase;
 
