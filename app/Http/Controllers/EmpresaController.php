@@ -227,7 +227,7 @@ class EmpresaController extends Controller
                     "(" . $this->data->nif . ")",
                 ])
             );
-            return to_route("empresa.index")->with([
+            return to_route("empresa.show", $this->data->id)->with([
                 "from" => "empresa.update",
                 "message" => [
                     "toast" => $this->toasts["exito"]["update"],

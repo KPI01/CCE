@@ -28,7 +28,7 @@ const NOMBRE_REGEX = /^[A-Za-z0-9áéíóúÁÉÍÓÚñÑ ,.&-]*$/gm;
 const ROPO_NRO_REGEX =
   /^([\d]{7,12}[SASTU]*([/][\d]{1,3})?|[\d]{1,3}[/][\d]{1,3})$/gm;
 const TEL_REGEX =
-  /^((\+34|0034|34)?[6|7|8|9]\d{8}|(800|900)\d{6,7}|(901|902|905|803|806|807)\d{6})$/;
+  /^(\+34|0034|34)?[6-9]\d{8}|(800|900)\d{6,7}|(901|902|905|803|806|807)\d{6}$|^(?!.*\S)/gm;
 
 export const formSchema = z.object({
   id: z.string().optional(),
@@ -77,7 +77,7 @@ export const formSchema = z.object({
     .optional(),
   codigo: z
     .string()
-    .regex(/^\d+$/, ONLY_CONTAIN_MSG("El código", ["números"]))
+    .regex(/^\d+$|^(?!.*\S)/gm, ONLY_CONTAIN_MSG("El código", ["números"]))
     .optional(),
   perfil: z
     .enum(PERFILES_READONLY, {
