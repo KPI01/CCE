@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Components\Navbar;
 use Tests\Browser\Pages\Recursos\Form;
-use Tests\DuskTestCase;
+use Tests\RecursoDuskTestCase;
 
-class ShowMaquinaTest extends DuskTestCase
+class ShowMaquinaTest extends RecursoDuskTestCase
 {
     protected array $PARAMS;
     public Model $row;

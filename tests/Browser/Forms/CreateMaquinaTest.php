@@ -6,23 +6,27 @@ use App\Models\Maquina;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Components\Navbar;
 use Tests\Browser\Pages\Recursos\Form;
-use Tests\DuskTestCase;
+use Tests\RecursoDuskTestCase;
 
-class CreateMaquinaTest extends DuskTestCase
+class CreateMaquinaTest extends RecursoDuskTestCase
 {
-    const PARAMS = ["maquina", "create"];
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->PARAMS = ["maquina", "create"];
+    }
 
     public function testAcceso(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...self::PARAMS));
+            $browser->visit(new Form(...$this->PARAMS));
         });
     }
 
     public function testAccesibilidad(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...self::PARAMS));
+            $browser->visit(new Form(...$this->PARAMS));
 
             $browser->within(new Navbar(), function (Browser $browser) {
                 $browser
@@ -69,7 +73,7 @@ class CreateMaquinaTest extends DuskTestCase
     public function testVisibilidad(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...self::PARAMS));
+            $browser->visit(new Form(...$this->PARAMS));
 
             $browser->within(new Navbar(), function (Browser $browser) {
                 $browser
@@ -117,7 +121,7 @@ class CreateMaquinaTest extends DuskTestCase
     public function testCamposHabilitados(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...self::PARAMS));
+            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->assertEnabled("@input-nombre")
@@ -187,7 +191,7 @@ class CreateMaquinaTest extends DuskTestCase
     public function testEnvioVacio(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...self::PARAMS));
+            $browser->visit(new Form(...$this->PARAMS));
 
             $browser->press("@submit")->pause(500);
 
@@ -208,7 +212,7 @@ class CreateMaquinaTest extends DuskTestCase
     public function testEnvioInvalido(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...self::PARAMS));
+            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->type("@input-nombre", "ab")
@@ -281,7 +285,7 @@ class CreateMaquinaTest extends DuskTestCase
             ->first();
 
         $this->browse(function (Browser $browser) use ($data) {
-            $browser->visit(new Form(...self::PARAMS));
+            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->type("@input-nombre", $data->nombre)

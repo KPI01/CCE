@@ -12,10 +12,12 @@ use Laravel\Dusk\Browser;
 use Laravel\Dusk\TestCase as BaseTestCase;
 use PHPUnit\Framework\Attributes\BeforeClass;
 
-abstract class DuskTestCase extends BaseTestCase
+abstract class RecursoDuskTestCase extends BaseTestCase
 {
     protected $user;
     public string $table;
+    protected array $PARAMS;
+    public Model $row;
 
     /**
      * Prepare for Dusk test execution.
@@ -60,7 +62,7 @@ abstract class DuskTestCase extends BaseTestCase
     public function setUp(): void
     {
         parent::setUp();
-        // Login como informatica
+        // Login como admin
         $this->user = User::where("email", "informatica@fruveco.com")->first();
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->user);

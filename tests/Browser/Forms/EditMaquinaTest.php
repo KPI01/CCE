@@ -4,18 +4,14 @@ namespace Tests\Browser\Edit;
 
 use App\Models\Maquina;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Components\Navbar;
 use Tests\Browser\Pages\Recursos\Form;
-use Tests\DuskTestCase;
 use Illuminate\Support\Arr;
+use Tests\RecursoDuskTestCase;
 
-class EditMaquinaTest extends DuskTestCase
+class EditMaquinaTest extends RecursoDuskTestCase
 {
-    protected array $PARAMS;
-    public Model $row;
-
     public function setUp(): void
     {
         parent::setUp();
