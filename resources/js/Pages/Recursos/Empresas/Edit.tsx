@@ -8,7 +8,6 @@ import { Form, FormField } from "@/Components/ui/form";
 import FormTitle from "@/Components/Forms/FormTitle";
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
-import FormButton from "@/Components/Forms/FormButton";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 import { router } from "@inertiajs/react";
 import { useToast } from "@/Components/ui/use-toast";
@@ -17,11 +16,11 @@ import {
   EditIcon,
   EmpresaIcon,
   nullToUndefined,
-  SendIcon,
   TablaIcon,
   toSend,
   urlWithoutId,
 } from "../utils";
+import EditButtons from "@/Components/Forms/EditButtons";
 
 const schema = formSchema;
 
@@ -39,6 +38,10 @@ export default function Edit({ data }: { data: Empresa }) {
     resolver: zodResolver(schema),
     defaultValues: { ...data },
   });
+
+  function handleDelete() {
+    router.delete(data.url);
+  }
 
   function onSubmit(values: z.infer<typeof schema>) {
     const dirty = form.formState.dirtyFields;
@@ -140,11 +143,25 @@ export default function Edit({ data }: { data: Empresa }) {
             />
             <FormField
               control={form.control}
+              name="perfil"
+              render={({ field }) => (
+                <FormItemSelectConstructor
+                  id={field.name}
+                  label="Perfil"
+                  name={field.name}
+                  onChange={field.onChange}
+                  value={field.value || ""}
+                  options={PERFILES}
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
               name="tel"
               render={({ field }) => (
                 <FormItemConstructor
                   id={field.name}
-                  label="Nº Teléfono"
+                  label="Teléfono"
                   name={field.name}
                   onChange={field.onChange}
                   value={field.value || ""}
@@ -167,20 +184,7 @@ export default function Edit({ data }: { data: Empresa }) {
                 />
               )}
             />
-            <FormField
-              control={form.control}
-              name="perfil"
-              render={({ field }) => (
-                <FormItemSelectConstructor
-                  id={field.name}
-                  label="Perfil"
-                  name={field.name}
-                  onChange={field.onChange}
-                  value={field.value || ""}
-                  options={PERFILES}
-                />
-              )}
-            />
+
             <FormField
               control={form.control}
               name="codigo"
@@ -262,12 +266,7 @@ export default function Edit({ data }: { data: Empresa }) {
               )}
             />
           </div>
-          <div className="col-span-full flex w-full">
-            <FormButton type="submit" variant={"default"} className="ml-auto">
-              <SendIcon />
-              Guardar
-            </FormButton>
-          </div>
+          <EditButtons destroyCallback={handleDelete} />
         </form>
       </Form>
     </FormLayout>
