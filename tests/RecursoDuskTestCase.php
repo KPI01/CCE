@@ -76,6 +76,7 @@ abstract class RecursoDuskTestCase extends BaseTestCase
 
     public function testAcceso(): void
     {
+        echo "Dentro de {" . __METHOD__ . "}" . PHP_EOL;
         $this->browse(function (Browser $browser) {
             $browser->visit(new Form(...$this->PARAMS));
         });
@@ -83,6 +84,7 @@ abstract class RecursoDuskTestCase extends BaseTestCase
 
     public function testAccesibilidad(): void
     {
+        echo "Dentro de {" . __METHOD__ . "}" . PHP_EOL;
         $this->browse(function (Browser $browser) {
             $browser->visit(new Form(...$this->PARAMS));
 
@@ -98,6 +100,7 @@ abstract class RecursoDuskTestCase extends BaseTestCase
 
     public function testVisibilidad(): void
     {
+        echo "Dentro de {" . __METHOD__ . "}" . PHP_EOL;
         $this->browse(function (Browser $browser) {
             $browser->visit(new Form(...$this->PARAMS));
 
