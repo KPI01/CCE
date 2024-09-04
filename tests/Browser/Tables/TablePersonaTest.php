@@ -4,6 +4,7 @@ namespace Tests\Browser\Table;
 
 use App\Models\Persona;
 use Database\Seeders\PersonaSeeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Components\Navbar;
@@ -139,7 +140,9 @@ class TablePersonaTest extends DuskTestCase
 
     public function testMenuFilas(): void
     {
+        Schema::disableForeignKeyConstraints();
         Persona::truncate();
+        DB::table(Persona::ROPO_TABLE)->truncate();
         $this->seed(PersonaSeeder::class);
 
         $this->browse(function (Browser $browser) {

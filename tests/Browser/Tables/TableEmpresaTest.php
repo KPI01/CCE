@@ -4,6 +4,7 @@ namespace Tests\Browser;
 
 use App\Models\Empresa;
 use Database\Seeders\EmpresaSeeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Components\Navbar;
@@ -138,7 +139,10 @@ class TableEmpresaTest extends DuskTestCase
 
     public function testMenuFilas(): void
     {
+        Schema::disableForeignKeyConstraints();
         Empresa::truncate();
+        DB::table(Empresa::ROPO_TABLE)->truncate();
+
         $this->seed(EmpresaSeeder::class);
 
         $this->browse(function (Browser $browser) {
