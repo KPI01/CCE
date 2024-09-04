@@ -16,25 +16,11 @@ class CreateMaquinaTest extends RecursoDuskTestCase
         $this->PARAMS = ["maquina", "create"];
     }
 
-    public function testAcceso(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
-        });
-    }
-
     public function testAccesibilidad(): void
     {
+        parent::testAccesibilidad();
         $this->browse(function (Browser $browser) {
             $browser->visit(new Form(...$this->PARAMS));
-
-            $browser->within(new Navbar(), function (Browser $browser) {
-                $browser
-                    ->assertPresent("@navbar")
-                    ->assertPresent("@acc-home")
-                    ->assertPresent("@acc-recursos")
-                    ->assertPresent("@acc-config");
-            });
 
             $browser
                 ->assertPresent("@breadcrumb")
@@ -72,16 +58,9 @@ class CreateMaquinaTest extends RecursoDuskTestCase
 
     public function testVisibilidad(): void
     {
+        parent::testVisibilidad();
         $this->browse(function (Browser $browser) {
             $browser->visit(new Form(...$this->PARAMS));
-
-            $browser->within(new Navbar(), function (Browser $browser) {
-                $browser
-                    ->assertVisible("@navbar")
-                    ->assertVisible("@acc-home")
-                    ->assertVisible("@acc-recursos")
-                    ->assertVisible("@acc-config");
-            });
 
             $browser
                 ->assertVisible("@breadcrumb")

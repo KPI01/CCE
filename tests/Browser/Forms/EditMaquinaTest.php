@@ -5,7 +5,6 @@ namespace Tests\Browser\Edit;
 use App\Models\Maquina;
 use Carbon\Carbon;
 use Laravel\Dusk\Browser;
-use Tests\Browser\Components\Navbar;
 use Tests\Browser\Pages\Recursos\Form;
 use Illuminate\Support\Arr;
 use Tests\RecursoDuskTestCase;
@@ -15,6 +14,9 @@ class EditMaquinaTest extends RecursoDuskTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->hasDeleteBtn = true;
+        $this->class = Maquina::class;
+        $this->recurso = "maquina";
         $this->row = Maquina::factory(1, [
             "tipo_id" => 1,
         ])
@@ -23,25 +25,11 @@ class EditMaquinaTest extends RecursoDuskTestCase
         $this->PARAMS = ["maquina", "edit", $this->row->id];
     }
 
-    public function testAcceso(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(...$this->PARAMS);
-        });
-    }
-
     public function testAccesibilidad(): void
     {
+        parent::testAccesibilidad();
         $this->browse(function (Browser $browser) {
             $browser->visit(new Form(...$this->PARAMS));
-
-            $browser->within(new Navbar(), function (Browser $browser) {
-                $browser
-                    ->assertPresent("@navbar")
-                    ->assertPresent("@acc-home")
-                    ->assertPresent("@acc-recursos")
-                    ->assertPresent("@acc-config");
-            });
 
             $browser
                 ->assertPresent("@breadcrumb")
@@ -79,16 +67,9 @@ class EditMaquinaTest extends RecursoDuskTestCase
 
     public function testVisibilidad(): void
     {
+        parent::testVisibilidad();
         $this->browse(function (Browser $browser) {
             $browser->visit(new Form(...$this->PARAMS));
-
-            $browser->within(new Navbar(), function (Browser $browser) {
-                $browser
-                    ->assertVisible("@navbar")
-                    ->assertVisible("@acc-home")
-                    ->assertVisible("@acc-recursos")
-                    ->assertVisible("@acc-config");
-            });
 
             $browser
                 ->assertVisible("@breadcrumb")
@@ -326,27 +307,6 @@ class EditMaquinaTest extends RecursoDuskTestCase
                 "created_at",
                 "updated_at",
             ])
-        );
-    }
-
-    public function testDelete(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
-
-            $browser
-                ->assertPresent("#destroy")
-                ->assertVisible("#destroy")
-                ->assertEnabled("#destroy")
-                ->click("#destroy")
-                ->pause(2500);
-
-            $browser->assertRouteIs("maquina.index");
-        });
-
-        $this->assertDatabaseMissing(
-            Maquina::class,
-            $this->row->getAttributes()
         );
     }
 }
