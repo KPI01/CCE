@@ -5,7 +5,6 @@ namespace Tests\Browser\Forms;
 use App\Models\Empresa;
 use Carbon\Carbon;
 use Laravel\Dusk\Browser;
-use Tests\Browser\Components\Navbar;
 use Tests\Browser\Pages\Recursos\Form;
 use Tests\RecursoDuskTestCase;
 
@@ -18,25 +17,11 @@ class ShowEmpresaTest extends RecursoDuskTestCase
         $this->PARAMS = ["empresa", "show", $this->row->id];
     }
 
-    public function testAcceso(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
-        });
-    }
-
     public function testAccesibilidad(): void
     {
+        parent::testAccesibilidad();
         $this->browse(function (Browser $browser) {
             $browser->visit(new Form(...$this->PARAMS));
-
-            $browser->within(new Navbar(), function (Browser $browser) {
-                $browser
-                    ->assertPresent("@navbar")
-                    ->assertPresent("@acc-home")
-                    ->assertPresent("@acc-recursos")
-                    ->assertPresent("@acc-config");
-            });
 
             $browser
                 ->assertPresent("@breadcrumb")
@@ -70,6 +55,7 @@ class ShowEmpresaTest extends RecursoDuskTestCase
 
     public function testAccesibilidadRopo(): void
     {
+        parent::testAccesibilidad();
         $this->browse(function (Browser $browser) {
             $browser->visit(new Form(...$this->PARAMS));
 
@@ -88,16 +74,9 @@ class ShowEmpresaTest extends RecursoDuskTestCase
 
     public function testVisibilidad(): void
     {
+        parent::testVisibilidad();
         $this->browse(function (Browser $browser) {
             $browser->visit(new Form(...$this->PARAMS));
-
-            $browser->within(new Navbar(), function (Browser $browser) {
-                $browser
-                    ->assertVisible("@navbar")
-                    ->assertVisible("@acc-home")
-                    ->assertVisible("@acc-recursos")
-                    ->assertVisible("@acc-config");
-            });
 
             $browser
                 ->assertVisible("@breadcrumb")
@@ -131,6 +110,7 @@ class ShowEmpresaTest extends RecursoDuskTestCase
 
     public function testVisibilidadRopo(): void
     {
+        parent::testVisibilidad();
         $this->browse(function (Browser $browser) {
             $browser->visit(new Form(...$this->PARAMS));
 
@@ -221,35 +201,5 @@ class ShowEmpresaTest extends RecursoDuskTestCase
                 "empresa" => $this->row->id,
             ]);
         });
-    }
-
-    public function testDelete(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
-
-            $browser->click("@badge-destroy")->pause(1000);
-
-            $browser
-                ->assertPresent("#delete-dialog")
-                ->assertVisible("#delete-dialog")
-                ->assertSeeIn("#delete-dialog", "Confirmación para eliminar");
-
-            $browser
-                ->press("#delete-dialog #delete-cancel")
-                ->pause(1000)
-                ->assertNotPresent("#delete-dialog");
-
-            $browser
-                ->click("@badge-destroy")
-                ->pause(1000)
-                ->click("#delete-dialog #delete-confirm")
-                ->pause(1000);
-        });
-
-        $this->assertDatabaseMissing(
-            Empresa::class,
-            $this->row->getAttributes()
-        );
     }
 }

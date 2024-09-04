@@ -4,7 +4,6 @@ namespace Tests\Browser\Forms;
 
 use App\Models\Empresa;
 use Laravel\Dusk\Browser;
-use Tests\Browser\Components\Navbar;
 use Tests\Browser\Pages\Recursos\Form;
 use Tests\RecursoDuskTestCase;
 
@@ -15,25 +14,12 @@ class CreateEmpresaTest extends RecursoDuskTestCase
         parent::setUp();
         $this->PARAMS = ["empresa", "create"];
     }
-    public function testAcceso(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
-        });
-    }
 
     public function testAccesibilidad(): void
     {
+        parent::testAccesibilidad();
         $this->browse(function (Browser $browser) {
-            $browser
-                ->visit(new Form(...$this->PARAMS))
-                ->within(new Navbar(), function (Browser $browser) {
-                    $browser
-                        ->assertPresent("@navbar")
-                        ->assertPresent("@acc-home")
-                        ->assertPresent("@acc-recursos")
-                        ->assertPresent("@acc-config");
-                });
+            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->assertPresent("@breadcrumb")
@@ -67,6 +53,7 @@ class CreateEmpresaTest extends RecursoDuskTestCase
 
     public function testAccesibilidadRopo(): void
     {
+        parent::testAccesibilidad();
         $this->browse(function (Browser $browser) {
             $browser
                 ->visit(new Form(...$this->PARAMS))
@@ -86,16 +73,9 @@ class CreateEmpresaTest extends RecursoDuskTestCase
 
     public function testVisibilidad(): void
     {
+        parent::testVisibilidad();
         $this->browse(function (Browser $browser) {
-            $browser
-                ->visit(new Form(...$this->PARAMS))
-                ->within(new Navbar(), function (Browser $browser) {
-                    $browser
-                        ->assertVisible("@navbar")
-                        ->assertVisible("@acc-home")
-                        ->assertVisible("@acc-recursos")
-                        ->assertVisible("@acc-config");
-                });
+            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->assertVisible("@breadcrumb")
@@ -134,6 +114,7 @@ class CreateEmpresaTest extends RecursoDuskTestCase
 
     public function testVisibilidadRopo(): void
     {
+        parent::testVisibilidad();
         $this->browse(function (Browser $browser) {
             $browser
                 ->visit(new Form(...$this->PARAMS))
