@@ -3,19 +3,22 @@
 namespace Tests\Browser\Forms;
 
 use App\Models\Empresa;
-use Illuminate\Support\Facades\DB;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Components\Navbar;
 use Tests\Browser\Pages\Recursos\Form;
-use Tests\DuskTestCase;
+use Tests\RecursoDuskTestCase;
 
-class CreateEmpresaTest extends DuskTestCase
+class CreateEmpresaTest extends RecursoDuskTestCase
 {
-    const PARAMS = ["empresa", "create"];
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->PARAMS = ["empresa", "create"];
+    }
     public function testAcceso(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...self::PARAMS));
+            $browser->visit(new Form(...$this->PARAMS));
         });
     }
 
@@ -23,7 +26,7 @@ class CreateEmpresaTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser
-                ->visit(new Form(...self::PARAMS))
+                ->visit(new Form(...$this->PARAMS))
                 ->within(new Navbar(), function (Browser $browser) {
                     $browser
                         ->assertPresent("@navbar")
@@ -66,14 +69,14 @@ class CreateEmpresaTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser
-                ->visit(new Form(...self::PARAMS))
+                ->visit(new Form(...$this->PARAMS))
                 ->assertPresent("@switch")
                 ->click("@switch")
                 ->pause(750)
                 ->assertPresent("#ropo-form")
                 ->assertPresent("@label-ropo_capacitacion")
                 ->assertPresent("@trigger-ropo_capacitacion")
-                ->assertPresentByName("select", "ropo.capacitacion")
+                ->assertPresentByName("select", '"ropo.capacitacion"')
                 ->assertPresent("@label-ropo_nro")
                 ->assertPresent("@input-ropo_nro")
                 ->assertPresent("@label-ropo_caducidad")
@@ -85,7 +88,7 @@ class CreateEmpresaTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser
-                ->visit(new Form(...self::PARAMS))
+                ->visit(new Form(...$this->PARAMS))
                 ->within(new Navbar(), function (Browser $browser) {
                     $browser
                         ->assertVisible("@navbar")
@@ -133,7 +136,7 @@ class CreateEmpresaTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser
-                ->visit(new Form(...self::PARAMS))
+                ->visit(new Form(...$this->PARAMS))
                 ->assertEnabled("@switch")
                 ->click("@switch")
                 ->pause(750)
@@ -150,7 +153,7 @@ class CreateEmpresaTest extends DuskTestCase
     public function testCamposHabilitados(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...self::PARAMS));
+            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->assertEnabled("@input-nombre")
@@ -212,14 +215,14 @@ class CreateEmpresaTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser
-                ->visit(new Form(...self::PARAMS))
+                ->visit(new Form(...$this->PARAMS))
                 ->assertEnabled("@switch")
                 ->click("@switch")
                 ->pause(750);
 
             $browser
                 ->assertEnabled("@trigger-ropo_capacitacion")
-                ->assertEnabledByName("select", "ropo.capacitacion")
+                ->assertEnabledByName("select", '"ropo.capacitacion"')
                 ->click("@trigger-ropo_capacitacion")
                 ->pause(500)
                 ->assertPresent("@sel-options")
@@ -243,7 +246,7 @@ class CreateEmpresaTest extends DuskTestCase
     public function testEnvioVacio(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...self::PARAMS));
+            $browser->visit(new Form(...$this->PARAMS));
 
             $browser->press("@submit")->pause(500);
 
@@ -267,7 +270,7 @@ class CreateEmpresaTest extends DuskTestCase
     public function testEnvioInvalido(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...self::PARAMS));
+            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->type("@input-nombre", "ac")
@@ -326,7 +329,7 @@ class CreateEmpresaTest extends DuskTestCase
     public function testEnvioRopoInvalido(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...self::PARAMS));
+            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->click("@switch")
@@ -361,7 +364,7 @@ class CreateEmpresaTest extends DuskTestCase
             ->first();
 
         $this->browse(function (Browser $browser) use ($data): void {
-            $browser->visit(new Form(...self::PARAMS));
+            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->type("@input-nombre", $data->nombre)

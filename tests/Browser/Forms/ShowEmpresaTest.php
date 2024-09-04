@@ -4,17 +4,13 @@ namespace Tests\Browser\Forms;
 
 use App\Models\Empresa;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Components\Navbar;
 use Tests\Browser\Pages\Recursos\Form;
-use Tests\DuskTestCase;
+use Tests\RecursoDuskTestCase;
 
-class ShowEmpresaTest extends DuskTestCase
+class ShowEmpresaTest extends RecursoDuskTestCase
 {
-    protected array $PARAMS;
-    public Model $row;
-
     public function setUp(): void
     {
         parent::setUp();
@@ -190,7 +186,7 @@ class ShowEmpresaTest extends DuskTestCase
                 ->assertSeeIn("@title", $this->row->nombre)
                 ->assertInputValue("@input-nif", $this->row->nif)
                 ->assertInputValue("@input-email", $this->row->email)
-                ->assertInputValue("@input-tel", $this->row->email)
+                ->assertInputValue("@input-tel", $this->row->tel)
                 ->assertInputValue("@input-codigo", $this->row->codigo)
                 ->assertSeeIn("@trigger-perfil", $this->row->perfil)
                 ->assertInputValue("@txt-direccion", $this->row->direccion)
