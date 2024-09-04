@@ -1,7 +1,7 @@
 import { DeleteIcon, SaveUpdateIcon } from "@/Pages/Recursos/utils";
 import FormButton from "./FormButton";
 
-type FnVoid<> = () => void;
+type FnVoid = () => void;
 
 export default function EditButtons({
   destroyCallback,
