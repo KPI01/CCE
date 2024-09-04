@@ -136,7 +136,7 @@ class EmpresaController extends Controller
     public function update(Request $request, string $id)
     {
         //
-        $this->data = Empresa::findOrFail($id);
+        $inst = Empresa::findOrFail($id);
         $basic = $request->all();
         unset($basic["ropo"]);
         $uniques = $request->all(["email", "nif"]);
@@ -144,7 +144,7 @@ class EmpresaController extends Controller
         if (
             Empresa::where([
                 ["email", $uniques["email"]],
-                ["id", "<>", $this->data->id],
+                ["id", "<>", $inst->id],
             ])->exists()
         ) {
             $this->toastErrorConstructor(
@@ -157,7 +157,7 @@ class EmpresaController extends Controller
                 ]),
                 variante: "warning"
             );
-            return to_route("empresa.edit", $this->data->id)->with([
+            return to_route("empresa.edit", $inst->id)->with([
                 "from" => "empresa.update",
                 "message" => [
                     "toast" => $this->toasts["error"]["email:duplicado"],
@@ -166,7 +166,7 @@ class EmpresaController extends Controller
         } elseif (
             Empresa::where([
                 ["nif", $uniques["nif"]],
-                ["id", "<>", $this->data->id],
+                ["id", "<>", $inst->id],
             ])->exists()
         ) {
             $this->toastErrorConstructor(
@@ -179,7 +179,7 @@ class EmpresaController extends Controller
                 ]),
                 variante: "warning"
             );
-            return to_route("empresa.edit", $this->data->id)->with([
+            return to_route("empresa.edit", $inst->id)->with([
                 "from" => "empresa.update",
                 "message" => [
                     "toast" => $this->toasts["error"]["id_nac:duplicado"],
@@ -192,7 +192,7 @@ class EmpresaController extends Controller
                 if (
                     DB::table(Empresa::ROPO_TABLE)
                         ->where("nro", $r["nro"])
-                        ->where("empresa_id", "<>", $this->data->id)
+                        ->where("empresa_id", "<>", $inst->id)
                         ->exists()
                 ) {
                     $this->toastErrorConstructor(
@@ -205,7 +205,7 @@ class EmpresaController extends Controller
                         ]),
                         variante: "warning"
                     );
-                    return to_route("empresa.edit", $this->data->id)->with([
+                    return to_route("empresa.edit", $inst->id)->with([
                         "from" => "empresa.update",
                         "message" => [
                             "toast" =>
@@ -213,21 +213,18 @@ class EmpresaController extends Controller
                         ],
                     ]);
                 }
-                $this->data->update($basic);
-                $this->data->setRopoAttribute($r);
+                $inst->update($basic);
+                $inst->setRopoAttribute($r);
             } else {
-                $this->data->update($basic);
+                $inst->update($basic);
             }
 
             $this->toastExitoConstructor(
                 accion: "update",
                 seccion: "description",
-                append: implode(" ", [
-                    $this->data->nombre,
-                    "(" . $this->data->nif . ")",
-                ])
+                append: implode(" ", [$inst->nombre, "(" . $inst->nif . ")"])
             );
-            return to_route("empresa.show", $this->data->id)->with([
+            return to_route("empresa.show", $inst->id)->with([
                 "from" => "empresa.update",
                 "message" => [
                     "toast" => $this->toasts["exito"]["update"],
@@ -236,7 +233,7 @@ class EmpresaController extends Controller
         }
     }
 
-    public function destroy(Request $req, string $id)
+    public function destroy(string $id)
     {
         //
         $this->data = Empresa::findOrFail($id);
