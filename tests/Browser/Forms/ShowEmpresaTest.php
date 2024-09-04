@@ -194,13 +194,6 @@ class ShowEmpresaTest extends RecursoDuskTestCase
                     "@txt-observaciones",
                     $this->row->observaciones
                 );
-        });
-    }
-
-    public function testValidacionInformacionRopo(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->assertSeeIn(
