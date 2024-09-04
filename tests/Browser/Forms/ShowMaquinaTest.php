@@ -17,6 +17,9 @@ class ShowMaquinaTest extends RecursoDuskTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->hasDeleteBtn = true;
+        $this->class = Maquina::class;
+        $this->recurso = "maquina";
         $this->row = Maquina::factory(1)->create()->first();
         $this->PARAMS = ["maquina", "show", $this->row->id];
     }

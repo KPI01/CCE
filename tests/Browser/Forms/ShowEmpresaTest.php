@@ -13,6 +13,9 @@ class ShowEmpresaTest extends RecursoDuskTestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->hasDeleteBtn = true;
+        $this->class = Empresa::class;
+        $this->recurso = "empresa";
         $this->row = Empresa::factory(1)->withRopo()->create()->first();
         $this->PARAMS = ["empresa", "show", $this->row->id];
     }
