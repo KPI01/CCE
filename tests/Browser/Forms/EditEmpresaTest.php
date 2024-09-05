@@ -281,28 +281,7 @@ class EditEmpresaTest extends RecursoDuskTestCase
         ]);
         $this->assertDatabaseMissing(Empresa::class, $attr);
     }
-
-    // public function testCampoVaciadoRopo(): void
-    // {
-    //     $this->browse(function (Browser $browser) {
-    //         $browser->visit(new Form(...$this->PARAMS));
-
-    //         for ($i = 0; $i < strlen($this->row->ropo["nro"]); $i++) {
-    //             $browser->keys("@input-ropo_nro", "{backspace}");
-    //         }
-    //         $browser->assertInputValue("@input-ropo_nro", "");
-
-    //         $browser
-    //             ->press("@submit")
-    //             ->pause(1000)
-    //             ->assertRouteIs("empresa.show", ["empresa" => $this->row->id]);
-    //     });
-
-    //     $this->assertDatabaseMissing(Empresa::ROPO_TABLE, [
-    //         "nro" => $this->row->ropo["nro"],
-    //     ]);
-    // }
-
+sólo debe contener:
     public function testEnvioInvalido(): void
     {
         $this->browse(function (Browser $browser) {
