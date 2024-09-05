@@ -3,35 +3,29 @@
 namespace Tests\Browser\Forms;
 
 use App\Models\Persona;
-use Illuminate\Support\Facades\DB;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Components\Navbar;
 use Tests\Browser\Pages\Recursos\Form;
-use Tests\DuskTestCase;
+use Tests\RecursoDuskTestCase;
 
-class CreatePersonaTest extends DuskTestCase
+class CreatePersonaTest extends RecursoDuskTestCase
 {
-    const PARAMS = ["persona", "create"];
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->PARAMS = ["maquina", "create"];
+    }
     public function testAcceso(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...self::PARAMS));
+            $browser->visit(new Form(...$this->PARAMS));
         });
     }
 
     public function testAccesibilidad(): void
     {
+        parent::testAccesibilidad();
         $this->browse(function (Browser $browser) {
-            $browser
-                ->visit(new Form(...self::PARAMS))
-                ->within(new Navbar(), function (Browser $browser) {
-                    $browser
-                        ->assertPresent("@navbar")
-                        ->assertPresent("@acc-home")
-                        ->assertPresent("@acc-recursos")
-                        ->assertPresent("@acc-config");
-                });
-
             $browser
                 ->assertPresent("@breadcrumb")
                 ->assertPresent("@title")
@@ -57,15 +51,9 @@ class CreatePersonaTest extends DuskTestCase
                 ->assertPresentByName("select", "perfil")
                 ->assertPresent("@txt-observaciones");
 
-            $browser->assertPresent("@switch")->assertPresent("@submit");
-        });
-    }
+            $browser->assertPresent("@submit");
 
-    public function testAccesibilidadRopo(): void
-    {
-        $this->browse(function (Browser $browser) {
             $browser
-                ->visit(new Form(...self::PARAMS))
                 ->assertPresent("@switch")
                 ->click("@switch")
                 ->pause(750)
@@ -82,16 +70,9 @@ class CreatePersonaTest extends DuskTestCase
 
     public function testVisibilidad(): void
     {
+        parent::testVisibilidad();
         $this->browse(function (Browser $browser) {
-            $browser
-                ->visit(new Form(...self::PARAMS))
-                ->within(new Navbar(), function (Browser $browser) {
-                    $browser
-                        ->assertVisible("@navbar")
-                        ->assertVisible("@acc-home")
-                        ->assertVisible("@acc-recursos")
-                        ->assertVisible("@acc-config");
-                });
+            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->assertVisible("@breadcrumb")
@@ -119,19 +100,9 @@ class CreatePersonaTest extends DuskTestCase
                 ->assertVisibleByName("select", "perfil")
                 ->assertVisible("@txt-observaciones");
 
-            $browser
-                ->assertVisible("@switch")
-                ->assertEnabled("@switch")
-                ->assertPresent("@submit")
-                ->assertEnabled("@submit");
-        });
-    }
+            $browser->assertPresent("@submit")->assertEnabled("@submit");
 
-    public function testVisibilidadRopo(): void
-    {
-        $this->browse(function (Browser $browser) {
             $browser
-                ->visit(new Form(...self::PARAMS))
                 ->assertEnabled("@switch")
                 ->click("@switch")
                 ->pause(750)
@@ -148,7 +119,7 @@ class CreatePersonaTest extends DuskTestCase
     public function testCamposHabilitados(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...self::PARAMS));
+            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->assertEnabled("@input-nombres")
@@ -209,17 +180,6 @@ class CreatePersonaTest extends DuskTestCase
                 ->assertInputValue("@txt-observaciones", "")
                 ->type("@txt-observaciones", "test")
                 ->assertInputValue("@txt-observaciones", "test");
-        });
-    }
-
-    public function testCamposHabilitadosRopo(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser
-                ->visit(new Form(...self::PARAMS))
-                ->assertEnabled("@switch")
-                ->click("@switch")
-                ->pause(750);
 
             $browser
                 ->assertEnabled("@trigger-ropo_capacitacion")
@@ -247,7 +207,7 @@ class CreatePersonaTest extends DuskTestCase
     public function testEnvioVacio(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...self::PARAMS));
+            $browser->visit(new Form(...$this->PARAMS));
 
             $browser->press("@submit")->pause(500);
 
@@ -274,7 +234,7 @@ class CreatePersonaTest extends DuskTestCase
     public function testEnvioInvalido(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...self::PARAMS));
+            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->type("@input-nombres", "at")
@@ -343,13 +303,6 @@ class CreatePersonaTest extends DuskTestCase
                 ->assertSeeIn("@msg-tel", "El teléfono debe ser válido.")
                 ->type("@input-tel", "abc$%")
                 ->assertSeeIn("@msg-tel", "El teléfono debe ser válido");
-        });
-    }
-
-    public function testEnvioRopoInvalido(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...self::PARAMS));
 
             $browser
                 ->click("@switch")
@@ -386,7 +339,7 @@ class CreatePersonaTest extends DuskTestCase
             ->first();
 
         $this->browse(function (Browser $browser) use ($data) {
-            $browser->visit(new Form(...self::PARAMS));
+            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->type("@input-nombres", $data->nombres)
@@ -395,6 +348,7 @@ class CreatePersonaTest extends DuskTestCase
                 ->type("@input-email", $data->email)
                 ->type("@input-tel", $data->tel)
                 ->type("@txt-observaciones", $data->observaciones);
+            /** PENDIENTE: Implementar test a atributos ROPO */
 
             $browser
                 ->press("@submit")
@@ -406,9 +360,5 @@ class CreatePersonaTest extends DuskTestCase
         unset($attr["id"]);
 
         $this->assertDatabaseHas(Persona::class, $attr);
-    }
-
-    public function testEnvioValidoConRopo(): void
-    {
     }
 }

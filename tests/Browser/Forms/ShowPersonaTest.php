@@ -4,43 +4,27 @@ namespace Tests\Browser\Show;
 
 use App\Models\Persona;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Laravel\Dusk\Browser;
-use Tests\Browser\Components\Navbar;
 use Tests\Browser\Pages\Recursos\Form;
-use Tests\DuskTestCase;
+use Tests\RecursoDuskTestCase;
 
-class ShowPersonaTest extends DuskTestCase
+class ShowPersonaTest extends RecursoDuskTestCase
 {
-    protected array $PARAMS;
-    public Model $row;
-
     public function setUp(): void
     {
         parent::setUp();
+        $this->hasDeleteBtn = true;
+        $this->class = Persona::class;
+        $this->recurso = "empresa";
         $this->row = Persona::factory(1)->withRopo()->create()->first();
         $this->PARAMS = ["persona", "show", $this->row->id];
     }
 
-    public function testAcceso(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
-        });
-    }
-
     public function testAccesibilidad(): void
     {
+        parent::testAccesibilidad();
         $this->browse(function (Browser $browser) {
             $browser->visit(new Form(...$this->PARAMS));
-
-            $browser->within(new Navbar(), function (Browser $browser) {
-                $browser
-                    ->assertPresent("@navbar")
-                    ->assertPresent("@acc-home")
-                    ->assertPresent("@acc-recursos")
-                    ->assertPresent("@acc-config");
-            });
 
             $browser
                 ->assertPresent("@breadcrumb")
@@ -67,13 +51,6 @@ class ShowPersonaTest extends DuskTestCase
                 ->assertPresent("@trigger-perfil")
                 ->assertPresentByName("select", "perfil")
                 ->assertPresent("@txt-observaciones");
-        });
-    }
-
-    public function testAccesibilidadRopo(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->assertPresent("@label-ropo_capacitacion")
@@ -90,16 +67,9 @@ class ShowPersonaTest extends DuskTestCase
 
     public function testVisibilidad(): void
     {
+        parent::testVisibilidad();
         $this->browse(function (Browser $browser) {
             $browser->visit(new Form(...$this->PARAMS));
-
-            $browser->within(new Navbar(), function (Browser $browser) {
-                $browser
-                    ->assertVisible("@navbar")
-                    ->assertVisible("@acc-home")
-                    ->assertVisible("@acc-recursos")
-                    ->assertVisible("@acc-config");
-            });
 
             $browser
                 ->assertVisible("@breadcrumb")
@@ -126,13 +96,6 @@ class ShowPersonaTest extends DuskTestCase
                 ->assertVisible("@trigger-perfil")
                 ->assertVisibleByName("select", "perfil")
                 ->assertVisible("@txt-observaciones");
-        });
-    }
-
-    public function testVisibilidadRopo(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->assertVisible("@label-ropo_capacitacion")
@@ -161,13 +124,6 @@ class ShowPersonaTest extends DuskTestCase
                 ->assertDisabled("@trigger-perfil")
                 ->assertDisabledByName("select", "perfil")
                 ->assertDisabled("@txt-observaciones");
-        });
-    }
-
-    public function testCamposInhabilitadosRopo(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->assertDisabled("@trigger-ropo_capacitacion")
@@ -196,13 +152,6 @@ class ShowPersonaTest extends DuskTestCase
                     "@txt-observaciones",
                     $this->row->observaciones
                 );
-        });
-    }
-
-    public function testValidacionInformacionRopo(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->assertSeeIn(
@@ -230,35 +179,5 @@ class ShowPersonaTest extends DuskTestCase
                 "persona" => $this->row->id,
             ]);
         });
-    }
-
-    public function testDelete(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
-
-            $browser->click("@badge-destroy")->pause(1000);
-
-            $browser
-                ->assertPresent("#delete-dialog")
-                ->assertVisible("#delete-dialog")
-                ->assertSeeIn("#delete-dialog", "Confirmación para eliminar");
-
-            $browser
-                ->press("#delete-dialog #delete-cancel")
-                ->pause(1000)
-                ->assertNotPresent("#delete-dialog");
-
-            $browser
-                ->click("@badge-destroy")
-                ->pause(1000)
-                ->click("#delete-dialog #delete-confirm")
-                ->pause(1000);
-        });
-
-        $this->assertDatabaseMissing(
-            Persona::class,
-            $this->row->getAttributes()
-        );
     }
 }
