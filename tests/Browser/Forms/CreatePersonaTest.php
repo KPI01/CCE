@@ -4,7 +4,6 @@ namespace Tests\Browser\Forms;
 
 use App\Models\Persona;
 use Laravel\Dusk\Browser;
-use Tests\Browser\Components\Navbar;
 use Tests\Browser\Pages\Recursos\Form;
 use Tests\RecursoDuskTestCase;
 
@@ -13,7 +12,7 @@ class CreatePersonaTest extends RecursoDuskTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->PARAMS = ["maquina", "create"];
+        $this->PARAMS = ["persona", "create"];
     }
     public function testAcceso(): void
     {
@@ -60,7 +59,7 @@ class CreatePersonaTest extends RecursoDuskTestCase
                 ->assertPresent("#ropo-form")
                 ->assertPresent("@label-ropo_capacitacion")
                 ->assertPresent("@trigger-ropo_capacitacion")
-                ->assertPresentByName("select", "ropo.capacitacion")
+                ->assertPresentByName("select", '"ropo.capacitacion"')
                 ->assertPresent("@label-ropo_nro")
                 ->assertPresent("@input-ropo_nro")
                 ->assertPresent("@label-ropo_caducidad")
@@ -182,8 +181,10 @@ class CreatePersonaTest extends RecursoDuskTestCase
                 ->assertInputValue("@txt-observaciones", "test");
 
             $browser
+                ->click("@switch")
+                ->pause(500)
                 ->assertEnabled("@trigger-ropo_capacitacion")
-                ->assertEnabledByName("select", "ropo.capacitacion")
+                ->assertEnabledByName("select", '"ropo.capacitacion"')
                 ->click("@trigger-ropo_capacitacion")
                 ->pause(500)
                 ->assertPresent("@sel-options")
