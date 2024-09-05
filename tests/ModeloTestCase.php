@@ -11,15 +11,7 @@ abstract class ModeloTestCase extends BaseTestCase
      * Variable para almacenar el nombre de la tabla
      */
     public string $table;
-    protected static string $ommit_msj;
-    /**
-     * Variable para almacenar la instancia
-     */
-    public $inst;
-    /**
-     * Variable para almacenar el registro recuperado de la BD
-     */
-    public $reg;
+    protected static string $ommitMsg;
     /**
      * Variable para guardar el UUID de la instancia
      */
@@ -28,7 +20,7 @@ abstract class ModeloTestCase extends BaseTestCase
     public static function setUpBeforeClass(): void
     {
         echo "Inicio de los tests" . PHP_EOL;
-        static::$ommit_msj = "No se aplica ";
+        static::$ommitMsg = "No se aplica ";
     }
     public static function tearDownAfterClass(): void
     {
@@ -38,26 +30,26 @@ abstract class ModeloTestCase extends BaseTestCase
     /**
      * Test básico de uso del factory.
      */
-    public function test_factory(): void
+    public function testFactory(): void
     {
     }
     /**
      * Test de los estados del factory
      * (si es que aplica)
      */
-    public function test_estados(): void
+    public function testEstados(): void
     {
-        echo static::$ommit_msj . __FUNCTION__ . PHP_EOL;
+        echo static::$ommitMsg . __FUNCTION__ . PHP_EOL;
         $this->assertTrue(true);
     }
     /**
      * Test de las secuencias del factory
      * (si es que aplica)
      */
-    public function test_secuencias(): void
+    public function testSecuencias(): void
     {
         /** Si es que aplica */
-        echo static::$ommit_msj . __FUNCTION__ . PHP_EOL;
+        echo static::$ommitMsg . __FUNCTION__ . PHP_EOL;
         $this->assertTrue(true);
     }
 
@@ -65,32 +57,32 @@ abstract class ModeloTestCase extends BaseTestCase
     /**
      * Test para el CREATE
      */
-    public function test_create(): void
+    public function testCreate(): void
     {
     }
     /**
      * Test para el READ
      */
-    public function test_read(): void
+    public function testRead(): void
     {
     }
     /**
      * Test para el UPDATE
      */
-    public function test_update(): void
+    public function testUpdate(): void
     {
     }
     /**
      * Test para el DELETE
      */
-    public function test_delete(): void
+    public function testDelete(): void
     {
     }
 
     /**
      * Test de uso del seeder
      */
-    public function test_seeder(): void
+    public function testSeeder(): void
     {
     }
 }

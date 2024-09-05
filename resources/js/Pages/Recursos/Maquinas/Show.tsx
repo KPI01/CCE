@@ -1,4 +1,4 @@
-import { Aux, Breadcrumbs, Maquina } from "@/types";
+import { Breadcrumbs, Maquina } from "@/types";
 import { formSchema } from "./formSchema";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -16,6 +16,10 @@ import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectCons
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 
 const schema = formSchema;
+
+type Aux = {
+  tipos: string[];
+};
 
 export default function Show({ data, aux }: { data: Maquina; aux: Aux }) {
   console.log("data:", data, "aux:", aux);

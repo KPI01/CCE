@@ -8,7 +8,6 @@ import { Form, FormField } from "@/Components/ui/form";
 import FormTitle from "@/Components/Forms/FormTitle";
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
-import FormButton from "@/Components/Forms/FormButton";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 import { router } from "@inertiajs/react";
 import { useToast } from "@/Components/ui/use-toast";
@@ -17,11 +16,11 @@ import {
   EditIcon,
   EmpresaIcon,
   nullToUndefined,
-  SendIcon,
   TablaIcon,
   toSend,
   urlWithoutId,
 } from "../utils";
+import EditButtons from "@/Components/Forms/EditButtons";
 
 const schema = formSchema;
 
@@ -33,18 +32,23 @@ export default function Edit({ data }: { data: Empresa }) {
     data.ropo.caducidad = new Date(data.ropo?.caducidad);
 
   const parsed = schema.safeParse(data);
-  console.log(parsed);
+  console.debug(parsed);
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: { ...data },
   });
 
-  function onSubmit(values: z.infer<typeof schema>) {
+  function handleDelete(): void {
+    console.debug(`Eliminando ${data.id}...`);
+    router.delete(data.url);
+  }
+
+  function onSubmit(values: z.infer<typeof schema>): void {
     const dirty = form.formState.dirtyFields;
     const parsed = schema.parse(values);
-    console.log("Enviando formulario...");
-    console.log(parsed);
+    console.debug("Enviando formulario...");
+    console.debug(parsed);
 
     const justDirty = toSend(dirty, parsed);
 
@@ -140,14 +144,28 @@ export default function Edit({ data }: { data: Empresa }) {
             />
             <FormField
               control={form.control}
+              name="perfil"
+              render={({ field }) => (
+                <FormItemSelectConstructor
+                  id={field.name}
+                  label="Perfil"
+                  name={field.name}
+                  onChange={field.onChange}
+                  value={field.value || PERFILES[0]}
+                  options={PERFILES}
+                />
+              )}
+            />
+            <FormField
+              control={form.control}
               name="tel"
               render={({ field }) => (
                 <FormItemConstructor
                   id={field.name}
-                  label="Nº Teléfono"
+                  label="Teléfono"
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value || ""}
+                  value={field.value}
                   autoComplete="tel"
                 />
               )}
@@ -162,25 +180,12 @@ export default function Edit({ data }: { data: Empresa }) {
                   label="Dirección"
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value || ""}
+                  value={field.value}
                   autoComplete="street-address"
                 />
               )}
             />
-            <FormField
-              control={form.control}
-              name="perfil"
-              render={({ field }) => (
-                <FormItemSelectConstructor
-                  id={field.name}
-                  label="Perfil"
-                  name={field.name}
-                  onChange={field.onChange}
-                  value={field.value || ""}
-                  options={PERFILES}
-                />
-              )}
-            />
+
             <FormField
               control={form.control}
               name="codigo"
@@ -190,7 +195,7 @@ export default function Edit({ data }: { data: Empresa }) {
                   label="Código"
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value || ""}
+                  value={field.value}
                   autoComplete="off"
                 />
               )}
@@ -205,7 +210,7 @@ export default function Edit({ data }: { data: Empresa }) {
                   label="Observaciones"
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value || ""}
+                  value={field.value}
                 />
               )}
             />
@@ -221,7 +226,7 @@ export default function Edit({ data }: { data: Empresa }) {
                   label="Capacitación"
                   name={field.name}
                   onChange={field.onChange}
-                  value={field.value || ""}
+                  value={field.value || CAPACITACIONES[0]}
                   options={CAPACITACIONES}
                 />
               )}
@@ -250,24 +255,11 @@ export default function Edit({ data }: { data: Empresa }) {
                   label="Caducidad"
                   value={field.value}
                   onChange={field.onChange}
-                  resetBtn
-                  resetFn={() =>
-                    form.setValue(field.name, undefined, {
-                      shouldValidate: true,
-                      shouldDirty: true,
-                      shouldTouch: true,
-                    })
-                  }
                 />
               )}
             />
           </div>
-          <div className="col-span-full flex w-full">
-            <FormButton type="submit" variant={"default"} className="ml-auto">
-              <SendIcon />
-              Guardar
-            </FormButton>
-          </div>
+          <EditButtons destroyCallback={handleDelete} />
         </form>
       </Form>
     </FormLayout>

@@ -1,6 +1,4 @@
-<?php
-
-namespace Database\Factories;
+<?php namespace Database\Factories;
 
 use App\Models\Persona;
 use Illuminate\Database\Eloquent\Factories\Factory;

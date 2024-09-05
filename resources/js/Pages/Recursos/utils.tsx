@@ -16,12 +16,18 @@ import {
 export const CONTAINER_CLASS = "container grid grid-cols-2 gap-x-12 gap-y-4";
 const ICON_CLASS = "size-4 mr-2";
 
-export const REQUIRED_MSG = (start: string) => `${start} es requerido.`;
+export const REQUIRED_MSG = (start: string, end: "a" | "o" = "o") =>
+  `${start} es requerid${end}.`;
 export const MIN_MESSAGE = (size: number) =>
   `Este campo debe tener al menos ${size} caracteres.`;
 export const MAX_MESSAGE = (size: number) =>
-  `Este campo debe tener como máximo ${size} caracteres`;
-export const BE_VALID_MSG = (start: string) => `${start} debe ser válido.`;
+  `Este campo debe tener como máximo ${size} caracteres.`;
+export const BE_VALID_MSG = (start: string, end: "a" | "o" = "o") =>
+  `${start} debe ser válid${end}.`;
+export const NOT_CONTAIN_MSG = (start: string, prohibited: string[]) =>
+  `${start} no debe contener: ${prohibited.join(", ")}.`;
+export const ONLY_CONTAIN_MSG = (start: string, allowed: string[]) =>
+  `${start} sólo debe contener: ${allowed.join(", ")}.`;
 
 export const RecursosIcon = ({ className }: IconProps) => (
   <Box className={cn(ICON_CLASS, className)} />

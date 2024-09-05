@@ -159,8 +159,8 @@
         "reveal": "always",
         "focus": true,
         "panel": "dedicated",
-        "showReuseMessage": false,
-        "clear": true,
+        "showReuseMessage": true,
+        "clear": false,
         "group": "testing"
       }
     },
@@ -229,6 +229,26 @@
       "command": "php artisan test",
       "problemMatcher": [],
       "label": "art: test",
+      "detail": "laravel",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": false,
+        "group": "testing"
+      }
+    },
+    {
+      "type": "shell",
+      "command": "php artisan test --filter ${input:test_filter}",
+      "problemMatcher": [],
+      "label": "art: test w/ filter",
       "detail": "laravel",
       "group": {
         "kind": "test",
@@ -352,6 +372,10 @@
       "id": "model_name",
       "description": "Nombre para el modelo"
     },
-    
+    {
+      "type":  "promptString",
+       "id":   "test_filter",
+       "description":  "Contenido para el filtro"
+    }
   ]
 }

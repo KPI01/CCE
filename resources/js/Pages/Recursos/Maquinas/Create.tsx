@@ -1,5 +1,5 @@
 import FormLayout from "@/Layouts/Recursos/FormLayout";
-import { Aux, Breadcrumbs } from "@/types";
+import { Breadcrumbs } from "@/types";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "./formSchema";
@@ -11,6 +11,8 @@ import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectCons
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 import FormButton from "@/Components/Forms/FormButton";
 import { router } from "@inertiajs/react";
+
+type Aux = { tipos: string[] };
 
 interface Props {
   url: string;
@@ -35,6 +37,9 @@ export default function Create({ aux, url }: Props) {
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      tipo: aux.tipos[0],
+    },
   });
 
   function onSubmit(values: z.infer<typeof schema>) {
@@ -62,7 +67,6 @@ export default function Create({ aux, url }: Props) {
             render={({ field }) => (
               <FormItemConstructor
                 label="Nombre *"
-                placeholder="..."
                 id={field.name}
                 name={field.name}
                 onChange={field.onChange}
@@ -76,7 +80,6 @@ export default function Create({ aux, url }: Props) {
             render={({ field }) => (
               <FormItemConstructor
                 label="Matrícula *"
-                placeholder="..."
                 id={field.name}
                 name={field.name}
                 onChange={field.onChange}
@@ -90,12 +93,11 @@ export default function Create({ aux, url }: Props) {
             render={({ field }) => (
               <FormItemSelectConstructor
                 label="Tipo *"
-                placeholder="..."
                 id={field.name}
                 name={field.name}
                 onChange={field.onChange}
-                value={field.value}
-                options={aux.tipos || []}
+                value={field.value || aux.tipos[0]}
+                options={aux.tipos}
               />
             )}
           />
@@ -105,7 +107,6 @@ export default function Create({ aux, url }: Props) {
             render={({ field }) => (
               <FormItemConstructor
                 label="Fabricante"
-                placeholder="..."
                 id={field.name}
                 name={field.name}
                 onChange={field.onChange}
@@ -119,7 +120,6 @@ export default function Create({ aux, url }: Props) {
             render={({ field }) => (
               <FormItemConstructor
                 label="Modelo"
-                placeholder="..."
                 id={field.name}
                 name={field.name}
                 onChange={field.onChange}
@@ -133,7 +133,6 @@ export default function Create({ aux, url }: Props) {
             render={({ field }) => (
               <FormItemConstructor
                 label="Marca"
-                placeholder="..."
                 id={field.name}
                 name={field.name}
                 onChange={field.onChange}
@@ -147,7 +146,6 @@ export default function Create({ aux, url }: Props) {
             render={({ field }) => (
               <FormItemConstructor
                 label="Cod. ROMA"
-                placeholder="..."
                 id={field.name}
                 name={field.name}
                 onChange={field.onChange}
@@ -161,7 +159,6 @@ export default function Create({ aux, url }: Props) {
             render={({ field }) => (
               <FormItemConstructor
                 label="Nro. de Serie"
-                placeholder="..."
                 id={field.name}
                 name={field.name}
                 onChange={field.onChange}
@@ -175,7 +172,6 @@ export default function Create({ aux, url }: Props) {
             render={({ field }) => (
               <FormDatePickerConstructor
                 label="Caducidad del ITEAF"
-                placeholder="..."
                 id={field.name}
                 name={field.name}
                 onChange={field.onChange}
@@ -189,7 +185,6 @@ export default function Create({ aux, url }: Props) {
             render={({ field }) => (
               <FormItemConstructor
                 label="Observaciones"
-                placeholder="..."
                 id={field.name}
                 name={field.name}
                 onChange={field.onChange}
@@ -198,10 +193,15 @@ export default function Create({ aux, url }: Props) {
               />
             )}
           />
-          <FormButton type="submit" className="col-span-full ms-auto">
-            <SendIcon />
-            Enviar
-          </FormButton>
+          <div className="col-span-full w-full">
+            <p className="mb-3 ml-auto w-fit text-sm">
+              Los campos marcados con (*) son obligatorios
+            </p>
+            <FormButton type="submit" className="ms-auto flex">
+              <SendIcon />
+              Enviar
+            </FormButton>
+          </div>
         </form>
       </Form>
     </FormLayout>

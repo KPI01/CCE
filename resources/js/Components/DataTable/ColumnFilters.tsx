@@ -60,10 +60,13 @@ export default function ColumnFilters<TData>({
       </SheetTrigger>
       <SheetContent id="filtros-content" className="overflow-auto">
         <SheetHeader className="grid grid-cols-3">
-          <SheetTitle className="col-span-2 text-xl font-bold">
+          <SheetTitle
+            id="filtros-title"
+            className="col-span-2 text-xl font-bold"
+          >
             Filtros
           </SheetTitle>
-          <SheetClose asChild>
+          <SheetClose id="filtros-close" asChild>
             <Button
               variant={"ghost"}
               size={"sm"}
@@ -74,11 +77,12 @@ export default function ColumnFilters<TData>({
               <X className="m-2 size-5" />
             </Button>
           </SheetClose>
-          <SheetDescription className="col-span-full">
+          <SheetDescription id="filtros-descrip" className="col-span-full">
             Selecciona los filtros que desees.
           </SheetDescription>
           <div>
             <Button
+              id="filtros-reset"
               variant={"destructive"}
               size={"sm"}
               onClick={() => table.resetColumnFilters()}

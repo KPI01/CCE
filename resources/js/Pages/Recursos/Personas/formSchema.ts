@@ -1,5 +1,11 @@
 import { z } from "zod";
-import { BE_VALID_MSG, MAX_MESSAGE, MIN_MESSAGE, REQUIRED_MSG } from "../utils";
+import {
+  BE_VALID_MSG,
+  MAX_MESSAGE,
+  MIN_MESSAGE,
+  ONLY_CONTAIN_MSG,
+  REQUIRED_MSG,
+} from "../utils";
 
 export const RECURSO = "persona";
 
@@ -20,11 +26,10 @@ const CAPACITACIONES_READONLY = [
   "Piloto Aplicador",
 ] as const;
 
-const NOMBRES_REGEX = /^[A-Za-záéíóúÁÉÍÓÚñÑ ]*$/gm;
+const LETRAS_REGEX = /^[A-Za-záéíóúÁÉÍÓÚñÑ ]*$/gm;
 const ROPO_NRO_REGEX =
   /^([\d]{7,12}[SASTU]*([/][\d]{1,3})?|[\d]{1,3}[/][\d]{1,3})$/gm;
-const TEL_REGEX =
-  /^((\+34|0034|34)?[6|7|8|9]\d{8}|(800|900)\d{6,7}|(901|902|905|803|806|807)\d{6})$/;
+const TEL_REGEX = /^(?:\+34|0034)?[6-9]\d{8}$|^(?!.*\S)/gm;
 
 export const formSchema = z
   .object({
@@ -37,7 +42,7 @@ export const formSchema = z
       .min(1, REQUIRED_MSG("El nombre"))
       .min(3, MIN_MESSAGE(3))
       .max(50, MAX_MESSAGE(50))
-      .regex(NOMBRES_REGEX, "El nombre solo puede contener letras."),
+      .regex(LETRAS_REGEX, ONLY_CONTAIN_MSG("El nombre", ["letras"])),
     apellidos: z
       .string({
         required_error: REQUIRED_MSG("El apellido"),
@@ -46,15 +51,15 @@ export const formSchema = z
       .min(1, REQUIRED_MSG("El apellido"))
       .min(3, MIN_MESSAGE(3))
       .max(50, MAX_MESSAGE(50))
-      .regex(NOMBRES_REGEX, "El apellido solo puede contener letras."),
+      .regex(LETRAS_REGEX, ONLY_CONTAIN_MSG("El apellido", ["letras"])),
     tipo_id_nac: z.enum(TIPOS_ID_NAC_READONLY, {
       invalid_type_error: BE_VALID_MSG("El tipo de identificación"),
     }),
     id_nac: z
       .string({
-        required_error: REQUIRED_MSG("La identificación"),
+        required_error: REQUIRED_MSG("La identificación", "a"),
       })
-      .min(1, REQUIRED_MSG("La identificación"))
+      .min(1, REQUIRED_MSG("La identificación", "a"))
       .max(12, MAX_MESSAGE(12)),
     email: z
       .string({
@@ -67,32 +72,28 @@ export const formSchema = z
       .enum(PERFILES_READONLY, {
         invalid_type_error: BE_VALID_MSG("El perfil"),
       })
-      .default("Aplicador"),
+      .default("Productor"),
     observaciones: z.string().max(1000, MAX_MESSAGE(1000)).optional(),
     ropo: z
       .object({
         capacitacion: z
           .enum(CAPACITACIONES_READONLY, {
-            invalid_type_error: BE_VALID_MSG("La capacitación ROPO"),
+            invalid_type_error: BE_VALID_MSG("La capacitación ROPO", "a"),
           })
           .optional(),
         caducidad: z
           .date({
             invalid_type_error: BE_VALID_MSG(
               "La fecha de caducidad del carné ROPO",
+              "a",
             ),
           })
           .optional(),
         nro: z
           .string({
-            invalid_type_error: BE_VALID_MSG(
-              "El número de identificación del carné ROPO",
-            ),
+            invalid_type_error: BE_VALID_MSG("El identificación ROPO"),
           })
-          .regex(
-            ROPO_NRO_REGEX,
-            "La identificación ROPO debe estar en el formato adecuado.",
-          )
+          .regex(ROPO_NRO_REGEX, BE_VALID_MSG("La identificación ROPO", "a"))
           .optional(),
       })
       .optional()
@@ -100,13 +101,13 @@ export const formSchema = z
         if (data?.nro && !data?.capacitacion) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: REQUIRED_MSG("La capacitación ROPO"),
+            message: REQUIRED_MSG("La capacitación ROPO", "a"),
             path: ["capacitacion"],
           });
         } else if (!data?.nro && data?.capacitacion) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: REQUIRED_MSG("El número de identificación del carné ROPO"),
+            message: REQUIRED_MSG("La identificación ROPO"),
             path: ["nro"],
           });
         }
@@ -126,7 +127,7 @@ export const formSchema = z
     if (!regex?.test(id)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "La identificación debe tener el formato adecuado.",
+        message: BE_VALID_MSG("La identificación", "a"),
         path: ["id_nac"],
       });
     }

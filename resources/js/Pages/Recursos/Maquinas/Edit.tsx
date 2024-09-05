@@ -1,13 +1,11 @@
-import { Aux, Breadcrumbs, Maquina } from "@/types";
+import { Breadcrumbs, Maquina } from "@/types";
 import { formSchema } from "./formSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   CONTAINER_CLASS,
-  DeleteIcon,
   EditIcon,
   MaquinaIcon,
-  SaveUpdateIcon,
   TablaIcon,
   nullToUndefined,
   toSend,
@@ -19,11 +17,15 @@ import { Form, FormField } from "@/Components/ui/form";
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
-import FormButton from "@/Components/Forms/FormButton";
 import { router } from "@inertiajs/react";
 import { useToast } from "@/Components/ui/use-toast";
+import EditButtons from "@/Components/Forms/EditButtons";
 
 const schema = formSchema;
+
+type Aux = {
+  tipos: string[];
+};
 
 interface Props {
   data: Maquina;
@@ -128,19 +130,6 @@ export default function Edit({ data, aux }: Props) {
           />
           <FormField
             control={form.control}
-            name="nro_serie"
-            render={({ field }) => (
-              <FormItemConstructor
-                id={field.name}
-                label="Nro. de Serie"
-                name={field.name}
-                value={field.value}
-                onChange={field.onChange}
-              />
-            )}
-          />
-          <FormField
-            control={form.control}
             name="tipo"
             render={({ field }) => (
               <FormItemSelectConstructor
@@ -150,6 +139,19 @@ export default function Edit({ data, aux }: Props) {
                 value={field.value}
                 onChange={field.onChange}
                 options={aux.tipos || []}
+              />
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="nro_serie"
+            render={({ field }) => (
+              <FormItemConstructor
+                id={field.name}
+                label="Nro. de Serie"
+                name={field.name}
+                value={field.value}
+                onChange={field.onChange}
               />
             )}
           />
@@ -240,20 +242,7 @@ export default function Edit({ data, aux }: Props) {
               />
             )}
           />
-          <div className="col-span-full flex items-center gap-16">
-            <FormButton
-              variant={"destructive"}
-              className="ms-auto"
-              onClick={handleDelete}
-            >
-              <DeleteIcon />
-              Eliminar
-            </FormButton>
-            <FormButton type="submit">
-              <SaveUpdateIcon />
-              Actualizar
-            </FormButton>
-          </div>
+          <EditButtons destroyCallback={handleDelete} />
         </form>
       </Form>
     </FormLayout>

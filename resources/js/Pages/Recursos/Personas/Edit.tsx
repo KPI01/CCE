@@ -14,20 +14,18 @@ import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import FormLayout from "@/Layouts/Recursos/FormLayout";
 import FormTitle from "@/Components/Forms/FormTitle";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
-import FormButton from "@/Components/Forms/FormButton";
 import { router } from "@inertiajs/react";
 import { useToast } from "@/Components/ui/use-toast";
 import {
   CONTAINER_CLASS,
-  DeleteIcon,
   EditIcon,
   PersonaIcon,
-  SaveUpdateIcon,
   TablaIcon,
   nullToUndefined,
   toSend,
   urlWithoutId,
 } from "../utils";
+import EditButtons from "@/Components/Forms/EditButtons";
 
 const schema = formSchema;
 
@@ -196,21 +194,6 @@ export default function Edit({ data }: { data: Persona }) {
 
             <FormField
               control={form.control}
-              name="tel"
-              render={({ field }) => (
-                <FormItemConstructor
-                  id={field.name}
-                  label="Teléfono"
-                  name={field.name}
-                  value={field.value || ""}
-                  autoComplete={"tel"}
-                  onChange={field.onChange}
-                />
-              )}
-            />
-
-            <FormField
-              control={form.control}
               name="perfil"
               render={({ field }) => (
                 <FormItemSelectConstructor
@@ -220,6 +203,21 @@ export default function Edit({ data }: { data: Persona }) {
                   value={field.value || ""}
                   onChange={field.onChange}
                   options={PERFILES}
+                />
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="tel"
+              render={({ field }) => (
+                <FormItemConstructor
+                  id={field.name}
+                  label="Teléfono"
+                  name={field.name}
+                  value={field.value || ""}
+                  autoComplete={"tel"}
+                  onChange={field.onChange}
                 />
               )}
             />
@@ -289,20 +287,7 @@ export default function Edit({ data }: { data: Persona }) {
             />
           </div>
 
-          <div className="col-span-full mt-4 flex justify-end gap-x-6">
-            <FormButton
-              type="reset"
-              variant={"destructive"}
-              onClick={handleDelete}
-            >
-              <DeleteIcon />
-              Eliminar
-            </FormButton>
-            <FormButton type="submit">
-              <SaveUpdateIcon />
-              Actualizar
-            </FormButton>
-          </div>
+          <EditButtons destroyCallback={handleDelete} />
         </form>
       </Form>
     </FormLayout>

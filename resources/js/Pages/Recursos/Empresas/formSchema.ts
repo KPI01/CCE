@@ -1,5 +1,11 @@
 import { z } from "zod";
-import { BE_VALID_MSG, MAX_MESSAGE, MIN_MESSAGE, REQUIRED_MSG } from "../utils";
+import {
+  BE_VALID_MSG,
+  MAX_MESSAGE,
+  MIN_MESSAGE,
+  ONLY_CONTAIN_MSG,
+  REQUIRED_MSG,
+} from "../utils";
 
 export const RECURSO = "empresa";
 
@@ -20,9 +26,9 @@ const CAPACITACIONES_READONLY = [
 
 const NOMBRE_REGEX = /^[A-Za-z0-9áéíóúÁÉÍÓÚñÑ ,.&-]*$/gm;
 const ROPO_NRO_REGEX =
-  /^([\d]{7,12}[SASTU]*([/][\d]{1,3})?|[\d]{1,3}[/][\d]{1,3})$/gm;
+  /^([\d]{7,12}[SASTU]*([/][\d]{1,3})?|[\d]{1,3}[/][\d]{1,3})$|^(?!.*\S)/gm;
 const TEL_REGEX =
-  /^((\+34|0034|34)?[6|7|8|9]\d{8}|(800|900)\d{6,7}|(901|902|905|803|806|807)\d{6})$/;
+  /^(\+34|0034|34)?[6-9]\d{8}|(800|900)\d{6,7}|(901|902|905|803|806|807)\d{6}$|^(?!.*\S)/gm;
 
 export const formSchema = z.object({
   id: z.string().optional(),
@@ -36,7 +42,15 @@ export const formSchema = z.object({
     .max(100, MAX_MESSAGE(100))
     .regex(
       NOMBRE_REGEX,
-      "El nombre solo puede contener letras, números, o (, . - · &).",
+      ONLY_CONTAIN_MSG("El nombre", [
+        "letras",
+        "números",
+        "()",
+        ".",
+        "-",
+        "·",
+        "&",
+      ]),
     ),
   nif: z
     .string({
@@ -45,7 +59,7 @@ export const formSchema = z.object({
     })
     .min(1, REQUIRED_MSG("El NIF"))
     .regex(/^[A-HJ-NP-SUVW][0-9]{7}[0-9A-J]$/gm, {
-      message: "El NIF debe ser válido.",
+      message: BE_VALID_MSG("El NIF"),
     }),
   email: z
     .string({
@@ -59,34 +73,39 @@ export const formSchema = z.object({
     .string({
       invalid_type_error: BE_VALID_MSG("El teléfono"),
     })
-    .regex(TEL_REGEX, "El número de teléfono debe ser válido.")
+    .regex(TEL_REGEX, BE_VALID_MSG("El teléfono"))
     .optional(),
   codigo: z
     .string()
-    .regex(/^\d+$/, "El código solo puede contener números.")
+    .regex(/^\d+$|^(?!.*\S)/gm, ONLY_CONTAIN_MSG("El código", ["números"]))
     .optional(),
   perfil: z
     .enum(PERFILES_READONLY, {
       invalid_type_error: BE_VALID_MSG("El perfil"),
     })
-    .default("Aplicador"),
+    .default("Productor"),
   direccion: z.string().max(300, MAX_MESSAGE(300)).optional(),
   observaciones: z.string().max(1000, MAX_MESSAGE(1000)).optional(),
   ropo: z
     .object({
       capacitacion: z
         .enum(CAPACITACIONES_READONLY, {
-          invalid_type_error: BE_VALID_MSG("La capacitación ROPO"),
+          invalid_type_error: BE_VALID_MSG("La capacitación ROPO", "a"),
         })
         .optional(),
       caducidad: z
         .date({
-          invalid_type_error: BE_VALID_MSG("La caducidad del carné ROPO"),
+          invalid_type_error: BE_VALID_MSG(
+            "La fecha de caducidad del carné ROPO",
+            "a",
+          ),
         })
         .optional(),
       nro: z
-        .string()
-        .regex(ROPO_NRO_REGEX, BE_VALID_MSG("El número del carné ROPO"))
+        .string({
+          invalid_type_error: BE_VALID_MSG("La identificación ROPO", "a"),
+        })
+        .regex(ROPO_NRO_REGEX, BE_VALID_MSG("La identificación ROPO", "a"))
         .optional(),
     })
     .optional()
@@ -94,13 +113,13 @@ export const formSchema = z.object({
       if (data?.nro && !data?.capacitacion) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Debes seleccionar una capacitación ROPO.",
+          message: REQUIRED_MSG("La capacitación ROPO", "a"),
           path: ["capacitacion"],
         });
       } else if (!data?.nro && data?.capacitacion) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Debes ingresar la identificación ROPO.",
+          message: REQUIRED_MSG("La identificación ROPO", "a"),
           path: ["nro"],
         });
       }

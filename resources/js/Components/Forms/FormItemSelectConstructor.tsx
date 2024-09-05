@@ -85,7 +85,7 @@ export function FormItemSelectConstructor({
             {options.map((val) => {
               if (val === "") return;
               return (
-                <SelectItem key={val} value={val}>
+                <SelectItem key={val} value={val} textValue={val}>
                   {val}
                 </SelectItem>
               );

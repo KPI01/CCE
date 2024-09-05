@@ -23,7 +23,7 @@ export default function FormButton({
   text,
   type = "button",
   variant = "default",
-  size = "default",
+  size = "lg",
 }: BaseProps & FormButtonPropsWithText) {
   const content = children ? children : text;
   const buttonClass = cn("w-fit", className);
