@@ -261,6 +261,10 @@ class EditMaquinaTest extends RecursoDuskTestCase
                     "@msg-modelo",
                     "El modelo no debe contener: caracteres especiales, números."
                 );
+
+            $browser->assertRouteIs("maquina.edit", [
+                "maquina" => $this->row->id,
+            ]);
         });
     }
 

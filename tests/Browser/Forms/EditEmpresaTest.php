@@ -307,6 +307,10 @@ class EditEmpresaTest extends RecursoDuskTestCase
                     "@msg-codigo",
                     "El código sólo debe contener: números."
                 );
+
+            $browser->assertRouteIs("empresa.edit", [
+                "empresa" => $this->row->id,
+            ]);
         });
     }
 
