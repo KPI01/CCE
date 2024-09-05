@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\CampaniaController;
+use App\Http\Controllers\CampanaController;
 use App\Http\Controllers\MaquinaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AppController;
@@ -27,6 +27,6 @@ Route::prefix("app")
             Route::resource("persona", PersonaController::class);
             Route::resource("empresa", EmpresaController::class);
             Route::resource("maquina", MaquinaController::class);
-            Route::resource("campana", CampaniaController::class);
+            Route::resource("campana", CampanaController::class);
         });
     });

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Campania;
+use App\Models\Campana;
 use Illuminate\Http\Request;
 
-class CampaniaController extends Controller
+class CampanaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class CampaniaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Campania $campania)
+    public function show(Campana $campana)
     {
         //
     }
@@ -42,7 +42,7 @@ class CampaniaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Campania $campania)
+    public function edit(Campana $campana)
     {
         //
     }
@@ -50,7 +50,7 @@ class CampaniaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Campania $campania)
+    public function update(Request $request, Campana $campana)
     {
         //
     }
@@ -58,7 +58,7 @@ class CampaniaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Campania $campania)
+    public function destroy(Campana $campana)
     {
         //
     }
