@@ -281,7 +281,7 @@ class EditEmpresaTest extends RecursoDuskTestCase
         ]);
         $this->assertDatabaseMissing(Empresa::class, $attr);
     }
-sólo debe contener:
+
     public function testEnvioInvalido(): void
     {
         $this->browse(function (Browser $browser) {
