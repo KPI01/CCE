@@ -331,6 +331,7 @@ class EditEmpresaTest extends RecursoDuskTestCase
     public function testEnvioValido(): void
     {
         $data = Empresa::factory(1, ["perfil" => "Productor"])
+            ->withRopo()
             ->make()
             ->first();
 
