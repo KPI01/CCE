@@ -194,21 +194,6 @@ export default function Edit({ data }: { data: Persona }) {
 
             <FormField
               control={form.control}
-              name="tel"
-              render={({ field }) => (
-                <FormItemConstructor
-                  id={field.name}
-                  label="Teléfono"
-                  name={field.name}
-                  value={field.value || ""}
-                  autoComplete={"tel"}
-                  onChange={field.onChange}
-                />
-              )}
-            />
-
-            <FormField
-              control={form.control}
               name="perfil"
               render={({ field }) => (
                 <FormItemSelectConstructor
@@ -218,6 +203,21 @@ export default function Edit({ data }: { data: Persona }) {
                   value={field.value || ""}
                   onChange={field.onChange}
                   options={PERFILES}
+                />
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="tel"
+              render={({ field }) => (
+                <FormItemConstructor
+                  id={field.name}
+                  label="Teléfono"
+                  name={field.name}
+                  value={field.value || ""}
+                  autoComplete={"tel"}
+                  onChange={field.onChange}
                 />
               )}
             />
