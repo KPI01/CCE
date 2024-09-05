@@ -47,16 +47,9 @@ class CreateEmpresaTest extends RecursoDuskTestCase
                 ->assertPresent("@txt-direccion")
                 ->assertPresent("@txt-observaciones");
 
-            $browser->assertPresent("@switch")->assertPresent("@submit");
-        });
-    }
+            $browser->assertPresent("@submit");
 
-    public function testAccesibilidadRopo(): void
-    {
-        parent::testAccesibilidad();
-        $this->browse(function (Browser $browser) {
             $browser
-                ->visit(new Form(...$this->PARAMS))
                 ->assertPresent("@switch")
                 ->click("@switch")
                 ->pause(750)
@@ -109,15 +102,8 @@ class CreateEmpresaTest extends RecursoDuskTestCase
                 ->assertEnabled("@switch")
                 ->assert("@submit")
                 ->assertEnabled("@submit");
-        });
-    }
 
-    public function testVisibilidadRopo(): void
-    {
-        parent::testVisibilidad();
-        $this->browse(function (Browser $browser) {
             $browser
-                ->visit(new Form(...$this->PARAMS))
                 ->assertEnabled("@switch")
                 ->click("@switch")
                 ->pause(750)
@@ -189,17 +175,8 @@ class CreateEmpresaTest extends RecursoDuskTestCase
                 ->assertInputValue("@txt-observaciones", "")
                 ->type("@txt-observaciones", "test")
                 ->assertInputValue("@txt-observaciones", "test");
-        });
-    }
 
-    public function testCamposHabilitadosRopo(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser
-                ->visit(new Form(...$this->PARAMS))
-                ->assertEnabled("@switch")
-                ->click("@switch")
-                ->pause(750);
+            $browser->assertEnabled("@switch")->click("@switch")->pause(750);
 
             $browser
                 ->assertEnabled("@trigger-ropo_capacitacion")
@@ -304,13 +281,6 @@ class CreateEmpresaTest extends RecursoDuskTestCase
                     "@msg-codigo",
                     "El código sólo debe contener: números."
                 );
-        });
-    }
-
-    public function testEnvioRopoInvalido(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->click("@switch")
@@ -355,6 +325,7 @@ class CreateEmpresaTest extends RecursoDuskTestCase
                 ->type("@input-codigo", $data->codigo)
                 ->type("@txt-direccion", $data->direccion)
                 ->type("@txt-observaciones", $data->observaciones);
+            /** PENDIENTE: Implementar test a atributos ROPO  */
 
             $browser
                 ->press("@submit")

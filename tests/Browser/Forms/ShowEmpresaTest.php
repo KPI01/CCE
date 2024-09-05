@@ -53,14 +53,6 @@ class ShowEmpresaTest extends RecursoDuskTestCase
                 ->assertPresentByName("select", "perfil")
                 ->assertPresent("@txt-direccion")
                 ->assertPresent("@txt-observaciones");
-        });
-    }
-
-    public function testAccesibilidadRopo(): void
-    {
-        parent::testAccesibilidad();
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->assertPresent("@label-ropo_capacitacion")
@@ -108,14 +100,6 @@ class ShowEmpresaTest extends RecursoDuskTestCase
                 ->assertVisibleByName("select", "perfil")
                 ->assertVisible("@txt-direccion")
                 ->assertVisible("@txt-observaciones");
-        });
-    }
-
-    public function testVisibilidadRopo(): void
-    {
-        parent::testVisibilidad();
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->assertVisible("@label-ropo_capacitacion")
@@ -144,13 +128,6 @@ class ShowEmpresaTest extends RecursoDuskTestCase
                 ->assertDisabledByName("select", "perfil")
                 ->assertDisabled("@txt-direccion")
                 ->assertDisabled("@txt-observaciones");
-        });
-    }
-
-    public function testCamposInhabilitadosRopo(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
 
             $browser
                 ->assertDisabled("@trigger-ropo_capacitacion")
