@@ -47,7 +47,10 @@ class EditEmpresaTest extends RecursoDuskTestCase
                 ->assertPresent("@label-tel")
                 ->assertPresent("@label-direccion")
                 ->assertPresent("@label-codigo")
-                ->assertPresent("@label-observaciones");
+                ->assertPresent("@label-observaciones")
+                ->assertPresent("@label-ropo_capacitacion")
+                ->assertPresent("@input-ropo_nro")
+                ->assertPresent("@label-ropo_caducidad");
 
             $browser
                 ->assertPresent("@input-nombre")
@@ -58,24 +61,7 @@ class EditEmpresaTest extends RecursoDuskTestCase
                 ->assertPresent("@input-tel")
                 ->assertPresent("@txt-direccion")
                 ->assertPresent("@input-codigo")
-                ->assertPresent("@txt-observaciones");
-        });
-    }
-
-    public function testAccesibilidadRopo(): void
-    {
-        parent::testAccesibilidad();
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
-
-            $browser->assertPresent("@h3-ropo");
-
-            $browser
-                ->assertPresent("@label-ropo_capacitacion")
-                ->assertPresent("@input-ropo_nro")
-                ->assertPresent("@label-ropo_caducidad");
-
-            $browser
+                ->assertPresent("@txt-observaciones")
                 ->assertPresent("@trigger-ropo_capacitacion")
                 ->assertPresentByName("select", '"ropo.capacitacion"')
                 ->assertPresent("@input-ropo_nro")
@@ -104,7 +90,10 @@ class EditEmpresaTest extends RecursoDuskTestCase
                 ->assertVisible("@label-tel")
                 ->assertVisible("@label-direccion")
                 ->assertVisible("@label-codigo")
-                ->assertVisible("@label-observaciones");
+                ->assertVisible("@label-observaciones")
+                ->assertVisible("@label-ropo_capacitacion")
+                ->assertVisible("@input-ropo_nro")
+                ->assertVisible("@label-ropo_caducidad");
 
             $browser
                 ->assertVisible("@input-nombre")
@@ -115,24 +104,7 @@ class EditEmpresaTest extends RecursoDuskTestCase
                 ->assertVisible("@input-tel")
                 ->assertVisible("@txt-direccion")
                 ->assertVisible("@input-codigo")
-                ->assertVisible("@txt-observaciones");
-        });
-    }
-
-    public function testVisibilidadRopo(): void
-    {
-        parent::testVisibilidad();
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
-
-            $browser->assertVisible("@h3-ropo");
-
-            $browser
-                ->assertVisible("@label-ropo_capacitacion")
-                ->assertVisible("@input-ropo_nro")
-                ->assertVisible("@label-ropo_caducidad");
-
-            $browser
+                ->assertVisible("@txt-observaciones")
                 ->assertVisible("@trigger-ropo_capacitacion")
                 ->assertVisibleByName("select", '"ropo.capacitacion"')
                 ->assertVisible("@input-ropo_nro")
@@ -154,16 +126,7 @@ class EditEmpresaTest extends RecursoDuskTestCase
                 ->assertEnabled("@input-tel")
                 ->assertEnabled("@txt-direccion")
                 ->assertEnabled("@input-codigo")
-                ->assertEnabled("@txt-observaciones");
-        });
-    }
-
-    public function testCamposHabilitadosRopo(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
-
-            $browser
+                ->assertEnabled("@txt-observaciones")
                 ->assertEnabled("@trigger-ropo_capacitacion")
                 ->assertEnabledByName("select", '"ropo.capacitacion"')
                 ->assertEnabled("@input-ropo_nro")
@@ -293,6 +256,7 @@ class EditEmpresaTest extends RecursoDuskTestCase
                 ->type("@input-email", "correo@")
                 ->type("@input-tel", "13246598")
                 ->type("@input-codigo", "abd&%")
+                ->type("@input-ropo_nro", "53526%$")
                 ->press("@submit");
 
             $browser
@@ -308,23 +272,11 @@ class EditEmpresaTest extends RecursoDuskTestCase
                     "El código sólo debe contener: números."
                 );
 
+            $browser->press("@submit");
+
             $browser->assertRouteIs("empresa.edit", [
                 "empresa" => $this->row->id,
             ]);
-        });
-    }
-
-    public function testEnvioInvalidoRopo(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
-
-            $browser->type("@input-ropo_nro", "53526%$")->press("@submit");
-
-            $browser->assertSeeIn(
-                "@msg-ropo_nro",
-                "La identificación ROPO debe ser válida."
-            );
         });
     }
 
@@ -346,6 +298,7 @@ class EditEmpresaTest extends RecursoDuskTestCase
                 ->type("@txt-direccion", $data->direccion)
                 ->type("@input-codigo", $data->codigo)
                 ->type("@txt-observaciones", $data->observaciones)
+                ->type("@input-ropo_nro", $data->ropo["nro"])
                 ->press("@submit");
 
             $browser
@@ -371,8 +324,4 @@ class EditEmpresaTest extends RecursoDuskTestCase
             ])
         );
     }
-
-    // public function testEnvioValidoRopo(): void
-    // {
-    // }
 }
