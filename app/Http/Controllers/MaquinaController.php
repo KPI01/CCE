@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class MaquinaController extends Controller
 {
+    public array $aux;
     public function __construct()
     {
         parent::__construct();
@@ -22,14 +23,20 @@ class MaquinaController extends Controller
                 append: "Máquina"
             );
         }
+
+        $this->aux["tipos"] = DB::table(Maquina::TIPOS_TABLE)
+            ->orderBy("id")
+            ->get()
+            ->pluck("nombre")
+            ->toArray();
     }
 
     public function index()
     {
         //
-        $this->data = Maquina::all();
+        $data = Maquina::all();
         return inertia("Recursos/Maquinas/Table", [
-            "data" => $this->data,
+            "data" => $data,
             "url" => route("maquina.index"),
         ]);
     }
@@ -37,13 +44,8 @@ class MaquinaController extends Controller
     public function create()
     {
         //
-        $aux = DB::table(Maquina::TIPOS_TABLE)
-            ->orderBy("id")
-            ->get()
-            ->pluck("nombre")
-            ->toArray();
-        return inertia("Recursos/Maquinas/Create", [
-            "aux" => ["tipos" => $aux],
+        return inertia("Recursos/Maquina/Create", [
+            "aux" => $this->aux,
             "url" => route("maquina.index"),
         ]);
     }
@@ -91,67 +93,47 @@ class MaquinaController extends Controller
         ]);
     }
 
-    public function show(string $id)
+    public function show(Maquina $maquina)
     {
         //
-        $data = Maquina::findOrFail($id);
-        $aux = [
-            "tipos" => DB::table(Maquina::TIPOS_TABLE)
-                ->get()
-                ->pluck("nombre")
-                ->toArray(),
-        ];
         return inertia("Recursos/Maquinas/Show", [
-            "data" => $data,
-            "aux" => $aux,
+            "data" => $maquina,
+            "aux" => $this->aux,
         ]);
     }
 
-    public function edit(string $id)
+    public function edit(Maquina $maquina)
     {
         //
-        $data = Maquina::findOrFail($id);
-        $aux = [
-            "tipos" => DB::table(Maquina::TIPOS_TABLE)
-                ->get()
-                ->pluck("nombre")
-                ->toArray(),
-        ];
-
         return inertia("Recursos/Maquinas/Edit", [
-            "data" => $data,
-            "aux" => $aux,
+            "data" => $maquina,
+            "aux" => $this->aux,
         ]);
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, Maquina $maquina)
     {
         //
-        $inst = Maquina::findOrFail($id);
         $data = $request->all();
         $uniques = $request->all(["matricula"]);
 
         if (is_null($uniques["matricula"])) {
-            $uniques["matricula"] = $inst->matricula;
+            $uniques["matricula"] = $maquina->matricula;
         }
 
         if (
             Maquina::where([
                 ["matricula", $uniques["matricula"]],
-                ["id", "<>", $inst->id],
+                ["id", "<>", $maquina->id],
             ])->exists()
         ) {
             $this->toastErrorConstructor(
                 campo: "matricula",
                 error: "Duplicidad",
-                mensaje: implode(" ", [
-                    "La matrícula",
-                    "[{$uniques["matricula"]}]",
-                    "ya se encuentra registrada",
-                ]),
+                mensaje: "La matrícula [{$uniques["matricula"]}] ya se encuentra registrada",
                 variante: "warning"
             );
-            return to_route("maquina.show", $inst->id)->with([
+            return to_route("maquina.show", $maquina->id)->with([
                 "from" => "maquina.update",
                 "message" => [
                     "toast" => $this->toasts["error"]["matricula:duplicidad"],
@@ -159,16 +141,16 @@ class MaquinaController extends Controller
             ]);
         }
 
-        $inst->update($data);
-        $inst->save();
+        $maquina->update($data);
+        $maquina->save();
 
         $this->toastExitoConstructor(
             accion: "update",
             seccion: "description",
-            append: implode(" ", [$inst->nombre, "[{$inst->matricula}]"])
+            append: "{$maquina->nombre} [{$maquina->matricula}]"
         );
 
-        return to_route("maquina.show", $inst->id)->with([
+        return to_route("maquina.show", $maquina->id)->with([
             "from" => "maquina.update",
             "message" => [
                 "toast" => $this->toasts["exito"]["update"],
@@ -176,25 +158,20 @@ class MaquinaController extends Controller
         ]);
     }
 
-    public function destroy(string $id)
+    public function destroy(Maquina $maquina)
     {
         //
-        $this->data = Maquina::findOrFail($id);
-        $this->data->delete();
+        $maquina->delete();
+
+        $this->toastExitoConstructor(
+            accion: "destroy",
+            seccion: "description",
+            append: "{$maquina->nombre} ({$maquina->matricula})"
+        );
         return to_route("maquina.index")->with([
             "from" => "maquina.destroy",
             "message" => [
-                "toast" => [
-                    "variant" => "destructive",
-                    "title" => "Recurso: Máquina",
-                    "description" => implode([
-                        $this->data->nombre,
-                        " ",
-                        "({$this->data->matricula})",
-                        " ",
-                        "se ha eliminado de los registros.",
-                    ]),
-                ],
+                "toast" => $this->toasts["exito"]["destroy"],
             ],
         ]);
     }

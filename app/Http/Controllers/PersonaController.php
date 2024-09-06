@@ -25,18 +25,18 @@ class PersonaController extends Controller
     public function index()
     {
         //
-        $this->data = Persona::all();
+        $data = Persona::all();
 
-        return inertia("Recursos/Personas/Table", [
-            "data" => $this->data,
-            "url" => route("persona.index")
+        return inertia("Recursos/Persona/Table", [
+            "data" => $data,
+            "url" => route("persona.index"),
         ]);
     }
 
     public function create()
     {
         //
-        return inertia("Recursos/Personas/Create", [
+        return inertia("Recursos/Persona/Create", [
             "url" => route("persona.index"),
         ]);
     }
@@ -93,18 +93,14 @@ class PersonaController extends Controller
                         ],
                     ]);
                 }
-                $this->inst = Persona::create($basic)->setRopoAttribute($r);
+                $inst = Persona::create($basic)->setRopoAttribute($r);
             } else {
-                $this->inst = Persona::create($basic);
+                $inst = Persona::create($basic);
             }
             $this->toastExitoConstructor(
                 accion: "store",
                 seccion: "description",
-                append: implode(" ", [
-                    $this->inst->nombres,
-                    $this->inst->apellidos,
-                    "(" . $this->inst->id_nac . ")",
-                ])
+                append: "{$inst->nombres} {$inst->apellidos} ({$inst->id_nac})"
             );
             return to_route("persona.index")->with([
                 "from" => "persona.store",
@@ -115,30 +111,25 @@ class PersonaController extends Controller
         }
     }
 
-    public function show(string $id)
+    public function show(Persona $persona)
     {
         //
-        $this->data = Persona::findOrFail($id);
-
-        return inertia("Recursos/Personas/Show", [
-            "data" => $this->data,
+        return inertia("Recursos/Persona/Show", [
+            "data" => $persona,
         ]);
     }
 
-    public function edit(string $id)
+    public function edit(Persona $persona)
     {
         //
-        $this->data = Persona::findOrFail($id);
-
-        return inertia("Recursos/Personas/Edit", [
-            "data" => $this->data,
+        return inertia("Recursos/Persona/Edit", [
+            "data" => $persona,
         ]);
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, Persona $persona)
     {
         //
-        $this->data = Persona::findOrFail($id);
         $basic = $request->all();
         unset($basic["ropo"]);
         $uniques = $request->all(["email", "id_nac"]);
@@ -146,20 +137,16 @@ class PersonaController extends Controller
         if (
             Persona::where([
                 ["email", $uniques["email"]],
-                ["id", "<>", $this->data->id],
+                ["id", "<>", $persona->id],
             ])->exists()
         ) {
             $this->toastErrorConstructor(
                 campo: "email",
                 error: "Duplicado",
-                mensaje: implode(" ", [
-                    "Correo:",
-                    $uniques["email"],
-                    "ya se encuentra registrado",
-                ]),
+                mensaje: "Correo: {$uniques["email"]} ya se encuentra registrado",
                 variante: "warning"
             );
-            return to_route("persona.edit", $this->data->id)->with([
+            return to_route("persona.edit", $persona->id)->with([
                 "from" => "persona.update",
                 "message" => [
                     "toast" => $this->toasts["error"]["email:duplicado"],
@@ -168,20 +155,16 @@ class PersonaController extends Controller
         } elseif (
             Persona::where([
                 ["id_nac", $uniques["id_nac"]],
-                ["id", "<>", $this->data->id],
+                ["id", "<>", $persona->id],
             ])->exists()
         ) {
             $this->toastErrorConstructor(
                 campo: "id_nac",
                 error: "Duplicado",
-                mensaje: implode(" ", [
-                    "NIF:",
-                    $uniques["id_nac"],
-                    "ya se encuentra registrado",
-                ]),
+                mensaje: "NIF: {$uniques["id_nac"]} ya se encuentra registrado",
                 variante: "warning"
             );
-            return to_route("persona.edit", $this->data->id)->with([
+            return to_route("persona.edit", $persona->id)->with([
                 "from" => "persona.update",
                 "message" => [
                     "toast" => $this->toasts["error"]["id_nac:duplicado"],
@@ -194,20 +177,16 @@ class PersonaController extends Controller
                 if (
                     DB::table(Persona::ROPO_TABLE)
                         ->where("nro", $r["nro"])
-                        ->where("persona_id", "<>", $this->data->id)
+                        ->where("persona_id", "<>", $persona->id)
                         ->exists()
                 ) {
                     $this->toastErrorConstructor(
                         campo: "ropo.nro",
                         error: "Duplicado",
-                        mensaje: implode(" ", [
-                            "Nº ROPO:",
-                            $r["nro"],
-                            "ya se encuentra registrado",
-                        ]),
+                        mensaje: "Nº ROPO: {$r["nro"]} ya se encuentra registrado",
                         variante: "warning"
                     );
-                    return to_route("persona.edit", $this->data->id)->with([
+                    return to_route("persona.edit", $persona->id)->with([
                         "from" => "persona.update",
                         "message" => [
                             "toast" =>
@@ -215,24 +194,20 @@ class PersonaController extends Controller
                         ],
                     ]);
                 }
-                $this->data->update($basic);
-                $this->data->setRopoAttribute($r);
+                $persona->update($basic);
+                $persona->setRopoAttribute($r);
             } else {
-                $this->data->update($basic);
+                $persona->update($basic);
             }
 
-            $this->data->save();
+            $persona->save();
 
             $this->toastExitoConstructor(
                 accion: "update",
                 seccion: "description",
-                append: implode(" ", [
-                    $this->data->nombres,
-                    $this->data->apellidos,
-                    "(" . $this->data->id_nac . ")",
-                ])
+                append: "{$persona->nombres} {$persona->apellidos} ({$persona->id_nac})"
             );
-            return to_route("persona.show", $this->data->id)->with([
+            return to_route("persona.show", $persona->id)->with([
                 "from" => "persona.update",
                 "message" => [
                     "toast" => $this->toasts["exito"]["update"],
@@ -241,26 +216,20 @@ class PersonaController extends Controller
         }
     }
 
-    public function destroy(string $id)
+    public function destroy(Persona $persona)
     {
         //
-        $this->data = Persona::findOrFail($id);
-        $this->data->delete();
+        $persona->delete();
 
+        $this->toastExitoConstructor(
+            accion: "destroy",
+            seccion: "description",
+            append: "{$persona->nombre} ({$persona->nif})"
+        );
         return to_route("persona.index")->with([
             "from" => "persona.destroy",
             "message" => [
-                "toast" => [
-                    "variant" => "destructive",
-                    "title" => "Recurso: Persona",
-                    "description" =>
-                        $this->data->nombres .
-                        " " .
-                        $this->data->apellidos .
-                        " (" .
-                        $this->data->id_nac .
-                        ") se ha eliminado de los registros.",
-                ],
+                "toast" => $this->toasts["exito"]["destroy"],
             ],
         ]);
     }
