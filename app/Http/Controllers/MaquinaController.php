@@ -35,7 +35,7 @@ class MaquinaController extends Controller
     {
         //
         $data = Maquina::all();
-        return inertia("Recursos/Maquinas/Table", [
+        return inertia("Recursos/Maquina/Table", [
             "data" => $data,
             "url" => route("maquina.index"),
         ]);
@@ -96,7 +96,7 @@ class MaquinaController extends Controller
     public function show(Maquina $maquina)
     {
         //
-        return inertia("Recursos/Maquinas/Show", [
+        return inertia("Recursos/Maquina/Show", [
             "data" => $maquina,
             "aux" => $this->aux,
         ]);
@@ -105,7 +105,7 @@ class MaquinaController extends Controller
     public function edit(Maquina $maquina)
     {
         //
-        return inertia("Recursos/Maquinas/Edit", [
+        return inertia("Recursos/Maquina/Edit", [
             "data" => $maquina,
             "aux" => $this->aux,
         ]);
