@@ -21,7 +21,7 @@ class Table extends Page
     public function url(): string
     {
         $route = Request::create(route("$this->r.index"));
-        return "/" . $route->path();
+        return "/{$route->path()}";
     }
 
     /**

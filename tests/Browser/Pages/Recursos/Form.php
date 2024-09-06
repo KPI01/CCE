@@ -41,7 +41,7 @@ class Form extends Page
             $rt = Request::create(uri: route($accion));
         }
 
-        return "/" . $rt->path();
+        return "/{$rt->path()}";
     }
 
     /**
