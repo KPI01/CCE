@@ -3,6 +3,7 @@ import { IconProps } from "@/types";
 import {
   Box,
   Building,
+  CalendarRange,
   CircleArrowOutUpRight,
   FilePen,
   FilePlus,
@@ -40,6 +41,9 @@ export const EmpresaIcon = ({ className }: IconProps) => (
 );
 export const MaquinaIcon = ({ className }: IconProps) => (
   <Tractor className={cn(ICON_CLASS, className)} />
+);
+export const CampanaIcon = ({ className }: IconProps) => (
+  <CalendarRange className={cn(ICON_CLASS, className)} />
 );
 
 export const TablaIcon = ({ className }: IconProps) => (
