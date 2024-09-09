@@ -2,10 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Campana extends Model
+class Campana extends RecursoBase
 {
-    use HasFactory;
+    protected $primaryKey = "id";
+
+    public function empresas(): HasMany
+    {
+        return $this->hasMany(Empresa::class)
+            ->withTimestamps()
+            ->using(CampanaEmpresa::class);
+    }
 }
