@@ -137,7 +137,7 @@ export function RowActionsLiveEdit({ id, info, url }: Props) {
       <DropdownMenu>
         <DialogTrigger asChild>
           <DropdownMenuTrigger id={`actions-${id}`} asChild>
-            <Button variant={"ghost"} className="h-8 w-8 p-0">
+            <Button variant={"ghost"} className="h-8 w-8">
               <span className="sr-only">Menú</span>
               <Ellipsis className="size-4" />
             </Button>

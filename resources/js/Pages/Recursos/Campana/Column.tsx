@@ -1,10 +1,10 @@
 "use client";
 
 import { DataTableColumnHeader } from "@/Components/DataTable/ColumnHeader";
-import { Checkbox } from "@/Components/ui/checkbox";
 import { Campana } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import Actions from "./Actions";
+import { Switch } from "@/Components/ui/switch";
 
 export const columns: ColumnDef<Campana>[] = [
   {
@@ -26,7 +26,15 @@ export const columns: ColumnDef<Campana>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="¿Activa?" />
     ),
-    cell: ({ row }) => <Checkbox checked={row.original.is_activa} />,
+    cell: ({ row }) => (
+      <div className="items-top flex space-x-2">
+        <Switch
+          className="ms-4"
+          defaultChecked={row.original.is_activa}
+          disabled
+        />
+      </div>
+    ),
     enableColumnFilter: true,
     enableSorting: true,
     enableHiding: false,
@@ -71,7 +79,7 @@ export const columns: ColumnDef<Campana>[] = [
     ),
     enableColumnFilter: false,
     enableSorting: false,
-    enableHiding: false,
+    enableHiding: true,
     size: 200,
     meta: {
       header: "Descripción",

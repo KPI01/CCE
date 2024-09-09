@@ -16,6 +16,8 @@ export default function Table({ data, url }: Props) {
     descripcion: false,
   };
 
+  console.debug("data:", data);
+
   return (
     <DataLayout
       title="Campañas"
