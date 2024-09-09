@@ -8,6 +8,14 @@ class Campana extends RecursoBase
 {
     protected $primaryKey = "id";
 
+    protected function casts(): array
+    {
+        return [
+            "inicio" => "datetime:d/m/Y",
+            "fin" => "datetime:d/m/Y",
+        ];
+    }
+
     public function empresas(): HasMany
     {
         return $this->hasMany(Empresa::class)

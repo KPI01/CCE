@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,6 +19,11 @@ class CampanaFactory extends Factory
     {
         return [
             //
+            "nombre" => fake()->year(),
+            "is_activa" => fake()->boolean(),
+            "inicio" => fake()->date(),
+            "fin" => fake()->date(),
+            "descripcion" => fake()->paragraph(2),
         ];
     }
 }
