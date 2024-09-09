@@ -80,7 +80,7 @@ export function DataTable<TData, TValue>({
         <ColumnToggle table={table} />
       </div>
       <div className="mx-auto w-full overflow-auto rounded-md border">
-        <Table className="w-full" id="data-table">
+        <Table id="data-table">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => {
               return (
