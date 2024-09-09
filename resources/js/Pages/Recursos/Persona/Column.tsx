@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { Persona } from "@/types";
 import { DataTableColumnHeader } from "@/Components/DataTable/ColumnHeader";
-import Actions from "@/Pages/Recursos/Personas/Actions";
+import Actions from "@/Pages/Recursos/Persona/Actions";
 
 export const columns: ColumnDef<Persona>[] = [
   {

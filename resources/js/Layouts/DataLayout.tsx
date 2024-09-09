@@ -27,14 +27,14 @@ interface CreateButtonProps {
   withPrompt?: boolean;
 }
 
-export default function DataLayout({
+export default function DataLayout<TData, TValue>({
   title,
   url,
   data,
   columns,
   initialVisibility,
   withPrompt,
-}: TableProps) {
+}: TableProps<TData, TValue>) {
   return (
     <MainLayout>
       <Head title={`Recurso: ${title}`} />
@@ -56,12 +56,12 @@ export default function DataLayout({
   );
 }
 
-function CreateButton({
+function CreateButton<TData, TValue>({
   url,
   withPrompt,
   title,
   columns,
-}: Pick<TableProps, "title" | "columns"> & CreateButtonProps) {
+}: Pick<TableProps<TData, TValue>, "title" | "columns"> & CreateButtonProps) {
   console.log("columns:", columns);
   const [values, setValues] = React.useState<Record<string, string>>({});
 
