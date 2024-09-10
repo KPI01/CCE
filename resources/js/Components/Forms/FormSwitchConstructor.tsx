@@ -14,7 +14,6 @@ interface Props extends Omit<ConstructorProps, "value"> {
 export default function FormSwitchConstructor({
   name,
   value,
-  placeholder = "(Vacío)",
   disabled = false,
   onChange,
   descripcion = undefined,
@@ -43,7 +42,12 @@ export default function FormSwitchConstructor({
         {Descripcion}
       </div>
       <FormControl>
-        <Switch className="ms-6" checked={value} onCheckedChange={onChange} />
+        <Switch
+          disabled={disabled}
+          className="ms-6"
+          checked={value}
+          onCheckedChange={onChange}
+        />
       </FormControl>
       <FormMessage id={`msg-${itemId}`} />
     </FormItem>
