@@ -1,10 +1,9 @@
 import { Badge, badgeVariants } from "@/Components/ui/badge";
-import { Button, buttonVariants } from "@/Components/ui/button";
-import { Separator } from "@/Components/ui/separator";
+import { buttonVariants } from "@/Components/ui/button";
 import { cn } from "@/lib/utils";
-import { LayoutProps, PageProps } from "@/types";
-import { Link, router, usePage } from "@inertiajs/react";
-import { ChevronLeft, Pen, Trash } from "lucide-react";
+import { LayoutProps } from "@/types";
+import { Link, router } from "@inertiajs/react";
+import { Pen, Trash } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,8 +15,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/Components/ui/alert-dialog";
-import { formatDate } from "@/lib/dates";
-import { BreadcrumbItem, BreadcrumbSeparator } from "../ui/breadcrumb";
+import { formatDate } from "date-fns";
+import { es } from "date-fns/locale";
 
 interface Props
   extends Omit<
@@ -30,6 +29,8 @@ interface Props
   updated_at: Date | null;
   showActions?: boolean;
 }
+
+const DATE_FORMAT = "eee, dd/MM/yyyy - HH:mm";
 
 export default function FormHeader({
   title,
@@ -48,18 +49,20 @@ export default function FormHeader({
     <div className={cn("flex items-center gap-4", className)}>
       <div className="flex gap-4">
         <div className="flex flex-col">
-          <h1 className="my-3 text-5xl font-extrabold">{title}</h1>
+          <h1 id="main-title" className="my-3 text-5xl font-extrabold">
+            {title}
+          </h1>
           <div className="flex select-none gap-x-4">
             {showActions && (
               <>
                 <AlertDialog>
                   <AlertDialogTrigger
-                    id={`badge-destroy-${id}`}
+                    id="badge-destroy"
                     className={badgeVariants({ variant: "destructive" })}
                   >
                     <Trash className="size-4" />
                   </AlertDialogTrigger>
-                  <AlertDialogContent id={`delete-${id}`}>
+                  <AlertDialogContent id="delete-dialog">
                     <AlertDialogHeader id="alert-title">
                       <AlertDialogTitle>
                         Confirmación para eliminar
@@ -71,13 +74,13 @@ export default function FormHeader({
                     </AlertDialogHeader>
                     <AlertDialogFooter id="alert-footer">
                       <AlertDialogCancel
-                        id="alert-cancel"
+                        id="delete-cancel"
                         className={buttonVariants({ variant: "outline" })}
                       >
                         No
                       </AlertDialogCancel>
                       <AlertDialogAction
-                        id="alert-confirm"
+                        id="delete-confirm"
                         className={buttonVariants({ variant: "destructive" })}
                         onClick={handleDelete}
                       >
@@ -88,7 +91,7 @@ export default function FormHeader({
                 </AlertDialog>
                 <Link
                   href={`${url}/edit` || "#"}
-                  id={`badge-edit-${id}`}
+                  id="badge-edit"
                   className={badgeVariants({ variant: "default" })}
                   as="button"
                 >
@@ -97,15 +100,19 @@ export default function FormHeader({
               </>
             )}
             {created_at && (
-              <Badge variant={"outline"} id={`badge-created-${id}`}>
+              <Badge variant={"outline"} id="badge-createdAt">
                 Creación:{" "}
-                <span className="ml-3 font-thin">{formatDate(created_at)}</span>
+                <span className="ml-3 font-thin">
+                  {formatDate(created_at, DATE_FORMAT, { locale: es })}
+                </span>
               </Badge>
             )}
             {updated_at && (
-              <Badge variant={"secondary"} id={`badge-updated-${id}`}>
+              <Badge variant={"secondary"} id="badge-updatedAt">
                 Últ. Ed:{" "}
-                <span className="ml-3 font-thin">{formatDate(updated_at)}</span>
+                <span className="ml-3 font-thin">
+                  {formatDate(updated_at, DATE_FORMAT, { locale: es })}
+                </span>
               </Badge>
             )}
           </div>

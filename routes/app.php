@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CampanaController;
 use App\Http\Controllers\MaquinaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AppController;
@@ -23,9 +24,9 @@ Route::prefix("app")
             });
 
         Route::prefix("recurso")->group(function () {
-            global $resourceEnpoints;
             Route::resource("persona", PersonaController::class);
             Route::resource("empresa", EmpresaController::class);
             Route::resource("maquina", MaquinaController::class);
+            Route::resource("campana", CampanaController::class);
         });
     });

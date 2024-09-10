@@ -15,6 +15,7 @@ import { Button } from "./ui/button";
 import { ReactElement } from "react";
 import { v4 as uuidv4 } from "uuid";
 import {
+  CampanaIcon,
   EmpresaIcon,
   MaquinaIcon,
   PersonaIcon,
@@ -47,6 +48,11 @@ const recursos: MenuItemsProps[] = [
     Icon: <MaquinaIcon />,
     Texto: "Máquinas",
     Recurso: "maquina",
+  },
+  {
+    Icon: <CampanaIcon />,
+    Texto: "Campañas",
+    Recurso: "campana",
   },
 ];
 

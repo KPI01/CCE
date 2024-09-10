@@ -64,3 +64,11 @@ export interface Maquina extends Modelo {
   roma: string;
   observaciones: string;
 }
+
+export interface Campana extends Modelo {
+  nombre: string;
+  is_activa: boolean | 0 | 1;
+  inicio: string;
+  fin: string;
+  descripcion?: string;
+}

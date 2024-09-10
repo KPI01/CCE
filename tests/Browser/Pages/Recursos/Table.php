@@ -21,7 +21,7 @@ class Table extends Page
     public function url(): string
     {
         $route = Request::create(route("$this->r.index"));
-        return "/" . $route->path();
+        return "/{$route->path()}";
     }
 
     /**
@@ -51,11 +51,16 @@ class Table extends Page
             "@pag-" => "#pag-nav-",
             "@radix-popper" => "div[data-radix-popper-content-wrapper]",
             "@radix-item" => "div[data-radix-collection-item]",
+            "@radix-menu-item-checkbox" => "div[role=menuitemcheckbox]",
             "@r-menu" => "table tbody tr:first-child td:last-child button",
             "@acc-show" => "a[id^=action-show]",
             "@acc-edit" => "a[id^=action-edit]",
-            "@acc-delete" => "button[id^=action-delete]",
+            "@acc-destroy" => "button[id^=action-destroy]",
             "@acc-create" => "button#action-create",
+            "@p-pri" => "button#pag-nav-primera",
+            "@p-ant" => "button#pag-nav-anterior",
+            "@p-sig" => "button#pag-nav-siguiente",
+            "@p-ult" => "button#pag-nav-ultima",
         ];
     }
 }

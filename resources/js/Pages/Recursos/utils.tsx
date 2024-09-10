@@ -3,6 +3,7 @@ import { IconProps } from "@/types";
 import {
   Box,
   Building,
+  CalendarRange,
   CircleArrowOutUpRight,
   FilePen,
   FilePlus,
@@ -16,12 +17,18 @@ import {
 export const CONTAINER_CLASS = "container grid grid-cols-2 gap-x-12 gap-y-4";
 const ICON_CLASS = "size-4 mr-2";
 
-export const REQUIRED_MSG = (start: string) => `${start} es requerido.`;
+export const REQUIRED_MSG = (start: string, end: "a" | "o" = "o") =>
+  `${start} es requerid${end}.`;
 export const MIN_MESSAGE = (size: number) =>
   `Este campo debe tener al menos ${size} caracteres.`;
 export const MAX_MESSAGE = (size: number) =>
-  `Este campo debe tener como máximo ${size} caracteres`;
-export const BE_VALID_MSG = (start: string) => `${start} debe ser válido.`;
+  `Este campo debe tener como máximo ${size} caracteres.`;
+export const BE_VALID_MSG = (start: string, end: "a" | "o" = "o") =>
+  `${start} debe ser válid${end}.`;
+export const NOT_CONTAIN_MSG = (start: string, prohibited: string[]) =>
+  `${start} no debe contener: ${prohibited.join(", ")}.`;
+export const ONLY_CONTAIN_MSG = (start: string, allowed: string[]) =>
+  `${start} sólo debe contener: ${allowed.join(", ")}.`;
 
 export const RecursosIcon = ({ className }: IconProps) => (
   <Box className={cn(ICON_CLASS, className)} />
@@ -34,6 +41,9 @@ export const EmpresaIcon = ({ className }: IconProps) => (
 );
 export const MaquinaIcon = ({ className }: IconProps) => (
   <Tractor className={cn(ICON_CLASS, className)} />
+);
+export const CampanaIcon = ({ className }: IconProps) => (
+  <CalendarRange className={cn(ICON_CLASS, className)} />
 );
 
 export const TablaIcon = ({ className }: IconProps) => (
@@ -93,4 +103,43 @@ export function nullToUndefined<T>(obj: T): T {
   }
 
   return copy;
+}
+
+export function convertToType<T>({
+  val,
+  type,
+}: {
+  val: any;
+  type: "string" | "number" | "boolean" | "date";
+}): T {
+  if (type === "string") {
+    try {
+      return String(val) as T;
+    } catch (e) {
+      console.error("Error al convertir a string");
+      throw e;
+    }
+  } else if (type === "number") {
+    try {
+      return Number(val) as T;
+    } catch (e) {
+      console.error("Error al convertir a número");
+      throw e;
+    }
+  } else if (type === "boolean") {
+    try {
+      return Boolean(val) as T;
+    } catch (e) {
+      console.error("Error al convertir a booleano");
+      throw e;
+    }
+  } else if (type === "date") {
+    try {
+      return new Date(val) as T;
+    } catch (e) {
+      console.error("Error al convertir a fecha");
+      throw e;
+    }
+  }
+  return val;
 }

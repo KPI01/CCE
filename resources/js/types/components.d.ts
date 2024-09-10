@@ -30,10 +30,10 @@ interface MainLayoutProps extends PropsWithChildren {
   className?: string;
 }
 
-interface TableProps {
+interface TableProps<TData, TValue> {
   title: string;
   data: any;
-  columns: ColumnDef<Record<string, unknown>, any>[];
+  columns: ColumnDef<Record<string, unknown>, any>[] | ColumnDef<any, any>[];
   url: string;
   initialVisibility?: Record<string, boolean>;
   withPrompt?: boolean;

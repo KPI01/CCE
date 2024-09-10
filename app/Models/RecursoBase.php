@@ -26,16 +26,13 @@ class RecursoBase extends Model
         return $url;
     }
     protected $appends = ["url"];
-    protected $casts = [
-        "url" => "string",
-    ];
 
-    public function getCreatedAtAttribute($value): string
+    protected function casts()
     {
-        return Carbon::parse($value)->format("Y-m-d H:i:s");
-    }
-    public function getUpdatedAtAttribute($value): string
-    {
-        return Carbon::parse($value)->format("Y-m-d H:i:s");
+        return [
+            "created_at" => "datetime:Y-m-d H:i",
+            "updated_at" => "datetime:Y-m-d H:i",
+            "url" => "string",
+        ];
     }
 }
