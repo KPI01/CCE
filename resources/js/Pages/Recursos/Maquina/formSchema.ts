@@ -16,7 +16,6 @@ const NOT_NUMBERS_NOR_SYMBOLS_REGEX =
   /^[^(0-9!"·$%&/()=?¿¡'\-._,{}\[\]\(\)\^|@#\\)\n]+$|^(?!.*\S)$/gm;
 
 export const formSchema = z.object({
-  id: z.string().nullish(),
   nombre: z
     .string({
       required_error: REQUIRED_MSG("El nombre"),

@@ -45,7 +45,7 @@ export default function FormDatePickerConstructor({
   resetFn,
   placeholder = "Selecciona una fecha",
 }: Props) {
-  console.debug("FormDatePickerConstructor(values)", value);
+  console.debug("value:", value);
   const toId = id.includes(".") ? id.replace(".", "_") : id;
   const labelId = `label-${toId}`;
   const inputId = `input-${toId}`;
