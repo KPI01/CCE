@@ -5,6 +5,8 @@ import { Campana } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import Actions from "./Actions";
 import { Switch } from "@/Components/ui/switch";
+import { formatDate } from "date-fns";
+import { convertToType } from "../utils";
 
 export const columns: ColumnDef<Campana>[] = [
   {
@@ -26,15 +28,17 @@ export const columns: ColumnDef<Campana>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="¿Activa?" />
     ),
-    cell: ({ row }) => (
-      <div className="items-top flex space-x-2">
-        <Switch
-          className="ms-4"
-          defaultChecked={row.original.is_activa}
-          disabled
-        />
-      </div>
-    ),
+    cell: ({ row }) => {
+      const val = convertToType<boolean>({
+        val: row.original.is_activa,
+        type: "boolean",
+      });
+      return (
+        <div className="items-top flex space-x-2">
+          <Switch className="ms-4" defaultChecked={val} disabled />
+        </div>
+      );
+    },
     enableColumnFilter: true,
     enableSorting: true,
     enableHiding: false,
@@ -49,6 +53,10 @@ export const columns: ColumnDef<Campana>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Inicio" />
     ),
+    cell: ({ row }) => {
+      const formatted = formatDate(row.original.inicio, "dd/MM/yyyy");
+      return formatted;
+    },
     enableColumnFilter: true,
     enableSorting: true,
     enableHiding: false,
@@ -63,6 +71,10 @@ export const columns: ColumnDef<Campana>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Fin" />
     ),
+    cell: ({ row }) => {
+      const formatted = formatDate(row.original.fin, "dd/MM/yyyy");
+      return formatted;
+    },
     enableColumnFilter: true,
     enableSorting: true,
     enableHiding: false,
