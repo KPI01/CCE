@@ -19,7 +19,7 @@ import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectCons
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 import { router } from "@inertiajs/react";
 import { useToast } from "@/Components/ui/use-toast";
-import EditButtons from "@/Components/Forms/EditButtons";
+import {EditButtons} from "@/Components/Forms/Footers";
 
 const schema = formSchema;
 

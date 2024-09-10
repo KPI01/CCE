@@ -25,7 +25,7 @@ import {
   toSend,
   urlWithoutId,
 } from "../utils";
-import EditButtons from "@/Components/Forms/EditButtons";
+import { EditButtons } from "@/Components/Forms/Footers";
 
 const schema = formSchema;
 

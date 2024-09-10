@@ -10,7 +10,7 @@ import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 import { router } from "@inertiajs/react";
-import CreateFormFooter from "@/Components/Forms/Footers";
+import { CreateFormFooter } from "@/Components/Forms/Footers";
 
 type Aux = { tipos: string[] };
 
