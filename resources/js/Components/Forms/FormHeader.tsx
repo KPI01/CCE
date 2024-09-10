@@ -1,10 +1,9 @@
 import { Badge, badgeVariants } from "@/Components/ui/badge";
-import { Button, buttonVariants } from "@/Components/ui/button";
-import { Separator } from "@/Components/ui/separator";
+import { buttonVariants } from "@/Components/ui/button";
 import { cn } from "@/lib/utils";
-import { LayoutProps, PageProps } from "@/types";
-import { Link, router, usePage } from "@inertiajs/react";
-import { ChevronLeft, Pen, Trash } from "lucide-react";
+import { LayoutProps } from "@/types";
+import { Link, router } from "@inertiajs/react";
+import { Pen, Trash } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,8 +15,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/Components/ui/alert-dialog";
-import { formatDate } from "@/lib/dates";
-import { BreadcrumbItem, BreadcrumbSeparator } from "../ui/breadcrumb";
+import { formatDate } from "date-fns";
+import { es } from "date-fns/locale";
 
 interface Props
   extends Omit<
@@ -30,6 +29,8 @@ interface Props
   updated_at: Date | null;
   showActions?: boolean;
 }
+
+const DATE_FORMAT = "eee, dd/MM/yyyy - HH:mm";
 
 export default function FormHeader({
   title,
@@ -101,13 +102,17 @@ export default function FormHeader({
             {created_at && (
               <Badge variant={"outline"} id="badge-createdAt">
                 Creación:{" "}
-                <span className="ml-3 font-thin">{formatDate(created_at)}</span>
+                <span className="ml-3 font-thin">
+                  {formatDate(created_at, DATE_FORMAT, { locale: es })}
+                </span>
               </Badge>
             )}
             {updated_at && (
               <Badge variant={"secondary"} id="badge-updatedAt">
                 Últ. Ed:{" "}
-                <span className="ml-3 font-thin">{formatDate(updated_at)}</span>
+                <span className="ml-3 font-thin">
+                  {formatDate(updated_at, DATE_FORMAT, { locale: es })}
+                </span>
               </Badge>
             )}
           </div>
