@@ -67,8 +67,8 @@ export interface Maquina extends Modelo {
 
 export interface Campana extends Modelo {
   nombre: string;
-  is_activa: boolean;
-  inicio: Date;
-  fin: Date;
+  is_activa: boolean | 0 | 1;
+  inicio: string;
+  fin: string;
   descripcion?: string;
 }

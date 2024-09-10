@@ -104,3 +104,42 @@ export function nullToUndefined<T>(obj: T): T {
 
   return copy;
 }
+
+export function convertToType<T>({
+  val,
+  type,
+}: {
+  val: any;
+  type: "string" | "number" | "boolean" | "date";
+}): T {
+  if (type === "string") {
+    try {
+      return String(val) as T;
+    } catch (e) {
+      console.error("Error al convertir a string");
+      throw e;
+    }
+  } else if (type === "number") {
+    try {
+      return Number(val) as T;
+    } catch (e) {
+      console.error("Error al convertir a número");
+      throw e;
+    }
+  } else if (type === "boolean") {
+    try {
+      return Boolean(val) as T;
+    } catch (e) {
+      console.error("Error al convertir a booleano");
+      throw e;
+    }
+  } else if (type === "date") {
+    try {
+      return new Date(val) as T;
+    } catch (e) {
+      console.error("Error al convertir a fecha");
+      throw e;
+    }
+  }
+  return val;
+}
