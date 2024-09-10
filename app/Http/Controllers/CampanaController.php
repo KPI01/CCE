@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Campana;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CampanaController extends Controller
@@ -43,13 +44,14 @@ class CampanaController extends Controller
     {
         //
         $data = $request->all();
-        $inst = Campana::create($data);
+        $data["inicio"] = Carbon::parse($data["inicio"])->format("Y-m-d");
+        $data["fin"] = Carbon::parse($data["fin"])->format("Y-m-d");
 
         if (
-            Campana::where(["nombre", "inicio", "fin"], "=", [
-                $data["nombre"],
-                $data["inicio"],
-                $data["fin"],
+            Campana::where([
+                ["nombre", "=", $data["nombre"]],
+                ["inicio", "=", $data["inicio"]],
+                ["fin", "=", $data["fin"]],
             ])->exists()
         ) {
             $this->toastErrorConstructor(
@@ -67,10 +69,14 @@ class CampanaController extends Controller
             ]);
         }
 
+        $inst = Campana::create($data);
+        $inicio = Carbon::parse($inst->inicio)->format("d/m/Y");
+        $fin = Carbon::parse($inst->fin)->format("d/m/Y");
+
         $this->toastExitoConstructor(
             accion: "store",
             seccion: "description",
-            append: "{$inst->nombre} desde {$inst->inicio} a {$inst->fin}"
+            append: "{$inst->nombre} desde {$inicio} a {$fin}"
         );
         return to_route("campana.index")->with([
             "from" => "campana.store",
