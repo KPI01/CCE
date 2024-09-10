@@ -1,7 +1,9 @@
-import { SendIcon } from "@/Pages/Recursos/utils";
+import { DeleteIcon, SaveUpdateIcon, SendIcon } from "@/Pages/Recursos/utils";
 import FormButton from "./FormButton";
 
-export default function CreateFormFooter() {
+type FnVoid = () => void;
+
+export function CreateFormFooter() {
   return (
     <div className="col-span-full w-full">
       <p className="mb-3 ml-auto w-fit text-sm">
@@ -10,6 +12,26 @@ export default function CreateFormFooter() {
       <FormButton type="submit" className="ms-auto flex">
         <SendIcon />
         Enviar
+      </FormButton>
+    </div>
+  );
+}
+
+export function EditButtons({ destroyCallback }: { destroyCallback: FnVoid }) {
+  return (
+    <div className="col-span-full flex items-center gap-16">
+      <FormButton
+        id="destroy"
+        variant={"destructive"}
+        className="ms-auto"
+        onClick={destroyCallback}
+      >
+        <DeleteIcon />
+        Eliminar
+      </FormButton>
+      <FormButton type="submit">
+        <SaveUpdateIcon />
+        Actualizar
       </FormButton>
     </div>
   );
