@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Campana extends RecursoBase
@@ -11,10 +10,14 @@ class Campana extends RecursoBase
 
     protected function casts(): array
     {
-        return [
-            "inicio" => "datetime:d/m/Y",
-            "fin" => "datetime:d/m/Y",
-        ];
+        return array_merge(
+            [
+                "is_activa" => "boolean",
+                "inicio" => "datetime:Y-m-d",
+                "fin" => "datetime:Y-m-d",
+            ],
+            parent::casts()
+        );
     }
 
     public function empresas(): HasMany
