@@ -72,6 +72,7 @@ class Form extends Page
             "@calendar" => "div#calendar-ropo_caducidad",
             "@msg-" => "p#msg-",
             "@trigger-" => "button#trigger-",
+            "@switch-" => 'button[role="switch"]#switch-',
             "@submit" => 'button[type="submit"]',
             "@reset" => 'button[type="reset"]',
             "@separator" => 'div[data-orientation][role="none"]',

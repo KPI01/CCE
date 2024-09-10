@@ -21,12 +21,12 @@ export default function FormSwitchConstructor({
   withLabel = true,
 }: Props) {
   const itemId = name.includes(".") ? name.replace(".", "_") : name;
-  const checkId = `check-${itemId}`;
+  const switchId = `switch-${itemId}`;
   const labelId = `label-${itemId}`;
   const descripId = `descrip-${itemId}`;
 
   const Label = (
-    <FormLabel id={labelId} htmlFor={checkId} className="leading-0">
+    <FormLabel id={labelId} htmlFor={switchId} className="leading-0">
       {label}
     </FormLabel>
   );
@@ -43,6 +43,7 @@ export default function FormSwitchConstructor({
       </div>
       <FormControl>
         <Switch
+          id={switchId}
           disabled={disabled}
           className="ms-6"
           checked={value}
