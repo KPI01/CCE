@@ -4,13 +4,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { formSchema } from "./formSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CONTAINER_CLASS, CreateIcon, SendIcon, TablaIcon } from "../utils";
+import { CONTAINER_CLASS, CreateIcon, TablaIcon } from "../utils";
 import { Form, FormField } from "@/Components/ui/form";
 import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
-import FormButton from "@/Components/Forms/FormButton";
 import { router } from "@inertiajs/react";
+import CreateFormFooter from "@/Components/Forms/Footers";
 
 type Aux = { tipos: string[] };
 
@@ -193,15 +193,7 @@ export default function Create({ aux, url }: Props) {
               />
             )}
           />
-          <div className="col-span-full w-full">
-            <p className="mb-3 ml-auto w-fit text-sm">
-              Los campos marcados con (*) son obligatorios
-            </p>
-            <FormButton type="submit" className="ms-auto flex">
-              <SendIcon />
-              Enviar
-            </FormButton>
-          </div>
+          <CreateFormFooter />
         </form>
       </Form>
     </FormLayout>

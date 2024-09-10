@@ -60,25 +60,29 @@ declare module 'ziggy-js' {
     "persona.show": [
         {
             "name": "persona",
-            "required": true
+            "required": true,
+            "binding": "id"
         }
     ],
     "persona.edit": [
         {
             "name": "persona",
-            "required": true
+            "required": true,
+            "binding": "id"
         }
     ],
     "persona.update": [
         {
             "name": "persona",
-            "required": true
+            "required": true,
+            "binding": "id"
         }
     ],
     "persona.destroy": [
         {
             "name": "persona",
-            "required": true
+            "required": true,
+            "binding": "id"
         }
     ],
     "empresa.index": [],
@@ -87,25 +91,29 @@ declare module 'ziggy-js' {
     "empresa.show": [
         {
             "name": "empresa",
-            "required": true
+            "required": true,
+            "binding": "id"
         }
     ],
     "empresa.edit": [
         {
             "name": "empresa",
-            "required": true
+            "required": true,
+            "binding": "id"
         }
     ],
     "empresa.update": [
         {
             "name": "empresa",
-            "required": true
+            "required": true,
+            "binding": "id"
         }
     ],
     "empresa.destroy": [
         {
             "name": "empresa",
-            "required": true
+            "required": true,
+            "binding": "id"
         }
     ],
     "maquina.index": [],
@@ -114,45 +122,91 @@ declare module 'ziggy-js' {
     "maquina.show": [
         {
             "name": "maquina",
-            "required": true
+            "required": true,
+            "binding": "id"
         }
     ],
     "maquina.edit": [
         {
             "name": "maquina",
-            "required": true
+            "required": true,
+            "binding": "id"
         }
     ],
     "maquina.update": [
         {
             "name": "maquina",
-            "required": true
+            "required": true,
+            "binding": "id"
         }
     ],
     "maquina.destroy": [
         {
             "name": "maquina",
+            "required": true,
+            "binding": "id"
+        }
+    ],
+    "campana.index": [],
+    "campana.create": [],
+    "campana.store": [],
+    "campana.show": [
+        {
+            "name": "campana",
+            "required": true,
+            "binding": "id"
+        }
+    ],
+    "campana.edit": [
+        {
+            "name": "campana",
+            "required": true,
+            "binding": "id"
+        }
+    ],
+    "campana.update": [
+        {
+            "name": "campana",
+            "required": true,
+            "binding": "id"
+        }
+    ],
+    "campana.destroy": [
+        {
+            "name": "campana",
+            "required": true,
+            "binding": "id"
+        }
+    ],
+    "aux_maquina.index": [
+        {
+            "name": "tabla",
+            "required": false
+        }
+    ],
+    "aux_maquina.store": [
+        {
+            "name": "tabla",
             "required": true
         }
     ],
-    "maquina.tipos.index": [],
-    "tipos_maquina.index": [],
-    "tipos_maquina.store": [],
-    "tipos_maquina.show": [
+    "aux_maquina.update": [
         {
-            "name": "tipos_maquina",
+            "name": "tabla",
+            "required": true
+        },
+        {
+            "name": "id",
             "required": true
         }
     ],
-    "tipos_maquina.update": [
+    "aux_maquina.destroy": [
         {
-            "name": "tipos_maquina",
+            "name": "tabla",
             "required": true
-        }
-    ],
-    "tipos_maquina.destroy": [
+        },
         {
-            "name": "tipos_maquina",
+            "name": "id",
             "required": true
         }
     ]
