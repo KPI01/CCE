@@ -104,13 +104,12 @@ class CampanaController extends Controller
         $data = $request->all();
 
         if (
-            Campana::where(["id", "!=", $campana->id])
-                ->where(["nombre", "inicio", "fin"], "=", [
-                    $data["nombre"],
-                    $data["inicio"],
-                    $data["fin"],
-                ])
-                ->exists()
+            Campana::where([
+                ["id", "!=", $campana->id],
+                ["nombre", "=", $data["nombre"]],
+                ["inicio", "=", $data["inicio"]],
+                ["fin", "=", $data["fin"]],
+            ])->exists()
         ) {
             $this->toastErrorConstructor(
                 campo: "campaña",
@@ -126,6 +125,9 @@ class CampanaController extends Controller
                 ],
             ]);
         }
+
+        $data["inicio"] = Carbon::parse($data["inicio"])->format("Y-m-d");
+        $data["fin"] = Carbon::parse($data["fin"])->format("Y-m-d");
 
         $campana->update($data);
         $campana->save();

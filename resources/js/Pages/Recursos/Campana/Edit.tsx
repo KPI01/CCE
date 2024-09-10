@@ -1,44 +1,42 @@
 import { Breadcrumbs, Campana } from "@/types";
 import { formSchema } from "./formSchema";
-import { useForm } from "react-hook-form";
-import { resolve } from "path";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import FormLayout from "@/Layouts/Recursos/FormLayout";
 import {
   CONTAINER_CLASS,
   CampanaIcon,
+  EditIcon,
   TablaIcon,
   convertToType,
+  toSend,
   urlWithoutId,
 } from "../utils";
-import FormLayout from "@/Layouts/Recursos/FormLayout";
-import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
 import { Form, FormField } from "@/Components/ui/form";
-import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
+import FormItemConstructor from "@/Components/Forms/FormItemConstructor";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import FormSwitchConstructor from "@/Components/Forms/FormSwitchConstructor";
+import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
+import EditButtons from "@/Components/Forms/EditButtons";
+import { router } from "@inertiajs/react";
+import { useToast } from "@/Components/ui/use-toast";
 
 const schema = formSchema;
 
-export default function Show({ data }: { data: Campana }) {
-  data.inicio = convertToType({
-    val: data.inicio,
-    type: "date",
-  });
-  console.debug("data.inicio convertido:", data.inicio);
-  data.fin = convertToType({
-    val: data.fin,
-    type: "date",
-  });
-  console.debug("data.inicio convertido:", data.fin);
+export default function Edit({ data }: { data: Campana }) {
+  const { toast } = useToast();
+
+  data.inicio = convertToType({ val: data.inicio, type: "date" });
+  data.fin = convertToType({ val: data.fin, type: "date" });
 
   const parsed = schema.parse(data);
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    values: parsed,
+    defaultValues: parsed,
   });
 
-  const breadcrumbs: Breadcrumbs[] = [
+  const breadcrumb: Breadcrumbs[] = [
     {
       icon: <TablaIcon />,
       text: "Tabla",
@@ -46,23 +44,70 @@ export default function Show({ data }: { data: Campana }) {
     },
     {
       icon: <CampanaIcon />,
-      text: "Campaña",
+      text: "Máquina",
       url: data.url,
     },
+    {
+      icon: <EditIcon />,
+      text: "Editando...",
+      url: `${data.url}/edit`,
+    },
   ];
+
+  function onSubmit(values: z.infer<typeof schema>) {
+    const parsed = schema.parse(values);
+    console.log("Enviando formulario...");
+    console.log(parsed);
+
+    if (
+      parsed.nombre === values.nombre &&
+      parsed.inicio === values.inicio &&
+      parsed.fin === values.fin
+    ) {
+      toast({
+        title: "No se han detectado cambios!",
+        variant: "muted",
+        customId: "edit-sin_cambios",
+      });
+    }
+
+    router.patch(data.url, parsed);
+  }
+
+  function handleDelete() {
+    router.delete(data.url);
+  }
 
   return (
     <FormLayout
       id={data.id}
-      pageTitle={`Campaña: ${data.nombre}`}
-      mainTitle={data.nombre}
+      url={data.url}
+      mainTitle="Campaña"
+      pageTitle="Editando: Campaña"
       created_at={data.created_at}
       updated_at={data.updated_at}
-      url={data.url}
-      breadcrumbs={breadcrumbs}
+      showActions={false}
+      breadcrumbs={breadcrumb}
     >
       <Form {...form}>
-        <form id="show-campaña" className={CONTAINER_CLASS}>
+        <form
+          id="show-campaña"
+          className={CONTAINER_CLASS}
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <FormField
+            control={form.control}
+            name="nombre"
+            render={({ field }) => (
+              <FormItemConstructor
+                label="Nombre *"
+                id={field.name}
+                name={field.name}
+                onChange={field.onChange}
+                value={field.value}
+              />
+            )}
+          />
           <FormField
             control={form.control}
             name="is_activa"
@@ -73,7 +118,6 @@ export default function Show({ data }: { data: Campana }) {
                 name={field.name}
                 onChange={field.onChange}
                 value={field.value}
-                disabled
               />
             )}
           />
@@ -88,7 +132,6 @@ export default function Show({ data }: { data: Campana }) {
                 name={field.name}
                 onChange={field.onChange}
                 value={field.value}
-                disabled
               />
             )}
           />
@@ -103,7 +146,6 @@ export default function Show({ data }: { data: Campana }) {
                 name={field.name}
                 onChange={field.onChange}
                 value={field.value}
-                disabled
               />
             )}
           />
@@ -119,10 +161,10 @@ export default function Show({ data }: { data: Campana }) {
                 onChange={field.onChange}
                 value={field.value}
                 textarea
-                disabled
               />
             )}
           />
+          <EditButtons destroyCallback={handleDelete} />
         </form>
       </Form>
     </FormLayout>
