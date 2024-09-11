@@ -119,6 +119,7 @@ export default function FormDatePickerConstructor({
             disabled={(date) => date < new Date()}
             defaultMonth={value}
             fromYear={new Date().getFullYear()}
+            showOutsideDays={false}
           />
         </PopoverContent>
       </Popover>
