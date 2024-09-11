@@ -9,17 +9,18 @@ export const formSchema = z
         invalid_type_error: BE_VALID_MSG("El nombre"),
       })
       .min(1, REQUIRED_MSG("El nombre"))
-      .min(4, MIN_MESSAGE(4)),
+      .min(4, MIN_MESSAGE(4))
+      .regex(/^[\w]+$/, BE_VALID_MSG("El nombre")),
     is_activa: z
       .boolean({
         required_error: REQUIRED_MSG("El estado"),
       })
       .default(false),
     inicio: z.date({
-      required_error: REQUIRED_MSG("La fecha de inicio"),
+      required_error: REQUIRED_MSG("La fecha de inicio", "a"),
     }),
     fin: z.date({
-      required_error: REQUIRED_MSG("La fecha final"),
+      required_error: REQUIRED_MSG("La fecha final", "a"),
     }),
     descripcion: z
       .string({
