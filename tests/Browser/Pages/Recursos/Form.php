@@ -69,7 +69,7 @@ class Form extends Page
             "@input-" => "input#input-",
             "@txt-" => "textarea#input-",
             "@descrip-" => "p#descrip-",
-            "@calendar" => "div#calendar-ropo_caducidad",
+            "@calendar-" => "div#calendar-",
             "@msg-" => "p#msg-",
             "@trigger-" => "button#trigger-",
             "@switch-" => 'button[role="switch"]#switch-',
