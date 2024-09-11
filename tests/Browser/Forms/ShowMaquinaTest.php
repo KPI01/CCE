@@ -11,9 +11,6 @@ use Tests\RecursoDuskTestCase;
 
 class ShowMaquinaTest extends RecursoDuskTestCase
 {
-    protected array $PARAMS;
-    public Model $row;
-
     public function setUp(): void
     {
         parent::setUp();
