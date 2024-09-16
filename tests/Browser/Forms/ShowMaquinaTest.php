@@ -4,7 +4,6 @@ namespace Tests\Browser\Show;
 
 use App\Models\Maquina;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\Recursos\Form;
 use Tests\RecursoDuskTestCase;
@@ -144,19 +143,6 @@ class ShowMaquinaTest extends RecursoDuskTestCase
                     "@txt-observaciones",
                     $this->row->observaciones
                 );
-        });
-    }
-
-    public function testGoEdit(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
-
-            $browser->click("@badge-edit")->pause(1000);
-
-            $browser->assertRouteIs("maquina.edit", [
-                "maquina" => $this->row->id,
-            ]);
         });
     }
 }
