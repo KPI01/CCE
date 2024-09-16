@@ -62,13 +62,13 @@ export default function Show({ data }: { data: Campana }) {
       breadcrumbs={breadcrumbs}
     >
       <Form {...form}>
-        <form id="show-campaña" className={CONTAINER_CLASS}>
+        <form id={`show-${data.id}`} className={CONTAINER_CLASS}>
           <FormField
             control={form.control}
             name="is_activa"
             render={({ field }) => (
               <FormSwitchConstructor
-                label="¿Activa? *"
+                label="¿Activa?"
                 id={field.name}
                 name={field.name}
                 onChange={field.onChange}
@@ -83,22 +83,7 @@ export default function Show({ data }: { data: Campana }) {
             name="inicio"
             render={({ field }) => (
               <FormDatePickerConstructor
-                label="Fecha de inicio *"
-                id={field.name}
-                name={field.name}
-                onChange={field.onChange}
-                value={field.value}
-                disabled
-              />
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="fin"
-            render={({ field }) => (
-              <FormDatePickerConstructor
-                label="Fecha final *"
+                label="Fecha de inicio"
                 id={field.name}
                 name={field.name}
                 onChange={field.onChange}
@@ -119,6 +104,21 @@ export default function Show({ data }: { data: Campana }) {
                 onChange={field.onChange}
                 value={field.value}
                 textarea
+                disabled
+              />
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="fin"
+            render={({ field }) => (
+              <FormDatePickerConstructor
+                label="Fecha final"
+                id={field.name}
+                name={field.name}
+                onChange={field.onChange}
+                value={field.value}
                 disabled
               />
             )}
