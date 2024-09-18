@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->ulid("codigo")->unique();
             $table->timestamps();
             $table->char("nombre", 65);
-            $table->char("variedad", 45);
+            $table->char("variedad", 45)->nullable();
         });
     }
 
