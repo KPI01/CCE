@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
 class Persona extends RecursoBase
@@ -40,7 +41,7 @@ class Persona extends RecursoBase
         "perfil" => self::PERFILES["productor"],
     ];
 
-    public function getRopoAttribute()
+    public function getRopoAttribute(): array
     {
         $this->retrieveRopoAttribute();
 
@@ -50,7 +51,10 @@ class Persona extends RecursoBase
     public function setRopoAttribute(array $ropo): Persona
     {
         if (!empty($ropo["caducidad"])) {
-            $ropo["caducidad"] = date("Y-m-d", strtotime($ropo["caducidad"]));
+            $ropo["caducidad"] = date(
+                format: "Y-m-d",
+                timestamp: strtotime(datetime: $ropo["caducidad"])
+            );
         }
 
         $this->upsertRopoAttribute($ropo);
@@ -59,16 +63,16 @@ class Persona extends RecursoBase
         return $this;
     }
 
-    private function retrieveRopoAttribute()
+    private function retrieveRopoAttribute(): void
     {
-        $record = DB::table(self::ROPO_TABLE)
-            ->where("persona_id", $this->id)
+        $record = DB::table(table: self::ROPO_TABLE)
+            ->where(column: "persona_id", value: $this->id)
             ->first();
 
         isset($record)
             ? ($this->ropo = [
-                "caducidad" => Carbon::parse($record->caducidad)->format(
-                    "Y-m-d"
+                "caducidad" => Carbon::parse(time: $record->caducidad)->format(
+                    format: "Y-m-d"
                 ),
                 "nro" => $record->nro,
                 "capacitacion" => $record->capacitacion,
@@ -80,19 +84,19 @@ class Persona extends RecursoBase
             ]);
     }
 
-    private function upsertRopoAttribute(array $ropo)
+    private function upsertRopoAttribute(array $ropo): void
     {
         $cad = $ropo["caducidad"];
 
         if (isset($cad)) {
-            $cad = Carbon::parse($cad);
+            $cad = Carbon::parse(time: $cad);
         }
 
-        DB::table(self::ROPO_TABLE)->upsert(
+        DB::table(table: self::ROPO_TABLE)->upsert(
             values: [
                 "persona_id" => $this->id,
                 "caducidad" => isset($ropo["caducidad"])
-                    ? $cad->format("Y-m-d")
+                    ? $cad->format(format: "Y-m-d")
                     : null,
                 "nro" => $ropo["nro"] ?? null,
                 "capacitacion" => $ropo["capacitacion"] ?? null,
@@ -107,8 +111,17 @@ class Persona extends RecursoBase
 
     public function empresas(): BelongsToMany
     {
-        return $this->belongsToMany(Empresa::class)
+        return $this->belongsToMany(related: Empresa::class)
             ->withTimestamps()
-            ->using(EmpresaPersona::class);
+            ->using(class: EmpresaPersona::class);
+    }
+
+    public function parcelas(): HasMany
+    {
+        return $this->hasMany(
+            related: Parcela::class,
+            foreignKey: "id",
+            localKey: "id"
+        );
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Campana extends RecursoBase
@@ -20,10 +21,18 @@ class Campana extends RecursoBase
         );
     }
 
-    public function empresas(): HasMany
+    public function empresas(): BelongsToMany
     {
-        return $this->hasMany(Empresa::class)
+        return $this->hasMany(related: Empresa::class)
             ->withTimestamps()
             ->using(CampanaEmpresa::class);
+    }
+
+    public function parcelas(): HasMany
+    {
+        return $this->hasMany(
+            related: Parcela::class,
+            foreignKey: "campana_id"
+        );
     }
 }

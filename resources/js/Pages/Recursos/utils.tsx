@@ -9,6 +9,7 @@ import {
   FilePlus,
   Send,
   Sheet,
+  Shovel,
   Tractor,
   Trash,
   UserRound,
@@ -44,6 +45,9 @@ export const MaquinaIcon = ({ className }: IconProps) => (
 );
 export const CampanaIcon = ({ className }: IconProps) => (
   <CalendarRange className={cn(ICON_CLASS, className)} />
+);
+export const ParcelaIcon = ({ className }: IconProps) => (
+  <Shovel className={cn(ICON_CLASS, className)} />
 );
 
 export const TablaIcon = ({ className }: IconProps) => (

@@ -104,22 +104,29 @@ class Empresa extends RecursoBase
 
     public function personas(): HasMany
     {
-        return $this->HasMany(Persona::class)
+        return $this->HasMany(related: Persona::class)
             ->withTimestamps()
             ->using(EmpresaPersona::class);
     }
 
     public function maquinas(): HasMany
     {
-        return $this->hasMany(Maquina::class)
+        return $this->hasMany(related: Maquina::class)
             ->withTimestamps()
             ->using(EmpresaMaquina::class);
     }
 
     public function campanas(): HasMany
     {
-        return $this->hasMany(Campana::class)
+        return $this->hasMany(related: Campana::class)
             ->withTimestamps()
             ->using(CampanaEmpresa::class);
+    }
+
+    public function parcelas(): HasMany
+    {
+        return $this->hasMany(related: Parcela::class)
+            ->withTimestamps()
+            ->using(EmpresaParcela::class);
     }
 }

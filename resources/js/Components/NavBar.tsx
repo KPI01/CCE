@@ -18,6 +18,7 @@ import {
   CampanaIcon,
   EmpresaIcon,
   MaquinaIcon,
+  ParcelaIcon,
   PersonaIcon,
   RecursosIcon,
 } from "@/Pages/Recursos/utils";
@@ -53,6 +54,11 @@ const recursos: MenuItemsProps[] = [
     Icon: <CampanaIcon />,
     Texto: "Campañas",
     Recurso: "campana",
+  },
+  {
+    Icon: <ParcelaIcon />,
+    Texto: "Parcelas",
+    Recurso: "parcela",
   },
 ];
 
