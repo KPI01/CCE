@@ -17,15 +17,20 @@ class CampanaFactory extends Factory
      */
     public function definition(): array
     {
-        $inicio = Carbon::parse(fake()->date());
-        $fin = Carbon::parse(fake()->dateTimeBetween("now", "+18 months"));
+        $inicio = Carbon::parse(time: fake()->date())->format(format: "Y-m-d");
+        $fin = Carbon::parse(
+            time: fake()->dateTimeBetween(
+                startDate: "now",
+                endDate: "+18 months"
+            )
+        )->format(format: "Y-m-d");
         return [
             //
             "nombre" => fake()->year(),
-            "is_activa" => fake()->boolean(),
+            "is_activa" => fake()->randomElement(array: [0, 1]),
             "inicio" => $inicio,
             "fin" => $fin,
-            "descripcion" => fake()->paragraph(2),
+            "descripcion" => fake()->paragraph(nbSentences: 2),
         ];
     }
 }
