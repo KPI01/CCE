@@ -18,130 +18,163 @@ class CreateCampanaTest extends RecursoDuskTestCase
     public function testAccesibilidad(): void
     {
         parent::testAccesibilidad();
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
+        $this->browse(
+            callback: function (Browser $browser): void {
+                $browser->visit(url: new Form(...$this->PARAMS));
 
-            $browser
-                ->assertPresent("@breadcrumb")
-                ->assertPresent("@title")
-                ->assertPresent("@form-create-campaña");
+                $browser
+                    ->assertPresent(selector: "@breadcrumb")
+                    ->assertPresent(selector: "@title")
+                    ->assertPresent(selector: "@form-create-campaña");
 
-            $browser
-                ->assertPresent("@label-nombre")
-                ->assertPresent("@label-is_activa")
-                ->assertPresent("@label-inicio")
-                ->assertPresent("@label-fin")
-                ->assertPresent("@label-descripcion");
+                $browser
+                    ->assertPresent(selector: "@label-nombre")
+                    ->assertPresent(selector: "@label-is_activa")
+                    ->assertPresent(selector: "@label-inicio")
+                    ->assertPresent(selector: "@label-fin")
+                    ->assertPresent(selector: "@label-descripcion");
 
-            $browser
-                ->assertPresent("@input-nombre")
-                ->assertPresent("@switch-is_activa")
-                ->assertPresent("@trigger-inicio")
-                ->assertPresent("@input-inicio")
-                ->assertPresent("@trigger-fin")
-                ->assertPresent("@input-fin")
-                ->assertPresent("@txt-descripcion");
-        });
+                $browser
+                    ->assertPresent(selector: "@input-nombre")
+                    ->assertPresent(selector: "@switch-is_activa")
+                    ->assertPresent(selector: "@trigger-inicio")
+                    ->assertPresent(selector: "@input-inicio")
+                    ->assertPresent(selector: "@trigger-fin")
+                    ->assertPresent(selector: "@input-fin")
+                    ->assertPresent(selector: "@txt-descripcion");
+            }
+        );
     }
 
     public function testVisibilidad(): void
     {
         parent::testVisibilidad();
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
+        $this->browse(
+            callback: function (Browser $browser): void {
+                $browser->visit(url: new Form(...$this->PARAMS));
 
-            $browser
-                ->assertVisible("@breadcrumb")
-                ->assertVisible("@title")
-                ->assertSeeIn("@title", "Campaña")
-                ->assertVisible("@form-create-campaña");
+                $browser
+                    ->assertVisible(selector: "@breadcrumb")
+                    ->assertVisible(selector: "@title")
+                    ->assertSeeIn(selector: "@title", text: "Campaña")
+                    ->assertVisible(selector: "@form-create-campaña");
 
-            $browser
-                ->assertVisible("@label-nombre")
-                ->assertVisible("@label-is_activa")
-                ->assertVisible("@label-inicio")
-                ->assertVisible("@label-fin")
-                ->assertVisible("@label-descripcion");
+                $browser
+                    ->assertVisible(selector: "@label-nombre")
+                    ->assertVisible(selector: "@label-is_activa")
+                    ->assertVisible(selector: "@label-inicio")
+                    ->assertVisible(selector: "@label-fin")
+                    ->assertVisible(selector: "@label-descripcion");
 
-            $browser
-                ->assertVisible("@input-nombre")
-                ->assertVisible("@switch-is_activa")
-                ->assertVisible("@trigger-inicio")
-                ->assertVisible("@trigger-fin")
-                ->assertVisible("@txt-descripcion");
-        });
+                $browser
+                    ->assertVisible(selector: "@input-nombre")
+                    ->assertVisible(selector: "@switch-is_activa")
+                    ->assertVisible(selector: "@trigger-inicio")
+                    ->assertVisible(selector: "@trigger-fin")
+                    ->assertVisible(selector: "@txt-descripcion");
+            }
+        );
     }
 
     public function testCamposHabilitados(): void
     {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
+        $this->browse(
+            callback: function (Browser $browser): void {
+                $browser->visit(url: new Form(...$this->PARAMS));
 
-            $browser
-                ->assertEnabled("@input-nombre")
-                ->assertInputValue("@input-nombre", "")
-                ->type("@input-nombre", "test")
-                ->assertInputValue("@input-nombre", "test");
+                $browser
+                    ->assertEnabled(field: "@input-nombre")
+                    ->assertInputValue(field: "@input-nombre", value: "")
+                    ->type(field: "@input-nombre", value: "test")
+                    ->assertInputValue(field: "@input-nombre", value: "test");
 
-            $browser
-                ->assertEnabled("@switch-is_activa")
-                ->assertAriaAttribute("@switch-is_activa", "checked", "false")
-                ->click("@switch-is_activa")
-                ->pause(500)
-                ->assertAriaAttribute("@switch-is_activa", "checked", "true");
+                $browser
+                    ->assertEnabled(field: "@switch-is_activa")
+                    ->assertAriaAttribute(
+                        selector: "@switch-is_activa",
+                        attribute: "checked",
+                        value: "false"
+                    )
+                    ->click(selector: "@switch-is_activa")
+                    ->pause(milliseconds: 500)
+                    ->assertAriaAttribute(
+                        selector: "@switch-is_activa",
+                        attribute: "checked",
+                        value: "true"
+                    );
 
-            $browser->assertEnabled("@trigger-inicio");
-            /** PENDIENTE: desarrollo test a date picker */
+                $browser->assertEnabled(field: "@trigger-inicio");
+                /** PENDIENTE: desarrollo test a date picker */
 
-            $browser->assertEnabled("@trigger-fin");
-            /** PENDIENTE: desarrollo test a date picker */
+                $browser->assertEnabled(field: "@trigger-fin");
+                /** PENDIENTE: desarrollo test a date picker */
 
-            $browser
-                ->assertEnabled("@txt-descripcion")
-                ->assertInputValue("@txt-descripcion", "")
-                ->type("@txt-descripcion", "test")
-                ->assertInputValue("@txt-descripcion", "test");
-        });
+                $browser
+                    ->assertEnabled(field: "@txt-descripcion")
+                    ->assertInputValue(field: "@txt-descripcion", value: "")
+                    ->type(field: "@txt-descripvalue: cion", value: "test")
+                    ->assertInputValue(
+                        field: "@txt-descripcion",
+                        value: "test"
+                    );
+            }
+        );
     }
     public function testEnvioVacio(): void
     {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
+        $this->browse(
+            callback: function (Browser $browser): void {
+                $browser->visit(url: new Form(...$this->PARAMS));
 
-            $browser->press("@submit")->pause(500);
+                $browser->press(button: "@submit")->pause(milliseconds: 500);
 
-            $browser
-                ->assertPresent("@msg-nombre")
-                ->assertPresent("@msg-inicio")
-                ->assertPresent("@msg-fin");
+                $browser
+                    ->assertPresent(selector: "@msg-nombre")
+                    ->assertPresent(selector: "@msg-inicio")
+                    ->assertPresent(selector: "@msg-fin");
 
-            $browser
-                ->assertVisible("@msg-nombre")
-                ->assertVisible("@msg-inicio")
-                ->assertVisible("@msg-fin");
+                $browser
+                    ->assertVisible(selector: "@msg-nombre")
+                    ->assertVisible(selector: "@msg-inicio")
+                    ->assertVisible(selector: "@msg-fin");
 
-            $browser
-                ->assertSeeIn("@msg-nombre", "El nombre es requerido.")
-                ->assertSeeIn("@msg-inicio", "La fecha de inicio es requerida.")
-                ->assertSeeIn("@msg-fin", "La fecha final es requerida.");
-        });
+                $browser
+                    ->assertSeeIn(
+                        selector: "@msg-nombre",
+                        text: "El nombre es requerido."
+                    )
+                    ->assertSeeIn(
+                        selector: "@msg-inicio",
+                        text: "La fecha de inicio es requerida."
+                    )
+                    ->assertSeeIn(
+                        selector: "@msg-fin",
+                        text: "La fecha final es requerida."
+                    );
+            }
+        );
     }
 
     public function testEnvioInvalido(): void
     {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
+        $this->browse(
+            callback: function (Browser $browser): void {
+                $browser->visit(url: new Form(...$this->PARAMS));
 
-            $browser
-                ->type("@input-nombre", "abc%$%")
-                ->pause(500)
-                ->press("@submit");
+                $browser
+                    ->type(field: "@input-nombre", value: "abc%$%")
+                    ->pause(milliseconds: 500)
+                    ->press(button: "@submit");
 
-            $browser
-                ->assertPresent("@msg-nombre")
-                ->assertVisible("@msg-nombre")
-                ->assertSeeIn("@msg-nombre", "El nombre debe ser válido");
-        });
+                $browser
+                    ->assertPresent(selector: "@msg-nombre")
+                    ->assertVisible(selector: "@msg-nombre")
+                    ->assertSeeIn(
+                        selector: "@msg-nombre",
+                        text: "El nombre debe ser válido"
+                    );
+            }
+        );
     }
 
     public function testEnvioValido(): void

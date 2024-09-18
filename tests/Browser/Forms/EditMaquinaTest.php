@@ -17,52 +17,57 @@ class EditMaquinaTest extends RecursoDuskTestCase
         $this->hasDeleteBtn = true;
         $this->class = Maquina::class;
         $this->recurso = "maquina";
-        $this->row = Maquina::factory(1, [
-            "tipo_id" => 1,
-        ])
+        $this->row = Maquina::factory(
+            count: 1,
+            state: [
+                "tipo_id" => 1,
+            ]
+        )
             ->create()
             ->first();
-        $this->PARAMS = ["maquina", "edit", $this->row->id];
+        $this->PARAMS = [$this->recurso, "edit", $this->row->id];
     }
 
     public function testAccesibilidad(): void
     {
         parent::testAccesibilidad();
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
+        $this->browse(
+            callback: function (Browser $browser): void {
+                $browser->visit(url: new Form(...$this->PARAMS));
 
-            $browser
-                ->assertPresent("@breadcrumb")
-                ->assertPresent("@title")
-                ->assertPresent("@form-edit-{$this->PARAMS[2]}")
-                ->assertPresent("@badge-createdAt")
-                ->assertPresent("@badge-updatedAt");
+                $browser
+                    ->assertPresent(selector: "@breadcrumb")
+                    ->assertPresent(selector: "@title")
+                    ->assertPresent(selector: "@form-edit-{$this->row->id}")
+                    ->assertPresent(selector: "@badge-createdAt")
+                    ->assertPresent(selector: "@badge-updatedAt");
 
-            $browser
-                ->assertPresent("@label-nombre")
-                ->assertPresent("@label-matricula")
-                ->assertPresent("@label-tipo")
-                ->assertPresent("@label-fabricante")
-                ->assertPresent("@label-modelo")
-                ->assertPresent("@label-marca")
-                ->assertPresent("@label-roma")
-                ->assertPresent("@label-nro_serie")
-                ->assertPresent("@label-cad_iteaf")
-                ->assertPresent("@label-observaciones");
+                $browser
+                    ->assertPresent(selector: "@label-nombre")
+                    ->assertPresent(selector: "@label-matricula")
+                    ->assertPresent(selector: "@label-tipo")
+                    ->assertPresent(selector: "@label-fabricante")
+                    ->assertPresent(selector: "@label-modelo")
+                    ->assertPresent(selector: "@label-marca")
+                    ->assertPresent(selector: "@label-roma")
+                    ->assertPresent(selector: "@label-nro_serie")
+                    ->assertPresent(selector: "@label-cad_iteaf")
+                    ->assertPresent(selector: "@label-observaciones");
 
-            $browser
-                ->assertPresent("@input-nombre")
-                ->assertPresent("@input-matricula")
-                ->assertPresent("@trigger-tipo")
-                ->assertPresentByName("select", "tipo")
-                ->assertPresent("@input-fabricante")
-                ->assertPresent("@input-modelo")
-                ->assertPresent("@input-marca")
-                ->assertPresent("@input-roma")
-                ->assertPresent("@input-nro_serie")
-                ->assertPresent("@input-cad_iteaf")
-                ->assertPresent("@txt-observaciones");
-        });
+                $browser
+                    ->assertPresent(selector: "@input-nombre")
+                    ->assertPresent(selector: "@input-matricula")
+                    ->assertPresent(selector: "@trigger-tipo")
+                    ->assertPresentByName("select", "tipo")
+                    ->assertPresent(selector: "@input-fabricante")
+                    ->assertPresent(selector: "@input-modelo")
+                    ->assertPresent(selector: "@input-marca")
+                    ->assertPresent(selector: "@input-roma")
+                    ->assertPresent(selector: "@input-nro_serie")
+                    ->assertPresent(selector: "@input-cad_iteaf")
+                    ->assertPresent(selector: "@txt-observaciones");
+            }
+        );
     }
 
     public function testVisibilidad(): void
@@ -127,190 +132,294 @@ class EditMaquinaTest extends RecursoDuskTestCase
 
     public function testValidacionInformacion(): void
     {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
+        $this->browse(
+            callback: function (Browser $browser): void {
+                $browser->visit(url: new Form(...$this->PARAMS));
 
-            $browser
-                ->assertInputValue("@input-nombre", $this->row->nombre)
-                ->assertInputValue("@input-matricula", $this->row->matricula)
-                ->assertSeeIn("@trigger-tipo", $this->row->tipo)
-                ->assertInputValue("@input-fabricante", $this->row->fabricante)
-                ->assertInputValue("@input-modelo", $this->row->modelo)
-                ->assertInputValue("@input-marca", $this->row->marca)
-                ->assertInputValue("@input-roma", $this->row->roma)
-                ->assertInputValue("@input-nro_serie", $this->row->nro_serie)
-                ->assertSeeIn(
-                    "@trigger-cad_iteaf",
-                    Carbon::parse($this->row->cad_iteaf)->format("d/m/Y")
-                )
-                ->assertInputValue(
-                    "@txt-observaciones",
-                    $this->row->observaciones
-                );
-        });
+                $browser
+                    ->assertInputValue(
+                        field: "@input-nombre",
+                        value: $this->row->nombre
+                    )
+                    ->assertInputValue(
+                        field: "@input-matricula",
+                        value: $this->row->matricula
+                    )
+                    ->assertSeeIn(
+                        selector: "@trigger-tipo",
+                        text: $this->row->tipo
+                    )
+                    ->assertInputValue(
+                        field: "@input-fabricante",
+                        value: $this->row->fabricante
+                    )
+                    ->assertInputValue(
+                        field: "@input-modelo",
+                        value: $this->row->modelo
+                    )
+                    ->assertInputValue(
+                        field: "@input-marca",
+                        value: $this->row->marca
+                    )
+                    ->assertInputValue(
+                        field: "@input-roma",
+                        value: $this->row->roma
+                    )
+                    ->assertInputValue(
+                        field: "@input-nro_serie",
+                        value: $this->row->nro_serie
+                    )
+                    ->assertSeeIn(
+                        selector: "@trigger-cad_iteaf",
+                        text: Carbon::parse(
+                            time: $this->row->cad_iteaf
+                        )->format(format: "d/m/Y")
+                    )
+                    ->assertInputValue(
+                        field: "@txt-observaciones",
+                        value: $this->row->observaciones
+                    );
+            }
+        );
     }
 
     public function testEnvioRequeridosVacios(): void
     {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
+        $this->browse(
+            callback: function (Browser $browser): void {
+                $browser->visit(url: new Form(...$this->PARAMS));
 
-            for ($i = 0; $i < strlen($this->row->nombre); $i++) {
-                $browser->keys("@input-nombre", "{backspace}");
+                for ($i = 0; $i < strlen(string: $this->row->nombre); $i++) {
+                    $browser->keys(
+                        selector: "@input-nombre",
+                        keys: "{backspace}"
+                    );
+                }
+                $browser->assertInputValue(field: "@input-nombre", value: "");
+
+                for ($i = 0; $i < strlen(string: $this->row->matricula); $i++) {
+                    $browser->keys(
+                        selector: "@input-matricula",
+                        keys: "{backspace}"
+                    );
+                }
+                $browser->assertInputValue(
+                    field: "@input-matricula",
+                    value: ""
+                );
+
+                $browser
+                    ->press(button: "@submit")
+                    ->assertSeeIn(
+                        selector: "@msg-nombre",
+                        text: "El nombre es requerido"
+                    )
+                    ->assertSeeIn(
+                        selector: "@msg-matricula",
+                        text: "La matrícula es requerida"
+                    );
             }
-            $browser->assertInputValue("@input-nombre", "");
-
-            for ($i = 0; $i < strlen($this->row->matricula); $i++) {
-                $browser->keys("@input-matricula", "{backspace}");
-            }
-            $browser->assertInputValue("@input-matricula", "");
-
-            $browser
-                ->press("@submit")
-                ->assertSeeIn("@msg-nombre", "El nombre es requerido")
-                ->assertSeeIn("@msg-matricula", "La matrícula es requerida");
-        });
+        );
     }
 
     public function testCamposVaciados(): void
     {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
+        $this->browse(
+            callback: function (Browser $browser): void {
+                $browser->visit(url: new Form(...$this->PARAMS));
 
-            for ($i = 0; $i < strlen($this->row->nro_serie); $i++) {
-                $browser->keys("@input-nro_serie", "{backspace}");
-            }
-            $browser->assertInputValue("@input-nro_serie", "");
-            for ($i = 0; $i < strlen($this->row->fabricante); $i++) {
-                $browser->keys("@input-fabricante", "{backspace}");
-            }
-            $browser->assertInputValue("@input-fabricante", "");
-            for ($i = 0; $i < strlen($this->row->marca); $i++) {
-                $browser->keys("@input-marca", "{backspace}");
-            }
-            $browser->assertInputValue("@input-marca", "");
-            for ($i = 0; $i < strlen($this->row->modelo); $i++) {
-                $browser->keys("@input-modelo", "{backspace}");
-            }
-            $browser->assertInputValue("@input-modelo", "");
-            for ($i = 0; $i < strlen($this->row->roma); $i++) {
-                $browser->keys("@input-roma", "{backspace}");
-            }
-            $browser->assertInputValue("@input-roma", "");
-            for ($i = 0; $i < strlen($this->row->observaciones); $i++) {
-                $browser->keys("@txt-observaciones", "{backspace}");
-            }
-            $browser->assertInputValue("@txt-observaciones", "");
+                for ($i = 0; $i < strlen(string: $this->row->nro_serie); $i++) {
+                    $browser->keys(
+                        selector: "@input-nro_serie",
+                        keys: "{backspace}"
+                    );
+                }
+                $browser->assertInputValue(
+                    field: "@input-nro_serie",
+                    value: ""
+                );
+                for (
+                    $i = 0;
+                    $i < strlen(string: $this->row->fabricante);
+                    $i++
+                ) {
+                    $browser->keys(
+                        selector: "@input-fabricante",
+                        keys: "{backspace}"
+                    );
+                }
+                $browser->assertInputValue(
+                    field: "@input-fabricante",
+                    value: ""
+                );
+                for ($i = 0; $i < strlen(string: $this->row->marca); $i++) {
+                    $browser->keys(
+                        selector: "@input-marca",
+                        keys: "{backspace}"
+                    );
+                }
+                $browser->assertInputValue(field: "@input-marca", value: "");
+                for ($i = 0; $i < strlen(string: $this->row->modelo); $i++) {
+                    $browser->keys(
+                        selector: "@input-modelo",
+                        keys: "{backspace}"
+                    );
+                }
+                $browser->assertInputValue(field: "@input-modelo", value: "");
+                for ($i = 0; $i < strlen(string: $this->row->roma); $i++) {
+                    $browser->keys(
+                        selector: "@input-roma",
+                        keys: "{backspace}"
+                    );
+                }
+                $browser->assertInputValue(field: "@input-roma", value: "");
+                for (
+                    $i = 0;
+                    $i < strlen(string: $this->row->observaciones);
+                    $i++
+                ) {
+                    $browser->keys(
+                        selector: "@txt-observaciones",
+                        keys: "{backspace}"
+                    );
+                }
+                $browser->assertInputValue(
+                    field: "@txt-observaciones",
+                    value: ""
+                );
 
-            $browser
-                ->press("@submit")
-                ->pause(1000)
-                ->assertRouteIs("maquina.show", ["maquina" => $this->row->id]);
-        });
+                $browser
+                    ->press(button: "@submit")
+                    ->pause(milliseconds: 1000)
+                    ->assertRouteIs(
+                        route: "maquina.show",
+                        parameters: [$this->recurso => $this->row->id]
+                    );
+            }
+        );
 
-        $attr = Arr::only($this->row->getAttributes(), [
-            "id",
-            "nombre",
-            "matricula",
-            "tipo_id",
-        ]);
-        $this->assertDatabaseHas(Maquina::class, $attr);
+        $attr = Arr::only(
+            array: $this->row->getAttributes(),
+            keys: ["id", "nombre", "matricula", "tipo_id"]
+        );
+        $this->assertDatabaseHas(table: $this->class, data: $attr);
 
-        $attr = Arr::except($this->row->getAttributes(), [
-            "id",
-            "created_at",
-            "updated_at",
-            "nombre",
-            "matricula",
-            "tipo_id",
-        ]);
-        $this->assertDatabaseMissing(Maquina::class, $attr);
+        $attr = Arr::except(
+            array: $this->row->getAttributes(),
+            keys: [
+                "id",
+                "created_at",
+                "updated_at",
+                "nombre",
+                "matricula",
+                "tipo_id",
+            ]
+        );
+        $this->assertDatabaseMissing(table: $this->class, data: $attr);
     }
 
     public function testEnvioInvalido(): void
     {
-        $this->browse(function (Browser $browser) {
-            $browser->visit(new Form(...$this->PARAMS));
+        $this->browse(
+            callback: function (Browser $browser): void {
+                $browser->visit(url: new Form(...$this->PARAMS));
 
-            $browser
-                ->type("@input-nombre", "sdh$%&")
-                ->type("@input-matricula", "asadsfd/%%")
-                ->type("@input-modelo", "modelo/1")
-                ->type("@input-marca", "marca&1")
-                ->type("@input-nro_serie", "serie5s4=")
-                ->press("@submit");
+                $browser
+                    ->type(field: "@input-nombre", value: "sdh$%&")
+                    ->type(field: "@input-matricula", value: "asadsfd/%%")
+                    ->type(field: "@input-modelo", value: "modelo/1")
+                    ->type(field: "@input-marca", value: "marca&1")
+                    ->type(field: "@input-nro_serie", value: "serie5s4=")
+                    ->press(button: "@submit");
 
-            $browser
-                ->assertSeeIn(
-                    "@msg-nombre",
-                    'El nombre no debe contener: !, ", ·, %, /, \, =, +, -, *, [], {}.'
-                )
-                ->assertSeeIn(
-                    "@msg-matricula",
-                    "La matrícula sólo debe contener: letras mayúsculas, números."
-                )
-                ->assertSeeIn(
-                    "@msg-nro_serie",
-                    "El Nro. de Serie sólo debe contener: letras mayúsculas, números."
-                )
-                ->assertSeeIn(
-                    "@msg-marca",
-                    "La marca no debe contener: caracteres especiales, números."
-                )
-                ->assertSeeIn(
-                    "@msg-modelo",
-                    "El modelo no debe contener: caracteres especiales, números."
+                $browser
+                    ->assertSeeIn(
+                        selector: "@msg-nombre",
+                        text: 'El nombre no debe contener: !, ", ·, %, /, \, =, +, -, *, [], {}.'
+                    )
+                    ->assertSeeIn(
+                        selector: "@msg-matricula",
+                        text: "La matrícula sólo debe contener: letras mayúsculas, números."
+                    )
+                    ->assertSeeIn(
+                        selector: "@msg-nro_serie",
+                        text: "El Nro. de Serie sólo debe contener: letras mayúsculas, números."
+                    )
+                    ->assertSeeIn(
+                        selector: "@msg-marca",
+                        text: "La marca no debe contener: caracteres especiales, números."
+                    )
+                    ->assertSeeIn(
+                        selector: "@msg-modelo",
+                        text: "El modelo no debe contener: caracteres especiales, números."
+                    );
+
+                $browser->assertRouteIs(
+                    route: "maquina.edit",
+                    parameters: [
+                        $this->recurso => $this->row->id,
+                    ]
                 );
-
-            $browser->assertRouteIs("maquina.edit", [
-                "maquina" => $this->row->id,
-            ]);
-        });
+            }
+        );
     }
 
     public function testEnvioValido(): void
     {
-        $data = Maquina::factory(1, [
-            "tipo_id" => 1,
-            "cad_iteaf" => $this->row->cad_iteaf,
-        ])
+        $data = $this->class
+            ::factory(
+                count: 1,
+                state: [
+                    "tipo_id" => 1,
+                    "cad_iteaf" => $this->row->cad_iteaf,
+                ]
+            )
             ->make()
             ->first();
-        $this->browse(function (Browser $browser) use ($data) {
-            $browser->visit(new Form(...$this->PARAMS));
+        $this->browse(
+            callback: function (Browser $browser) use ($data): void {
+                $browser->visit(url: new Form(...$this->PARAMS));
 
-            $browser
-                ->type("@input-nombre", $data->nombre)
-                ->type("@input-matricula", $data->matricula)
-                ->type("@input-nro_serie", $data->nro_serie)
-                ->type("@input-fabricante", $data->fabricante)
-                ->type("@input-marca", $data->marca)
-                ->type("@input-modelo", $data->modelo)
-                ->type("@input-roma", $data->roma)
-                ->type("@txt-observaciones", $data->observaciones)
-                ->press("@submit");
+                $browser
+                    ->type(field: "@input-nombre", value: $data->nombre)
+                    ->type(field: "@input-matricula", value: $data->matricula)
+                    ->type(field: "@input-nro_serie", value: $data->nro_serie)
+                    ->type(field: "@input-fabricante", value: $data->fabricante)
+                    ->type(field: "@input-marca", value: $data->marca)
+                    ->type(field: "@input-modelo", value: $data->modelo)
+                    ->type(field: "@input-roma", value: $data->roma)
+                    ->type(
+                        field: "@txt-observaciones",
+                        value: $data->observaciones
+                    )
+                    ->press(button: "@submit");
 
-            $browser
-                ->pause(1000)
-                ->assertRouteIs("maquina.show", ["maquina" => $this->row->id]);
-        });
+                $browser
+                    ->pause(milliseconds: 1000)
+                    ->assertRouteIs(
+                        route: "maquina.show",
+                        parameters: [$this->recurso => $this->row->id]
+                    );
+            }
+        );
 
-        $this->assertDatabaseHas(Maquina::class, ["id" => $this->row->id]);
+        $this->assertDatabaseHas(
+            table: $this->class,
+            data: ["id" => $this->row->id]
+        );
         $this->assertDatabaseMissing(
-            Maquina::class,
-            Arr::except($this->row->getAttributes(), [
-                "id",
-                "created_at",
-                "updated_at",
-            ])
+            table: $this->class,
+            data: Arr::except(
+                array: $this->row->getAttributes(),
+                keys: ["id", "created_at", "updated_at"]
+            )
         );
         $this->assertDatabaseHas(
-            Maquina::class,
-            Arr::except($data->getAttributes(), [
-                "id",
-                "created_at",
-                "updated_at",
-            ])
+            table: $this->class,
+            data: Arr::except(
+                array: $data->getAttributes(),
+                keys: ["id", "created_at", "updated_at"]
+            )
         );
     }
 }
