@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { BE_VALID_MSG, MIN_MESSAGE, REQUIRED_MSG } from "../utils";
+import {
+  BE_VALID_MSG,
+  MIN_MESSAGE,
+  NOT_CONTAIN_MSG,
+  REQUIRED_MSG,
+} from "../utils";
 
 export const formSchema = z
   .object({
@@ -10,7 +15,10 @@ export const formSchema = z
       })
       .min(1, REQUIRED_MSG("El nombre"))
       .min(4, MIN_MESSAGE(4))
-      .regex(/^[\w]+$/, BE_VALID_MSG("El nombre")),
+      .regex(
+        /^[\w]+$/,
+        NOT_CONTAIN_MSG("El nombre", ["caracteres especiales"]),
+      ),
     is_activa: z
       .boolean({
         required_error: REQUIRED_MSG("El estado"),

@@ -91,7 +91,7 @@ export default function Edit({ data }: { data: Campana }) {
     >
       <Form {...form}>
         <form
-          id="show-campaña"
+          id={`edit-${data.id}`}
           className={CONTAINER_CLASS}
           onSubmit={form.handleSubmit(onSubmit)}
         >
