@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create("cultivos", function (Blueprint $table) {
-            $table->ulid("codigo")->unique();
+            $table->ulid("codigo")->unique()->primary();
             $table->timestamps();
             $table->char("nombre", 65);
             $table->char("variedad", 45)->nullable();

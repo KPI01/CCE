@@ -21,7 +21,7 @@ class CultivoSeeder extends Seeder
     public function run(): void
     {
         //
-        echo "Creando maquinas ({$this::$count}) ..." . PHP_EOL;
+        echo "Creando cultivos ({$this::$count}) ..." . PHP_EOL;
         Cultivo::factory($this::$count)->create();
     }
 }
