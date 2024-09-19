@@ -16,8 +16,11 @@ class CultivoFactory extends Factory
      */
     public function definition(): array
     {
+        $variedad = fake()->boolean() ? fake()->word() : null;
         return [
             //
+            "nombre" => ucfirst(fake()->word()),
+            "variedad" => $variedad,
         ];
     }
 }
