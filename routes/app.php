@@ -1,13 +1,14 @@
 <?php
 
 use App\Http\Controllers\CampanaController;
+use App\Http\Controllers\CultivoController;
 use App\Http\Controllers\MaquinaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\PersonaController;
 
-Route::prefix("app")
+Route::prefix("/app")
     ->middleware(["auth", "verified"])
     ->group(function () {
         Route::controller(AppController::class)->group(function () {
@@ -15,7 +16,7 @@ Route::prefix("app")
             Route::get("/home", "index")->name("home");
         });
 
-        Route::prefix("admin")
+        Route::prefix("/admin")
             ->middleware("auth")
             ->group(function () {
                 Route::controller(AppController::class)->group(function () {
@@ -23,10 +24,11 @@ Route::prefix("app")
                 });
             });
 
-        Route::prefix("recurso")->group(function () {
-            Route::resource("persona", PersonaController::class);
-            Route::resource("empresa", EmpresaController::class);
-            Route::resource("maquina", MaquinaController::class);
-            Route::resource("campana", CampanaController::class);
+        Route::prefix("/recurso")->group(function () {
+            Route::resource("/persona", PersonaController::class);
+            Route::resource("/empresa", EmpresaController::class);
+            Route::resource("/maquina", MaquinaController::class);
+            Route::resource("/campana", CampanaController::class);
+            Route::resource("/cultivo", CultivoController::class);
         });
     });
