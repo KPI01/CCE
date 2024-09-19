@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Maquina;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Schema;
 
 class MaquinaSeeder extends Seeder
 {
