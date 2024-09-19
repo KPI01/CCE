@@ -110,24 +110,14 @@ class CultivoController extends Controller
 
         $cultivo->update($data);
 
-        return response()->json(
-            data: [
-                "payload" => $cultivo,
-            ]
-        );
+        return response()->json(data: $cultivo->toArray(), status: 200);
     }
 
-    public function apiDestroy(Cultivo $cultivo): JsonResponse
+    public function apiDestroy(Cultivo $cultivo)
     {
         //
         $cultivo->delete();
 
-        return response()->json(
-            data: [
-                "mensaje" => "El cultivo ha sido eliminado.",
-                "payload" => $cultivo,
-            ],
-            status: 200
-        );
+        return response(status: 204);
     }
 }

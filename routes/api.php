@@ -1,8 +1,6 @@
 <?php
 use App\Http\Controllers\Auxiliares\MaquinaAuxiliaresController;
 use App\Http\Controllers\CultivoController;
-use App\Http\Resources\CultivoResource;
-use App\Models\Cultivo;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix("/api")
@@ -17,11 +15,22 @@ Route::prefix("/api")
                 callback: function (): void {
                     Route::controller(CultivoController::class)->group(
                         callback: function (): void {
-                            Route::get("/cultivo", "apiIndex");
-                            Route::post("/cultivo", "apiStore");
-                            Route::patch("/cultivo/{cultivo}", "apiUpdate");
-                            Route::put("/cultivo/{cultivo}", "apiUpdate");
-                            Route::delete("/cultivo/{cultivo}", "apiDestroy");
+                            $baseName = "cultivo.api";
+                            Route::get("/cultivo", "apiIndex")->name(
+                                "{$baseName}.index"
+                            );
+                            Route::post("/cultivo", "apiStore")->name(
+                                "{$baseName}.store"
+                            );
+                            Route::match(
+                                ["put", "patch"],
+                                "/cultivo/{cultivo}",
+                                "apiUpdate"
+                            )->name("{$baseName}.update");
+                            Route::delete(
+                                "/cultivo/{cultivo}",
+                                "apiDestroy"
+                            )->name("{$baseName}.destroy");
                         }
                     );
                 }
