@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CultivoResource;
 use App\Models\Cultivo;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -78,10 +77,8 @@ class CultivoController extends Controller
         ) {
             return response()->json(
                 data: [
-                    "status" => 400,
                     "mensaje" => "No se han encontrado los datos necesarios.",
                     "payload" => [
-                        "original" => $cultivo,
                         "sent" => $data,
                     ],
                 ],

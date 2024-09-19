@@ -22,15 +22,15 @@ Route::prefix("/api")
                             Route::post("/cultivo", "apiStore")->name(
                                 "{$baseName}.store"
                             );
-                            Route::match(
-                                ["put", "patch"],
-                                "/cultivo/{cultivo}",
-                                "apiUpdate"
-                            )->name("{$baseName}.update");
                             Route::delete(
                                 "/cultivo/{cultivo}",
                                 "apiDestroy"
                             )->name("{$baseName}.destroy");
+                            Route::match(
+                                methods: ["PUT", "PATCH"],
+                                uri: "/cultivo/{cultivo}",
+                                action: "apiUpdate"
+                            )->name("{$baseName}.update");
                         }
                     );
                 }
