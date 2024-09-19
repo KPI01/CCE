@@ -48,7 +48,7 @@ class MaquinaTest extends ModeloTestCase
 
     public function testRead(): void
     {
-        $inst = Maquina::factory()->make();
+        $inst = Maquina::factory(1)->make()->first();
         $this->assertNotNull($inst, "factory()->make() no funcionó");
         $inst->save();
         $reg = Maquina::findOrFail($inst->id);
