@@ -9,6 +9,7 @@ import {
   FilePlus,
   Send,
   Sheet,
+  Sprout,
   Tractor,
   Trash,
   UserRound,
@@ -44,6 +45,9 @@ export const MaquinaIcon = ({ className }: IconProps) => (
 );
 export const CampanaIcon = ({ className }: IconProps) => (
   <CalendarRange className={cn(ICON_CLASS, className)} />
+);
+export const CultivoIcon = ({ className }: IconProps) => (
+  <Sprout className={cn(ICON_CLASS, className)} />
 );
 
 export const TablaIcon = ({ className }: IconProps) => (
@@ -112,6 +116,7 @@ export function convertToType<T>({
   val: any;
   type: "string" | "number" | "boolean" | "date";
 }): T {
+  console.debug(val, typeof val);
   if (type === "string") {
     try {
       return String(val) as T;

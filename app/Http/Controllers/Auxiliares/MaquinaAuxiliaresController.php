@@ -31,8 +31,6 @@ class MaquinaAuxiliaresController extends Controller
             return to_route("aux_maquina.index", $tabla);
         }
 
-        $cols = Schema::getColumnListing($tabla);
-        $cols[] = "urls";
         $rows = DB::table($tabla)->orderBy("id")->get();
         $rows = $rows->map(function ($row) use ($tabla) {
             $row->url = route("aux_maquina.update", [
@@ -49,7 +47,6 @@ class MaquinaAuxiliaresController extends Controller
 
         return inertia("Config/Auxiliares/Recursos/Maquina", [
             "title" => $name,
-            "cols" => $cols,
             "rows" => $rows,
             "url" => route("aux_maquina.index", $tabla),
         ]);

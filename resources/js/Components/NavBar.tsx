@@ -16,6 +16,7 @@ import { ReactElement } from "react";
 import { v4 as uuidv4 } from "uuid";
 import {
   CampanaIcon,
+  CultivoIcon,
   EmpresaIcon,
   MaquinaIcon,
   PersonaIcon,
@@ -52,6 +53,11 @@ const recursos: MenuItemsProps[] = [
   {
     Icon: <CampanaIcon />,
     Texto: "Campañas",
+    Recurso: "campana",
+  },
+  {
+    Icon: <CultivoIcon />,
+    Texto: "Cultivos",
     Recurso: "campana",
   },
 ];
@@ -147,6 +153,12 @@ export default function NavBar() {
                   <Link href={route("aux_maquina.index")}>
                     <MaquinaIcon />
                     Máquinas
+                  </Link>
+                </MenubarItem>
+                <MenubarItem className={MENUBARITEM_CLASS} asChild>
+                  <Link href={route("cultivo.index")}>
+                    <CultivoIcon />
+                    Cultivos
                   </Link>
                 </MenubarItem>
               </MenubarSubContent>

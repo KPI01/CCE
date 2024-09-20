@@ -5,15 +5,14 @@ type Row = Record<string, unknown>;
 
 interface Props {
   title: string;
-  cols: string[];
   rows: Row[];
   url: string;
 }
 
-export default function Maquina({ title, cols, rows, url }: Props) {
-  console.log("title:", title, "cols:", cols, "rows:", rows);
+export default function Maquina({ title, rows, url }: Props) {
+  console.debug("title:", title, "rows:", rows);
   const columns = createColumn(rows[0]) ?? [];
-  console.log("columns:", columns);
+  console.debug("columns:", columns);
   return (
     <DataLayout
       title={title}

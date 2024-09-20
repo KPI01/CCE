@@ -62,16 +62,16 @@ function CreateButton<TData, TValue>({
   title,
   columns,
 }: Pick<TableProps<TData, TValue>, "title" | "columns"> & CreateButtonProps) {
-  console.log("columns:", columns);
   const [values, setValues] = React.useState<Record<string, string>>({});
+
+  console.debug("state:", values);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const key = e.target.name;
     const value = e.target.value;
     console.debug("old state:", values);
     console.debug("new to state:", "key:", key, "value:", value);
-    console.debug("new state:", { ...values, [key]: value });
-    setValues((values) => ({ ...values, [key]: value }));
+    setValues({ ...values, [key]: value });
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -79,6 +79,7 @@ function CreateButton<TData, TValue>({
     console.log("POST request:", url);
     console.log("payload:", values);
     router.post(url, values);
+    setValues({});
   }
 
   if (withPrompt === true) {
@@ -104,17 +105,18 @@ function CreateButton<TData, TValue>({
                   column.id.charAt(0).toUpperCase() + column.id.slice(1);
 
                 return (
-                  <div className="flex w-full items-center justify-between">
+                  <div
+                    key={column.id}
+                    className="flex w-full items-center justify-between"
+                  >
                     <Label htmlFor={`input-${key}`}>{normal}</Label>
                     <Input
-                      key={uuidv4()}
                       name={key}
                       id={`input-${key}`}
                       className="max-w-80"
                       placeholder={`Aquí va el ${key}`}
-                      value={values[key]}
+                      value={values[key] || ""}
                       onChange={handleChange}
-                      autoFocus
                     />
                   </div>
                 );
