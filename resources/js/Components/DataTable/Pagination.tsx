@@ -15,14 +15,16 @@ import {
   SelectValue,
 } from "@/Components/ui/select";
 
+const SIZES = [5, 8, 10, 15, 20, 30];
+
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
 }
 
 export function Pagination<TData>({ table }: DataTablePaginationProps<TData>) {
   return (
-    <div id="pag-container" className="flex items-center justify-between px-2">
-      <div className="flex items-center space-x-6 lg:space-x-8">
+    <div id="pag-container" className="w-full bg-secondary/50 px-2 py-2">
+      <div className="ms-auto flex justify-end gap-8">
         <div className="flex items-center space-x-2">
           <p className="text-sm font-medium">Filas por página</p>
           <Select
@@ -35,7 +37,7 @@ export function Pagination<TData>({ table }: DataTablePaginationProps<TData>) {
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
             <SelectContent id="page-size-select" side="top">
-              {[5, 10, 20, 30].map((pageSize) => (
+              {[5, 8, 10, 15, 20, 30].map((pageSize) => (
                 <SelectItem key={pageSize} value={`${pageSize}`}>
                   {pageSize}
                 </SelectItem>

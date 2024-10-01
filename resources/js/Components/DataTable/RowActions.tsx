@@ -135,12 +135,13 @@ export function RowActionsLiveEdit({ id, info, url }: Props) {
   return (
     <Dialog>
       <DropdownMenu>
-        <DialogTrigger asChild>
-          <DropdownMenuTrigger id={`actions-${id}`} asChild>
-            <Button variant={"ghost"} className="w-16">
-              <span className="sr-only">Menú</span>
-              <Ellipsis className="size-4" />
-            </Button>
+        <DialogTrigger asChild className="text-end">
+          <DropdownMenuTrigger
+            id={`actions-${id}`}
+            className={buttonVariants({ variant: "ghost" })}
+          >
+            <span className="sr-only">Menú</span>
+            <Ellipsis className="size-4" />
           </DropdownMenuTrigger>
         </DialogTrigger>
       </DropdownMenu>
