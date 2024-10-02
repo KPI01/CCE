@@ -161,7 +161,6 @@ function SimplifiedOptions({
               Haz los cambios en los campos necesarios, y luego pulsa en guardar
               para enviarlos.
             </DialogDescription>
-            {/* FORMULARIO VA AQUI */}
             {form}
           </DialogHeader>
         </DialogContent>
