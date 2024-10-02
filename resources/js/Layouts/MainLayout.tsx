@@ -6,6 +6,7 @@ import NavBar from "@/Components/NavBar";
 import { Toaster } from "@/Components/ui/toaster";
 import { useToast } from "@/Components/ui/use-toast";
 import { Separator } from "@/Components/ui/separator";
+import { TooltipProvider } from "@/Components/ui/tooltip";
 
 export default function MainLayout({ children, className }: MainLayoutProps) {
   const { toast } = useToast();
@@ -29,9 +30,11 @@ export default function MainLayout({ children, className }: MainLayoutProps) {
     <StrictMode>
       <NavBar />
       <Separator />
-      <main className={cn("container flex flex-col", className)}>
-        {children}
-      </main>
+      <TooltipProvider>
+        <main className={cn("container flex flex-col", className)}>
+          {children}
+        </main>
+      </TooltipProvider>
       <Toaster />
     </StrictMode>
   );

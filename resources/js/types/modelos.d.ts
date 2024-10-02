@@ -72,3 +72,8 @@ export interface Campana extends Modelo {
   fin: string;
   descripcion?: string;
 }
+
+export interface Cultivo extends Modelo {
+  nombre: string;
+  variedad: string;
+}

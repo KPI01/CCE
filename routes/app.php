@@ -29,6 +29,6 @@ Route::prefix("/app")
             Route::resource("/empresa", EmpresaController::class);
             Route::resource("/maquina", MaquinaController::class);
             Route::resource("/campana", CampanaController::class);
-            Route::resource("/cultivo", CultivoController::class);
+            Route::apiResource("/cultivo", CultivoController::class);
         });
     });

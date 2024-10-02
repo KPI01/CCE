@@ -178,6 +178,49 @@ declare module 'ziggy-js' {
             "binding": "id"
         }
     ],
+    "cultivo.index": [],
+    "cultivo.create": [],
+    "cultivo.store": [],
+    "cultivo.show": [
+        {
+            "name": "cultivo",
+            "required": true
+        }
+    ],
+    "cultivo.edit": [
+        {
+            "name": "cultivo",
+            "required": true
+        }
+    ],
+    "cultivo.update": [
+        {
+            "name": "cultivo",
+            "required": true
+        }
+    ],
+    "cultivo.destroy": [
+        {
+            "name": "cultivo",
+            "required": true
+        }
+    ],
+    "cultivo.api.index": [],
+    "cultivo.api.store": [],
+    "cultivo.api.destroy": [
+        {
+            "name": "cultivo",
+            "required": true,
+            "binding": "codigo"
+        }
+    ],
+    "cultivo.api.update": [
+        {
+            "name": "cultivo",
+            "required": true,
+            "binding": "codigo"
+        }
+    ],
     "aux_maquina.index": [
         {
             "name": "tabla",

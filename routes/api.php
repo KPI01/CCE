@@ -13,26 +13,7 @@ Route::prefix("/api")
 
             Route::prefix("/recurso")->group(
                 callback: function (): void {
-                    Route::controller(CultivoController::class)->group(
-                        callback: function (): void {
-                            $baseName = "cultivo.api";
-                            Route::get("/cultivo", "apiIndex")->name(
-                                "{$baseName}.index"
-                            );
-                            Route::post("/cultivo", "apiStore")->name(
-                                "{$baseName}.store"
-                            );
-                            Route::delete(
-                                "/cultivo/{cultivo}",
-                                "apiDestroy"
-                            )->name("{$baseName}.destroy");
-                            Route::match(
-                                methods: ["PUT", "PATCH"],
-                                uri: "/cultivo/{cultivo}",
-                                action: "apiUpdate"
-                            )->name("{$baseName}.update");
-                        }
-                    );
+                    Route::apiResource("cultivo", CultivoController::class);
                 }
             );
 

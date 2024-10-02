@@ -1,10 +1,8 @@
-import { v4 as uuidv4 } from "uuid";
-
 import { Head, Link, router } from "@inertiajs/react";
 import { TableProps } from "@/types";
 
 import MainLayout from "./MainLayout";
-import { DataTable } from "@/Components/DataTable/DataTable";
+import { DataTable } from "@/Components/DataTable/Table";
 import { Button } from "@/Components/ui/button";
 import {
   AlertDialog,
@@ -32,9 +30,9 @@ export default function DataLayout<TData, TValue>({
   url,
   data,
   columns,
-  initialVisibility,
   withPrompt,
 }: TableProps<TData, TValue>) {
+  console.debug(data);
   return (
     <MainLayout>
       <Head title={`Recurso: ${title}`} />
@@ -47,11 +45,7 @@ export default function DataLayout<TData, TValue>({
           withPrompt={withPrompt}
         />
       </div>
-      <DataTable
-        data={data}
-        columns={columns}
-        initialVisibility={initialVisibility}
-      />
+      <DataTable data={data} columns={columns} />
     </MainLayout>
   );
 }

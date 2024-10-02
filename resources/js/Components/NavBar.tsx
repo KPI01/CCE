@@ -55,11 +55,6 @@ const recursos: MenuItemsProps[] = [
     Texto: "Campañas",
     Recurso: "campana",
   },
-  {
-    Icon: <CultivoIcon />,
-    Texto: "Cultivos",
-    Recurso: "campana",
-  },
 ];
 
 interface handleRecursoLinkParams {
@@ -83,7 +78,7 @@ export default function NavBar() {
 
   function handleRecursoLink({ recurso }: handleRecursoLinkParams) {
     const url = route(`${recurso}.index`);
-    console.info("Redirigiendo a...", url);
+    console.debug("Redirigiendo a...", url);
     router.get(url);
   }
 
