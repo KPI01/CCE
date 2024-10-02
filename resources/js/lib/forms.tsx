@@ -49,6 +49,7 @@ export default function DynamicForm({
                   name={field.name}
                   onChange={field.onChange}
                   value={field.value}
+                  defaultValue={defaults[field.name]}
                 />
               )}
             />

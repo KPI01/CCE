@@ -22,6 +22,7 @@ const columns: ColumnDef<Cultivo>[] = [
   {
     accessorKey: "nombre",
     header: ({ column }) => (
+
       <DataTableColumnHeader column={column} title="Nombre" />
     ),
     enableHiding: false,
@@ -59,17 +60,13 @@ const columns: ColumnDef<Cultivo>[] = [
             invalid_type_error: TYPE_MESSAGE("El nombre", "texto"),
           })
           .min(1, REQUIRED_MSG("El nombre"))
-          .max(25, MAX_MESSAGE(25))
-          .default(original.nombre),
-        variedad: z
-          .string()
-          .max(25, MAX_MESSAGE(25))
-          .default(original.variedad),
+          .max(25, MAX_MESSAGE(25)),
+        variedad: z.string().max(25, MAX_MESSAGE(25)),
       });
 
       const onSubmit = () => {
         console.log("Enviando datos...");
-        router.put();
+        router.put(route("cultivo.store"));
       };
 
       return (
@@ -101,7 +98,9 @@ export default function Cultivo({ data, fields }: Props) {
 
   return (
     <MainLayout>
-      <h1 className="mb-10 mt-6 text-6xl font-bold">Cultivos</h1>
+      <div>
+        <h1 className="mb-10 mt-6 text-6xl font-bold">Cultivos</h1>
+      </div>
       <DataTable columns={columns} data={data} />
     </MainLayout>
   );
