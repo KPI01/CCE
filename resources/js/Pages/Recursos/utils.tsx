@@ -24,6 +24,9 @@ export const MIN_MESSAGE = (size: number) =>
   `Este campo debe tener al menos ${size} caracteres.`;
 export const MAX_MESSAGE = (size: number) =>
   `Este campo debe tener como máximo ${size} caracteres.`;
+export const TYPE_MESSAGE = (field: string, type: string) => {
+  return `${field} debe ser: ${type}.`;
+};
 export const BE_VALID_MSG = (start: string, end: "a" | "o" = "o") =>
   `${start} debe ser válid${end}.`;
 export const NOT_CONTAIN_MSG = (start: string, prohibited: string[]) =>

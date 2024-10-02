@@ -23,6 +23,7 @@ import {
 const schema = formSchema;
 
 export default function Show({ data }: { data: Persona }) {
+  console.debug(data);
   schema.safeParse(data);
   const form = useForm<z.infer<typeof schema>>({
     defaultValues: { ...data },

@@ -18,9 +18,13 @@ export function createColumn(
   }
 
   const keys: string[] = Object.keys(data);
+  console.debug(keys, keys.length);
 
   for (const key of keys) {
     const keyIsAcciones = key === "url";
+    console.debug(key, `key is url?`, keyIsAcciones);
+    const size = keys.indexOf(key) + 1;
+    console.debug(size, keys.length - 2, size / (keys.length - 1));
     const title = !keyIsAcciones
       ? `${key.charAt(0).toUpperCase()}${key.slice(1)}`
       : "Acciones";
@@ -53,7 +57,7 @@ export function createColumn(
           }
           return row.original[key];
         },
-        size: 200,
+        size: keyIsAcciones ? 5 : undefined,
         meta: {
           header: title,
           key: key,
