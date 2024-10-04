@@ -189,7 +189,8 @@ declare module 'ziggy-js' {
     "cultivo.update": [
         {
             "name": "cultivo",
-            "required": true
+            "required": true,
+            "binding": "id"
         }
     ],
     "cultivo.destroy": [

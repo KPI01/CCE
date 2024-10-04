@@ -26,7 +26,6 @@ interface Props extends ConstructorProps {
     | "on"
     | "organization"
     | "street-address";
-  defaultValue?: string | number | undefined;
 }
 
 export default function FormItemConstructor({
@@ -46,7 +45,6 @@ export default function FormItemConstructor({
   autoComplete = "off",
   msgClass,
   descripcion = undefined,
-  defaultValue,
 }: Props) {
   const toId = id.includes(".") ? id.replace(".", "_") : id;
   const inputId = `input-${toId}`;
@@ -91,7 +89,6 @@ export default function FormItemConstructor({
           className={controlInputClass}
           style={controlInputStyle}
           autoComplete={autoComplete}
-          defaultValue={defaultValue}
         />
       </FormControl>
       {descripcion && Descripcion}

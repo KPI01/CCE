@@ -3,9 +3,15 @@ import { Form, FormField } from "@/Components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { ucfirst } from "./utils";
+import { cn, ucfirst } from "./utils";
 import { Button } from "@/Components/ui/button";
-import { SaveUpdateIcon } from "@/Pages/Recursos/utils";
+import { CreateIcon, SaveUpdateIcon } from "@/Pages/Recursos/utils";
+import {
+  DialogDescription,
+  DialogHeader,
+  DialogContent,
+  DialogTitle,
+} from "@/Components/ui/dialog";
 
 interface FormField {
   name: string;
@@ -13,29 +19,44 @@ interface FormField {
   type: string;
 }
 
+export type Methods = "post" | "put";
+
 interface DynamicFormProps {
+  stateHandler?: (state: any) => void;
   fields: FormField[];
   schema: z.ZodSchema<any>;
-  onSubmit: (data: any) => void;
-  defaults: Record<string, any>;
+  onSubmit: (props: { values: any; method: Methods }) => void;
+  defaults?: Record<string, any>;
+  classNames?: {
+    form?: string;
+  };
+  method: Methods;
+  icon?: "create" | "update";
 }
 
-export default function DynamicForm({
+export function DynamicForm({
   fields,
   schema,
   onSubmit,
   defaults = {},
+  classNames = {},
+  method,
+  icon = "create",
 }: DynamicFormProps) {
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: defaults,
   });
+  console.debug("method:", method);
+
+  const Icon: JSX.Element =
+    icon === "create" ? <CreateIcon /> : <SaveUpdateIcon />;
 
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-4"
-        onSubmit={form.handleSubmit(onSubmit)}
+        className={cn("flex flex-col gap-4", classNames.form)}
+        onSubmit={form.handleSubmit((values) => onSubmit({ values, method }))}
       >
         {fields.map((field) => (
           <div key={field.name}>
@@ -49,17 +70,40 @@ export default function DynamicForm({
                   name={field.name}
                   onChange={field.onChange}
                   value={field.value}
-                  defaultValue={defaults[field.name]}
                 />
               )}
             />
           </div>
         ))}
         <Button className="ms-auto w-fit" type="submit">
-          <SaveUpdateIcon />
+          {Icon}
           Enviar
         </Button>
       </form>
     </Form>
+  );
+}
+
+interface CreateDialogProps {
+  children: React.ReactNode;
+  title: string;
+  description?: string;
+}
+
+export function CreateDialog({
+  children,
+  title = "Crear",
+  description,
+}: CreateDialogProps) {
+  return (
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>{title}</DialogTitle>
+        {description !== undefined && (
+          <DialogDescription>{description}</DialogDescription>
+        )}
+      </DialogHeader>
+      {children}
+    </DialogContent>
   );
 }

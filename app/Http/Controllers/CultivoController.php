@@ -46,10 +46,7 @@ class CultivoController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            "nombre" => ["required", "string"],
-            "variedad" => ["nullable", "string"],
-        ]);
+        $data = $request->input();
 
         if (!isset($data["variedad"])) {
             $data["variedad"] = null;
@@ -81,6 +78,7 @@ class CultivoController extends Controller
         $name = !is_null($data["variedad"])
             ? "{$data["nombre"]} {$data["variedad"]}"
             : $data["nombre"];
+
         $this->toastExitoConstructor(
             accion: "store",
             seccion: "description",
@@ -94,8 +92,44 @@ class CultivoController extends Controller
         ]);
     }
 
-    public function update()
+    public function update(Request $request, Cultivo $cultivo)
     {
+        $data = $request->input();
+
+        if (
+            Cultivo::where([
+                ["nombre", "=", $data["nombre"]],
+                ["variedad", "=", $data["variedad"]],
+            ])->exists()
+        ) {
+            $this->toastErrorConstructor(
+                campo: "cultivo",
+                error: "Duplicidad",
+                mensaje: "Ya existe un cultivo con dicho nombre y variedad",
+                variante: "warning"
+            );
+            return to_route("cultivo.index")->with([
+                "from" => "cultivo.update",
+                "message" => [
+                    "toast" => $this->toasts["error"]["cultivo:duplicidad"],
+                ],
+            ]);
+        }
+        $cultivo->update($data);
+
+        $this->toastExitoConstructor(
+            accion: "update",
+            seccion: "description",
+            append: "El cultivo " .
+                $data["nombre"] .
+                " se ha actualizado exitosamente"
+        );
+        return to_route("cultivo.index")->with([
+            "from" => "cultivo.update",
+            "message" => [
+                "toast" => $this->toasts["exito"]["update"],
+            ],
+        ]);
     }
     public function destroy()
     {

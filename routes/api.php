@@ -11,12 +11,6 @@ Route::prefix("/api")
                 return csrf_token();
             });
 
-            Route::prefix("/recurso")->group(
-                callback: function (): void {
-                    Route::apiResource("cultivo", CultivoController::class);
-                }
-            );
-
             Route::prefix("/aux")->group(
                 callback: function (): void {
                     Route::controller(

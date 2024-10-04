@@ -25,10 +25,10 @@ Route::prefix("/app")
             });
 
         Route::prefix("/recurso")->group(function () {
-            Route::resource("/persona", PersonaController::class);
-            Route::resource("/empresa", EmpresaController::class);
-            Route::resource("/maquina", MaquinaController::class);
-            Route::resource("/campana", CampanaController::class);
-            Route::apiResource("/cultivo", CultivoController::class);
+            Route::resource("persona", PersonaController::class);
+            Route::resource("empresa", EmpresaController::class);
+            Route::resource("maquina", MaquinaController::class);
+            Route::resource("campana", CampanaController::class);
+            Route::apiResource("cultivo", CultivoController::class);
         });
     });

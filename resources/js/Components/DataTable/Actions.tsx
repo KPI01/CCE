@@ -38,14 +38,18 @@ const MENUITEM_CLASS = "cursor-pointer text-base";
 interface Props {
   display: string;
   simplified?: boolean;
-  form: JSX.Element;
+  children: React.ReactNode;
 }
 
 function handleDelete(url: string) {}
 
-export default function Actions({ simplified = false, display, form }: Props) {
-  if (simplified && form) {
-    return <SimplifiedOptions display={display} form={form} />;
+export default function Actions({
+  simplified = false,
+  display,
+  children,
+}: Props) {
+  if (simplified && children) {
+    return <SimplifiedOptions display={display} children={children} />;
   }
 
   return <Menu display={display} />;
@@ -108,10 +112,10 @@ function Menu({ display }: { display: string }) {
 
 function SimplifiedOptions({
   display,
-  form,
+  children,
 }: {
   display: string;
-  form: JSX.Element;
+  children: React.ReactNode;
 }) {
   return (
     <AlertDialog>
@@ -161,8 +165,8 @@ function SimplifiedOptions({
               Haz los cambios en los campos necesarios, y luego pulsa en guardar
               para enviarlos.
             </DialogDescription>
-            {form}
           </DialogHeader>
+          {children}
         </DialogContent>
         <AlertDialogContent>
           <AlertDialogHeader>

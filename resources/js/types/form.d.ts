@@ -1,3 +1,12 @@
+type ButtonVariants =
+  | "default"
+  | "destructive"
+  | "outline"
+  | "secondary"
+  | "ghost"
+  | "link";
+type ButtonSizes = "default" | "sm" | "lg" | "icon";
+
 interface ConstructorProps {
   id: string;
   withLabel?: boolean;
