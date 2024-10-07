@@ -34,16 +34,17 @@ interface handleSubmitProps {
 
 const handleSubmit = (props: handleSubmitProps) => {
   console.debug("props:", props);
+  schema.parse(props.values);
+  const { id, ...values } = props.values;
 
   if (props.method === "post") {
-    const { id, ...values } = props.values;
     console.debug("Creando...", values);
     router.post(route("cultivo.store"), values);
     return;
   }
   if (props.method === "put") {
-    console.debug("Actualizando...", props.values);
-    router.put(route("cultivo.update", props.values.id), props.values);
+    console.debug("Actualizando...", values);
+    router.put(route("cultivo.update", id), values);
     return;
   }
 
@@ -55,63 +56,6 @@ const formFields = [
   { name: "variedad", label: "Variedad", type: "text" },
 ];
 
-const columns: ColumnDef<Cultivo>[] = [
-  {
-    accessorKey: "nombre",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Nombre" />
-    ),
-    enableHiding: false,
-    enableColumnFilter: true,
-    enableSorting: true,
-    size: undefined,
-  },
-  {
-    accessorKey: "variedad",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Variedad" />
-    ),
-    enableHiding: false,
-    enableColumnFilter: true,
-    enableSorting: true,
-    size: undefined,
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Acciones"
-        className="ml-auto text-end"
-      />
-    ),
-    cell: ({ row }) => {
-      const original = row.original;
-      console.debug("original:", original);
-
-      return (
-        <Actions
-          display={`${original.nombre} (${original.variedad})`}
-          simplified
-        >
-          <DynamicForm
-            schema={schema}
-            fields={formFields}
-            onSubmit={handleSubmit}
-            method="put"
-            defaults={{
-              id: original.id,
-              nombre: original.nombre,
-              variedad: original.variedad,
-            }}
-          />
-        </Actions>
-      );
-    },
-  },
-];
-
 interface Props {
   data: Cultivo[];
   fields: Record<string, unknown>[];
@@ -119,6 +63,67 @@ interface Props {
 
 export default function Cultivo({ data, fields }: Props) {
   console.debug("fields:", fields);
+
+  const columns: ColumnDef<Cultivo>[] = [
+    {
+      accessorKey: "nombre",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Nombre" />
+      ),
+      enableHiding: false,
+      enableColumnFilter: true,
+      enableSorting: true,
+      size: undefined,
+    },
+    {
+      accessorKey: "variedad",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Variedad" />
+      ),
+      enableHiding: false,
+      enableColumnFilter: true,
+      enableSorting: true,
+      size: undefined,
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="Acciones"
+          className="ml-auto text-end"
+        />
+      ),
+      cell: ({ row }) => {
+        const { original } = row;
+        console.debug("original:", original);
+
+        return (
+          <Actions
+            display={`${original.nombre} (${original.variedad})`}
+            url={route("cultivo.show", original.id)}
+            simplified
+          >
+            <DynamicForm
+              schema={schema}
+              fields={formFields}
+              submitConf={{
+                url: route("cultivo.update", original.id),
+                method: "put",
+                values: original,
+              }}
+              defaults={{
+                id: original.id,
+                nombre: original.nombre,
+                variedad: original.variedad,
+              }}
+            />
+          </Actions>
+        );
+      },
+    },
+  ];
 
   return (
     <MainLayout>
@@ -141,8 +146,10 @@ export default function Cultivo({ data, fields }: Props) {
           <DynamicForm
             schema={schema}
             fields={formFields}
-            onSubmit={handleSubmit}
-            method="post"
+            submitConf={{
+              url: route("cultivo.store"),
+              method: "post",
+            }}
             defaults={{
               id: "",
               nombre: "",

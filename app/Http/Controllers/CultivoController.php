@@ -131,7 +131,19 @@ class CultivoController extends Controller
             ],
         ]);
     }
-    public function destroy()
+    public function destroy(Request $request, Cultivo $cultivo)
     {
+        $cultivo->delete();
+        $this->toastExitoConstructor(
+            accion: "destroy",
+            seccion: "description",
+            append: "El cultivo {$cultivo->nombre} se ha eliminado exitosamente"
+        );
+        return to_route("cultivo.index")->with([
+            "from" => "cultivo.destroy",
+            "message" => [
+                "toast" => $this->toasts["exito"]["destroy"],
+            ],
+        ]);
     }
 }

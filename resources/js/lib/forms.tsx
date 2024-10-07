@@ -12,6 +12,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@/Components/ui/dialog";
+import { router } from "@inertiajs/react";
 
 interface FormField {
   name: string;
@@ -22,41 +23,49 @@ interface FormField {
 export type Methods = "post" | "put";
 
 interface DynamicFormProps {
-  stateHandler?: (state: any) => void;
   fields: FormField[];
   schema: z.ZodSchema<any>;
-  onSubmit: (props: { values: any; method: Methods }) => void;
+  submitConf: { method: Methods; url: string; values?: Record<string, any> };
   defaults?: Record<string, any>;
   classNames?: {
     form?: string;
   };
-  method: Methods;
   icon?: "create" | "update";
 }
 
 export function DynamicForm({
   fields,
   schema,
-  onSubmit,
   defaults = {},
   classNames = {},
-  method,
   icon = "create",
+  submitConf,
 }: DynamicFormProps) {
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: defaults,
   });
-  console.debug("method:", method);
 
   const Icon: JSX.Element =
     icon === "create" ? <CreateIcon /> : <SaveUpdateIcon />;
+
+  const onSubmit = (props: { values: Record<string, any> }) => {
+    const { values } = props;
+    console.debug("values:", values);
+    schema.parse(values);
+
+    console.debug("submitConf:", submitConf);
+    router.visit(submitConf.url, {
+      method: submitConf.method,
+      data: values,
+    });
+  };
 
   return (
     <Form {...form}>
       <form
         className={cn("flex flex-col gap-4", classNames.form)}
-        onSubmit={form.handleSubmit((values) => onSubmit({ values, method }))}
+        onSubmit={form.handleSubmit((values) => onSubmit({ values }))}
       >
         {fields.map((field) => (
           <div key={field.name}>

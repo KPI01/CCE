@@ -30,6 +30,13 @@ import { z } from "zod";
 import { Form } from "../ui/form";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { cn } from "@/lib/utils";
+import { router } from "@inertiajs/react";
+import { useState } from "react";
+
+type OpenSimplified = {
+  edit: boolean;
+  delete: boolean;
+};
 
 const ICON_CLASS = "mr-2 size-4";
 const ICON_STROKE = 1.5;
@@ -39,17 +46,28 @@ interface Props {
   display: string;
   simplified?: boolean;
   children: React.ReactNode;
+  url: string;
 }
 
-function handleDelete(url: string) {}
+function handleDelete(url: string) {
+  router.delete(url, {
+    onFinish: () => {
+      router.reload();
+    },
+  });
+}
 
 export default function Actions({
   simplified = false,
   display,
   children,
+  url,
 }: Props) {
+  console.log("url:", url);
   if (simplified && children) {
-    return <SimplifiedOptions display={display} children={children} />;
+    return (
+      <SimplifiedOptions display={display} children={children} url={url} />
+    );
   }
 
   return <Menu display={display} />;
@@ -113,9 +131,11 @@ function Menu({ display }: { display: string }) {
 function SimplifiedOptions({
   display,
   children,
+  url,
 }: {
   display: string;
   children: React.ReactNode;
+  url: string;
 }) {
   return (
     <AlertDialog>
@@ -185,6 +205,7 @@ function SimplifiedOptions({
             <AlertDialogCancel>No, cancelar</AlertDialogCancel>
             <AlertDialogAction
               className={buttonVariants({ variant: "destructive" })}
+              onClick={() => handleDelete(url)}
             >
               Sí, estoy seguro
             </AlertDialogAction>
