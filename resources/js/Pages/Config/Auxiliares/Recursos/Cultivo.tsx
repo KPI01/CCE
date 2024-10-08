@@ -122,7 +122,7 @@ export default function Cultivo({ data, fields }: Props) {
             Crear
           </DialogTrigger>
         </div>
-        <DataTable columns={columns} data={data} />
+        <DataTable config={{ data, columns }} />
         <CreateDialog title="Crear cultivo">
           <DynamicForm
             schema={schema}
