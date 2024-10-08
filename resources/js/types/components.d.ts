@@ -3,6 +3,7 @@ import { UUID } from "./modelos";
 
 interface IconProps {
   className?: string;
+  strokeWidth?: number;
 }
 
 type Breadcrumbs = {

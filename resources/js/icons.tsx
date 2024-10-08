@@ -6,6 +6,8 @@ import {
   CircleArrowOutUpRight,
   FilePen,
   FilePlus,
+  FileQuestion,
+  FolderOpen,
   Home,
   Send,
   Sprout,
@@ -68,4 +70,8 @@ export const SendIcon = ({ className }: IconProps) => (
 );
 export const CreateIcon = ({ className }: IconProps) => (
   <FilePlus className={cn(ICON_CLASS, className)} />
+);
+
+export const EmptyIcon = ({ className, strokeWidth = 1 }: IconProps) => (
+  <FolderOpen className={cn(ICON_CLASS, className)} strokeWidth={strokeWidth} />
 );

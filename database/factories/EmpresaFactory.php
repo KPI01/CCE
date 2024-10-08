@@ -23,7 +23,6 @@ class EmpresaFactory extends Factory
 
         return [
             //
-            "id" => fake()->uuid(),
             "nombre" => fake()->company(),
             "nif" => fake()->unique()->vat(),
             "email" => fake()->unique()->companyEmail(),

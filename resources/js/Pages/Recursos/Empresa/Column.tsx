@@ -2,9 +2,9 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Empresa } from "@/types";
-import Actions from "./Actions";
 import { DataTableColumnHeader } from "@/Components/DataTable/ColumnHeader";
+import { Empresa } from "..";
+import Actions from "@/Components/DataTable/Actions";
 
 export const columns: ColumnDef<Empresa>[] = [
   {
@@ -93,73 +93,12 @@ export const columns: ColumnDef<Empresa>[] = [
     },
   },
   {
-    accessorFn: (row) => {
-      if (row.ropo?.capacitacion) {
-        return row.ropo.capacitacion;
-      }
-      return null;
-    },
-    id: "ropo_capacitacion",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Capacitación ROPO" />
-    ),
-    enableColumnFilter: true,
-    enableHiding: true,
-    size: 250,
-    meta: {
-      header: "Capacitación ROPO",
-      key: "ropo_capacitacion",
-      tipo: "select",
-    },
-  },
-  {
-    accessorFn: (row) => {
-      if (row.ropo?.nro) {
-        return row.ropo.nro;
-      }
-      return null;
-    },
-    id: "ropo_nro",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Id. ROPO" />
-    ),
-    enableColumnFilter: true,
-    enableSorting: false,
-    meta: {
-      header: "Id. ROPO",
-      key: "ropo_nro",
-    },
-  },
-  {
-    accessorFn: (row) => {
-      if (row.ropo?.caducidad) {
-        return row.ropo.caducidad;
-      }
-      return null;
-    },
-    id: "ropo_caducidad",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Caducidad ROPO" />
-    ),
-    cell: (info) => {
-      if (info.getValue()) {
-        return new Date(info.getValue() as string).toLocaleDateString();
-      }
-    },
-    enableColumnFilter: true,
-    enableSorting: true,
-    enableHiding: true,
-    meta: {
-      header: "Caducidad ROPO",
-      key: "ropo_caducidad",
-    },
-  },
-  {
     id: "actions",
     cell: ({ row }) => {
-      const empresa = row.original;
+      const { original } = row;
+      const display = `${original.nombre} (${original.nif})`;
 
-      return <Actions data={empresa} />;
+      return <Actions display={display} url={original.url} />;
     },
     enableHiding: false,
     enablePinning: true,
