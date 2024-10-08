@@ -1,9 +1,7 @@
 import MainLayout from "@/Layouts/MainLayout";
-import { DataTable } from "@/Components/DataTable/Table";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/Components/DataTable/ColumnHeader";
 import { type Cultivo } from "@/types";
-import Actions from "@/Components/DataTable/Actions";
 import { z } from "zod";
 import {
   MAX_MESSAGE,
@@ -13,7 +11,9 @@ import {
 import { CreateDialog, DynamicForm, Methods } from "@/lib/forms";
 import { Dialog, DialogTrigger } from "@/Components/ui/dialog";
 import { buttonVariants } from "@/Components/ui/button";
-import { Head, router } from "@inertiajs/react";
+import { Head } from "@inertiajs/react";
+import Actions from "@/Components/DataTable/Actions";
+import DataTable from "@/Components/DataTable/Table";
 
 const schema = z.object({
   id: z.string(),
@@ -32,25 +32,6 @@ interface handleSubmitProps {
   method: Methods;
 }
 
-const handleSubmit = (props: handleSubmitProps) => {
-  console.debug("props:", props);
-  schema.parse(props.values);
-  const { id, ...values } = props.values;
-
-  if (props.method === "post") {
-    console.debug("Creando...", values);
-    router.post(route("cultivo.store"), values);
-    return;
-  }
-  if (props.method === "put") {
-    console.debug("Actualizando...", values);
-    router.put(route("cultivo.update", id), values);
-    return;
-  }
-
-  console.debug("No se pudo realizar la acción");
-  return;
-};
 const formFields = [
   { name: "nombre", label: "Nombre", type: "text" },
   { name: "variedad", label: "Variedad", type: "text" },
