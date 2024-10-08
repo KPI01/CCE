@@ -28,18 +28,6 @@ type ROPO = {
   capacitacion?: Capacitaciones;
 };
 
-export interface Persona extends Modelo {
-  nombres: string;
-  apellidos: string;
-  tipo_id_nac: "DNI" | "NIE";
-  id_nac: string;
-  email: string;
-  tel: string;
-  perfil: Perfiles;
-  observaciones: string;
-  ropo?: ROPO;
-}
-
 export interface Empresa extends Modelo {
   nombre: string;
   nif: string;
