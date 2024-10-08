@@ -1,14 +1,5 @@
 type UUID = `${string}-${string}-${string}-${string}-${string}`;
 
-type Perfiles = "Productor" | "Aplicador" | "Operario";
-
-type Capacitaciones =
-  | "Básico"
-  | "Cualificado"
-  | "Fumigador"
-  | "Piloto Aplicador"
-  | undefined;
-
 interface Modelo {
   id: UUID;
   created_at: string;
@@ -20,24 +11,6 @@ export interface User extends Modelo {
   name: string;
   email: string;
   email_verified_at: string;
-}
-
-type ROPO = {
-  caducidad?: Date;
-  nro?: string;
-  capacitacion?: Capacitaciones;
-};
-
-export interface Empresa extends Modelo {
-  nombre: string;
-  nif: string;
-  email: string;
-  tel: string;
-  codigo: string;
-  perfil: Perfiles;
-  direccion: string;
-  observaciones: string;
-  ropo?: ROPO;
 }
 
 export interface Maquina extends Modelo {

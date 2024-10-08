@@ -19,10 +19,14 @@ import {
   CultivoIcon,
   EmpresaIcon,
   MaquinaIcon,
-  PersonaIcon,
-  RecursosIcon,
 } from "@/Pages/Recursos/utils";
-import { EmailIcon, HomeIcon, TablasAuxiliaresIcon } from "@/icons";
+import {
+  EmailIcon,
+  HomeIcon,
+  TablasAuxiliaresIcon,
+  RecursosIcon,
+  PersonaIcon,
+} from "@/icons";
 
 const MENUTRIGGER_CLASS =
   "w-max font-medium border-px flex items-center rounded border-accent px-2 py-1";

@@ -11,12 +11,12 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create("tipos_maquina", function (Blueprint $table) {
-            $table->id()->autoIncrement();
+            $table->ulid()->autoIncrement();
             $table->string("tipo", 50)->index();
         });
 
         Schema::create("maquinas", function (Blueprint $table) {
-            $table->uuid("id")->primary();
+            $table->ulid("id")->primary();
             $table->timestamps();
             $table->string("nombre", 100);
             $table

@@ -11,7 +11,6 @@ import {
   Sprout,
   Tractor,
   Trash,
-  UserRound,
 } from "lucide-react";
 
 export const CONTAINER_CLASS = "container grid grid-cols-2 gap-x-12 gap-y-4";

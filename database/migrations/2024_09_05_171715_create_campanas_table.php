@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create("campanas", function (Blueprint $table) {
-            $table->uuid("id")->unique();
+            $table->ulid("id")->unique();
             $table->timestamps();
             $table->string("nombre");
             $table->boolean("is_activa");

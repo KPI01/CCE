@@ -60,7 +60,7 @@ export default function FormHeader({
                     id="badge-destroy"
                     className={badgeVariants({ variant: "destructive" })}
                   >
-                    <Trash className="size-4" />
+                    <Trash className="size-4 text-accent" />
                   </AlertDialogTrigger>
                   <AlertDialogContent id="delete-dialog">
                     <AlertDialogHeader id="alert-title">
