@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { CAPACITACIONES, formSchema, PERFILES } from "./formSchema";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Breadcrumbs, Empresa } from "@/types";
+import { Breadcrumbs } from "@/types";
 import FormLayout from "@/Layouts/Recursos/FormLayout";
 import { Form, FormField } from "@/Components/ui/form";
 import FormTitle from "@/Components/Forms/FormTitle";
@@ -13,14 +13,13 @@ import { router } from "@inertiajs/react";
 import { useToast } from "@/Components/ui/use-toast";
 import {
   CONTAINER_CLASS,
-  EditIcon,
-  EmpresaIcon,
   nullToUndefined,
-  TablaIcon,
   toSend,
   urlWithoutId,
 } from "../utils";
 import { EditButtons } from "@/Components/Forms/Footers";
+import { EditIcon, EmpresaIcon, TablaIcon } from "@/icons";
+import { Empresa } from "..";
 
 const schema = formSchema;
 

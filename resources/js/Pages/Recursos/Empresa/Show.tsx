@@ -1,4 +1,4 @@
-import { Breadcrumbs, Empresa } from "@/types";
+import { Breadcrumbs } from "@/types";
 import { formSchema, PERFILES, CAPACITACIONES } from "./formSchema";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -11,11 +11,11 @@ import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstruc
 import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectConstructor";
 import {
   CONTAINER_CLASS,
-  EmpresaIcon,
-  TablaIcon,
   nullToUndefined,
   urlWithoutId,
 } from "../utils";
+import { Empresa } from "..";
+import { EmpresaIcon, TablaIcon } from "@/icons";
 
 const schema = formSchema;
 

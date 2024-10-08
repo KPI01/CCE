@@ -32,9 +32,6 @@ export const NOT_CONTAIN_MSG = (start: string, prohibited: string[]) =>
 export const ONLY_CONTAIN_MSG = (start: string, allowed: string[]) =>
   `${start} sólo debe contener: ${allowed.join(", ")}.`;
 
-export const EmpresaIcon = ({ className }: IconProps) => (
-  <Building className={cn(ICON_CLASS, className)} />
-);
 export const MaquinaIcon = ({ className }: IconProps) => (
   <Tractor className={cn(ICON_CLASS, className)} />
 );
