@@ -13,13 +13,14 @@ import { LogOut, User2 } from "lucide-react";
 import { Link, router, usePage } from "@inertiajs/react";
 import { Button } from "../ui/button";
 import { v4 as uuidv4 } from "uuid";
-import { EmpresaIcon, MaquinaIcon } from "@/Pages/Recursos/utils";
+import { MaquinaIcon } from "@/Pages/Recursos/utils";
 import {
   EmailIcon,
   HomeIcon,
   TablasAuxiliaresIcon,
   RecursosIcon,
   PersonaIcon,
+  EmpresaIcon,
 } from "@/icons";
 
 const MENUTRIGGER_CLASS =
@@ -45,12 +46,6 @@ const recursos: MenuItemsProps[] = [
   },
   {
     Icon: <MaquinaIcon />,
-    Texto: "Máquinas",
-    Recurso: "maquina",
-  },
-];
-  {
-    Icon: <Campana />,
     Texto: "Máquinas",
     Recurso: "maquina",
   },

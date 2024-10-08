@@ -94,13 +94,9 @@ export const columns: ColumnDef<Persona>[] = [
 
     cell: ({ row }) => {
       const { original } = row;
+      const display = `${original.nombres} ${original.apellidos} (${original.tipo_id_nac}: ${original.id_nac})`;
 
-      return (
-        <Actions
-          display={`${original.nombres} ${original.apellidos} (${original.tipo_id_nac}: ${original.id_nac})`}
-          url={original.url}
-        />
-      );
+      return <Actions display={display} url={original.url} />;
     },
     enableHiding: false,
   },

@@ -18,6 +18,7 @@ import { Pagination } from "./Pagination";
 import { Separator } from "../ui/separator";
 import { useState } from "react";
 import { DataTableProps } from ".";
+import { EmptyIcon } from "@/icons";
 
 export default function DataTable<TData, TValue>({
   config,
@@ -79,9 +80,10 @@ export default function DataTable<TData, TValue>({
             <TableRow>
               <TableCell
                 colSpan={config.columns.length}
-                className="h-24 text-center"
+                className="h-24 select-text text-center text-2xl font-medium text-primary/50"
               >
-                No results.
+                <EmptyIcon className="m-auto size-48" />
+                No hay resultados que mostrar.
               </TableCell>
             </TableRow>
           )}

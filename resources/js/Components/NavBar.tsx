@@ -14,18 +14,14 @@ import { Link, router, usePage } from "@inertiajs/react";
 import { Button } from "./ui/button";
 import { ReactElement } from "react";
 import { v4 as uuidv4 } from "uuid";
-import {
-  CampanaIcon,
-  CultivoIcon,
-  EmpresaIcon,
-  MaquinaIcon,
-} from "@/Pages/Recursos/utils";
+import { CampanaIcon, CultivoIcon, MaquinaIcon } from "@/Pages/Recursos/utils";
 import {
   EmailIcon,
   HomeIcon,
   TablasAuxiliaresIcon,
   RecursosIcon,
   PersonaIcon,
+  EmpresaIcon,
 } from "@/icons";
 
 const MENUTRIGGER_CLASS =
