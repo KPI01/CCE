@@ -1,13 +1,11 @@
 "use client";
-
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
+  getSortedRowModel,
 } from "@tanstack/react-table";
-
 import {
   Table,
   TableBody,
@@ -18,22 +16,29 @@ import {
 } from "@/Components/ui/table";
 import { Pagination } from "./Pagination";
 import { Separator } from "../ui/separator";
-
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-}
+import { useState } from "react";
+import { DataTableProps } from ".";
 
 export default function DataTable<TData, TValue>({
-  columns,
-  data,
+  config,
+  state = {},
 }: DataTableProps<TData, TValue>) {
+  const [visibility, setVisibility] = useState(state.visibility || {});
+  const [sorting, setSorting] = useState(state.sorting || []);
+
   const table = useReactTable({
-    data,
-    columns,
+    data: config.data,
+    columns: config.columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onColumnVisibilityChange: setVisibility,
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: { columnVisibility: visibility, sorting },
+    debugAll: true,
   });
+
+  console.debug("state:", table.getState());
 
   return (
     <div className="my-5 rounded-md border">
@@ -72,7 +77,10 @@ export default function DataTable<TData, TValue>({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell
+                colSpan={config.columns.length}
+                className="h-24 text-center"
+              >
                 No results.
               </TableCell>
             </TableRow>
