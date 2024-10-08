@@ -2,18 +2,16 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
 
 class RecursoBase extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory, HasUlids;
 
     protected $controller;
-    protected $keyType = "string";
     public $incrementing = false;
     protected $guarded = [];
 
