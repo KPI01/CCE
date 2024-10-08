@@ -1,6 +1,7 @@
 {
   "recommendations": [
     "amiralizadeh9480.laravel-extra-intellisense",
-    "nhedger.inertia"
+    "nhedger.inertia",
+    "bradlc.vscode-tailwindcss"
   ]
 }
