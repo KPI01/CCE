@@ -217,13 +217,15 @@ class PersonaController extends Controller
     public function destroy(Persona $persona)
     {
         //
+        $display = "{$persona->nombres} {$persona->apellidos} ({$persona->id_nac})";
         $persona->delete();
 
         $this->toastExitoConstructor(
             accion: "destroy",
             seccion: "description",
-            append: "{$persona->nombre} ({$persona->nif})"
+            append: $display
         );
+
         return to_route("persona.index")->with([
             "from" => "persona.destroy",
             "message" => [

@@ -1,4 +1,4 @@
-import { AtSign, Home, Table } from "lucide-react";
+import { AtSign, Box, Home, Table, UserRound } from "lucide-react";
 import { IconProps } from "./types";
 import { cn } from "./lib/utils";
 
@@ -12,4 +12,12 @@ export const EmailIcon = ({ className }: IconProps) => (
 );
 export const TablasAuxiliaresIcon = ({ className }: IconProps) => (
   <Table className={cn(ICON_CLASS, className)} />
+);
+
+export const RecursosIcon = ({ className }: IconProps) => (
+  <Box className={cn(ICON_CLASS, className)} />
+);
+
+export const PersonaIcon = ({ className = "" }: IconProps) => (
+  <UserRound className={cn(ICON_CLASS, className)} />
 );

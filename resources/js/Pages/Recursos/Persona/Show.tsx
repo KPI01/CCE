@@ -1,4 +1,4 @@
-import { Breadcrumbs, Persona } from "@/types";
+import { Breadcrumbs } from "@/types";
 import {
   formSchema,
   PERFILES,
@@ -15,18 +15,23 @@ import FormTitle from "@/Components/Forms/FormTitle";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
 import {
   CONTAINER_CLASS,
-  PersonaIcon,
   TablaIcon,
+  nullToUndefined,
   urlWithoutId,
 } from "../utils";
+import { Persona } from "..";
+import { PersonaIcon } from "@/icons";
 
 const schema = formSchema;
 
 export default function Show({ data }: { data: Persona }) {
-  console.debug(data);
-  schema.safeParse(data);
+  console.debug("data:", data);
+  data = nullToUndefined(data);
+  const parsed = schema.safeParse(data);
+  console.debug("parsed:", parsed);
+
   const form = useForm<z.infer<typeof schema>>({
-    defaultValues: { ...data },
+    defaultValues: { ...parsed.data },
   });
 
   const breadcrumb: Breadcrumbs[] = [
@@ -41,7 +46,6 @@ export default function Show({ data }: { data: Persona }) {
       url: data.url,
     },
   ];
-  console.log(breadcrumb);
 
   return (
     <FormLayout

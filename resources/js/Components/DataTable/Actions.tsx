@@ -26,35 +26,24 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { z } from "zod";
-import { Form } from "../ui/form";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { cn } from "@/lib/utils";
-import { router } from "@inertiajs/react";
-import { useState } from "react";
-
-type OpenSimplified = {
-  edit: boolean;
-  delete: boolean;
-};
+import { Link, router } from "@inertiajs/react";
 
 const ICON_CLASS = "mr-2 size-4";
 const ICON_STROKE = 1.5;
-const MENUITEM_CLASS = "cursor-pointer text-base";
+const MENUITEM_CLASS = "cursor-pointer text-base w-full";
 
 interface Props {
   display: string;
   simplified?: boolean;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   url: string;
 }
 
 function handleDelete(url: string) {
-  router.delete(url, {
-    onFinish: () => {
-      router.reload();
-    },
-  });
+  console.debug("Eliminando...", url.split("/").slice(-1)[0]);
+  router.delete(url);
 }
 
 export default function Actions({
@@ -63,19 +52,22 @@ export default function Actions({
   children,
   url,
 }: Props) {
-  console.log("url:", url);
+  console.debug("url:", url);
   if (simplified && children) {
     return (
       <SimplifiedOptions display={display} children={children} url={url} />
     );
   }
 
-  return <Menu display={display} />;
+  return <Menu display={display} resourceUrl={url} />;
 }
 
-function Menu({ display }: { display: string }) {
-  const redirectEdit = () => {};
+interface MenuProps {
+  display: string;
+  resourceUrl: string;
+}
 
+function Menu({ display, resourceUrl }: MenuProps) {
   return (
     <AlertDialog>
       <DropdownMenu>
@@ -86,18 +78,28 @@ function Menu({ display }: { display: string }) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="center">
           <DropdownMenuLabel>Opciones</DropdownMenuLabel>
-          <DropdownMenuItem className={MENUITEM_CLASS}>
-            <ScanSearch className={ICON_CLASS} strokeWidth={ICON_STROKE} />
-            <span className="sr-only">Detalles</span>
+          <DropdownMenuItem className={MENUITEM_CLASS} asChild>
+            <Link method="get" href={resourceUrl}>
+              <ScanSearch className={ICON_CLASS} strokeWidth={ICON_STROKE} />
+              <span>Detalles</span>
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className={MENUITEM_CLASS} onClick={redirectEdit}>
-            <Pencil className={ICON_CLASS} strokeWidth={ICON_STROKE} />
-            <span className="sr-only">Editar</span>
+          <DropdownMenuItem className={MENUITEM_CLASS} asChild>
+            <Link method="get" href={`${resourceUrl}/edit`}>
+              <Pencil className={ICON_CLASS} strokeWidth={ICON_STROKE} />
+              <span>Editar</span>
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className={MENUITEM_CLASS}>
-            <AlertDialogTrigger className="flex items-center">
-              <span className="sr-only">Eliminar</span>
+          <DropdownMenuItem
+            className={cn(
+              MENUITEM_CLASS,
+              "focus:bg-destructive-foreground focus:text-accent",
+            )}
+            asChild
+          >
+            <AlertDialogTrigger>
               <CircleX className={ICON_CLASS} strokeWidth={ICON_STROKE} />
+              <span className="">Eliminar</span>
             </AlertDialogTrigger>
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -113,11 +115,13 @@ function Menu({ display }: { display: string }) {
           </div>
         </AlertDialogDescription>
         <AlertDialogFooter>
-          <AlertDialogCancel className={buttonVariants({ variant: "default" })}>
+          <AlertDialogCancel
+            className={buttonVariants({ variant: "secondary" })}
+          >
             No
           </AlertDialogCancel>
           <AlertDialogAction
-            onClick={() => handleDelete("")}
+            onClick={() => handleDelete(resourceUrl)}
             className={buttonVariants({ variant: "destructive" })}
           >
             Si

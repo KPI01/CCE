@@ -3,8 +3,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 
 import { DataTableColumnHeader } from "@/Components/DataTable/ColumnHeader";
-import Actions from "@/Pages/Recursos/Persona/Actions";
 import { Persona } from "..";
+import Actions from "@/Components/DataTable/Actions";
 
 export const columns: ColumnDef<Persona>[] = [
   {
@@ -93,9 +93,14 @@ export const columns: ColumnDef<Persona>[] = [
     id: "actions",
 
     cell: ({ row }) => {
-      const persona = row.original;
+      const { original } = row;
 
-      return <Actions data={persona} />;
+      return (
+        <Actions
+          display={`${original.nombres} ${original.apellidos} (${original.tipo_id_nac}: ${original.id_nac})`}
+          url={original.url}
+        />
+      );
     },
     enableHiding: false,
   },

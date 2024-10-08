@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Breadcrumbs, Persona } from "@/types";
+import { Breadcrumbs } from "@/types";
 import {
   formSchema,
   PERFILES,
@@ -19,13 +19,14 @@ import { useToast } from "@/Components/ui/use-toast";
 import {
   CONTAINER_CLASS,
   EditIcon,
-  PersonaIcon,
   TablaIcon,
   nullToUndefined,
   toSend,
   urlWithoutId,
 } from "../utils";
 import { EditButtons } from "@/Components/Forms/Footers";
+import { Persona } from "..";
+import { PersonaIcon } from "@/icons";
 
 const schema = formSchema;
 

@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import { IconProps } from "@/types";
 import {
-  Box,
   Building,
   CalendarRange,
   CircleArrowOutUpRight,
@@ -34,12 +33,6 @@ export const NOT_CONTAIN_MSG = (start: string, prohibited: string[]) =>
 export const ONLY_CONTAIN_MSG = (start: string, allowed: string[]) =>
   `${start} sólo debe contener: ${allowed.join(", ")}.`;
 
-export const RecursosIcon = ({ className }: IconProps) => (
-  <Box className={cn(ICON_CLASS, className)} />
-);
-export const PersonaIcon = ({ className }: IconProps) => (
-  <UserRound className={cn(ICON_CLASS, className)} />
-);
 export const EmpresaIcon = ({ className }: IconProps) => (
   <Building className={cn(ICON_CLASS, className)} />
 );
