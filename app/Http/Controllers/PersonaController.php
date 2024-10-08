@@ -26,11 +26,9 @@ class PersonaController extends Controller
     {
         //
         $data = Persona::all();
+        $url = route("persona.create");
 
-        return inertia("Recursos/Persona/Table", [
-            "data" => $data,
-            "url" => route("persona.index"),
-        ]);
+        return inertia("Recursos/Persona/Table", compact("data", "url"));
     }
 
     public function create()
