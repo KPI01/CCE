@@ -28,7 +28,6 @@ class PersonaFactory extends Factory
 
         return [
             //,
-            "id" => fake()->unique()->uuid(),
             "nombres" => fake()->firstName(),
             "apellidos" => fake()->lastName(),
             "tipo_id_nac" => $tipo_id_nac,
