@@ -1,12 +1,12 @@
 "use client";
 
 import { DataTableColumnHeader } from "@/Components/DataTable/ColumnHeader";
-import { Campana } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
-import Actions from "./Actions";
 import { Switch } from "@/Components/ui/switch";
 import { formatDate } from "date-fns";
 import { convertToType } from "../utils";
+import { Campana } from "..";
+import Actions from "@/Components/DataTable/Actions";
 
 export const columns: ColumnDef<Campana>[] = [
   {
@@ -101,7 +101,12 @@ export const columns: ColumnDef<Campana>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      return <Actions data={row.original} />;
+      const { original } = row;
+      const display = `la campaña ${original.nombre} que está ${
+        original.is_activa ? "activa" : "inactiva"
+      }`;
+
+      return <Actions display={display} url={original.url} />;
     },
   },
 ];

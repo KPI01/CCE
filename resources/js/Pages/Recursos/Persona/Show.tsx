@@ -13,14 +13,9 @@ import { FormItemSelectConstructor } from "@/Components/Forms/FormItemSelectCons
 import FormLayout from "@/Layouts/Recursos/FormLayout";
 import FormTitle from "@/Components/Forms/FormTitle";
 import FormDatePickerConstructor from "@/Components/Forms/FormDatePickerConstructor";
-import {
-  CONTAINER_CLASS,
-  TablaIcon,
-  nullToUndefined,
-  urlWithoutId,
-} from "../utils";
+import { CONTAINER_CLASS, nullToUndefined, urlWithoutId } from "../utils";
 import { Persona } from "..";
-import { PersonaIcon } from "@/icons";
+import { PersonaIcon, TablaIcon } from "@/icons";
 
 const schema = formSchema;
 

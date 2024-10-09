@@ -17,8 +17,9 @@ import { router } from "@inertiajs/react";
 import { Switch } from "@/Components/ui/switch";
 import { Label } from "@radix-ui/react-label";
 import { Breadcrumbs } from "@/types";
-import { CONTAINER_CLASS, CreateIcon, SendIcon, TablaIcon } from "../utils";
+import { CONTAINER_CLASS } from "../utils";
 import FormButton from "@/Components/Forms/FormButton";
+import { CreateIcon, SendIcon, TablaIcon } from "@/icons";
 
 const schema = formSchema;
 

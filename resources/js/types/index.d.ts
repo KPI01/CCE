@@ -1,11 +1,7 @@
-import { Empresa, Persona, User } from "./modelos";
+import { User } from "./modelos";
 
 export interface Message {
   content?: string;
-  action?: {
-    type: string;
-    data: Persona | Empresa;
-  };
   toast?: {
     variant: "default" | "destructive";
     title: string;

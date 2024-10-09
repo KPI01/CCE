@@ -18,15 +18,13 @@ import { router } from "@inertiajs/react";
 import { useToast } from "@/Components/ui/use-toast";
 import {
   CONTAINER_CLASS,
-  EditIcon,
-  TablaIcon,
   nullToUndefined,
   toSend,
   urlWithoutId,
 } from "../utils";
 import { EditButtons } from "@/Components/Forms/Footers";
 import { Persona } from "..";
-import { PersonaIcon } from "@/icons";
+import { PersonaIcon, EditIcon, TablaIcon } from "@/icons";
 
 const schema = formSchema;
 

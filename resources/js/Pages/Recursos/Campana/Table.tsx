@@ -1,6 +1,6 @@
 import DataLayout from "@/Layouts/DataLayout";
-import { Campana } from "@/types";
 import { columns } from "./Column";
+import { Campana, TableState } from "..";
 
 interface Props {
   data: Campana[];
@@ -8,15 +8,11 @@ interface Props {
 }
 
 export default function Table({ data, url }: Props) {
-  const initVis = {
-    nombre: true,
-    is_activa: true,
-    inicio: true,
-    fin: true,
-    descripcion: false,
+  const state: TableState = {
+    visibility: {
+      descripcion: false,
+    },
   };
-
-  console.debug("data:", data);
 
   return (
     <DataLayout
@@ -24,7 +20,7 @@ export default function Table({ data, url }: Props) {
       data={data}
       columns={columns}
       url={url}
-      initialVisibility={initVis}
+      state={state}
     />
   );
 }
