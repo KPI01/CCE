@@ -196,39 +196,14 @@ declare module 'ziggy-js' {
     "cultivo.destroy": [
         {
             "name": "cultivo",
-            "required": true
+            "required": true,
+            "binding": "id"
         }
     ],
-    "aux_maquina.index": [
+    "aux.maquina.index": [
         {
             "name": "tabla",
             "required": false
-        }
-    ],
-    "aux_maquina.store": [
-        {
-            "name": "tabla",
-            "required": true
-        }
-    ],
-    "aux_maquina.update": [
-        {
-            "name": "tabla",
-            "required": true
-        },
-        {
-            "name": "id",
-            "required": true
-        }
-    ],
-    "aux_maquina.destroy": [
-        {
-            "name": "tabla",
-            "required": true
-        },
-        {
-            "name": "id",
-            "required": true
         }
     ]
 }

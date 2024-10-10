@@ -8,12 +8,13 @@ import {
   REQUIRED_MSG,
   TYPE_MESSAGE,
 } from "@/Pages/Recursos/utils";
-import { CreateDialog, DynamicForm, Methods } from "@/lib/forms";
+import { CreateDialog, DynamicForm } from "@/lib/forms";
 import { Dialog, DialogTrigger } from "@/Components/ui/dialog";
 import { buttonVariants } from "@/Components/ui/button";
 import { Head } from "@inertiajs/react";
 import Actions from "@/Components/DataTable/Actions";
 import DataTable from "@/Components/DataTable/Table";
+import { Auxiliars } from "..";
 
 const schema = z.object({
   id: z.string(),
@@ -27,23 +28,13 @@ const schema = z.object({
   variedad: z.string().max(25, MAX_MESSAGE(25)).nullish(),
 });
 
-interface handleSubmitProps {
-  values: z.infer<typeof schema>;
-  method: Methods;
-}
-
 const formFields = [
   { name: "nombre", label: "Nombre", type: "text" },
   { name: "variedad", label: "Variedad", type: "text" },
 ];
 
-interface Props {
-  data: Cultivo[];
-  fields: Record<string, unknown>[];
-}
-
-export default function Cultivo({ data, fields }: Props) {
-  console.debug("fields:", fields);
+export default function Cultivo({ data, fields, url }: Auxiliars<Cultivo>) {
+  console.debug("recieved:", { data, fields, url });
 
   const columns: ColumnDef<Cultivo>[] = [
     {
@@ -128,7 +119,7 @@ export default function Cultivo({ data, fields }: Props) {
             schema={schema}
             fields={formFields}
             submitConf={{
-              url: route("cultivo.store"),
+              url: typeof url === "string" ? url : url.create,
               method: "post",
             }}
             defaults={{

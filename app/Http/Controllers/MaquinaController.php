@@ -26,7 +26,6 @@ class MaquinaController extends Controller
 
         $this->aux["tipos"] = DB::table(Maquina::TIPOS_TABLE)
             ->orderBy("id")
-            ->get()
             ->pluck("nombre")
             ->toArray();
     }
@@ -35,10 +34,9 @@ class MaquinaController extends Controller
     {
         //
         $data = Maquina::all();
-        return inertia("Recursos/Maquina/Table", [
-            "data" => $data,
-            "url" => route("maquina.index"),
-        ]);
+        $url = route("maquina.create");
+
+        return inertia("Recursos/Maquina/Table", compact("data", "url"));
     }
 
     public function create()
@@ -174,5 +172,13 @@ class MaquinaController extends Controller
                 "toast" => $this->toasts["exito"]["destroy"],
             ],
         ]);
+    }
+
+    public function indexAux(Request $request, string $tabla)
+    {
+        //
+        $data = DB::table($tabla)->get();
+
+        return inertia("Recursos/Maquina/Auxiliares", compact("data", "tabla"));
     }
 }

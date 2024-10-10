@@ -86,6 +86,26 @@
     },
     {
       "type": "shell",
+      "command": "php artisan db:wipe",
+      "problemMatcher": [],
+      "label": "art: wipe",
+      "detail": "laravel",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": false,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true,
+        "group": "database"
+      }
+    },
+    {
+      "type": "shell",
       "command": "php artisan db:seed --class=${input:seeder}",
       "problemMatcher": [],
       "label": "art: seed",
